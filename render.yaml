@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: autostorico-api
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: python server.py
+    healthCheckPath: /health
+    envVars:
+      - key: AUTOSTORICO_API_KEY
+        sync: false
+      - key: AUTOSTORICO_API_HOST
+        value: 0.0.0.0
