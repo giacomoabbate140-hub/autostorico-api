@@ -16,6 +16,7 @@ PORT = int(os.environ.get("PORT") or os.environ.get("AUTOSTORICO_API_PORT", "808
 GOOGLE_CSE_API_KEY = os.environ.get("GOOGLE_CSE_API_KEY", "").strip()
 GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID", "").strip()
 BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
+SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
 MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
@@ -193,6 +194,54 @@ def brave_market_search(query: str) -> list[dict[str, Any]]:
     return results
 
 
+def serpapi_market_search(query: str) -> list[dict[str, Any]]:
+    if not SERPAPI_API_KEY:
+        return []
+    params = urllib.parse.urlencode(
+        {
+            "engine": "google",
+            "q": query,
+            "api_key": SERPAPI_API_KEY,
+            "google_domain": "google.it",
+            "gl": "it",
+            "hl": "it",
+            "num": 10,
+        }
+    )
+    url = f"https://serpapi.com/search.json?{params}"
+    request = urllib.request.Request(
+        url,
+        headers={
+            "Accept": "application/json",
+            "Accept-Encoding": "identity",
+            "User-Agent": "AutoStoricoValueBot/1.0",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=10) as response:
+        data = json.loads(response.read().decode("utf-8"))
+    results = []
+    for item in data.get("organic_results", []):
+        title = str(item.get("title") or "")
+        snippet = str(item.get("snippet") or "")
+        link = str(item.get("link") or "")
+        price = extract_listing_price(f"{title} {snippet}")
+        if price is None:
+            continue
+        source_name = next(
+            (name for name, domain in MARKET_SITES if domain in link),
+            "Fonte web",
+        )
+        results.append(
+            {
+                "source": source_name,
+                "title": title[:140],
+                "url": link,
+                "price": price,
+            }
+        )
+    return results
+
+
 def fetch_market_sources(payload: dict[str, Any], year: int | None) -> list[dict[str, Any]]:
     if not MARKET_SEARCH_ENABLED:
         return []
@@ -201,6 +250,8 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> list[dict
     for query in build_market_queries(payload, year):
         try:
             provider_results = brave_market_search(query)
+            if not provider_results:
+                provider_results = serpapi_market_search(query)
             if not provider_results:
                 provider_results = google_market_search(query)
             for listing in provider_results:
@@ -493,7 +544,11 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "marketType": "vendita_privata",
         "matchedListings": matched_count,
         "sourcesUsed": source_names,
-        "marketSearchConfigured": bool(BRAVE_SEARCH_API_KEY or (GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID)),
+        "marketSearchConfigured": bool(
+            BRAVE_SEARCH_API_KEY
+            or SERPAPI_API_KEY
+            or (GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID)
+        ),
         "sampleListings": filtered_listings[:5],
     }
 
