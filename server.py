@@ -37,6 +37,44 @@ def round_to_hundreds(value: float) -> int:
     return int(round(value / 100.0) * 100)
 
 
+def private_sale_age_factor(age: int, is_moto: bool) -> float:
+    if is_moto:
+        anchors = {
+            0: 0.88,
+            1: 0.78,
+            2: 0.68,
+            3: 0.60,
+            5: 0.48,
+            8: 0.36,
+            10: 0.30,
+            15: 0.20,
+            20: 0.12,
+            30: 0.07,
+        }
+    else:
+        anchors = {
+            0: 0.92,
+            1: 0.82,
+            2: 0.72,
+            3: 0.64,
+            5: 0.50,
+            8: 0.36,
+            10: 0.29,
+            12: 0.235,
+            15: 0.18,
+            20: 0.10,
+            30: 0.04,
+        }
+    age = max(0, min(30, age))
+    points = sorted(anchors)
+    if age in anchors:
+        return anchors[age]
+    lower = max(point for point in points if point < age)
+    upper = min(point for point in points if point > age)
+    ratio = (age - lower) / (upper - lower)
+    return anchors[lower] + ((anchors[upper] - anchors[lower]) * ratio)
+
+
 def normalize_condition(value: str) -> str:
     cleaned = value.strip().lower()
     if cleaned.startswith("ottim"):
@@ -144,30 +182,30 @@ def market_floor_value(
     if age >= 25:
         if is_collectible_panda:
             if normalized_condition == "Ottimo":
-                return 2500
+                return 6000
             if normalized_condition == "Buono":
-                return 1500
-            return 900
+                return 3500
+            return 1800
         if is_panda_classic or is_economy:
             if normalized_condition == "Ottimo":
-                return 800
+                return 1400
             if normalized_condition == "Buono":
-                return 450
-            return 250
+                return 800
+            return 400
         if is_premium_or_rare:
             if normalized_condition == "Ottimo":
-                return 1800
+                return 2600
             if normalized_condition == "Buono":
-                return 1100
-            return 650
-        return 350 if normalized_condition == "Sufficiente" else 650
+                return 1600
+            return 900
+        return 600 if normalized_condition == "Sufficiente" else 1000
 
     if age >= 15:
         if normalized_condition == "Ottimo":
-            return 1600 if is_premium_or_rare else 900
+            return 4200 if is_premium_or_rare else 1800
         if normalized_condition == "Buono":
-            return 1000 if is_premium_or_rare else 650
-        return 650 if is_premium_or_rare else 350
+            return 3000 if is_premium_or_rare else 1200
+        return 1800 if is_premium_or_rare else 700
 
     return 700 if normalized_condition == "Sufficiente" else 1000
 
@@ -192,7 +230,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     base_value = estimated_new_value(vehicle_type, brand, model, trim)
     is_moto = vehicle_type.lower() == "moto"
 
-    age_factor = math.pow(0.86 if is_moto else 0.84, age)
+    age_factor = private_sale_age_factor(age, is_moto)
     expected_km = max(1, age) * (6000 if is_moto else 13000)
     mileage_ratio = km / expected_km if expected_km else 1
     mileage_factor = max(0.62, min(1.18, 1.10 - ((mileage_ratio - 1) * 0.18)))
@@ -229,7 +267,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "averageValue": round_to_hundreds(average),
         "maxValue": round_to_hundreds(max_value),
         "confidence": confidence,
-        "method": "API AutoStorico: stima server basata su anno, km, marca/modello, allestimento, stato, gomme, aria condizionata, proprietari, storico e documenti. Confronto predisposto per banche dati/listini e annunci pubblici autorizzati.",
+        "method": "API AutoStorico: stima server orientata al valore di vendita tra privati, basata su anno, km, marca/modello, allestimento, stato, gomme, aria condizionata, proprietari, storico lavori, revisioni e documenti. Confronto predisposto per banche dati/listini e annunci pubblici autorizzati.",
     }
 
 
