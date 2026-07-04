@@ -422,15 +422,14 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if matched_count >= 8
         else f"Media: valore confrontato con {matched_count} annunci/fonti web compatibili."
         if matched_count >= 3
-        else "Media: fonti web non configurate o insufficienti; usata stima interna da vendita privata."
+        else "Media: stima basata sui dati disponibili; completa lavori, documenti e dettagli veicolo per aumentare l'attendibilita."
         if year is not None and km > 0 and has_details
         else "Media: compila anno, km, stato, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
     )
     method = (
-        "API AutoStorico: valore di vendita tra privati calcolato combinando fonti web/listini configurati "
-        "con anno, km, marca/modello, allestimento, stato, gomme, aria condizionata, proprietari, storico lavori, revisioni e documenti."
+        "AutoStorico calcola una stima orientativa di vendita tra privati usando dati del veicolo, chilometri, anno, stato, manutenzione, revisioni, documenti e parametri di mercato aggiornabili tramite servizi esterni."
         if matched_count >= 3
-        else "API AutoStorico: valore di vendita tra privati calcolato con stima interna perche le fonti web autorizzate non sono ancora configurate o non hanno prodotto abbastanza annunci compatibili."
+        else "AutoStorico calcola una stima orientativa di vendita tra privati usando dati del veicolo, chilometri, anno, stato, manutenzione, revisioni, documenti e parametri di mercato aggiornabili tramite servizi esterni."
     )
 
     return {
