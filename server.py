@@ -68,7 +68,16 @@ def estimated_new_value(vehicle_type: str, brand: str, model: str, trim: str = "
     return 22000
 
 
-def vehicle_detail_factor(fuel_type: str, gearbox: str, trim: str, condition: str) -> float:
+def normalize_previous_owners(value: str) -> str:
+    cleaned = value.strip().lower()
+    if 'piu' in cleaned or 'oltre' in cleaned or '2+' in cleaned:
+        return 'Piu di 2 proprietari'
+    if cleaned.startswith('2'):
+        return '2 proprietari'
+    return '1 proprietario'
+
+
+def vehicle_detail_factor(fuel_type: str, gearbox: str, trim: str, condition: str, tires_changed: bool = False, tire_type: str = '', air_conditioning_ok: bool = False, previous_owners: str = '1 proprietario') -> float:
     factor = 1.0
     normalized_condition = normalize_condition(condition).lower()
     if normalized_condition.startswith("ottim"):
@@ -89,7 +98,18 @@ def vehicle_detail_factor(fuel_type: str, gearbox: str, trim: str, condition: st
 
     if trim.strip():
         factor += 0.02
-    return max(0.84, min(1.15, factor))
+    if tires_changed:
+        factor += 0.03
+    if tire_type.strip():
+        factor += 0.01
+    if air_conditioning_ok:
+        factor += 0.02
+    owners = normalize_previous_owners(previous_owners)
+    if owners == '1 proprietario':
+        factor += 0.03
+    elif owners == 'Piu di 2 proprietari':
+        factor -= 0.04
+    return max(0.80, min(1.20, factor))
 
 
 def market_floor_value(
@@ -161,6 +181,10 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     gearbox = str(payload.get("gearbox") or "").strip()
     trim = str(payload.get("trim") or "").strip()
     condition = str(payload.get("condition") or "Buono").strip()
+    tires_changed = bool(payload.get("tiresChanged") is True)
+    tire_type = str(payload.get("tireType") or "").strip()
+    air_conditioning_ok = bool(payload.get("airConditioningOk") is True)
+    previous_owners = str(payload.get("previousOwners") or "1 proprietario").strip()
     year = parse_year(payload.get("firstRegistrationDate"))
 
     current_year = 2026
@@ -185,7 +209,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     if int(payload.get("documentsCount") or 0) > 0:
         history_factor += 0.02
 
-    detail_factor = vehicle_detail_factor(fuel_type, gearbox, trim, condition)
+    detail_factor = vehicle_detail_factor(fuel_type, gearbox, trim, condition, tires_changed, tire_type, air_conditioning_ok, previous_owners)
     raw_value = base_value * age_factor * mileage_factor * history_factor * detail_factor
     floor_value = market_floor_value(vehicle_type, brand, model, trim, condition, age)
     average = max(floor_value, raw_value)
@@ -193,11 +217,11 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     min_value = max(floor_value * 0.75, average * (1 - spread))
     max_value = max(min_value + 200, average * (1 + spread))
 
-    has_details = bool(fuel_type and gearbox and condition)
+    has_details = bool(fuel_type and gearbox and condition and previous_owners)
     confidence = (
         "Alta: anno, km, stato e dettagli veicolo ricevuti dall'app."
         if year is not None and km > 0 and has_details
-        else "Media: per aumentare attendibilita compila anno, km, stato, cambio, alimentazione e lavori."
+        else "Media: per aumentare attendibilita compila anno, km, stato, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
     )
 
     return {
@@ -205,7 +229,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "averageValue": round_to_hundreds(average),
         "maxValue": round_to_hundreds(max_value),
         "confidence": confidence,
-        "method": "API AutoStorico: stima server basata su anno, km, marca/modello, allestimento, stato, storico e documenti. Confronto predisposto per banche dati/listini e annunci pubblici autorizzati.",
+        "method": "API AutoStorico: stima server basata su anno, km, marca/modello, allestimento, stato, gomme, aria condizionata, proprietari, storico e documenti. Confronto predisposto per banche dati/listini e annunci pubblici autorizzati.",
     }
 
 
@@ -260,3 +284,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
