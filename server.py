@@ -3,6 +3,9 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
+import urllib.parse
+import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
@@ -10,6 +13,15 @@ from typing import Any
 API_KEY = os.environ.get("AUTOSTORICO_API_KEY", "autostorico-test-key")
 HOST = os.environ.get("AUTOSTORICO_API_HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT") or os.environ.get("AUTOSTORICO_API_PORT", "8088"))
+GOOGLE_CSE_API_KEY = os.environ.get("GOOGLE_CSE_API_KEY", "").strip()
+GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID", "").strip()
+MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
+MARKET_SITES = [
+    ("AutoScout24", "autoscout24.it"),
+    ("Subito Motori", "subito.it"),
+    ("Automobile.it", "automobile.it"),
+    ("Moto.it/Automoto", "automoto.it"),
+]
 
 
 def parse_float(value: Any, default: float = 0.0) -> float:
@@ -35,6 +47,135 @@ def parse_year(first_registration_date: Any) -> int | None:
 
 def round_to_hundreds(value: float) -> int:
     return int(round(value / 100.0) * 100)
+
+
+def median(values: list[float]) -> float:
+    ordered = sorted(values)
+    if not ordered:
+        return 0
+    middle = len(ordered) // 2
+    if len(ordered) % 2:
+        return ordered[middle]
+    return (ordered[middle - 1] + ordered[middle]) / 2
+
+
+def extract_price(text: str) -> int | None:
+    normalized = text.replace("\u00a0", " ")
+    patterns = [
+        r"(?:€|EUR)\s*([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})",
+        r"([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})\s*(?:€|EUR)",
+    ]
+    for pattern in patterns:
+        for match in re.finditer(pattern, normalized, flags=re.IGNORECASE):
+            price = int(re.sub(r"\D", "", match.group(1)))
+            if 300 <= price <= 250000:
+                return price
+    return None
+
+
+def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]:
+    brand = str(payload.get("brand") or "").strip()
+    model = str(payload.get("model") or "").strip()
+    trim = str(payload.get("trim") or "").strip()
+    km = int(parse_float(payload.get("km")))
+    query_core = " ".join(part for part in [brand, model, trim] if part)
+    if year:
+        query_core = f"{query_core} {year}"
+    if km > 0:
+        rounded_km = int(round(km / 10000) * 10000)
+        query_core = f"{query_core} {rounded_km} km"
+    if not query_core.strip():
+        return []
+    return [f"{query_core} prezzo site:{domain}" for _, domain in MARKET_SITES]
+
+
+def google_market_search(query: str) -> list[dict[str, Any]]:
+    if not GOOGLE_CSE_API_KEY or not GOOGLE_CSE_ID:
+        return []
+    params = urllib.parse.urlencode(
+        {
+            "key": GOOGLE_CSE_API_KEY,
+            "cx": GOOGLE_CSE_ID,
+            "q": query,
+            "num": 5,
+            "gl": "it",
+            "lr": "lang_it",
+        }
+    )
+    url = f"https://www.googleapis.com/customsearch/v1?{params}"
+    request = urllib.request.Request(
+        url,
+        headers={"User-Agent": "AutoStoricoValueBot/1.0"},
+    )
+    with urllib.request.urlopen(request, timeout=8) as response:
+        data = json.loads(response.read().decode("utf-8"))
+    results = []
+    for item in data.get("items", []):
+        title = str(item.get("title") or "")
+        snippet = str(item.get("snippet") or "")
+        link = str(item.get("link") or "")
+        price = extract_price(f"{title} {snippet}")
+        if price is None:
+            continue
+        source_name = next(
+            (name for name, domain in MARKET_SITES if domain in link),
+            "Fonte web",
+        )
+        results.append(
+            {
+                "source": source_name,
+                "title": title[:140],
+                "url": link,
+                "price": price,
+            }
+        )
+    return results
+
+
+def fetch_market_sources(payload: dict[str, Any], year: int | None) -> list[dict[str, Any]]:
+    if not MARKET_SEARCH_ENABLED:
+        return []
+    listings: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for query in build_market_queries(payload, year):
+        try:
+            for listing in google_market_search(query):
+                url = str(listing.get("url") or "")
+                if url in seen_urls:
+                    continue
+                seen_urls.add(url)
+                listings.append(listing)
+        except Exception:
+            continue
+    return listings[:20]
+
+
+def market_estimate_from_sources(
+    listings: list[dict[str, Any]],
+    internal_average: float,
+) -> tuple[float | None, list[dict[str, Any]]]:
+    if not listings:
+        return None, []
+    prices = [float(item["price"]) for item in listings if item.get("price")]
+    if not prices:
+        return None, []
+    center = median(prices)
+    lower_limit = max(300.0, center * 0.55)
+    upper_limit = center * 1.65
+    filtered = [
+        item
+        for item in listings
+        if lower_limit <= float(item.get("price") or 0) <= upper_limit
+    ]
+    filtered_prices = [float(item["price"]) for item in filtered]
+    if len(filtered_prices) < 3:
+        return None, filtered
+    source_average = median(filtered_prices)
+    if internal_average > 0:
+        blended = (source_average * 0.70) + (internal_average * 0.30)
+    else:
+        blended = source_average
+    return blended, filtered
 
 
 def private_sale_age_factor(age: int, is_moto: bool) -> float:
@@ -250,16 +391,34 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     detail_factor = vehicle_detail_factor(fuel_type, gearbox, trim, condition, tires_changed, tire_type, air_conditioning_ok, previous_owners)
     raw_value = base_value * age_factor * mileage_factor * history_factor * detail_factor
     floor_value = market_floor_value(vehicle_type, brand, model, trim, condition, age)
-    average = max(floor_value, raw_value)
+    internal_average = max(floor_value, raw_value)
+    listings = fetch_market_sources(payload, year)
+    market_average, filtered_listings = market_estimate_from_sources(
+        listings,
+        internal_average,
+    )
+    average = market_average if market_average is not None else internal_average
     spread = 0.26 if year is None else 0.28 if age >= 20 else 0.16
     min_value = max(floor_value * 0.75, average * (1 - spread))
     max_value = max(min_value + 200, average * (1 + spread))
 
     has_details = bool(fuel_type and gearbox and condition and previous_owners)
+    matched_count = len(filtered_listings)
+    source_names = sorted({str(item.get("source") or "Fonte web") for item in filtered_listings})
     confidence = (
-        "Alta: anno, km, stato e dettagli veicolo ricevuti dall'app."
+        f"Alta: valore confrontato con {matched_count} annunci/fonti web compatibili."
+        if matched_count >= 8
+        else f"Media: valore confrontato con {matched_count} annunci/fonti web compatibili."
+        if matched_count >= 3
+        else "Media: fonti web non configurate o insufficienti; usata stima interna da vendita privata."
         if year is not None and km > 0 and has_details
-        else "Media: per aumentare attendibilita compila anno, km, stato, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
+        else "Media: compila anno, km, stato, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
+    )
+    method = (
+        "API AutoStorico: valore di vendita tra privati calcolato combinando fonti web/listini configurati "
+        "con anno, km, marca/modello, allestimento, stato, gomme, aria condizionata, proprietari, storico lavori, revisioni e documenti."
+        if matched_count >= 3
+        else "API AutoStorico: valore di vendita tra privati calcolato con stima interna perche le fonti web autorizzate non sono ancora configurate o non hanno prodotto abbastanza annunci compatibili."
     )
 
     return {
@@ -267,7 +426,12 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "averageValue": round_to_hundreds(average),
         "maxValue": round_to_hundreds(max_value),
         "confidence": confidence,
-        "method": "API AutoStorico: stima server orientata al valore di vendita tra privati, basata su anno, km, marca/modello, allestimento, stato, gomme, aria condizionata, proprietari, storico lavori, revisioni e documenti. Confronto predisposto per banche dati/listini e annunci pubblici autorizzati.",
+        "method": method,
+        "marketType": "vendita_privata",
+        "matchedListings": matched_count,
+        "sourcesUsed": source_names,
+        "marketSearchConfigured": bool(GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
+        "sampleListings": filtered_listings[:5],
     }
 
 
