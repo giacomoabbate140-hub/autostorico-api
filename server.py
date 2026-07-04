@@ -74,7 +74,7 @@ def extract_price(text: str) -> int | None:
 
 
 def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]:
-    brand = str(payload.get("brand") or "").strip()
+    brand = str(payload.get("brand") or payload.get("make") or "").strip()
     model = str(payload.get("model") or "").strip()
     trim = str(payload.get("trim") or "").strip()
     km = int(parse_float(payload.get("km")))
@@ -87,6 +87,18 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
     if not query_core.strip():
         return []
     return [f"{query_core} prezzo site:{domain}" for _, domain in MARKET_SITES]
+
+
+def extract_listing_price(text: str) -> int | None:
+    normalized = text.replace("\u00a0", " ")
+    price_token = r"(?:\u20ac|EUR)"
+    number_token = r"([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})"
+    for pattern in (rf"{price_token}\s*{number_token}", rf"{number_token}\s*{price_token}"):
+        for match in re.finditer(pattern, normalized, flags=re.IGNORECASE):
+            price = int(re.sub(r"\D", "", match.group(1)))
+            if 300 <= price <= 250000:
+                return price
+    return None
 
 
 def google_market_search(query: str) -> list[dict[str, Any]]:
@@ -114,7 +126,7 @@ def google_market_search(query: str) -> list[dict[str, Any]]:
         title = str(item.get("title") or "")
         snippet = str(item.get("snippet") or "")
         link = str(item.get("link") or "")
-        price = extract_price(f"{title} {snippet}")
+        price = extract_listing_price(f"{title} {snippet}")
         if price is None:
             continue
         source_name = next(
@@ -353,7 +365,7 @@ def market_floor_value(
 
 def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     vehicle_type = str(payload.get("vehicleType") or "Auto").strip()
-    brand = str(payload.get("brand") or "").strip()
+    brand = str(payload.get("brand") or payload.get("make") or "").strip()
     model = str(payload.get("model") or "").strip()
     km = parse_float(payload.get("km"))
     fuel_type = str(payload.get("fuelType") or "").strip()
