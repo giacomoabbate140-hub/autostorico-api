@@ -37,22 +37,119 @@ def round_to_hundreds(value: float) -> int:
     return int(round(value / 100.0) * 100)
 
 
-def estimated_new_value(vehicle_type: str, brand: str, model: str) -> float:
+def normalize_condition(value: str) -> str:
+    cleaned = value.strip().lower()
+    if cleaned.startswith("ottim"):
+        return "Ottimo"
+    if cleaned.startswith("suff"):
+        return "Sufficiente"
+    return "Buono"
+
+
+def estimated_new_value(vehicle_type: str, brand: str, model: str, trim: str = "") -> float:
     if vehicle_type.lower() == "moto":
         return 7500
 
-    brand_model = f"{brand} {model}".lower()
+    brand_model = f"{brand} {model} {trim}".lower()
     premium = ["audi", "bmw", "mercedes", "lexus", "tesla", "volvo"]
     upper = ["alfa romeo", "mini", "jeep", "cupra", "land rover", "jaguar"]
     economy = ["fiat", "dacia", "citroen", "renault", "peugeot", "opel", "ford", "hyundai", "kia"]
 
+    if "panda" in brand_model:
+        return 14500
+    if any(name in brand_model for name in ["punto", "seicento", "cinquecento"]):
+        return 13500
     if any(name in brand_model for name in premium):
         return 32000
     if any(name in brand_model for name in upper):
         return 26000
     if any(name in brand_model for name in economy):
-        return 19000
+        return 17500
     return 22000
+
+
+def vehicle_detail_factor(fuel_type: str, gearbox: str, trim: str, condition: str) -> float:
+    factor = 1.0
+    normalized_condition = normalize_condition(condition).lower()
+    if normalized_condition.startswith("ottim"):
+        factor += 0.10
+    elif normalized_condition.startswith("buon"):
+        factor += 0.02
+    elif normalized_condition.startswith("suff"):
+        factor -= 0.18
+
+    if "auto" in gearbox.lower():
+        factor += 0.03
+
+    fuel = fuel_type.lower()
+    if "hybrid" in fuel or "ibrid" in fuel or "elettr" in fuel:
+        factor += 0.04
+    elif "diesel" in fuel:
+        factor -= 0.02
+
+    if trim.strip():
+        factor += 0.02
+    return max(0.84, min(1.15, factor))
+
+
+def market_floor_value(
+    vehicle_type: str,
+    brand: str,
+    model: str,
+    trim: str,
+    condition: str,
+    age: int,
+) -> float:
+    brand_model = f"{brand} {model} {trim}".lower()
+    normalized_condition = normalize_condition(condition)
+    is_moto = vehicle_type.lower() == "moto"
+    is_economy = any(
+        name in brand_model
+        for name in ["fiat", "dacia", "citroen", "renault", "peugeot", "opel", "ford", "hyundai", "kia"]
+    )
+    is_premium_or_rare = any(
+        name in brand_model
+        for name in ["audi", "bmw", "mercedes", "porsche", "ferrari", "land rover", "jaguar", "alfa romeo"]
+    )
+    is_panda_classic = "panda" in brand_model
+    is_collectible_panda = is_panda_classic and any(
+        name in brand_model for name in ["4x4", "sisley", "selecta"]
+    )
+
+    if is_moto:
+        if age >= 25:
+            return 350 if normalized_condition == "Sufficiente" else 550
+        return 500 if normalized_condition == "Sufficiente" else 700
+
+    if age >= 25:
+        if is_collectible_panda:
+            if normalized_condition == "Ottimo":
+                return 2500
+            if normalized_condition == "Buono":
+                return 1500
+            return 900
+        if is_panda_classic or is_economy:
+            if normalized_condition == "Ottimo":
+                return 800
+            if normalized_condition == "Buono":
+                return 450
+            return 250
+        if is_premium_or_rare:
+            if normalized_condition == "Ottimo":
+                return 1800
+            if normalized_condition == "Buono":
+                return 1100
+            return 650
+        return 350 if normalized_condition == "Sufficiente" else 650
+
+    if age >= 15:
+        if normalized_condition == "Ottimo":
+            return 1600 if is_premium_or_rare else 900
+        if normalized_condition == "Buono":
+            return 1000 if is_premium_or_rare else 650
+        return 650 if is_premium_or_rare else 350
+
+    return 700 if normalized_condition == "Sufficiente" else 1000
 
 
 def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
@@ -60,11 +157,15 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     brand = str(payload.get("brand") or "").strip()
     model = str(payload.get("model") or "").strip()
     km = parse_float(payload.get("km"))
+    fuel_type = str(payload.get("fuelType") or "").strip()
+    gearbox = str(payload.get("gearbox") or "").strip()
+    trim = str(payload.get("trim") or "").strip()
+    condition = str(payload.get("condition") or "Buono").strip()
     year = parse_year(payload.get("firstRegistrationDate"))
 
     current_year = 2026
     age = 6 if year is None else max(0, min(30, current_year - year))
-    base_value = estimated_new_value(vehicle_type, brand, model)
+    base_value = estimated_new_value(vehicle_type, brand, model, trim)
     is_moto = vehicle_type.lower() == "moto"
 
     age_factor = math.pow(0.86 if is_moto else 0.84, age)
@@ -84,17 +185,19 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     if int(payload.get("documentsCount") or 0) > 0:
         history_factor += 0.02
 
-    raw_value = base_value * age_factor * mileage_factor * history_factor
-    floor_value = 700 if is_moto else 1200
+    detail_factor = vehicle_detail_factor(fuel_type, gearbox, trim, condition)
+    raw_value = base_value * age_factor * mileage_factor * history_factor * detail_factor
+    floor_value = market_floor_value(vehicle_type, brand, model, trim, condition, age)
     average = max(floor_value, raw_value)
-    spread = 0.22 if year is None else 0.15
-    min_value = max(floor_value, average * (1 - spread))
-    max_value = max(min_value + 300, average * (1 + spread))
+    spread = 0.26 if year is None else 0.28 if age >= 20 else 0.16
+    min_value = max(floor_value * 0.75, average * (1 - spread))
+    max_value = max(min_value + 200, average * (1 + spread))
 
+    has_details = bool(fuel_type and gearbox and condition)
     confidence = (
-        "Alta: dati completi ricevuti dall'app."
-        if year is not None and km > 0
-        else "Media: mancano anno o km precisi."
+        "Alta: anno, km, stato e dettagli veicolo ricevuti dall'app."
+        if year is not None and km > 0 and has_details
+        else "Media: per aumentare attendibilita compila anno, km, stato, cambio, alimentazione e lavori."
     )
 
     return {
@@ -102,7 +205,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "averageValue": round_to_hundreds(average),
         "maxValue": round_to_hundreds(max_value),
         "confidence": confidence,
-        "method": "API AutoStorico: stima server basata su anno, km, marca/modello, storico e documenti. Pronta per collegamento a banca dati esterna autorizzata.",
+        "method": "API AutoStorico: stima server basata su anno, km, marca/modello, allestimento, stato, storico e documenti. Confronto predisposto per banche dati/listini e annunci pubblici autorizzati.",
     }
 
 
