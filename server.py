@@ -587,20 +587,21 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
 
     has_details = bool(fuel_type and gearbox and condition and previous_owners)
     matched_count = len(filtered_listings)
+    market_based = matched_count >= 3
     source_names = sorted({str(item.get("source") or "Fonte web") for item in filtered_listings})
     confidence = (
         f"Alta: valore confrontato con {matched_count} annunci/fonti web compatibili."
         if matched_count >= 8
         else f"Media: valore confrontato con {matched_count} annunci/fonti web compatibili."
-        if matched_count >= 3
-        else "Media: stima basata sui dati disponibili; completa lavori, documenti e dettagli veicolo per aumentare l'attendibilita."
+        if market_based
+        else "Server online: fonti mercato interrogate, ma non ci sono abbastanza prezzi confrontabili. Stima interna usata solo come fallback."
         if year is not None and km > 0 and has_details
         else "Media: compila anno, km, stato, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
     )
     method = (
-        "AutoStorico calcola una stima orientativa di vendita tra privati usando dati del veicolo, chilometri, anno, stato, manutenzione, revisioni, documenti e parametri di mercato aggiornabili tramite servizi esterni."
-        if matched_count >= 3
-        else "AutoStorico calcola una stima orientativa di vendita tra privati usando dati del veicolo, chilometri, anno, stato, manutenzione, revisioni, documenti e parametri di mercato aggiornabili tramite servizi esterni."
+        "Valore calcolato confrontando annunci/fonti mercato compatibili e corretto con i dati del veicolo."
+        if market_based
+        else "Server online ma confronto mercato insufficiente: AutoStorico non considera questo valore come prezzo web definitivo."
     )
 
     return {
@@ -612,6 +613,12 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "marketType": "vendita_privata",
         "matchedListings": matched_count,
         "sourcesUsed": source_names,
+        "marketBased": market_based,
+        "serverOnline": bool(
+            BRAVE_SEARCH_API_KEY
+            or SERPAPI_API_KEY
+            or (GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID)
+        ),
         "marketSearchConfigured": bool(
             BRAVE_SEARCH_API_KEY
             or SERPAPI_API_KEY
