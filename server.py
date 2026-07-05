@@ -91,6 +91,7 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
     broad_queries = [
         f"{query_core} auto usata prezzo vendita privati",
         f"{query_core} usata quotazione prezzo",
+        f"{query_core} AutoScout24 Subito Automobile prezzo",
     ]
     site_queries = [f"{query_core} prezzo site:{domain}" for _, domain in MARKET_SITES]
     return broad_queries + site_queries
@@ -225,17 +226,33 @@ def serpapi_market_search(query: str) -> list[dict[str, Any]]:
     with urllib.request.urlopen(request, timeout=10) as response:
         data = json.loads(response.read().decode("utf-8"))
     results = []
-    for item in data.get("organic_results", []):
+    search_items = []
+    for section_name in [
+        "organic_results",
+        "ads",
+        "inline_shopping_results",
+        "shopping_results",
+        "top_shopping_results",
+    ]:
+        search_items.extend(data.get(section_name) or [])
+    for item in search_items:
         title = str(item.get("title") or "")
         snippet = str(item.get("snippet") or "")
-        link = str(item.get("link") or "")
+        link = str(item.get("link") or item.get("product_link") or "")
         item_text = json.dumps(item, ensure_ascii=False)
-        price = extract_listing_price(f"{title} {snippet} {item_text}")
+        extracted_price = item.get("extracted_price")
+        price = (
+            int(float(extracted_price))
+            if extracted_price is not None
+            else extract_listing_price(f"{title} {snippet} {item_text}")
+        )
         if price is None:
+            continue
+        if not 300 <= price <= 250000:
             continue
         source_name = next(
             (name for name, domain in MARKET_SITES if domain in link),
-            "Fonte web",
+            str(item.get("source") or "Fonte web"),
         )
         results.append(
             {
@@ -487,29 +504,18 @@ def market_floor_value(
         name in brand_model
         for name in ["audi", "bmw", "mercedes", "porsche", "ferrari", "land rover", "jaguar", "alfa romeo"]
     )
-    is_panda_classic = "panda" in brand_model
-    is_collectible_panda = is_panda_classic and any(
-        name in brand_model for name in ["4x4", "sisley", "selecta"]
-    )
-
     if is_moto:
         if age >= 25:
             return 350 if normalized_condition == "Sufficiente" else 550
         return 500 if normalized_condition == "Sufficiente" else 700
 
     if age >= 25:
-        if is_collectible_panda:
+        if is_economy:
             if normalized_condition == "Ottimo":
-                return 6000
+                return 1800
             if normalized_condition == "Buono":
-                return 3500
-            return 1800
-        if is_panda_classic or is_economy:
-            if normalized_condition == "Ottimo":
-                return 4200
-            if normalized_condition == "Buono":
-                return 3000
-            return 2200
+                return 1100
+            return 600
         if is_premium_or_rare:
             if normalized_condition == "Ottimo":
                 return 2600
