@@ -4,6 +4,7 @@ import json
 import math
 import os
 import re
+import html
 import urllib.parse
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -80,8 +81,10 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
     model = str(payload.get("model") or "").strip()
     trim = str(payload.get("trim") or "").strip()
     km = int(parse_float(payload.get("km")))
-    query_core = " ".join(part for part in [brand, model, trim] if part)
+    base_core = " ".join(part for part in [brand, model, trim] if part)
+    query_core = base_core
     if year:
+        base_core = f"{base_core} {year}".strip()
         query_core = f"{query_core} {year}"
     if km > 0:
         rounded_km = int(round(km / 10000) * 10000)
@@ -89,16 +92,16 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
     if not query_core.strip():
         return []
     broad_queries = [
-        f"{query_core} auto usata prezzo vendita privati",
-        f"{query_core} usata quotazione prezzo",
-        f"{query_core} AutoScout24 Subito Automobile prezzo",
+        f"{query_core} auto usata prezzo",
+        f"{base_core} usata prezzo vendita privati",
+        f"{base_core} AutoScout24 Subito Automobile prezzo",
     ]
-    site_queries = [f"{query_core} prezzo site:{domain}" for _, domain in MARKET_SITES]
+    site_queries = [f"{base_core} prezzo site:{domain}" for _, domain in MARKET_SITES]
     return broad_queries + site_queries
 
 
 def extract_listing_price(text: str) -> int | None:
-    normalized = text.replace("\u00a0", " ")
+    normalized = html.unescape(text).replace("\u00a0", " ")
     price_token = r"(?:\u20ac|EUR)"
     number_token = r"([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})"
     for pattern in (rf"{price_token}\s*{number_token}", rf"{number_token}\s*{price_token}"):
@@ -107,6 +110,76 @@ def extract_listing_price(text: str) -> int | None:
             if 300 <= price <= 250000:
                 return price
     return None
+
+
+def market_source_name(link: str, fallback: str = "Fonte web") -> str:
+    return next(
+        (name for name, domain in MARKET_SITES if domain in link),
+        fallback,
+    )
+
+
+def is_market_url(link: str) -> bool:
+    return any(domain in link for _, domain in MARKET_SITES)
+
+
+def extract_price_from_listing_page(link: str) -> int | None:
+    if not link or not is_market_url(link):
+        return None
+    request = urllib.request.Request(
+        link,
+        headers={
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "it-IT,it;q=0.9",
+            "User-Agent": "Mozilla/5.0 AutoStoricoValueBot/1.0",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=8) as response:
+        content_type = response.headers.get("Content-Type", "")
+        if "text/html" not in content_type and "application/xhtml" not in content_type:
+            return None
+        raw = response.read(900000).decode("utf-8", errors="ignore")
+    page = html.unescape(raw)
+    structured_patterns = [
+        r'"price"\s*:\s*"?([0-9]{3,6}(?:[.,][0-9]{1,2})?)"?',
+        r'"priceAmount"\s*:\s*"?([0-9]{3,6}(?:[.,][0-9]{1,2})?)"?',
+        r'property=["\'](?:product:price:amount|og:price:amount)["\'][^>]*content=["\']([0-9]{3,6}(?:[.,][0-9]{1,2})?)',
+        r'content=["\']([0-9]{3,6}(?:[.,][0-9]{1,2})?)["\'][^>]*property=["\'](?:product:price:amount|og:price:amount)["\']',
+    ]
+    for pattern in structured_patterns:
+        for match in re.finditer(pattern, page, flags=re.IGNORECASE):
+            price = int(float(match.group(1).replace(".", "").replace(",", ".")))
+            if 300 <= price <= 250000:
+                return price
+    return extract_listing_price(page[:300000])
+
+
+def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte web") -> dict[str, Any] | None:
+    title = str(item.get("title") or "")
+    snippet = str(item.get("snippet") or item.get("description") or "")
+    link = str(item.get("link") or item.get("url") or item.get("product_link") or "")
+    if not link:
+        return None
+    item_text = json.dumps(item, ensure_ascii=False)
+    extracted_price = item.get("extracted_price")
+    price = (
+        int(float(extracted_price))
+        if extracted_price is not None
+        else extract_listing_price(f"{title} {snippet} {item_text}")
+    )
+    if price is None:
+        try:
+            price = extract_price_from_listing_page(link)
+        except Exception:
+            price = None
+    if price is None or not 300 <= price <= 250000:
+        return None
+    return {
+        "source": market_source_name(link, str(item.get("source") or fallback_source)),
+        "title": title[:140],
+        "url": link,
+        "price": price,
+    }
 
 
 def google_market_search(query: str) -> list[dict[str, Any]]:
@@ -131,24 +204,9 @@ def google_market_search(query: str) -> list[dict[str, Any]]:
         data = json.loads(response.read().decode("utf-8"))
     results = []
     for item in data.get("items", []):
-        title = str(item.get("title") or "")
-        snippet = str(item.get("snippet") or "")
-        link = str(item.get("link") or "")
-        price = extract_listing_price(f"{title} {snippet}")
-        if price is None:
-            continue
-        source_name = next(
-            (name for name, domain in MARKET_SITES if domain in link),
-            "Fonte web",
-        )
-        results.append(
-            {
-                "source": source_name,
-                "title": title[:140],
-                "url": link,
-                "price": price,
-            }
-        )
+        listing = listing_from_search_item(item)
+        if listing is not None:
+            results.append(listing)
     return results
 
 
@@ -178,25 +236,15 @@ def brave_market_search(query: str) -> list[dict[str, Any]]:
         data = json.loads(response.read().decode("utf-8"))
     results = []
     for item in data.get("web", {}).get("results", []):
-        title = str(item.get("title") or "")
-        snippet = str(item.get("description") or "")
-        extra_snippets = " ".join(str(value) for value in item.get("extra_snippets") or [])
-        link = str(item.get("url") or "")
-        price = extract_listing_price(f"{title} {snippet} {extra_snippets}")
-        if price is None:
-            continue
-        source_name = next(
-            (name for name, domain in MARKET_SITES if domain in link),
-            "Fonte web",
+        item["snippet"] = " ".join(
+            [
+                str(item.get("description") or ""),
+                " ".join(str(value) for value in item.get("extra_snippets") or []),
+            ]
         )
-        results.append(
-            {
-                "source": source_name,
-                "title": title[:140],
-                "url": link,
-                "price": price,
-            }
-        )
+        listing = listing_from_search_item(item)
+        if listing is not None:
+            results.append(listing)
     return results
 
 
@@ -236,32 +284,9 @@ def serpapi_market_search(query: str) -> list[dict[str, Any]]:
     ]:
         search_items.extend(data.get(section_name) or [])
     for item in search_items:
-        title = str(item.get("title") or "")
-        snippet = str(item.get("snippet") or "")
-        link = str(item.get("link") or item.get("product_link") or "")
-        item_text = json.dumps(item, ensure_ascii=False)
-        extracted_price = item.get("extracted_price")
-        price = (
-            int(float(extracted_price))
-            if extracted_price is not None
-            else extract_listing_price(f"{title} {snippet} {item_text}")
-        )
-        if price is None:
-            continue
-        if not 300 <= price <= 250000:
-            continue
-        source_name = next(
-            (name for name, domain in MARKET_SITES if domain in link),
-            str(item.get("source") or "Fonte web"),
-        )
-        results.append(
-            {
-                "source": source_name,
-                "title": title[:140],
-                "url": link,
-                "price": price,
-            }
-        )
+        listing = listing_from_search_item(item)
+        if listing is not None:
+            results.append(listing)
     return results
 
 
@@ -295,27 +320,9 @@ def serpapi_shopping_market_search(query: str) -> list[dict[str, Any]]:
     for category in data.get("categorized_shopping_results") or []:
         shopping_groups.extend(category.get("shopping_results") or [])
     for item in shopping_groups:
-        title = str(item.get("title") or "")
-        link = str(item.get("link") or item.get("product_link") or "")
-        price_value = item.get("extracted_price")
-        price = (
-            int(float(price_value))
-            if price_value is not None
-            else extract_listing_price(json.dumps(item, ensure_ascii=False))
-        )
-        if price is None:
-            continue
-        if not 300 <= price <= 250000:
-            continue
-        source_name = str(item.get("source") or "Google Shopping")
-        results.append(
-            {
-                "source": source_name,
-                "title": title[:140],
-                "url": link,
-                "price": price,
-            }
-        )
+        listing = listing_from_search_item(item, fallback_source="Google Shopping")
+        if listing is not None:
+            results.append(listing)
     return results
 
 
@@ -362,11 +369,11 @@ def market_estimate_from_sources(
         if lower_limit <= float(item.get("price") or 0) <= upper_limit
     ]
     filtered_prices = [float(item["price"]) for item in filtered]
-    if len(filtered_prices) < 3:
+    if len(filtered_prices) < 2:
         return None, filtered
     source_average = median(filtered_prices)
     if internal_average > 0:
-        blended = (source_average * 0.70) + (internal_average * 0.30)
+        blended = (source_average * 0.90) + (internal_average * 0.10)
     else:
         blended = source_average
     return blended, filtered
@@ -587,7 +594,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
 
     has_details = bool(fuel_type and gearbox and condition and previous_owners)
     matched_count = len(filtered_listings)
-    market_based = matched_count >= 3
+    market_based = matched_count >= 2
     source_names = sorted({str(item.get("source") or "Fonte web") for item in filtered_listings})
     confidence = (
         f"Alta: valore confrontato con {matched_count} annunci/fonti web compatibili."
@@ -599,7 +606,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         else "Media: compila anno, km, stato, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
     )
     method = (
-        "Valore calcolato confrontando annunci/fonti mercato compatibili e corretto con i dati del veicolo."
+        "Valore calcolato partendo da annunci/fonti mercato compatibili; i dati del veicolo correggono solo leggermente il range."
         if market_based
         else "Server online ma confronto mercato insufficiente: AutoStorico non considera questo valore come prezzo web definitivo."
     )
