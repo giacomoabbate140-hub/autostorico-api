@@ -224,13 +224,62 @@ def serpapi_market_search(query: str) -> list[dict[str, Any]]:
         title = str(item.get("title") or "")
         snippet = str(item.get("snippet") or "")
         link = str(item.get("link") or "")
-        price = extract_listing_price(f"{title} {snippet}")
+        item_text = json.dumps(item, ensure_ascii=False)
+        price = extract_listing_price(f"{title} {snippet} {item_text}")
         if price is None:
             continue
         source_name = next(
             (name for name, domain in MARKET_SITES if domain in link),
             "Fonte web",
         )
+        results.append(
+            {
+                "source": source_name,
+                "title": title[:140],
+                "url": link,
+                "price": price,
+            }
+        )
+    return results
+
+
+def serpapi_shopping_market_search(query: str) -> list[dict[str, Any]]:
+    if not SERPAPI_API_KEY:
+        return []
+    params = urllib.parse.urlencode(
+        {
+            "engine": "google_shopping",
+            "q": query.replace(" site:", " "),
+            "api_key": SERPAPI_API_KEY,
+            "google_domain": "google.it",
+            "gl": "it",
+            "hl": "it",
+            "location": "Italy",
+        }
+    )
+    url = f"https://serpapi.com/search.json?{params}"
+    request = urllib.request.Request(
+        url,
+        headers={
+            "Accept": "application/json",
+            "Accept-Encoding": "identity",
+            "User-Agent": "AutoStoricoValueBot/1.0",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=10) as response:
+        data = json.loads(response.read().decode("utf-8"))
+    results = []
+    shopping_groups = list(data.get("shopping_results") or [])
+    for category in data.get("categorized_shopping_results") or []:
+        shopping_groups.extend(category.get("shopping_results") or [])
+    for item in shopping_groups:
+        title = str(item.get("title") or "")
+        link = str(item.get("link") or item.get("product_link") or "")
+        price_value = item.get("extracted_price")
+        price = int(float(price_value)) if price_value is not None else extract_listing_price(json.dumps(item, ensure_ascii=False))
+        if not 300 <= price <= 250000:
+            continue
+        source_name = str(item.get("source") or "Google Shopping")
         results.append(
             {
                 "source": source_name,
@@ -252,6 +301,8 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> list[dict
             provider_results = brave_market_search(query)
             if not provider_results:
                 provider_results = serpapi_market_search(query)
+            if not provider_results:
+                provider_results = serpapi_shopping_market_search(query)
             if not provider_results:
                 provider_results = google_market_search(query)
             for listing in provider_results:
