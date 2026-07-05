@@ -730,7 +730,19 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
 class AutoStoricoApi(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         if self.path == "/health":
-            self.send_json({"ok": True, "service": "autostorico-value-api"})
+            configured_providers = {
+                "brave": bool(BRAVE_SEARCH_API_KEY),
+                "serpapi": bool(SERPAPI_API_KEY),
+                "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
+            }
+            self.send_json(
+                {
+                    "ok": True,
+                    "service": "autostorico-value-api",
+                    "marketSearchConfigured": any(configured_providers.values()),
+                    "configuredProviders": configured_providers,
+                }
+            )
             return
         self.send_json({"error": "not_found"}, status=404)
 
