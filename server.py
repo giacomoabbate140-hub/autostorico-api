@@ -16,6 +16,7 @@ HOST = os.environ.get("AUTOSTORICO_API_HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT") or os.environ.get("AUTOSTORICO_API_PORT", "8088"))
 GOOGLE_CSE_API_KEY = os.environ.get("GOOGLE_CSE_API_KEY", "").strip()
 GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID", "").strip()
+GOOGLE_CSE_ENABLED = os.environ.get("AUTOSTORICO_GOOGLE_CSE_ENABLED", "0") == "1"
 BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
 SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
 MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
@@ -205,7 +206,7 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
 
 
 def google_market_search(query: str) -> list[dict[str, Any]]:
-    if not GOOGLE_CSE_API_KEY or not GOOGLE_CSE_ID:
+    if not GOOGLE_CSE_ENABLED or not GOOGLE_CSE_API_KEY or not GOOGLE_CSE_ID:
         return []
     params = urllib.parse.urlencode(
         {
@@ -390,7 +391,16 @@ def serpapi_shopping_market_search(query: str, diagnostics: dict[str, Any] | Non
 
 
 def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    diagnostics: dict[str, Any] = {"providers": [], "errors": []}
+    configured_providers = {
+        "brave": bool(BRAVE_SEARCH_API_KEY),
+        "serpapi": bool(SERPAPI_API_KEY),
+        "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
+    }
+    diagnostics: dict[str, Any] = {
+        "configuredProviders": configured_providers,
+        "providers": [],
+        "errors": [],
+    }
     if not MARKET_SEARCH_ENABLED:
         return [], diagnostics
     listings: list[dict[str, Any]] = []
@@ -398,12 +408,14 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     for query in build_market_queries(payload, year):
         query_results: list[dict[str, Any]] = []
         providers = [
-            ("brave", lambda: brave_market_search(query, diagnostics)),
-            ("serpapi_google", lambda: serpapi_market_search(query, diagnostics)),
-            ("serpapi_shopping", lambda: serpapi_shopping_market_search(query, diagnostics)),
-            ("google_cse", lambda: google_market_search(query)),
+            ("brave", configured_providers["brave"], lambda: brave_market_search(query, diagnostics)),
+            ("serpapi_google", configured_providers["serpapi"], lambda: serpapi_market_search(query, diagnostics)),
+            ("serpapi_shopping", configured_providers["serpapi"], lambda: serpapi_shopping_market_search(query, diagnostics)),
+            ("google_cse", configured_providers["google_cse"], lambda: google_market_search(query)),
         ]
-        for provider_name, provider in providers:
+        for provider_name, is_configured, provider in providers:
+            if not is_configured:
+                continue
             try:
                 provider_results = provider()
             except Exception as exc:
@@ -674,12 +686,15 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     has_details = bool(fuel_type and gearbox and condition and previous_owners)
     matched_count = len(filtered_listings)
     market_based = matched_count >= 2
+    market_configured = any(market_diagnostics.get("configuredProviders", {}).values())
     source_names = sorted({str(item.get("source") or "Fonte web") for item in filtered_listings})
     confidence = (
         f"Alta: valore confrontato con {matched_count} annunci/fonti web compatibili."
         if matched_count >= 8
         else f"Media: valore confrontato con {matched_count} annunci/fonti web compatibili."
         if market_based
+        else "Server online, ma fonti mercato non configurate. Aggiungi SerpApi o Brave su Render per usare prezzi web reali."
+        if not market_configured
         else "Server online: fonti mercato interrogate, ma non ci sono abbastanza prezzi confrontabili. Stima interna usata solo come fallback."
         if year is not None and km > 0 and has_details
         else "Media: compila anno, km, stato, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
@@ -687,6 +702,8 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     method = (
         "Valore calcolato partendo da annunci/fonti mercato compatibili; i dati del veicolo correggono solo leggermente il range."
         if market_based
+        else "API online ma fonti mercato assenti: configura SERPAPI_API_KEY o BRAVE_SEARCH_API_KEY su Render."
+        if not market_configured
         else "Server online ma confronto mercato insufficiente: AutoStorico non considera questo valore come prezzo web definitivo."
     )
 
@@ -700,16 +717,9 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "matchedListings": matched_count,
         "sourcesUsed": source_names,
         "marketBased": market_based,
-        "serverOnline": bool(
-            BRAVE_SEARCH_API_KEY
-            or SERPAPI_API_KEY
-            or (GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID)
-        ),
-        "marketSearchConfigured": bool(
-            BRAVE_SEARCH_API_KEY
-            or SERPAPI_API_KEY
-            or (GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID)
-        ),
+        "serverOnline": True,
+        "marketSearchConfigured": market_configured,
+        "configuredProviders": market_diagnostics.get("configuredProviders", {}),
         "sampleListings": filtered_listings[:5],
     }
     if payload.get("debug") is True:
