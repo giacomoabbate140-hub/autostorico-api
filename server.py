@@ -112,6 +112,28 @@ def extract_listing_price(text: str) -> int | None:
     return None
 
 
+def parse_price_amount(value: str) -> int | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    cleaned = re.sub(r"[^0-9,\.]", "", text)
+    if not cleaned:
+        return None
+    try:
+        if "," in cleaned:
+            amount = float(cleaned.replace(".", "").replace(",", "."))
+        elif cleaned.count(".") == 1 and len(cleaned.rsplit(".", 1)[1]) <= 2:
+            amount = float(cleaned)
+        else:
+            amount = float(cleaned.replace(".", ""))
+    except ValueError:
+        return None
+    price = int(round(amount))
+    if 300 <= price <= 250000:
+        return price
+    return None
+
+
 def market_source_name(link: str, fallback: str = "Fonte web") -> str:
     return next(
         (name for name, domain in MARKET_SITES if domain in link),
@@ -148,8 +170,8 @@ def extract_price_from_listing_page(link: str) -> int | None:
     ]
     for pattern in structured_patterns:
         for match in re.finditer(pattern, page, flags=re.IGNORECASE):
-            price = int(float(match.group(1).replace(".", "").replace(",", ".")))
-            if 300 <= price <= 250000:
+            price = parse_price_amount(match.group(1))
+            if price is not None:
                 return price
     return extract_listing_price(page[:300000])
 
@@ -374,25 +396,36 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     for query in build_market_queries(payload, year):
-        try:
-            provider_results = brave_market_search(query, diagnostics)
-            if not provider_results:
-                provider_results = serpapi_market_search(query, diagnostics)
-            if not provider_results:
-                provider_results = serpapi_shopping_market_search(query, diagnostics)
-            if not provider_results:
-                provider_results = google_market_search(query)
-            for listing in provider_results:
-                url = str(listing.get("url") or "")
-                if url in seen_urls:
-                    continue
-                seen_urls.add(url)
-                listings.append(listing)
-            if len(listings) >= 12:
+        query_results: list[dict[str, Any]] = []
+        providers = [
+            ("brave", lambda: brave_market_search(query, diagnostics)),
+            ("serpapi_google", lambda: serpapi_market_search(query, diagnostics)),
+            ("serpapi_shopping", lambda: serpapi_shopping_market_search(query, diagnostics)),
+            ("google_cse", lambda: google_market_search(query)),
+        ]
+        for provider_name, provider in providers:
+            try:
+                provider_results = provider()
+            except Exception as exc:
+                diagnostics["errors"].append(
+                    {
+                        "provider": provider_name,
+                        "query": query,
+                        "error": str(exc)[:180],
+                    }
+                )
+                continue
+            if provider_results:
+                query_results.extend(provider_results)
                 break
-        except Exception as exc:
-            diagnostics["errors"].append({"query": query, "error": str(exc)[:180]})
-            continue
+        for listing in query_results:
+            url = str(listing.get("url") or "")
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            listings.append(listing)
+        if len(listings) >= 12:
+            break
     diagnostics["pricesFound"] = len(listings)
     return listings[:20], diagnostics
 
