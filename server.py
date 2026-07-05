@@ -276,7 +276,13 @@ def serpapi_shopping_market_search(query: str) -> list[dict[str, Any]]:
         title = str(item.get("title") or "")
         link = str(item.get("link") or item.get("product_link") or "")
         price_value = item.get("extracted_price")
-        price = int(float(price_value)) if price_value is not None else extract_listing_price(json.dumps(item, ensure_ascii=False))
+        price = (
+            int(float(price_value))
+            if price_value is not None
+            else extract_listing_price(json.dumps(item, ensure_ascii=False))
+        )
+        if price is None:
+            continue
         if not 300 <= price <= 250000:
             continue
         source_name = str(item.get("source") or "Google Shopping")
