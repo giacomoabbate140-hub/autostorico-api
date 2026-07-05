@@ -506,10 +506,10 @@ def market_floor_value(
             return 1800
         if is_panda_classic or is_economy:
             if normalized_condition == "Ottimo":
-                return 1400
+                return 4200
             if normalized_condition == "Buono":
-                return 800
-            return 400
+                return 3000
+            return 2200
         if is_premium_or_rare:
             if normalized_condition == "Ottimo":
                 return 2600
