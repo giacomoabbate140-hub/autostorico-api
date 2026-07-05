@@ -210,7 +210,7 @@ def google_market_search(query: str) -> list[dict[str, Any]]:
     return results
 
 
-def brave_market_search(query: str) -> list[dict[str, Any]]:
+def brave_market_search(query: str, diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not BRAVE_SEARCH_API_KEY:
         return []
     params = urllib.parse.urlencode(
@@ -235,7 +235,8 @@ def brave_market_search(query: str) -> list[dict[str, Any]]:
     with urllib.request.urlopen(request, timeout=8) as response:
         data = json.loads(response.read().decode("utf-8"))
     results = []
-    for item in data.get("web", {}).get("results", []):
+    search_items = list(data.get("web", {}).get("results", []) or [])
+    for item in search_items:
         item["snippet"] = " ".join(
             [
                 str(item.get("description") or ""),
@@ -245,10 +246,20 @@ def brave_market_search(query: str) -> list[dict[str, Any]]:
         listing = listing_from_search_item(item)
         if listing is not None:
             results.append(listing)
+    if diagnostics is not None:
+        diagnostics["providers"].append(
+            {
+                "provider": "brave",
+                "query": query,
+                "items": len(search_items),
+                "priced": len(results),
+                "sampleUrls": [str(item.get("url") or "") for item in search_items[:3]],
+            }
+        )
     return results
 
 
-def serpapi_market_search(query: str) -> list[dict[str, Any]]:
+def serpapi_market_search(query: str, diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not SERPAPI_API_KEY:
         return []
     params = urllib.parse.urlencode(
@@ -273,6 +284,8 @@ def serpapi_market_search(query: str) -> list[dict[str, Any]]:
     )
     with urllib.request.urlopen(request, timeout=10) as response:
         data = json.loads(response.read().decode("utf-8"))
+    if data.get("error"):
+        raise RuntimeError(str(data.get("error")))
     results = []
     search_items = []
     for section_name in [
@@ -287,10 +300,23 @@ def serpapi_market_search(query: str) -> list[dict[str, Any]]:
         listing = listing_from_search_item(item)
         if listing is not None:
             results.append(listing)
+    if diagnostics is not None:
+        diagnostics["providers"].append(
+            {
+                "provider": "serpapi_google",
+                "query": query,
+                "items": len(search_items),
+                "priced": len(results),
+                "sampleUrls": [
+                    str(item.get("link") or item.get("product_link") or "")
+                    for item in search_items[:3]
+                ],
+            }
+        )
     return results
 
 
-def serpapi_shopping_market_search(query: str) -> list[dict[str, Any]]:
+def serpapi_shopping_market_search(query: str, diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not SERPAPI_API_KEY:
         return []
     params = urllib.parse.urlencode(
@@ -315,6 +341,8 @@ def serpapi_shopping_market_search(query: str) -> list[dict[str, Any]]:
     )
     with urllib.request.urlopen(request, timeout=10) as response:
         data = json.loads(response.read().decode("utf-8"))
+    if data.get("error"):
+        raise RuntimeError(str(data.get("error")))
     results = []
     shopping_groups = list(data.get("shopping_results") or [])
     for category in data.get("categorized_shopping_results") or []:
@@ -323,21 +351,35 @@ def serpapi_shopping_market_search(query: str) -> list[dict[str, Any]]:
         listing = listing_from_search_item(item, fallback_source="Google Shopping")
         if listing is not None:
             results.append(listing)
+    if diagnostics is not None:
+        diagnostics["providers"].append(
+            {
+                "provider": "serpapi_shopping",
+                "query": query,
+                "items": len(shopping_groups),
+                "priced": len(results),
+                "sampleUrls": [
+                    str(item.get("link") or item.get("product_link") or "")
+                    for item in shopping_groups[:3]
+                ],
+            }
+        )
     return results
 
 
-def fetch_market_sources(payload: dict[str, Any], year: int | None) -> list[dict[str, Any]]:
+def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    diagnostics: dict[str, Any] = {"providers": [], "errors": []}
     if not MARKET_SEARCH_ENABLED:
-        return []
+        return [], diagnostics
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     for query in build_market_queries(payload, year):
         try:
-            provider_results = brave_market_search(query)
+            provider_results = brave_market_search(query, diagnostics)
             if not provider_results:
-                provider_results = serpapi_market_search(query)
+                provider_results = serpapi_market_search(query, diagnostics)
             if not provider_results:
-                provider_results = serpapi_shopping_market_search(query)
+                provider_results = serpapi_shopping_market_search(query, diagnostics)
             if not provider_results:
                 provider_results = google_market_search(query)
             for listing in provider_results:
@@ -346,9 +388,13 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> list[dict
                     continue
                 seen_urls.add(url)
                 listings.append(listing)
-        except Exception:
+            if len(listings) >= 12:
+                break
+        except Exception as exc:
+            diagnostics["errors"].append({"query": query, "error": str(exc)[:180]})
             continue
-    return listings[:20]
+    diagnostics["pricesFound"] = len(listings)
+    return listings[:20], diagnostics
 
 
 def market_estimate_from_sources(
@@ -582,7 +628,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     raw_value = base_value * age_factor * mileage_factor * history_factor * detail_factor
     floor_value = market_floor_value(vehicle_type, brand, model, trim, condition, age)
     internal_average = max(floor_value, raw_value)
-    listings = fetch_market_sources(payload, year)
+    listings, market_diagnostics = fetch_market_sources(payload, year)
     market_average, filtered_listings = market_estimate_from_sources(
         listings,
         internal_average,
@@ -611,7 +657,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         else "Server online ma confronto mercato insufficiente: AutoStorico non considera questo valore come prezzo web definitivo."
     )
 
-    return {
+    response = {
         "minValue": round_to_hundreds(min_value),
         "averageValue": round_to_hundreds(average),
         "maxValue": round_to_hundreds(max_value),
@@ -633,6 +679,9 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         ),
         "sampleListings": filtered_listings[:5],
     }
+    if payload.get("debug") is True:
+        response["marketDiagnostics"] = market_diagnostics
+    return response
 
 
 class AutoStoricoApi(BaseHTTPRequestHandler):
