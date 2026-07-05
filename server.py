@@ -88,7 +88,12 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         query_core = f"{query_core} {rounded_km} km"
     if not query_core.strip():
         return []
-    return [f"{query_core} prezzo site:{domain}" for _, domain in MARKET_SITES]
+    broad_queries = [
+        f"{query_core} auto usata prezzo vendita privati",
+        f"{query_core} usata quotazione prezzo",
+    ]
+    site_queries = [f"{query_core} prezzo site:{domain}" for _, domain in MARKET_SITES]
+    return broad_queries + site_queries
 
 
 def extract_listing_price(text: str) -> int | None:
@@ -536,7 +541,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     tire_type = str(payload.get("tireType") or "").strip()
     air_conditioning_ok = bool(payload.get("airConditioningOk") is True)
     previous_owners = str(payload.get("previousOwners") or "1 proprietario").strip()
-    year = parse_year(payload.get("firstRegistrationDate"))
+    year = parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
 
     current_year = 2026
     age = 6 if year is None else max(0, min(30, current_year - year))
