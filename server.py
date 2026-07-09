@@ -158,6 +158,19 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         f"{base_core} usata prezzo vendita privati",
         f"{base_core} AutoScout24 Subito Automobile prezzo",
     ]
+    if year:
+        age = max(0, min(40, 2026 - year))
+        historic_kind = historic_classification(age, brand, model, trim)
+        if historic_kind in {"collectible_historic", "young_collectible"}:
+            broad_queries.extend(
+                [
+                    f"{base_core} storica prezzo",
+                    f"{base_core} epoca ASI prezzo",
+                    f"{base_core} collezione valore",
+                ]
+            )
+        elif historic_kind == "historic_age_common":
+            broad_queries.append(f"{base_core} storica prezzo vendita privati")
     site_queries = [f"{base_core} prezzo site:{domain}" for _, domain in MARKET_SITES]
     return broad_queries + site_queries
 
@@ -271,6 +284,16 @@ def is_basic_old_economy_car(brand: str, model: str, trim: str = "") -> bool:
         "opel corsa",
     ]
     return any(name in text for name in basic_models)
+
+
+def historic_classification(age: int, brand: str, model: str, trim: str = "") -> str:
+    if age < 20:
+        return "ordinary"
+    if is_collectible_variant(brand, model, trim):
+        return "collectible_historic" if age >= 30 else "young_collectible"
+    if age >= 30:
+        return "historic_age_common"
+    return "potential_historic_interest"
 
 
 def extract_price_from_listing_page(link: str) -> int | None:
@@ -625,14 +648,29 @@ def asking_to_private_sale_factor(
 ) -> float:
     if is_moto:
         return 0.90 if age <= 5 else 0.86
+    historic_kind = historic_classification(age, brand, model, trim)
+    if historic_kind == "collectible_historic":
+        return 0.82
+    if historic_kind == "young_collectible":
+        return 0.88
     if age >= 25 and is_basic_old_economy_car(brand, model, trim):
         if km >= 180000:
             return 0.45
         if km >= 120000:
             return 0.52
         return 0.60
-    if age >= 25 and is_collectible_variant(brand, model, trim):
-        return 0.82
+    if historic_kind == "historic_age_common":
+        if km >= 180000:
+            return 0.62
+        if km >= 120000:
+            return 0.68
+        return 0.74
+    if historic_kind == "potential_historic_interest":
+        if km >= 180000:
+            return 0.78
+        if km >= 120000:
+            return 0.82
+        return 0.86
     if age >= 12 or km >= 140000:
         return 0.86
     if age >= 8 or km >= 100000:
@@ -854,6 +892,8 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
 
     current_year = 2026
     age = 6 if year is None else max(0, min(30, current_year - year))
+    actual_age = 6 if year is None else max(0, current_year - year)
+    historic_kind = historic_classification(actual_age, brand, model, trim)
     base_value = estimated_new_value(vehicle_type, brand, model, trim, engine_cc, fuel_type)
     is_moto = vehicle_type.lower() == "moto"
 
@@ -928,6 +968,8 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "confidence": confidence,
         "method": method,
         "marketType": "vendita_privata",
+        "historicCriteria": historic_kind,
+        "vehicleAge": actual_age,
         "matchedListings": matched_count,
         "sourcesUsed": source_names,
         "marketBased": market_based,
