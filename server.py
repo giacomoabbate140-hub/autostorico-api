@@ -37,6 +37,34 @@ def parse_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
+def parse_engine_cc(value: Any) -> int:
+    text = str(value or "").lower().strip()
+    if not text:
+        return 0
+    if "." in text and not re.search(r"\d{4}", text):
+        as_liters = parse_float(text)
+        if 0.6 <= as_liters <= 8.0:
+            return int(round(as_liters * 1000))
+    cc = int(parse_float(text))
+    if 600 <= cc <= 8000:
+        return cc
+    compact = re.sub(r"\D", "", text)
+    if compact.isdigit():
+        cc = int(compact)
+        if 600 <= cc <= 8000:
+            return cc
+    return 0
+
+
+def engine_query_label(engine_cc: int) -> str:
+    if engine_cc <= 0:
+        return ""
+    liters = engine_cc / 1000
+    if liters < 1:
+        return f"{engine_cc} cc"
+    return f"{liters:.1f}".replace(".", ",")
+
+
 def parse_year(first_registration_date: Any) -> int | None:
     text = str(first_registration_date or "").strip()
     if not text:
@@ -81,8 +109,13 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
     brand = str(payload.get("brand") or payload.get("make") or "").strip()
     model = str(payload.get("model") or "").strip()
     trim = str(payload.get("trim") or "").strip()
+    fuel_type = str(payload.get("fuelType") or "").strip()
+    engine_cc = parse_engine_cc(payload.get("engineDisplacement") or payload.get("engineCc"))
+    engine_label = engine_query_label(engine_cc)
     km = int(parse_float(payload.get("km")))
-    base_core = " ".join(part for part in [brand, model, trim] if part)
+    base_core = " ".join(
+        part for part in [brand, model, trim, engine_label, fuel_type] if part
+    )
     query_core = base_core
     if year:
         base_core = f"{base_core} {year}".strip()
@@ -517,7 +550,7 @@ def normalize_condition(value: str) -> str:
     return "Buono"
 
 
-def estimated_new_value(vehicle_type: str, brand: str, model: str, trim: str = "") -> float:
+def estimated_new_value(vehicle_type: str, brand: str, model: str, trim: str = "", engine_cc: int = 0, fuel_type: str = "") -> float:
     if vehicle_type.lower() == "moto":
         return 7500
 
@@ -527,16 +560,34 @@ def estimated_new_value(vehicle_type: str, brand: str, model: str, trim: str = "
     economy = ["fiat", "dacia", "citroen", "renault", "peugeot", "opel", "ford", "hyundai", "kia"]
 
     if "panda" in brand_model:
-        return 14500
-    if any(name in brand_model for name in ["punto", "seicento", "cinquecento"]):
-        return 13500
-    if any(name in brand_model for name in premium):
-        return 32000
-    if any(name in brand_model for name in upper):
-        return 26000
-    if any(name in brand_model for name in economy):
-        return 17500
-    return 22000
+        base = 14500
+    elif any(name in brand_model for name in ["punto", "seicento", "cinquecento"]):
+        base = 13500
+    elif any(name in brand_model for name in premium):
+        base = 32000
+    elif any(name in brand_model for name in upper):
+        base = 26000
+    elif any(name in brand_model for name in economy):
+        base = 17500
+    else:
+        base = 22000
+    fuel = fuel_type.lower()
+    if "elettr" in fuel:
+        base *= 1.25
+    elif "ibrid" in fuel or "hybrid" in fuel:
+        base *= 1.12
+    elif "diesel" in fuel and engine_cc >= 1500:
+        base *= 1.05
+    if engine_cc:
+        if engine_cc <= 1000:
+            base *= 0.92
+        elif engine_cc <= 1400:
+            base *= 1.00
+        elif engine_cc <= 2000:
+            base *= 1.08
+        else:
+            base *= 1.12
+    return base
 
 
 def normalize_previous_owners(value: str) -> str:
@@ -548,7 +599,7 @@ def normalize_previous_owners(value: str) -> str:
     return '1 proprietario'
 
 
-def vehicle_detail_factor(fuel_type: str, gearbox: str, trim: str, condition: str, tires_changed: bool = False, tire_type: str = '', air_conditioning_ok: bool = False, previous_owners: str = '1 proprietario') -> float:
+def vehicle_detail_factor(fuel_type: str, gearbox: str, trim: str, condition: str, tires_changed: bool = False, tire_type: str = '', air_conditioning_ok: bool = False, previous_owners: str = '1 proprietario', engine_cc: int = 0) -> float:
     factor = 1.0
     normalized_condition = normalize_condition(condition).lower()
     if normalized_condition.startswith("ottim"):
@@ -562,10 +613,24 @@ def vehicle_detail_factor(fuel_type: str, gearbox: str, trim: str, condition: st
         factor += 0.03
 
     fuel = fuel_type.lower()
-    if "hybrid" in fuel or "ibrid" in fuel or "elettr" in fuel:
+    if "elettr" in fuel:
+        factor += 0.05
+    elif "hybrid" in fuel or "ibrid" in fuel:
         factor += 0.04
+    elif "gpl" in fuel or "metano" in fuel:
+        factor += 0.02
     elif "diesel" in fuel:
-        factor -= 0.02
+        factor -= 0.01
+
+    if engine_cc:
+        if engine_cc <= 1000:
+            factor -= 0.03
+        elif engine_cc <= 1400:
+            factor += 0.01
+        elif engine_cc <= 2000:
+            factor += 0.03
+        else:
+            factor += 0.01
 
     if trim.strip():
         factor += 0.02
@@ -638,6 +703,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     model = str(payload.get("model") or "").strip()
     km = parse_float(payload.get("km"))
     fuel_type = str(payload.get("fuelType") or "").strip()
+    engine_cc = parse_engine_cc(payload.get("engineDisplacement") or payload.get("engineCc"))
     gearbox = str(payload.get("gearbox") or "").strip()
     trim = str(payload.get("trim") or "").strip()
     condition = str(payload.get("condition") or "Buono").strip()
@@ -649,7 +715,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
 
     current_year = 2026
     age = 6 if year is None else max(0, min(30, current_year - year))
-    base_value = estimated_new_value(vehicle_type, brand, model, trim)
+    base_value = estimated_new_value(vehicle_type, brand, model, trim, engine_cc, fuel_type)
     is_moto = vehicle_type.lower() == "moto"
 
     age_factor = private_sale_age_factor(age, is_moto)
@@ -669,7 +735,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     if int(payload.get("documentsCount") or 0) > 0:
         history_factor += 0.02
 
-    detail_factor = vehicle_detail_factor(fuel_type, gearbox, trim, condition, tires_changed, tire_type, air_conditioning_ok, previous_owners)
+    detail_factor = vehicle_detail_factor(fuel_type, gearbox, trim, condition, tires_changed, tire_type, air_conditioning_ok, previous_owners, engine_cc)
     raw_value = base_value * age_factor * mileage_factor * history_factor * detail_factor
     floor_value = market_floor_value(vehicle_type, brand, model, trim, condition, age)
     internal_average = max(floor_value, raw_value)
@@ -683,7 +749,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     min_value = max(floor_value * 0.75, average * (1 - spread))
     max_value = max(min_value + 200, average * (1 + spread))
 
-    has_details = bool(fuel_type and gearbox and condition and previous_owners)
+    has_details = bool(fuel_type and engine_cc and gearbox and condition and previous_owners)
     matched_count = len(filtered_listings)
     market_based = matched_count >= 2
     market_configured = any(market_diagnostics.get("configuredProviders", {}).values())
@@ -697,7 +763,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if not market_configured
         else "Server online: fonti mercato interrogate, ma non ci sono abbastanza prezzi confrontabili. Stima interna usata solo come fallback."
         if year is not None and km > 0 and has_details
-        else "Media: compila anno, km, stato, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
+        else "Media: compila anno, km, stato, cilindrata, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
     )
     method = (
         "Valore calcolato partendo da annunci/fonti mercato compatibili; i dati del veicolo correggono solo leggermente il range."
