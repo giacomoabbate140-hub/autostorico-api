@@ -524,6 +524,18 @@ def market_estimate_from_sources(
     return blended, filtered
 
 
+def asking_to_private_sale_factor(age: int, km: float, is_moto: bool) -> float:
+    if is_moto:
+        return 0.90 if age <= 5 else 0.86
+    if age >= 12 or km >= 140000:
+        return 0.86
+    if age >= 8 or km >= 100000:
+        return 0.89
+    if age >= 4:
+        return 0.92
+    return 0.95
+
+
 def private_sale_age_factor(age: int, is_moto: bool) -> float:
     if is_moto:
         anchors = {
@@ -765,6 +777,8 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         listings,
         internal_average,
     )
+    if market_average is not None:
+        market_average *= asking_to_private_sale_factor(age, km, is_moto)
     average = market_average if market_average is not None else internal_average
     spread = 0.26 if year is None else 0.28 if age >= 20 else 0.16
     min_value = max(floor_value * 0.75, average * (1 - spread))
@@ -787,7 +801,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         else "Media: compila anno, km, stato, cilindrata, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
     )
     method = (
-        "Valore calcolato partendo da annunci/fonti mercato compatibili; i dati del veicolo correggono solo leggermente il range."
+        "Valore calcolato partendo da annunci/fonti mercato compatibili, poi corretto verso un prezzo realistico di vendita tra privati."
         if market_based
         else "API online ma fonti mercato assenti: configura SERPAPI_API_KEY o BRAVE_SEARCH_API_KEY su Render."
         if not market_configured
