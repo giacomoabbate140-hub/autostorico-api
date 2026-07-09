@@ -24,6 +24,10 @@ MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
     ("Subito Motori", "subito.it"),
     ("Automobile.it", "automobile.it"),
+    ("Quattroruote", "quattroruote.it"),
+    ("AutoUncle", "autouncle.it"),
+    ("Trovit Auto", "auto.trovit.it"),
+    ("Bakeca Motori", "bakeca.it"),
     ("Moto.it/Automoto", "automoto.it"),
 ]
 
@@ -210,11 +214,28 @@ def extract_price_from_listing_page(link: str) -> int | None:
     return extract_listing_price(page[:300000])
 
 
-def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte web") -> dict[str, Any] | None:
+def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
+    cleaned = text.lower()
+    brand = str(payload.get("brand") or payload.get("make") or "").strip().lower()
+    model = str(payload.get("model") or "").strip().lower()
+    if brand and brand not in cleaned:
+        return False
+    if model:
+        model_tokens = [token for token in re.split(r"\s+", model) if len(token) > 1]
+        if model_tokens and not all(token in cleaned for token in model_tokens):
+            return False
+    return True
+
+
+def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte web", payload: dict[str, Any] | None = None) -> dict[str, Any] | None:
     title = str(item.get("title") or "")
     snippet = str(item.get("snippet") or item.get("description") or "")
     link = str(item.get("link") or item.get("url") or item.get("product_link") or "")
     if not link:
+        return None
+    if not is_market_url(link):
+        return None
+    if payload is not None and not is_relevant_listing_text(f"{title} {snippet} {link}", payload):
         return None
     item_text = json.dumps(item, ensure_ascii=False)
     extracted_price = item.get("extracted_price")
@@ -238,7 +259,7 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
     }
 
 
-def google_market_search(query: str) -> list[dict[str, Any]]:
+def google_market_search(query: str, payload: dict[str, Any]) -> list[dict[str, Any]]:
     if not GOOGLE_CSE_ENABLED or not GOOGLE_CSE_API_KEY or not GOOGLE_CSE_ID:
         return []
     params = urllib.parse.urlencode(
@@ -260,13 +281,13 @@ def google_market_search(query: str) -> list[dict[str, Any]]:
         data = json.loads(response.read().decode("utf-8"))
     results = []
     for item in data.get("items", []):
-        listing = listing_from_search_item(item)
+        listing = listing_from_search_item(item, payload=payload)
         if listing is not None:
             results.append(listing)
     return results
 
 
-def brave_market_search(query: str, diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not BRAVE_SEARCH_API_KEY:
         return []
     params = urllib.parse.urlencode(
@@ -299,7 +320,7 @@ def brave_market_search(query: str, diagnostics: dict[str, Any] | None = None) -
                 " ".join(str(value) for value in item.get("extra_snippets") or []),
             ]
         )
-        listing = listing_from_search_item(item)
+        listing = listing_from_search_item(item, payload=payload)
         if listing is not None:
             results.append(listing)
     if diagnostics is not None:
@@ -315,7 +336,7 @@ def brave_market_search(query: str, diagnostics: dict[str, Any] | None = None) -
     return results
 
 
-def serpapi_market_search(query: str, diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def serpapi_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not SERPAPI_API_KEY:
         return []
     params = urllib.parse.urlencode(
@@ -353,7 +374,7 @@ def serpapi_market_search(query: str, diagnostics: dict[str, Any] | None = None)
     ]:
         search_items.extend(data.get(section_name) or [])
     for item in search_items:
-        listing = listing_from_search_item(item)
+        listing = listing_from_search_item(item, payload=payload)
         if listing is not None:
             results.append(listing)
     if diagnostics is not None:
@@ -372,7 +393,7 @@ def serpapi_market_search(query: str, diagnostics: dict[str, Any] | None = None)
     return results
 
 
-def serpapi_shopping_market_search(query: str, diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def serpapi_shopping_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not SERPAPI_API_KEY:
         return []
     params = urllib.parse.urlencode(
@@ -404,7 +425,7 @@ def serpapi_shopping_market_search(query: str, diagnostics: dict[str, Any] | Non
     for category in data.get("categorized_shopping_results") or []:
         shopping_groups.extend(category.get("shopping_results") or [])
     for item in shopping_groups:
-        listing = listing_from_search_item(item, fallback_source="Google Shopping")
+        listing = listing_from_search_item(item, fallback_source="Google Shopping", payload=payload)
         if listing is not None:
             results.append(listing)
     if diagnostics is not None:
@@ -441,10 +462,10 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     for query in build_market_queries(payload, year):
         query_results: list[dict[str, Any]] = []
         providers = [
-            ("brave", configured_providers["brave"], lambda: brave_market_search(query, diagnostics)),
-            ("serpapi_google", configured_providers["serpapi"], lambda: serpapi_market_search(query, diagnostics)),
-            ("serpapi_shopping", configured_providers["serpapi"], lambda: serpapi_shopping_market_search(query, diagnostics)),
-            ("google_cse", configured_providers["google_cse"], lambda: google_market_search(query)),
+            ("brave", configured_providers["brave"], lambda: brave_market_search(query, payload, diagnostics)),
+            ("serpapi_google", configured_providers["serpapi"], lambda: serpapi_market_search(query, payload, diagnostics)),
+            ("serpapi_shopping", configured_providers["serpapi"], lambda: serpapi_shopping_market_search(query, payload, diagnostics)),
+            ("google_cse", configured_providers["google_cse"], lambda: google_market_search(query, payload)),
         ]
         for provider_name, is_configured, provider in providers:
             if not is_configured:
@@ -795,7 +816,8 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
 
 class AutoStoricoApi(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
-        if self.path == "/health":
+        request_path = urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
+        if request_path == "/health":
             configured_providers = {
                 "brave": bool(BRAVE_SEARCH_API_KEY),
                 "serpapi": bool(SERPAPI_API_KEY),
@@ -814,7 +836,8 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
         self.send_json({"error": "not_found"}, status=404)
 
     def do_POST(self) -> None:
-        if self.path != "/api/vehicle-value":
+        request_path = urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
+        if request_path != "/api/vehicle-value":
             self.send_json({"error": "not_found"}, status=404)
             return
 
