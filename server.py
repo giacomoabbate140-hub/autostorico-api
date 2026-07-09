@@ -805,6 +805,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 {
                     "ok": True,
                     "service": "autostorico-value-api",
+                    "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
                 }
