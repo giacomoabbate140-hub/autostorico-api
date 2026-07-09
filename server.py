@@ -236,6 +236,43 @@ def weighted_median(items: list[dict[str, Any]]) -> float:
     return rows[-1][0]
 
 
+def vehicle_text(brand: str, model: str, trim: str = "") -> str:
+    return f"{brand} {model} {trim}".lower()
+
+
+def is_collectible_variant(brand: str, model: str, trim: str = "") -> bool:
+    text = vehicle_text(brand, model, trim)
+    collectible_terms = [
+        "4x4",
+        "sisley",
+        "selecta",
+        "trekking",
+        "val d'isere",
+        "val d isere",
+        "young 4x4",
+        "country club",
+    ]
+    return any(term in text for term in collectible_terms)
+
+
+def is_basic_old_economy_car(brand: str, model: str, trim: str = "") -> bool:
+    text = vehicle_text(brand, model, trim)
+    if is_collectible_variant(brand, model, trim):
+        return False
+    basic_models = [
+        "fiat panda",
+        "fiat punto",
+        "fiat seicento",
+        "fiat cinquecento",
+        "ford fiesta",
+        "renault clio",
+        "peugeot 106",
+        "citroen saxo",
+        "opel corsa",
+    ]
+    return any(name in text for name in basic_models)
+
+
 def extract_price_from_listing_page(link: str) -> int | None:
     if not link or not is_market_url(link):
         return None
@@ -578,9 +615,24 @@ def market_estimate_from_sources(
     return blended, filtered
 
 
-def asking_to_private_sale_factor(age: int, km: float, is_moto: bool) -> float:
+def asking_to_private_sale_factor(
+    age: int,
+    km: float,
+    is_moto: bool,
+    brand: str = "",
+    model: str = "",
+    trim: str = "",
+) -> float:
     if is_moto:
         return 0.90 if age <= 5 else 0.86
+    if age >= 25 and is_basic_old_economy_car(brand, model, trim):
+        if km >= 180000:
+            return 0.45
+        if km >= 120000:
+            return 0.52
+        return 0.60
+    if age >= 25 and is_collectible_variant(brand, model, trim):
+        return 0.82
     if age >= 12 or km >= 140000:
         return 0.86
     if age >= 8 or km >= 100000:
@@ -832,7 +884,14 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         internal_average,
     )
     if market_average is not None:
-        market_average *= asking_to_private_sale_factor(age, km, is_moto)
+        market_average *= asking_to_private_sale_factor(
+            age,
+            km,
+            is_moto,
+            brand,
+            model,
+            trim,
+        )
     average = market_average if market_average is not None else internal_average
     spread = 0.26 if year is None else 0.28 if age >= 20 else 0.16
     min_value = max(floor_value * 0.75, average * (1 - spread))
