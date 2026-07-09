@@ -28,7 +28,31 @@ MARKET_SITES = [
     ("AutoUncle", "autouncle.it"),
     ("Trovit Auto", "auto.trovit.it"),
     ("Bakeca Motori", "bakeca.it"),
+    ("AutoXY", "autoxy.it"),
+    ("AutoHero", "autohero.com"),
+    ("Spoticar", "spoticar.it"),
+    ("AutoSuperMarket", "autosupermarket.it"),
+    ("Annunci AlVolante", "annunci.alvolante.it"),
     ("Moto.it/Automoto", "automoto.it"),
+]
+
+DIRECT_MARKET_DOMAINS = [
+    "autoscout24.it",
+    "subito.it",
+    "automobile.it",
+    "autohero.com",
+    "spoticar.it",
+    "annunci.alvolante.it",
+]
+
+REFERENCE_MARKET_DOMAINS = [
+    "quattroruote.it",
+    "autouncle.it",
+    "auto.trovit.it",
+    "bakeca.it",
+    "autoxy.it",
+    "autosupermarket.it",
+    "automoto.it",
 ]
 
 
@@ -183,6 +207,35 @@ def is_market_url(link: str) -> bool:
     return any(domain in link for _, domain in MARKET_SITES)
 
 
+def source_weight(link: str) -> float:
+    if any(domain in link for domain in DIRECT_MARKET_DOMAINS):
+        return 1.0
+    if any(domain in link for domain in REFERENCE_MARKET_DOMAINS):
+        return 0.65
+    return 0.45
+
+
+def weighted_median(items: list[dict[str, Any]]) -> float:
+    rows = sorted(
+        (
+            (float(item["price"]), float(item.get("weight") or 1.0))
+            for item in items
+            if item.get("price")
+        ),
+        key=lambda row: row[0],
+    )
+    if not rows:
+        return 0
+    total_weight = sum(weight for _, weight in rows)
+    midpoint = total_weight / 2
+    running = 0.0
+    for price, weight in rows:
+        running += weight
+        if running >= midpoint:
+            return price
+    return rows[-1][0]
+
+
 def extract_price_from_listing_page(link: str) -> int | None:
     if not link or not is_market_url(link):
         return None
@@ -256,6 +309,7 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
         "title": title[:140],
         "url": link,
         "price": price,
+        "weight": source_weight(link),
     }
 
 
@@ -516,7 +570,7 @@ def market_estimate_from_sources(
     filtered_prices = [float(item["price"]) for item in filtered]
     if len(filtered_prices) < 2:
         return None, filtered
-    source_average = median(filtered_prices)
+    source_average = weighted_median(filtered)
     if internal_average > 0:
         blended = (source_average * 0.90) + (internal_average * 0.10)
     else:
