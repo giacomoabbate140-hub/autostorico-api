@@ -619,20 +619,36 @@ def market_estimate_from_sources(
     prices = [float(item["price"]) for item in listings if item.get("price")]
     if not prices:
         return None, []
-    center = median(prices)
-    lower_limit = max(300.0, center * 0.55)
-    upper_limit = center * 1.65
+    center = weighted_median(listings)
+    lower_limit = max(300.0, center * 0.70)
+    upper_limit = center * 1.35
+    if internal_average > 0:
+        lower_limit = max(lower_limit, internal_average * 0.62)
+        upper_limit = min(upper_limit, internal_average * 1.22)
     filtered = [
         item
         for item in listings
         if lower_limit <= float(item.get("price") or 0) <= upper_limit
     ]
     filtered_prices = [float(item["price"]) for item in filtered]
-    if len(filtered_prices) < 2:
+    if len(filtered_prices) < 3 and internal_average > 0:
+        relaxed_lower = max(300.0, internal_average * 0.55)
+        relaxed_upper = internal_average * 1.30
+        filtered = [
+            item
+            for item in listings
+            if relaxed_lower <= float(item.get("price") or 0) <= relaxed_upper
+        ]
+        filtered_prices = [float(item["price"]) for item in filtered]
+    if len(filtered_prices) < 3:
         return None, filtered
     source_average = weighted_median(filtered)
     if internal_average > 0:
-        blended = (source_average * 0.90) + (internal_average * 0.10)
+        divergence = abs(source_average - internal_average) / max(internal_average, 1)
+        if divergence > 0.18:
+            blended = (source_average * 0.55) + (internal_average * 0.45)
+        else:
+            blended = (source_average * 0.75) + (internal_average * 0.25)
     else:
         blended = source_average
     return blended, filtered
