@@ -187,6 +187,41 @@ def extract_listing_price(text: str) -> int | None:
     return None
 
 
+def extract_listing_year(text: str) -> int | None:
+    current_year = 2026
+    for match in re.finditer(r"\b(19[5-9][0-9]|20[0-2][0-9])\b", text):
+        year = int(match.group(1))
+        if 1950 <= year <= current_year + 1:
+            return year
+    return None
+
+
+def extract_listing_km(text: str) -> int | None:
+    normalized = html.unescape(text).replace("\u00a0", " ")
+    patterns = [
+        r"(?<![A-Za-z0-9])([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})\s*(?:km|chilometri)\b",
+        r"(?:km|chilometri)\s*(?<![A-Za-z0-9])([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})\b",
+    ]
+    for pattern in patterns:
+        for match in re.finditer(pattern, normalized, flags=re.IGNORECASE):
+            km = int(re.sub(r"\D", "", match.group(1)))
+            if 1000 <= km <= 500000:
+                return km
+    return None
+
+
+def quartile(sorted_values: list[float], ratio: float) -> float:
+    if not sorted_values:
+        return 0
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    position = (len(sorted_values) - 1) * ratio
+    lower = int(position)
+    upper = min(lower + 1, len(sorted_values) - 1)
+    fraction = position - lower
+    return sorted_values[lower] + ((sorted_values[upper] - sorted_values[lower]) * fraction)
+
+
 def parse_price_amount(value: str) -> int | None:
     text = str(value or "").strip()
     if not text:
@@ -331,11 +366,21 @@ def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
     cleaned = text.lower()
     brand = str(payload.get("brand") or payload.get("make") or "").strip().lower()
     model = str(payload.get("model") or "").strip().lower()
+    target_year = parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
+    target_km = int(parse_float(payload.get("km")))
     if brand and brand not in cleaned:
         return False
     if model:
         model_tokens = [token for token in re.split(r"\s+", model) if len(token) > 1]
         if model_tokens and not all(token in cleaned for token in model_tokens):
+            return False
+    listing_year = extract_listing_year(text)
+    if target_year and listing_year and abs(listing_year - target_year) > 1:
+        return False
+    listing_km = extract_listing_km(text)
+    if target_km > 0 and listing_km:
+        km_tolerance = max(30000, int(target_km * 0.40))
+        if abs(listing_km - target_km) > km_tolerance:
             return False
     return True
 
@@ -344,13 +389,14 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
     title = str(item.get("title") or "")
     snippet = str(item.get("snippet") or item.get("description") or "")
     link = str(item.get("link") or item.get("url") or item.get("product_link") or "")
+    item_text = json.dumps(item, ensure_ascii=False)
+    combined_text = f"{title} {snippet} {link} {item_text}"
     if not link:
         return None
     if not is_market_url(link):
         return None
-    if payload is not None and not is_relevant_listing_text(f"{title} {snippet} {link}", payload):
+    if payload is not None and not is_relevant_listing_text(combined_text, payload):
         return None
-    item_text = json.dumps(item, ensure_ascii=False)
     extracted_price = item.get("extracted_price")
     price = (
         int(float(extracted_price))
@@ -369,6 +415,8 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
         "title": title[:140],
         "url": link,
         "price": price,
+        "year": extract_listing_year(combined_text),
+        "km": extract_listing_km(combined_text),
         "weight": source_weight(link),
     }
 
@@ -642,6 +690,20 @@ def market_estimate_from_sources(
         filtered_prices = [float(item["price"]) for item in filtered]
     if len(filtered_prices) < 3:
         return None, filtered
+    ordered_prices = sorted(filtered_prices)
+    q1 = quartile(ordered_prices, 0.25)
+    q3 = quartile(ordered_prices, 0.75)
+    iqr = q3 - q1
+    if iqr > 0:
+        iqr_lower = max(300.0, q1 - (1.5 * iqr))
+        iqr_upper = q3 + (1.5 * iqr)
+        iqr_filtered = [
+            item
+            for item in filtered
+            if iqr_lower <= float(item.get("price") or 0) <= iqr_upper
+        ]
+        if len(iqr_filtered) >= 3:
+            filtered = iqr_filtered
     source_average = weighted_median(filtered)
     if internal_average > 0:
         divergence = abs(source_average - internal_average) / max(internal_average, 1)
