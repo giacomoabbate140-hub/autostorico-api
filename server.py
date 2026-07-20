@@ -7,6 +7,7 @@ import re
 import html
 import urllib.parse
 import urllib.request
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
@@ -20,6 +21,7 @@ GOOGLE_CSE_ENABLED = os.environ.get("AUTOSTORICO_GOOGLE_CSE_ENABLED", "0") == "1
 BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
 SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
 MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
+MINIMUM_MARKET_LISTINGS = 3
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
     ("Subito Motori", "subito.it"),
@@ -1017,7 +1019,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
 
     has_details = bool(fuel_type and engine_cc and gearbox and condition and previous_owners)
     matched_count = len(filtered_listings)
-    market_based = matched_count >= 2
+    market_based = matched_count >= MINIMUM_MARKET_LISTINGS
     market_configured = any(market_diagnostics.get("configuredProviders", {}).values())
     source_names = sorted({str(item.get("source") or "Fonte web") for item in filtered_listings})
     confidence = (
@@ -1049,8 +1051,10 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "historicCriteria": historic_kind,
         "vehicleAge": actual_age,
         "matchedListings": matched_count,
+        "minimumListingsRequired": MINIMUM_MARKET_LISTINGS,
         "sourcesUsed": source_names,
         "marketBased": market_based,
+        "marketCheckedAt": datetime.now(timezone.utc).isoformat(),
         "serverOnline": True,
         "marketSearchConfigured": market_configured,
         "configuredProviders": market_diagnostics.get("configuredProviders", {}),
