@@ -5,6 +5,9 @@ import math
 import os
 import re
 import html
+import hashlib
+import threading
+import time
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -12,7 +15,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
 
-API_KEY = os.environ.get("AUTOSTORICO_API_KEY", "autostorico-test-key")
+# A mobile app cannot keep a shared API secret confidential. Requests are
+# therefore protected by server-side limits and cache instead of a key in APKs.
+API_KEY = os.environ.get("AUTOSTORICO_API_KEY", "").strip()
 HOST = os.environ.get("AUTOSTORICO_API_HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT") or os.environ.get("AUTOSTORICO_API_PORT", "8088"))
 GOOGLE_CSE_API_KEY = os.environ.get("GOOGLE_CSE_API_KEY", "").strip()
@@ -22,6 +27,12 @@ BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
 SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
 MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
 MINIMUM_MARKET_LISTINGS = 3
+MARKET_CACHE_TTL_SECONDS = int(os.environ.get("AUTOSTORICO_CACHE_TTL_SECONDS", str(30 * 24 * 60 * 60)))
+MARKET_RATE_WINDOW_SECONDS = int(os.environ.get("AUTOSTORICO_RATE_WINDOW_SECONDS", "3600"))
+MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
+MARKET_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
+MARKET_REQUESTS: dict[str, list[float]] = {}
+MARKET_GUARD_LOCK = threading.Lock()
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
     ("Subito Motori", "subito.it"),
@@ -56,6 +67,59 @@ REFERENCE_MARKET_DOMAINS = [
     "autosupermarket.it",
     "automoto.it",
 ]
+
+
+def market_cache_key(payload: dict[str, Any]) -> str:
+    """Keep estimates reusable without retaining a vehicle plate in memory."""
+    km = max(0, int(parse_float(payload.get("km"), 0)))
+    fields = {
+        "vehicleType": str(payload.get("vehicleType") or "").strip().lower(),
+        "brand": str(payload.get("brand") or payload.get("make") or "").strip().lower(),
+        "model": str(payload.get("model") or "").strip().lower(),
+        "year": parse_year(payload.get("firstRegistrationDate")),
+        "fuelType": str(payload.get("fuelType") or "").strip().lower(),
+        "engineCc": parse_engine_cc(payload.get("engineDisplacement")),
+        "gearbox": str(payload.get("gearbox") or "").strip().lower(),
+        "trim": str(payload.get("trim") or "").strip().lower(),
+        "condition": str(payload.get("condition") or "").strip().lower(),
+        "kmBucket": (km // 5000) * 5000,
+    }
+    serialized = json.dumps(fields, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+def cached_market_estimate(cache_key: str) -> dict[str, Any] | None:
+    now = time.time()
+    with MARKET_GUARD_LOCK:
+        cached = MARKET_CACHE.get(cache_key)
+        if cached is None:
+            return None
+        created_at, estimate = cached
+        if now - created_at > MARKET_CACHE_TTL_SECONDS:
+            MARKET_CACHE.pop(cache_key, None)
+            return None
+        return estimate
+
+
+def cache_market_estimate(cache_key: str, estimate: dict[str, Any]) -> None:
+    with MARKET_GUARD_LOCK:
+        MARKET_CACHE[cache_key] = (time.time(), estimate)
+
+
+def can_run_market_search(client_id: str) -> bool:
+    now = time.time()
+    with MARKET_GUARD_LOCK:
+        recent = [
+            timestamp
+            for timestamp in MARKET_REQUESTS.get(client_id, [])
+            if now - timestamp < MARKET_RATE_WINDOW_SECONDS
+        ]
+        if len(recent) >= MARKET_RATE_LIMIT:
+            MARKET_REQUESTS[client_id] = recent
+            return False
+        recent.append(now)
+        MARKET_REQUESTS[client_id] = recent
+        return True
 
 
 def parse_float(value: Any, default: float = 0.0) -> float:
@@ -1094,17 +1158,34 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
 
         auth = self.headers.get("Authorization", "")
         expected = f"Bearer {API_KEY}"
-        if API_KEY and auth != expected:
+        if auth and API_KEY and auth != expected:
             self.send_json({"error": "unauthorized"}, status=401)
             return
 
         try:
             length = int(self.headers.get("Content-Length", "0"))
+            if length <= 0 or length > 65536:
+                self.send_json({"error": "invalid_request"}, status=400)
+                return
             raw_body = self.rfile.read(length).decode("utf-8")
             payload = json.loads(raw_body or "{}")
             if not isinstance(payload, dict):
                 raise ValueError("Payload must be an object")
-            estimate = estimate_vehicle_value(payload)
+            cache_key = market_cache_key(payload)
+            estimate = cached_market_estimate(cache_key)
+            if estimate is None:
+                client_id = (
+                    self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+                    or self.client_address[0]
+                )
+                if not can_run_market_search(client_id):
+                    self.send_json(
+                        {"error": "rate_limited", "retryAfterSeconds": MARKET_RATE_WINDOW_SECONDS},
+                        status=429,
+                    )
+                    return
+                estimate = estimate_vehicle_value(payload)
+                cache_market_estimate(cache_key, estimate)
             self.send_json({"estimate": estimate})
         except Exception as exc:
             self.send_json({"error": "bad_request", "detail": str(exc)}, status=400)

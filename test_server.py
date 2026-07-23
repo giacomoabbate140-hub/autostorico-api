@@ -1,6 +1,6 @@
 import unittest
 
-from server import market_estimate_from_sources
+from server import market_cache_key, market_estimate_from_sources
 
 
 class MarketEvidenceTests(unittest.TestCase):
@@ -24,6 +24,18 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertIsNotNone(estimate)
         self.assertEqual(len(filtered), 3)
+
+    def test_market_cache_key_does_not_include_plate_and_buckets_kilometres(self):
+        first = {
+            "plate": "AA000AA",
+            "brand": "Opel",
+            "model": "Corsa",
+            "engineDisplacement": "1229",
+            "km": 121100,
+        }
+        second = {**first, "plate": "ZZ999ZZ", "km": 124900}
+
+        self.assertEqual(market_cache_key(first), market_cache_key(second))
 
 
 if __name__ == "__main__":
