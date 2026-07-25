@@ -3,7 +3,7 @@ services:
     name: autostorico-api
     env: python
     plan: free
-    buildCommand: ""
+    buildCommand: pip install -r requirements.txt
     startCommand: python server.py
     healthCheckPath: /health
     envVars:
@@ -11,3 +11,11 @@ services:
         sync: false
       - key: AUTOSTORICO_API_HOST
         value: 0.0.0.0
+      - key: AUTOSTORICO_PREMIUM_API_KEY
+        sync: false
+      - key: GOOGLE_PLAY_SERVICE_ACCOUNT_FILE
+        value: /etc/secrets/google-play-service-account.json
+      - key: GOOGLE_PLAY_PACKAGE_NAME
+        value: autostorico.myapp
+      - key: GOOGLE_PLAY_SUBSCRIPTION_ID
+        value: premium_6_mesi

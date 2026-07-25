@@ -16,7 +16,11 @@ Su Render:
 1. New
 2. Web Service
 3. Runtime: Python
-4. Build command: vuoto
+4. Build command:
+
+```text
+pip install -r requirements.txt
+```
 5. Start command:
 
 ```text
@@ -34,7 +38,30 @@ AUTOSTORICO_API_HOST=0.0.0.0
 
 Non impostare `PORT`: Render la fornisce automaticamente.
 
-## 4. Test API
+## 4. Verifica sicura Premium Google Play
+
+Per vendere il piano `premium_6_mesi` aggiungi su Render queste variabili:
+
+```text
+AUTOSTORICO_PREMIUM_API_KEY=una_seconda_chiave_lunga_segreta
+GOOGLE_PLAY_PACKAGE_NAME=autostorico.myapp
+GOOGLE_PLAY_SUBSCRIPTION_ID=premium_6_mesi
+GOOGLE_PLAY_SERVICE_ACCOUNT_FILE=/etc/secrets/google-play-service-account.json
+```
+
+La service account deve avere l'accesso alla Google Play Developer API per l'app
+`autostorico.myapp`. Carica il suo JSON come Secret File di Render con nome
+`google-play-service-account.json`; non inserirlo mai nel repository GitHub.
+
+Compila l'app con:
+
+```powershell
+flutter build appbundle --release `
+  --dart-define=ENTITLEMENT_API_URL=https://NOME-SERVIZIO.onrender.com/api/premium/verify `
+  --dart-define=ENTITLEMENT_API_KEY=la_stessa_seconda_chiave_lunga_segreta
+```
+
+## 5. Test API
 
 Apri:
 

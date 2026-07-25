@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 import os
+from pathlib import Path
 import re
 import html
 import hashlib
@@ -13,6 +14,13 @@ import urllib.request
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
+
+try:
+    from google.auth.transport.requests import AuthorizedSession
+    from google.oauth2 import service_account
+except ImportError:
+    AuthorizedSession = None
+    service_account = None
 
 
 # A mobile app cannot keep a shared API secret confidential. Requests are
@@ -33,6 +41,19 @@ MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
 MARKET_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_REQUESTS: dict[str, list[float]] = {}
 MARKET_GUARD_LOCK = threading.Lock()
+GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = os.environ.get(
+    "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", ""
+).strip()
+GOOGLE_PLAY_SERVICE_ACCOUNT_FILE = os.environ.get(
+    "GOOGLE_PLAY_SERVICE_ACCOUNT_FILE", ""
+).strip()
+GOOGLE_PLAY_PACKAGE_NAME = os.environ.get(
+    "GOOGLE_PLAY_PACKAGE_NAME", "autostorico.myapp"
+).strip()
+GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
+    "GOOGLE_PLAY_SUBSCRIPTION_ID", "premium_6_mesi"
+).strip()
+PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
     ("Subito Motori", "subito.it"),
@@ -1129,6 +1150,113 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     return response
 
 
+def google_play_service_account_json() -> str:
+    """Load the credential from an environment value or Render secret file."""
+    if GOOGLE_PLAY_SERVICE_ACCOUNT_JSON:
+        return GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
+    if not GOOGLE_PLAY_SERVICE_ACCOUNT_FILE:
+        return ""
+    try:
+        return Path(GOOGLE_PLAY_SERVICE_ACCOUNT_FILE).read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
+def premium_verification_configured() -> bool:
+    return bool(
+        google_play_service_account_json()
+        and PREMIUM_API_KEY
+        and GOOGLE_PLAY_PACKAGE_NAME
+        and GOOGLE_PLAY_SUBSCRIPTION_ID
+        and AuthorizedSession is not None
+        and service_account is not None
+    )
+
+
+def verify_google_play_subscription(
+    purchase_token: str, product_id: str
+) -> dict[str, Any]:
+    """Confirm a Google Play subscription server-side, never trusting the app."""
+    if not premium_verification_configured():
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Verifica Premium non ancora configurata.",
+        }
+    if product_id != GOOGLE_PLAY_SUBSCRIPTION_ID:
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Piano Premium non valido.",
+        }
+    if not purchase_token or len(purchase_token) < 12:
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Token di acquisto non valido.",
+        }
+
+    try:
+        service_account_info = json.loads(google_play_service_account_json())
+        credentials = service_account.Credentials.from_service_account_info(
+            service_account_info,
+            scopes=["https://www.googleapis.com/auth/androidpublisher"],
+        )
+        session = AuthorizedSession(credentials)
+        encoded_token = urllib.parse.quote(purchase_token, safe="")
+        endpoint = (
+            "https://androidpublisher.googleapis.com/androidpublisher/v3/"
+            f"applications/{urllib.parse.quote(GOOGLE_PLAY_PACKAGE_NAME, safe='')}/"
+            f"purchases/subscriptionsv2/tokens/{encoded_token}"
+        )
+        response = session.get(endpoint, timeout=12)
+        if response.status_code != 200:
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Acquisto non confermato da Google Play.",
+            }
+        data = response.json()
+        line_items = list(data.get("lineItems") or [])
+        matching_item = next(
+            (item for item in line_items if item.get("productId") == product_id),
+            None,
+        )
+        if matching_item is None:
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Il piano acquistato non corrisponde ad AutoStorico Premium.",
+            }
+        state = str(data.get("subscriptionState") or "")
+        expiry = str(matching_item.get("expiryTime") or "")
+        inactive_states = {
+            "SUBSCRIPTION_STATE_PENDING",
+            "SUBSCRIPTION_STATE_ON_HOLD",
+            "SUBSCRIPTION_STATE_PAUSED",
+            "SUBSCRIPTION_STATE_EXPIRED",
+        }
+        active = state not in inactive_states and bool(expiry)
+        return {
+            "active": active,
+            "isTrial": False,
+            "expiresAt": expiry if active else None,
+            "message": "Premium verificato e attivo." if active else "Abbonamento non attivo.",
+        }
+    except (ValueError, KeyError, TypeError):
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Configurazione Premium non valida sul server.",
+        }
+    except Exception:
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Verifica Premium temporaneamente non disponibile.",
+        }
+
+
 class AutoStoricoApi(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         request_path = urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
@@ -1145,6 +1273,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
+                    "premiumVerificationConfigured": premium_verification_configured(),
                 }
             )
             return
@@ -1152,13 +1281,16 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         request_path = urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
-        if request_path != "/api/vehicle-value":
+        if request_path not in {"/api/vehicle-value", "/api/premium/verify"}:
             self.send_json({"error": "not_found"}, status=404)
             return
 
         auth = self.headers.get("Authorization", "")
-        expected = f"Bearer {API_KEY}"
-        if auth and API_KEY and auth != expected:
+        if request_path == "/api/premium/verify":
+            if not PREMIUM_API_KEY or auth != f"Bearer {PREMIUM_API_KEY}":
+                self.send_json({"error": "unauthorized"}, status=401)
+                return
+        elif auth and API_KEY and auth != f"Bearer {API_KEY}":
             self.send_json({"error": "unauthorized"}, status=401)
             return
 
@@ -1171,6 +1303,13 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             payload = json.loads(raw_body or "{}")
             if not isinstance(payload, dict):
                 raise ValueError("Payload must be an object")
+            if request_path == "/api/premium/verify":
+                verification = verify_google_play_subscription(
+                    str(payload.get("purchaseToken") or "").strip(),
+                    str(payload.get("productId") or "").strip(),
+                )
+                self.send_json(verification)
+                return
             cache_key = market_cache_key(payload)
             estimate = cached_market_estimate(cache_key)
             if estimate is None:
