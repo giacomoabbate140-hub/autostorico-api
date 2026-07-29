@@ -1257,9 +1257,222 @@ def verify_google_play_subscription(
         }
 
 
+DEFECT_SOURCE_OFFICIAL = "NHTSA richiami/reclami ufficiali"
+DEFECT_SOURCE_COMMUNITY = "Community/forum utenti da verificare"
+DEFECT_SOURCE_SURVEY = "Owner reviews/survey affidabilita da verificare"
+
+DEFECT_DATABASE: list[dict[str, Any]] = [
+    {
+        "brand": "Fiat",
+        "aliases": ["Abarth", "Lancia"],
+        "models": ["500", "595", "695", "panda", "panda hybrid", "tipo", "punto", "500x", "500l", "ypsilon", "elefantino"],
+        "title": "Frizione, elettronica, mild hybrid e avantreno",
+        "severity": "Media",
+        "typicalKm": "60.000 - 170.000 km",
+        "estimatedCost": "120 - 1800 EUR",
+        "check": "Controlla frizione, servosterzo city, batteria 12V/start&stop, display, sensori, sospensioni anteriori, EGR/DPF sui diesel e richiami con telaio.",
+        "evidence": "Mix database AutoStorico: richiami ufficiali dove disponibili e segnali community per modelli Fiat/Lancia/Abarth molto diffusi.",
+        "sourceLabel": DEFECT_SOURCE_COMMUNITY,
+        "sourceUrl": "https://www.honestjohn.co.uk/owner-reviews/",
+        "recallCount": 2,
+        "complaintCount": 5,
+        "communitySignal": 8,
+    },
+    {
+        "brand": "Alfa Romeo",
+        "aliases": ["Alfa"],
+        "models": ["giulia", "stelvio", "giulietta", "tonale", "junior", "mito", "147", "156", "159", "brera", "spider"],
+        "title": "Freni, carburante, elettronica e sospensioni",
+        "severity": "Alta",
+        "typicalKm": "50.000 - 180.000 km",
+        "estimatedCost": "180 - 2600 EUR",
+        "check": "Controlla frenata, odore carburante, spie quadro, infotainment, ADAS sui modelli recenti, frizione/cambio e bracci sospensione sui modelli piu datati.",
+        "evidence": "NHTSA segnala richiami/reclami per Giulia e Stelvio; Tonale/Junior hanno dati storici ancora limitati e vanno valutate con segnali community e campagne aperte.",
+        "sourceLabel": DEFECT_SOURCE_OFFICIAL,
+        "sourceUrl": "https://www.nhtsa.gov/nhtsa-datasets-and-apis",
+        "recallCount": 20,
+        "complaintCount": 204,
+        "communitySignal": 8,
+    },
+    {
+        "brand": "Peugeot",
+        "aliases": ["Peugeto", "Citroen", "Citroën", "Opel", "Vauxhall"],
+        "models": ["205", "206", "207", "208", "2008", "307", "308", "3008", "407", "508", "5008", "partner", "rifter", "expert", "c3", "c4", "corsa", "astra", "mokka"],
+        "title": "PureTech wet belt, BlueHDi AdBlue e elettronica",
+        "severity": "Alta",
+        "typicalKm": "50.000 - 180.000 km",
+        "estimatedCost": "250 - 2600 EUR",
+        "check": "Su PureTech controlla cinghia bagno olio e consumo olio; su diesel verifica AdBlue, NOx, EGR, DPF, turbo, frizione e storico tagliandi.",
+        "evidence": "Segnali frequenti da owner reports e domande tecniche su motori Stellantis PureTech/BlueHDi; confermare sempre codice motore e manutenzione.",
+        "sourceLabel": "Ask Honest John/community da verificare",
+        "sourceUrl": "https://good-garage-guide.honestjohn.co.uk/askhj/",
+        "recallCount": 0,
+        "complaintCount": 0,
+        "communitySignal": 10,
+    },
+    {
+        "brand": "Volkswagen",
+        "aliases": ["VW", "Skoda", "Seat", "Cupra"],
+        "models": ["golf", "polo", "tiguan", "passat", "t-roc", "t-cross", "taigo", "touran", "caddy", "fabia", "octavia", "leon", "ibiza", "ateca"],
+        "title": "DSG, infotainment, motore/diesel e ADAS",
+        "severity": "Media",
+        "typicalKm": "70.000 - 180.000 km",
+        "estimatedCost": "180 - 2600 EUR",
+        "check": "Controlla cambio DSG/meccatronica, display, sensori, EGR/AdBlue sui diesel, spie motore, freni, sospensioni e richiami gruppo VW.",
+        "evidence": "NHTSA ha richiami/reclami per Golf/Tiguan; owner reports indicano controlli su DSG, elettronica e sistemi antinquinamento.",
+        "sourceLabel": DEFECT_SOURCE_OFFICIAL,
+        "sourceUrl": "https://www.nhtsa.gov/nhtsa-datasets-and-apis",
+        "recallCount": 19,
+        "complaintCount": 311,
+        "communitySignal": 8,
+    },
+    {
+        "brand": "Audi",
+        "aliases": [],
+        "models": ["a1", "a3", "a4", "a5", "a6", "q2", "q3", "q5", "q7"],
+        "title": "S tronic, airbag/elettronica e diesel AdBlue",
+        "severity": "Media",
+        "typicalKm": "70.000 - 190.000 km",
+        "estimatedCost": "220 - 3500 EUR",
+        "check": "Controlla S tronic, MMI, sensori, airbag, freni, AdBlue/EGR sui diesel, sospensioni e fatture manutenzione.",
+        "evidence": "NHTSA mostra richiami/reclami per A3/A4; community segnala costi elevati su cambio, elettronica e diesel.",
+        "sourceLabel": DEFECT_SOURCE_OFFICIAL,
+        "sourceUrl": "https://www.nhtsa.gov/nhtsa-datasets-and-apis",
+        "recallCount": 3,
+        "complaintCount": 86,
+        "communitySignal": 7,
+    },
+    {
+        "brand": "BMW",
+        "aliases": ["Mini"],
+        "models": ["serie 1", "1 series", "serie 3", "3 series", "serie 5", "x1", "x3", "x5", "mini", "cooper", "countryman"],
+        "title": "Distribuzione, xDrive, elettronica e diesel",
+        "severity": "Media",
+        "typicalKm": "80.000 - 200.000 km",
+        "estimatedCost": "250 - 4000 EUR",
+        "check": "Controlla rumori catena a freddo, perdite olio, cambio automatico, xDrive, EGR/AdBlue sui diesel, sospensioni e diagnosi centraline.",
+        "evidence": "NHTSA e owner reports indicano controlli su motore, alimentazione, struttura/elettronica; rischio varia molto per motore e anno.",
+        "sourceLabel": DEFECT_SOURCE_OFFICIAL,
+        "sourceUrl": "https://www.nhtsa.gov/nhtsa-datasets-and-apis",
+        "recallCount": 4,
+        "complaintCount": 117,
+        "communitySignal": 8,
+    },
+    {
+        "brand": "Toyota",
+        "aliases": ["Lexus"],
+        "models": ["aygo", "yaris", "corolla", "auris", "rav4", "c-hr", "chr", "prius", "hilux", "land cruiser"],
+        "title": "Ibrido, batteria 12V/HV e controlli sicurezza",
+        "severity": "Bassa",
+        "typicalKm": "70.000 - 220.000 km",
+        "estimatedCost": "120 - 3000 EUR",
+        "check": "Controlla stato sistema ibrido, batteria 12V/HV, inverter, freni rigenerativi, richiami, manutenzione Toyota e ruggine su 4x4.",
+        "evidence": "Survey affidabilita spesso positive, ma su usato ibrido vanno verificati batteria, garanzia e storico ufficiale.",
+        "sourceLabel": DEFECT_SOURCE_SURVEY,
+        "sourceUrl": "https://www.whatcar.com/news/what-car-reliability-survey-what-does-it-reveal-about-owners-and-their-cars/n19298",
+        "recallCount": 1,
+        "complaintCount": 4,
+        "communitySignal": 5,
+    },
+    {
+        "brand": "Ford",
+        "aliases": [],
+        "models": ["fiesta", "focus", "kuga", "puma", "ecosport", "mondeo", "transit", "tourneo"],
+        "title": "EcoBoost wet belt, diesel e cambio",
+        "severity": "Alta",
+        "typicalKm": "80.000 - 220.000 km",
+        "estimatedCost": "250 - 3500 EUR",
+        "check": "Verifica cinghia bagno olio sui motori interessati, pressione olio, raffreddamento, frizione/cambio, EGR/DPF sui diesel e uso lavoro sui van.",
+        "evidence": "Segnali tecnici e community evidenziano controlli prioritari su EcoBoost e van usati.",
+        "sourceLabel": "Ask Honest John/community da verificare",
+        "sourceUrl": "https://good-garage-guide.honestjohn.co.uk/askhj/",
+        "recallCount": 0,
+        "complaintCount": 0,
+        "communitySignal": 9,
+    },
+]
+
+
+def normalize_text(value: Any) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip().lower())
+
+
+def defect_entry_matches(entry: dict[str, Any], brand: str, model: str) -> bool:
+    brand_text = normalize_text(brand)
+    model_text = normalize_text(model)
+    brand_names = [entry["brand"], *entry.get("aliases", [])]
+    return any(normalize_text(name) in brand_text for name in brand_names) and any(
+        normalize_text(model_name) in model_text for model_name in entry["models"]
+    )
+
+
+def public_defect_entry(entry: dict[str, Any], brand: str, model: str, km: int) -> dict[str, Any]:
+    item = {
+        "brand": entry["brand"],
+        "brandAliases": entry.get("aliases", []),
+        "models": entry["models"],
+        "title": entry["title"],
+        "severity": entry["severity"],
+        "typicalKm": entry["typicalKm"],
+        "estimatedCost": entry["estimatedCost"],
+        "check": entry["check"],
+        "evidence": entry["evidence"],
+        "sourceLabel": entry["sourceLabel"],
+        "sourceUrl": entry["sourceUrl"],
+        "recallCount": entry.get("recallCount", 0),
+        "complaintCount": entry.get("complaintCount", 0),
+        "communitySignal": entry.get("communitySignal", 0),
+    }
+    if km >= 150000 and item["severity"] != "Alta":
+        item["evidence"] += " Chilometraggio elevato: aumentare attenzione su manutenzione documentata e prova su strada."
+    item["requestedVehicle"] = {"brand": brand, "model": model, "km": km}
+    return item
+
+
+def lookup_defects(query: dict[str, list[str]]) -> dict[str, Any]:
+    brand = (query.get("brand") or query.get("make") or [""])[0]
+    model = (query.get("model") or [""])[0]
+    km = int(parse_float((query.get("km") or ["0"])[0], 0))
+    matches = [entry for entry in DEFECT_DATABASE if defect_entry_matches(entry, brand, model)]
+    if not matches:
+        brand_text = normalize_text(brand)
+        matches = [
+            entry
+            for entry in DEFECT_DATABASE
+            if any(normalize_text(name) in brand_text for name in [entry["brand"], *entry.get("aliases", [])])
+        ][:3]
+    if not matches:
+        matches = [
+            {
+                "brand": brand or "Generico",
+                "aliases": [],
+                "models": [model or "modello non indicato"],
+                "title": "Controllo generico pre-acquisto",
+                "severity": "Media",
+                "typicalKm": "variabile",
+                "estimatedCost": "variabile",
+                "check": "Controlla storico tagliandi, diagnosi OBD, prova a freddo, frizione/cambio, freni, sospensioni, perdite, richiami VIN e documenti.",
+                "evidence": "Nessuna scheda precisa trovata: AutoStorico restituisce una checklist prudente da verificare in officina.",
+                "sourceLabel": "Checklist AutoStorico",
+                "sourceUrl": "",
+                "recallCount": 0,
+                "complaintCount": 0,
+                "communitySignal": 4,
+            }
+        ]
+    defects = [public_defect_entry(entry, brand, model, km) for entry in matches]
+    return {
+        "defects": defects,
+        "count": len(defects),
+        "source": "AutoStorico defects API",
+        "disclaimer": "Dati indicativi basati su richiami, reclami pubblici, owner reports e community: non sostituiscono diagnosi o verifica tecnica.",
+    }
+
+
 class AutoStoricoApi(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
-        request_path = urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
+        parsed_url = urllib.parse.urlparse(self.path)
+        request_path = parsed_url.path.rstrip("/") or "/"
         if request_path == "/health":
             configured_providers = {
                 "brave": bool(BRAVE_SEARCH_API_KEY),
@@ -1276,6 +1489,9 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "premiumVerificationConfigured": premium_verification_configured(),
                 }
             )
+            return
+        if request_path in {"/api/defects", "/defects"}:
+            self.send_json(lookup_defects(urllib.parse.parse_qs(parsed_url.query)))
             return
         self.send_json({"error": "not_found"}, status=404)
 
