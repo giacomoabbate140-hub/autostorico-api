@@ -29,3 +29,7 @@ services:
         sync: false
       - key: AUTOSTORICO_GOOGLE_CSE_ENABLED
         value: "0"
+      - key: AUTOSTORICO_DEFECT_RESEARCH_API_KEY
+        sync: false
+      - key: AUTOSTORICO_DEFECT_RESEARCH_ENABLED
+        value: "0"

@@ -1,6 +1,12 @@
 import unittest
 
-from server import market_cache_key, market_estimate_from_sources, vehicle_defect_reports
+from server import (
+    defect_research_cache_key,
+    market_cache_key,
+    market_estimate_from_sources,
+    trusted_defect_source,
+    vehicle_defect_reports,
+)
 
 
 class MarketEvidenceTests(unittest.TestCase):
@@ -53,6 +59,19 @@ class MarketEvidenceTests(unittest.TestCase):
 
     def test_defect_catalog_returns_none_for_unknown_vehicle(self):
         self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))
+
+    def test_defect_research_only_accepts_trusted_domains(self):
+        self.assertEqual(
+            trusted_defect_source("https://www.peugeot.it/post-vendita"),
+            ("Peugeot Italia", "manufacturer_candidate"),
+        )
+        self.assertIsNone(trusted_defect_source("https://example.com/peugeot-208"))
+
+    def test_defect_research_cache_key_is_case_insensitive(self):
+        self.assertEqual(
+            defect_research_cache_key("Peugeot", "208"),
+            defect_research_cache_key("peugeot", " 208 "),
+        )
 
 
 if __name__ == "__main__":

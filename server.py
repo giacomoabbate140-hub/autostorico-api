@@ -13,7 +13,6 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
 from typing import Any
 
 try:
@@ -34,6 +33,12 @@ GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID", "").strip()
 GOOGLE_CSE_ENABLED = os.environ.get("AUTOSTORICO_GOOGLE_CSE_ENABLED", "0") == "1"
 BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
 SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
+DEFECT_RESEARCH_API_KEY = os.environ.get(
+    "AUTOSTORICO_DEFECT_RESEARCH_API_KEY", ""
+).strip()
+DEFECT_RESEARCH_ENABLED = (
+    os.environ.get("AUTOSTORICO_DEFECT_RESEARCH_ENABLED", "0") == "1"
+)
 MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
 MINIMUM_MARKET_LISTINGS = 3
 MARKET_CACHE_TTL_SECONDS = int(os.environ.get("AUTOSTORICO_CACHE_TTL_SECONDS", str(30 * 24 * 60 * 60)))
@@ -56,6 +61,9 @@ GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
 ).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 DEFECT_CATALOG_PATH = Path(__file__).parent / "data" / "vehicle_defects.json"
+DEFECT_RESEARCH_CACHE_TTL_SECONDS = 24 * 60 * 60
+DEFECT_RESEARCH_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
+DEFECT_RESEARCH_LOCK = threading.Lock()
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
     ("Subito Motori", "subito.it"),
@@ -90,6 +98,22 @@ REFERENCE_MARKET_DOMAINS = [
     "autosupermarket.it",
     "automoto.it",
 ]
+
+DEFECT_RESEARCH_SOURCES = {
+    "mit.gov.it": ("Ministero delle infrastrutture e dei trasporti", "official_candidate"),
+    "ec.europa.eu": ("Commissione europea", "official_candidate"),
+    "nhtsa.gov": ("NHTSA", "official_candidate"),
+    "peugeot.it": ("Peugeot Italia", "manufacturer_candidate"),
+    "citroen.it": ("Citroen Italia", "manufacturer_candidate"),
+    "dacia.it": ("Dacia Italia", "manufacturer_candidate"),
+    "stellantis.com": ("Stellantis", "manufacturer_candidate"),
+    "forum.quattroruote.it": ("Forum Quattroruote", "community_candidate"),
+    "forum.clubalfa.it": ("ClubAlfa", "community_candidate"),
+    "bmwpassion.com": ("BMW Passion Forum", "community_candidate"),
+    "mercedesbenzclub.it": ("Mercedes-Benz Club Italia", "community_candidate"),
+    "communaute.dacia.fr": ("Comunita Dacia", "community_candidate"),
+    "audirsclub.it": ("Audi RS Club Italia", "community_candidate"),
+}
 
 
 def normalize_catalog_text(value: Any) -> str:
@@ -140,6 +164,103 @@ def vehicle_defect_reports(make: str, model: str) -> dict[str, Any] | None:
             "Verifica sempre VIN, manutenzione e campagne attive presso il costruttore."
         ),
     }
+
+
+def defect_research_configured() -> bool:
+    return bool(
+        DEFECT_RESEARCH_ENABLED and DEFECT_RESEARCH_API_KEY and SERPAPI_API_KEY
+    )
+
+
+def defect_research_cache_key(make: str, model: str) -> str:
+    return f"{normalize_catalog_text(make)}|{normalize_catalog_text(model)}"
+
+
+def trusted_defect_source(url: str) -> tuple[str, str] | None:
+    hostname = urllib.parse.urlparse(url).hostname or ""
+    hostname = hostname.casefold().removeprefix("www.")
+    for domain, source in DEFECT_RESEARCH_SOURCES.items():
+        if hostname == domain or hostname.endswith(f".{domain}"):
+            return source
+    return None
+
+
+def search_defect_source_candidates(make: str, model: str) -> dict[str, Any]:
+    if not defect_research_configured():
+        raise RuntimeError("Ricerca fonti non configurata sul server.")
+    clean_make = str(make or "").strip()
+    clean_model = str(model or "").strip()
+    if not clean_make or not clean_model:
+        raise ValueError("Marca e modello sono obbligatori.")
+    cache_key = defect_research_cache_key(clean_make, clean_model)
+    now = time.time()
+    with DEFECT_RESEARCH_LOCK:
+        cached = DEFECT_RESEARCH_CACHE.get(cache_key)
+        if cached and now - cached[0] < DEFECT_RESEARCH_CACHE_TTL_SECONDS:
+            return {**cached[1], "fromCache": True}
+
+    query = f'"{clean_make}" "{clean_model}" (richiamo OR difetto OR problema OR campagna)'
+    params = urllib.parse.urlencode(
+        {
+            "engine": "google",
+            "q": query,
+            "api_key": SERPAPI_API_KEY,
+            "google_domain": "google.it",
+            "gl": "it",
+            "hl": "it",
+            "num": 20,
+        }
+    )
+    request = urllib.request.Request(
+        f"https://serpapi.com/search.json?{params}",
+        headers={
+            "Accept": "application/json",
+            "Accept-Encoding": "identity",
+            "User-Agent": "AutoStoricoDefectResearch/1.0",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=15) as response:
+        data = json.loads(response.read().decode("utf-8"))
+    if data.get("error"):
+        raise RuntimeError(str(data["error"]))
+
+    candidates: list[dict[str, str]] = []
+    seen_urls: set[str] = set()
+    for item in data.get("organic_results") or []:
+        url = str(item.get("link") or "").strip()
+        trusted = trusted_defect_source(url)
+        if not trusted or not url or url in seen_urls:
+            continue
+        source_name, source_type = trusted
+        seen_urls.add(url)
+        candidates.append(
+            {
+                "title": str(item.get("title") or "Fonte da verificare"),
+                "url": url,
+                "snippet": str(item.get("snippet") or ""),
+                "sourceName": source_name,
+                "sourceType": source_type,
+                "status": "pending_review",
+            }
+        )
+        if len(candidates) >= 10:
+            break
+
+    result = {
+        "make": clean_make,
+        "model": clean_model,
+        "query": query,
+        "candidates": candidates,
+        "count": len(candidates),
+        "fromCache": False,
+        "disclaimer": (
+            "Candidati automatici: devono essere verificati e approvati prima "
+            "di entrare nel catalogo visibile agli utenti."
+        ),
+    }
+    with DEFECT_RESEARCH_LOCK:
+        DEFECT_RESEARCH_CACHE[cache_key] = (now, result)
+    return result
 
 
 def market_cache_key(payload: dict[str, Any]) -> str:
@@ -1540,11 +1661,13 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "configuredProviders": configured_providers,
                     "premiumVerificationConfigured": premium_verification_configured(),
                     "vehicleDefectCatalogReady": bool(VEHICLE_DEFECT_CATALOG.get("vehicles")),
+                    "defectResearchConfigured": defect_research_configured(),
                 }
             )
             return
         if request_path in {"/api/defects", "/defects"}:
             self.send_json(lookup_defects(urllib.parse.parse_qs(parsed_url.query)))
+            return
         if request_path == "/api/vehicle-defects":
             query = urllib.parse.parse_qs(parsed_url.query)
             make = query.get("make", [""])[0]
@@ -1560,6 +1683,25 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 )
                 return
             self.send_json(result)
+            return
+        if request_path == "/api/admin/defect-source-candidates":
+            auth = self.headers.get("Authorization", "")
+            if not DEFECT_RESEARCH_API_KEY or auth != f"Bearer {DEFECT_RESEARCH_API_KEY}":
+                self.send_json({"error": "unauthorized"}, status=401)
+                return
+            query = urllib.parse.parse_qs(parsed_url.query)
+            try:
+                self.send_json(
+                    search_defect_source_candidates(
+                        query.get("make", [""])[0],
+                        query.get("model", [""])[0],
+                    )
+                )
+            except (RuntimeError, ValueError) as exc:
+                self.send_json(
+                    {"error": "research_unavailable", "detail": str(exc)},
+                    status=503,
+                )
             return
         self.send_json({"error": "not_found"}, status=404)
 
