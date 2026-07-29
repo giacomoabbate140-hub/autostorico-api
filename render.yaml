@@ -19,3 +19,13 @@ services:
         value: autostorico.myapp
       - key: GOOGLE_PLAY_SUBSCRIPTION_ID
         value: premium_6_mesi
+      - key: BRAVE_SEARCH_API_KEY
+        sync: false
+      - key: SERPAPI_API_KEY
+        sync: false
+      - key: GOOGLE_CSE_API_KEY
+        sync: false
+      - key: GOOGLE_CSE_ID
+        sync: false
+      - key: AUTOSTORICO_GOOGLE_CSE_ENABLED
+        value: "0"

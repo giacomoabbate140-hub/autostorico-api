@@ -13,6 +13,7 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from typing import Any
 
 try:
@@ -54,6 +55,7 @@ GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
     "GOOGLE_PLAY_SUBSCRIPTION_ID", "premium_6_mesi"
 ).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
+DEFECT_CATALOG_PATH = Path(__file__).parent / "data" / "vehicle_defects.json"
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
     ("Subito Motori", "subito.it"),
@@ -88,6 +90,56 @@ REFERENCE_MARKET_DOMAINS = [
     "autosupermarket.it",
     "automoto.it",
 ]
+
+
+def normalize_catalog_text(value: Any) -> str:
+    """Normalize values used to match make and model without storing VIN data."""
+    return re.sub(r"\s+", " ", str(value or "").strip().casefold())
+
+
+def load_vehicle_defect_catalog() -> dict[str, Any]:
+    try:
+        catalog = json.loads(DEFECT_CATALOG_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {"catalogVersion": 1, "vehicles": []}
+    return catalog if isinstance(catalog, dict) else {"catalogVersion": 1, "vehicles": []}
+
+
+VEHICLE_DEFECT_CATALOG = load_vehicle_defect_catalog()
+
+
+def vehicle_defect_reports(make: str, model: str) -> dict[str, Any] | None:
+    wanted_make = normalize_catalog_text(make)
+    wanted_model = normalize_catalog_text(model)
+    if not wanted_make or not wanted_model:
+        return None
+
+    matching_vehicles = [
+        vehicle
+        for vehicle in VEHICLE_DEFECT_CATALOG.get("vehicles", [])
+        if normalize_catalog_text(vehicle.get("make")) == wanted_make
+        and normalize_catalog_text(vehicle.get("model")) == wanted_model
+    ]
+    if not matching_vehicles:
+        return None
+
+    reports = [
+        report
+        for vehicle in matching_vehicles
+        for report in vehicle.get("reports", [])
+        if isinstance(report, dict)
+    ]
+    return {
+        "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
+        "make": matching_vehicles[0].get("make"),
+        "model": matching_vehicles[0].get("model"),
+        "vehicles": matching_vehicles,
+        "reports": reports,
+        "disclaimer": (
+            "Le segnalazioni community non sono diagnosi o richiami ufficiali. "
+            "Verifica sempre VIN, manutenzione e campagne attive presso il costruttore."
+        ),
+    }
 
 
 def market_cache_key(payload: dict[str, Any]) -> str:
@@ -1487,11 +1539,27 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
                     "premiumVerificationConfigured": premium_verification_configured(),
+                    "vehicleDefectCatalogReady": bool(VEHICLE_DEFECT_CATALOG.get("vehicles")),
                 }
             )
             return
         if request_path in {"/api/defects", "/defects"}:
             self.send_json(lookup_defects(urllib.parse.parse_qs(parsed_url.query)))
+        if request_path == "/api/vehicle-defects":
+            query = urllib.parse.parse_qs(parsed_url.query)
+            make = query.get("make", [""])[0]
+            model = query.get("model", [""])[0]
+            result = vehicle_defect_reports(make, model)
+            if result is None:
+                self.send_json(
+                    {
+                        "error": "vehicle_not_found",
+                        "detail": "Inserisci marca e modello presenti nel catalogo.",
+                    },
+                    status=404,
+                )
+                return
+            self.send_json(result)
             return
         self.send_json({"error": "not_found"}, status=404)
 

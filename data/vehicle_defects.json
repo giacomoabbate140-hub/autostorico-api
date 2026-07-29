@@ -1,0 +1,309 @@
+{
+  "catalogVersion": 1,
+  "updatedAt": "2026-07-29",
+  "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
+  "vehicles": [
+    {
+      "make": "Opel",
+      "model": "Corsa",
+      "generation": "C",
+      "years": "2000-2006",
+      "reports": [
+        {
+          "id": "opel-corsa-c-diesel-battery-housing-2010",
+          "category": "Impianto elettrico",
+          "title": "Possibile fessurazione dell'involucro batteria",
+          "sourceType": "official_recall",
+          "confidence": "official",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "sourceName": "Ministero delle infrastrutture e dei trasporti",
+          "sourceUrl": "https://mit.gov.it/nfsmitgov/files/media/documentazione/2022-10/Bollettino_semestrale_di_richiamo_dei_v_tosi___n_19_2010.pdf",
+          "userText": "Verifica sempre l'eventuale richiamo tramite VIN presso la rete Opel."
+        }
+      ]
+    },
+    {
+      "make": "Opel",
+      "model": "Corsa",
+      "generation": "D",
+      "years": "2006-2014",
+      "reports": [
+        {
+          "id": "opel-corsa-d-brake-servo-community",
+          "category": "Freni",
+          "title": "Segnalazioni su servofreno",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Corsa Club Italia",
+          "sourceUrl": "https://www.corsaclub.it/forum/viewtopic.php?t=1884",
+          "userText": "Segnalazione community, non richiamo. Se il pedale freno cambia comportamento, fai controllare il veicolo in officina."
+        },
+        {
+          "id": "opel-corsa-d-rear-window-seal-community",
+          "category": "Carrozzeria e infiltrazioni",
+          "title": "Segnalazioni su guarnizione del lunotto",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Corsa Club Italia",
+          "sourceUrl": "https://www.corsaclub.it/forum/viewtopic.php?f=85&p=111563&t=1884",
+          "userText": "Segnalazione community: controlla eventuali infiltrazioni o umidita nel vano posteriore."
+        }
+      ]
+    },
+    {
+      "make": "Fiat",
+      "model": "Panda",
+      "generation": "169",
+      "years": "2003-2012",
+      "reports": [
+        {
+          "id": "fiat-panda-2003-airbag-control-unit",
+          "category": "Airbag e sicurezza",
+          "title": "Centralina airbag non conforme",
+          "sourceType": "official_recall",
+          "confidence": "official",
+          "severity": "urgent",
+          "status": "source-verified",
+          "productionPeriod": "aprile 2003 - novembre 2003",
+          "sourceName": "Ministero delle infrastrutture e dei trasporti",
+          "sourceUrl": "https://www.mit.gov.it/nfsmitgov/files/media/documentazione/2022-10/Bollettino_semestrale_di_richiamo_dei_v_tosi___n_24_2012.pdf",
+          "userText": "Verifica subito tramite VIN presso la rete Fiat se il veicolo e interessato."
+        },
+        {
+          "id": "fiat-panda-2005-brake-caliper-brackets",
+          "category": "Freni",
+          "title": "Staffe pinze freni anteriori non conformi",
+          "sourceType": "official_recall",
+          "confidence": "official",
+          "severity": "urgent",
+          "status": "source-verified",
+          "productionPeriod": "gennaio 2005 - febbraio 2005",
+          "sourceName": "Ministero delle infrastrutture e dei trasporti",
+          "sourceUrl": "https://mit.gov.it/nfsmitgov/files/media/documentazione/2022-10/Bollettino_semestrale_di_richiamo_dei_v_tosi___n_18_2010.pdf",
+          "userText": "Richiamo storico: verifica il VIN presso la rete Fiat."
+        },
+        {
+          "id": "fiat-panda-2005-engine-pulley",
+          "category": "Motore e servizi",
+          "title": "Puleggia motore non conforme",
+          "sourceType": "official_recall",
+          "confidence": "official",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "productionPeriod": "settembre 2005 - maggio 2006",
+          "sourceName": "Ministero delle infrastrutture e dei trasporti",
+          "sourceUrl": "https://mit.gov.it/nfsmitgov/files/media/documentazione/2022-10/Bollettino_semestrale_di_richiamo_dei_v_tosi___n_19_2010.pdf",
+          "userText": "Richiamo storico: verifica il VIN presso la rete Fiat."
+        }
+      ]
+    },
+    {
+      "make": "Citroen",
+      "model": "C3",
+      "generation": "Veicoli interessati da campagne specifiche",
+      "years": "Verifica obbligatoria tramite VIN o targa",
+      "reports": [
+        {
+          "id": "citroen-c3-takata-airbag-2024",
+          "category": "Airbag e sicurezza",
+          "title": "Campagna urgente airbag Takata",
+          "sourceType": "official_recall",
+          "confidence": "official",
+          "severity": "urgent",
+          "status": "source-verified",
+          "sourceName": "Ministero delle infrastrutture e dei trasporti",
+          "sourceUrl": "https://www.mit.gov.it/comunicazione/news/auto-campagna-urgente-di-richiamo-veicoli-citroen-c3-e-ds3",
+          "userText": "Verifica subito VIN o targa sul portale ufficiale Citroen. Se il costruttore indica Stop Drive, non usare il veicolo."
+        },
+        {
+          "id": "citroen-c3-puretech-timing-belt-support",
+          "category": "Motore e distribuzione",
+          "title": "Assistenza prevista per alcune motorizzazioni PureTech precedenti",
+          "sourceType": "manufacturer_support",
+          "confidence": "official",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "engineScope": "Precedenti PureTech 1.0 e 1.2 indicati dal costruttore; non tutte le C3 sono interessate",
+          "affectedProductionScope": "Aspirati 1.0/1.2 prodotti da giugno 2012 a giugno 2022; turbo 1.2 prodotti da aprile 2014 a giugno 2022, subordinatamente alle condizioni del costruttore",
+          "mechanism": "Il deterioramento prematuro della cinghia in olio puo rilasciare materiale nel circuito, con possibile problema di pressione dell'olio.",
+          "sourceName": "Citroen Italia / Stellantis",
+          "sourceUrl": "https://www.citroen.it/post-vendita/estensione-garanzia-puretech-citroen.html",
+          "userText": "Verifica VIN, motore, manutenzione e idoneita presso la rete Citroen."
+        },
+        {
+          "id": "citroen-c3-2025-infotainment-community",
+          "category": "Infotainment ed elettronica",
+          "title": "Segnalazioni su avvio e riavvio dell'infotainment",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Forum Quattroruote",
+          "sourceUrl": "https://forum.quattroruote.it/threads/citroen-c3-2025-infotainment.149665/",
+          "userText": "Esperienze di proprietari, non richiamo: verifica gli aggiornamenti software con la rete Citroen."
+        }
+      ]
+    },
+    {
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "generation": "940",
+      "years": "2010-2020",
+      "reports": [
+        {
+          "id": "alfa-giulietta-940-interior-door-handle-community",
+          "category": "Interni e carrozzeria",
+          "title": "Segnalazioni sulla rottura della maniglia interna porta",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "ClubAlfa",
+          "sourceUrl": "https://forum.clubalfa.it/threads/giulietta-problema-rottura-maniglia-interna-apri-porta.70186/page-230",
+          "userText": "Discussione con molte esperienze di proprietari. Non e un richiamo: controlla gioco, crepe o difficolta di apertura."
+        }
+      ]
+    },
+    {
+      "make": "Peugeot",
+      "model": "208",
+      "generation": "Tutte le generazioni",
+      "years": "2012-oggi",
+      "reports": [
+        {
+          "id": "peugeot-208-puretech-timing-belt-support",
+          "category": "Motore e distribuzione",
+          "title": "Assistenza prevista per alcune motorizzazioni PureTech precedenti",
+          "sourceType": "manufacturer_support",
+          "confidence": "official",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "engineScope": "Precedenti PureTech 1.0 e 1.2 indicati dal costruttore; non tutte le 208 sono interessate",
+          "affectedProductionScope": "Aspirati 1.0/1.2 prodotti da giugno 2012 a giugno 2022; turbo 1.2 prodotti da aprile 2014 a giugno 2022, subordinatamente alle condizioni del costruttore",
+          "mechanism": "Il deterioramento prematuro della cinghia in olio puo rilasciare materiale nel circuito e contribuire a problemi di pressione dell'olio.",
+          "sourceName": "Peugeot Italia",
+          "sourceUrl": "https://www.peugeot.it/post-vendita-e-servizi/motori-puretech-soluzioni.html",
+          "userText": "Verifica VIN, motore, manutenzione e condizioni applicabili presso la rete Peugeot."
+        },
+        {
+          "id": "peugeot-208-electronics-community",
+          "category": "Elettronica",
+          "title": "Segnalazioni su centralina e sistemi elettronici",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Forum Quattroruote",
+          "sourceUrl": "https://forum.quattroruote.it/threads/problema-centralina-peugeot-208.106720/",
+          "userText": "Esperienza singola di proprietario, non difetto confermato: fai eseguire una diagnosi se compaiono anomalie."
+        }
+      ]
+    },
+    {
+      "make": "Dacia",
+      "model": "Duster",
+      "generation": "Tutte le generazioni",
+      "years": "2010-oggi",
+      "reports": [
+        {
+          "id": "dacia-duster-clutch-pedal-community",
+          "category": "Frizione e cambio",
+          "title": "Segnalazioni su pedale frizione che resta in basso",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Comunita Dacia",
+          "sourceUrl": "https://communaute.dacia.fr/forum/DACIA/DACIA-DUSTER/DUSTER---PEDALE-EMBRAYAGE-BLOQUEE-EN-BAS/5409387/188999",
+          "userText": "Segnalazione di proprietari, non richiamo: se il pedale resta abbassato, fai controllare frizione e comando idraulico."
+        }
+      ]
+    },
+    {
+      "make": "Audi",
+      "model": "A3",
+      "generation": "8V",
+      "years": "2012-2020",
+      "reports": [
+        {
+          "id": "audi-a3-8v-electronic-and-s-tronic-community",
+          "category": "Elettronica e cambio",
+          "title": "Segnalazioni su elettronica e cambio S tronic",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Audi RS Club Italia",
+          "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-65696.html",
+          "userText": "Raccolta community, non richiamo: richiedi diagnosi e verifica aggiornamenti software in caso di anomalie."
+        }
+      ]
+    },
+    {
+      "make": "BMW",
+      "model": "Serie 1",
+      "generation": "E8x e F20/F21",
+      "years": "2007-2015 circa, secondo motorizzazione",
+      "reports": [
+        {
+          "id": "bmw-serie-1-n47-timing-chain-community",
+          "category": "Motore e distribuzione",
+          "title": "Segnalazioni sulla catena di distribuzione N47",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo motori diesel BMW N47; identifica sempre il codice motore tramite VIN o libretto",
+          "sourceName": "BMW Passion Forum",
+          "sourceUrl": "https://www.bmwpassion.com/forum/threads/bmw-serie-1-f20-f21-n47-catena-distribuzione-problemi-anche-su-f20.189469/",
+          "userText": "Segnalazione riferita al motore N47, non a tutte le Serie 1. Rumori metallici dalla distribuzione richiedono un controllo tempestivo."
+        }
+      ]
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "generation": "W177",
+      "years": "2018-2025",
+      "reports": [
+        {
+          "id": "mercedes-classe-a-w177-electronics-community",
+          "category": "Elettronica e infotainment",
+          "title": "Segnalazioni su elettronica, sensori e software",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Forum Quattroruote",
+          "sourceUrl": "https://forum.quattroruote.it/threads/nuova-classe-a-mille-problemi.122084/",
+          "userText": "Esperienze di alcuni proprietari, non richiamo. Chiedi il controllo degli aggiornamenti software alla rete Mercedes-Benz."
+        }
+      ]
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "generation": "W169",
+      "years": "2004-2012",
+      "reports": [
+        {
+          "id": "mercedes-classe-a-w169-cvt-community",
+          "category": "Cambio automatico",
+          "title": "Segnalazioni su cambio automatico CVT e centralina",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Mercedes-Benz Club Italia",
+          "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=106702",
+          "userText": "Spie cambio, slittamenti o modalita emergenza vanno controllati in officina senza ritardi."
+        }
+      ]
+    }
+  ]
+}

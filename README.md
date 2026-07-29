@@ -1,6 +1,6 @@
 # AutoStorico API
 
-API locale per stimare il valore del veicolo.
+API per stimare il valore del veicolo e fornire segnalazioni su difetti con fonti tracciabili.
 
 ## Avvio locale
 
@@ -13,6 +13,14 @@ C:\Users\giaco\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\p
 ## Endpoint
 
 `POST /api/vehicle-value`
+
+`GET /api/vehicle-defects?make=Peugeot&model=208`
+
+L'endpoint difetti restituisce sempre la fonte e distingue i richiami/supporto del costruttore dalle segnalazioni community. Le segnalazioni community non sono diagnosi.
+
+## Chiavi di ricerca su Render
+
+Le chiavi non vanno inserite nell'APK o in Git. In Render, apri il servizio, vai in **Environment** e aggiungi almeno una tra `BRAVE_SEARCH_API_KEY` e `SERPAPI_API_KEY`. Per Google Custom Search servono anche `GOOGLE_CSE_API_KEY`, `GOOGLE_CSE_ID` e `AUTOSTORICO_GOOGLE_CSE_ENABLED=1`.
 
 Header:
 

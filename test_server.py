@@ -1,6 +1,6 @@
 import unittest
 
-from server import market_cache_key, market_estimate_from_sources
+from server import market_cache_key, market_estimate_from_sources, vehicle_defect_reports
 
 
 class MarketEvidenceTests(unittest.TestCase):
@@ -36,6 +36,23 @@ class MarketEvidenceTests(unittest.TestCase):
         second = {**first, "plate": "ZZ999ZZ", "km": 124900}
 
         self.assertEqual(market_cache_key(first), market_cache_key(second))
+
+    def test_defect_catalog_keeps_official_and_community_sources_distinct(self):
+        result = vehicle_defect_reports("Peugeot", "208")
+
+        self.assertIsNotNone(result)
+        report_types = {report["sourceType"] for report in result["reports"]}
+        self.assertIn("manufacturer_support", report_types)
+        self.assertIn("community_source", report_types)
+
+    def test_defect_catalog_matches_brand_and_model_case_insensitively(self):
+        result = vehicle_defect_reports("bmw", "serie 1")
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["reports"][0]["id"], "bmw-serie-1-n47-timing-chain-community")
+
+    def test_defect_catalog_returns_none_for_unknown_vehicle(self):
+        self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))
 
 
 if __name__ == "__main__":
