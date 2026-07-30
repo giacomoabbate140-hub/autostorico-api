@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 5,
+  "catalogVersion": 6,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -231,6 +231,19 @@
           "sourceName": "FIAT Forum",
           "sourceUrl": "https://www.fiatforum.com/threads/passenger-side-airbag-on-dashboard.452811/",
           "userText": "Segnalazione community, non richiamo: se la copertura della plancia si solleva, si crepa o si deforma, fai verificare il veicolo in rete Fiat e controlla eventuali campagne tramite VIN."
+        },
+        {
+          "id": "fiat-500-312-blue-and-me-community",
+          "category": "Infotainment ed elettronica",
+          "title": "Segnalazioni ricorrenti su Blue&Me e collegamento telefono",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "affectedProductionScope": "Fiat 500 312 con sistema Blue&Me, in particolare esemplari piu datati; dipende anche da telefono e versione software",
+          "sourceName": "FIAT Forum",
+          "sourceUrl": "https://www.fiatforum.com/threads/500-2007-blue-me-problems.498827/",
+          "userText": "La community riporta disconnessioni Bluetooth, USB non riconosciuta, comandi al volante o chiamate instabili. Non e un richiamo: controlla compatibilita del telefono, aggiornamenti e diagnosi del modulo prima di sostituirlo."
         }
       ]
     },
