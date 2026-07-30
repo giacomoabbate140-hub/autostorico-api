@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 7,
+  "catalogVersion": 8,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -412,6 +412,48 @@
       ]
     },
     {
+      "make": "Audi",
+      "model": "A3",
+      "generation": "8P",
+      "years": "2003-2013",
+      "researchTopics": ["2.0 TDI", "1.8 TFSI", "volano", "EGR", "iniettori", "consumo olio"],
+      "reports": []
+    },
+    {
+      "make": "Audi",
+      "model": "A4",
+      "aliases": ["A4 B8"],
+      "generation": "B8",
+      "years": "2007-2015",
+      "researchTopics": ["2.0 TFSI", "consumo olio", "distribuzione", "pompa acqua"],
+      "reports": []
+    },
+    {
+      "make": "Audi",
+      "model": "A6",
+      "aliases": ["A6 C7"],
+      "generation": "C7",
+      "years": "2011-2018",
+      "researchTopics": ["3.0 TDI", "catena distribuzione", "EGR", "sospensioni pneumatiche"],
+      "reports": []
+    },
+    {
+      "make": "Audi",
+      "model": "Q3",
+      "generation": "8U e F3",
+      "years": "2011-oggi",
+      "researchTopics": ["TDI e TFSI", "DSG/S tronic", "pompa acqua", "EGR"],
+      "reports": []
+    },
+    {
+      "make": "Audi",
+      "model": "Q5",
+      "generation": "8R e FY",
+      "years": "2008-oggi",
+      "researchTopics": ["2.0 TDI", "S tronic", "volano", "DPF", "sospensioni"],
+      "reports": []
+    },
+    {
       "make": "BMW",
       "model": "Serie 1",
       "generation": "E8x e F20/F21",
@@ -554,6 +596,40 @@
           "userText": "Esperienze di alcuni proprietari, non richiamo. Chiedi il controllo degli aggiornamenti software alla rete Mercedes-Benz."
         }
       ]
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "Classe C",
+      "aliases": ["C-Class"],
+      "generation": "W204, W205 e W206",
+      "years": "2007-oggi",
+      "researchTopics": ["180d", "200 CDI", "cambio 7G-DCT", "AdBlue", "sensori NOx"],
+      "reports": []
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "Classe E",
+      "aliases": ["E-Class"],
+      "generation": "W212, W213 e W214",
+      "years": "2009-oggi",
+      "researchTopics": ["220 CDI", "iniettori", "bloccasterzo elettronico", "catena benzina"],
+      "reports": []
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "GLA",
+      "generation": "X156 e H247",
+      "years": "2014-oggi",
+      "researchTopics": ["200d", "cambio automatico", "AdBlue", "sensori NOx"],
+      "reports": []
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "GLC",
+      "generation": "X253 e X254",
+      "years": "2015-oggi",
+      "researchTopics": ["220d", "sensori NOx", "AdBlue", "infotainment"],
+      "reports": []
     },
     {
       "make": "Mercedes-Benz",
