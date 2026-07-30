@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 2,
+  "catalogVersion": 3,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -99,6 +99,39 @@
           "sourceName": "Ministero delle infrastrutture e dei trasporti",
           "sourceUrl": "https://mit.gov.it/nfsmitgov/files/media/documentazione/2022-10/Bollettino_semestrale_di_richiamo_dei_v_tosi___n_19_2010.pdf",
           "userText": "Richiamo storico: verifica il VIN presso la rete Fiat."
+        },
+        {
+          "id": "fiat-panda-169-coolant-plastic-connector-community",
+          "category": "Raffreddamento motore",
+          "title": "Segnalazioni su raccordo o bocchettone acqua in plastica",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Panda 169 1.2 e versioni con raccordo acqua equivalente; conferma il ricambio con VIN",
+          "sourceName": "FIAT Forum",
+          "sourceUrl": "https://www.fiatforum.com/threads/panda100-hp-water-pipe-rh-side.429180/",
+          "userText": "Segnalazioni di perdita o rottura del raccordo/tubo acqua in plastica. Non e un richiamo: se cala il refrigerante, compare spia temperatura o ci sono tracce di liquido, ferma il veicolo in sicurezza e fai controllare il circuito a motore freddo."
+        }
+      ]
+    },
+    {
+      "make": "Lancia",
+      "model": "Ypsilon",
+      "generation": "Piattaforme con raccordo acqua/sfiato condiviso",
+      "years": "Verifica ricambio e motore tramite VIN",
+      "reports": [
+        {
+          "id": "lancia-ypsilon-coolant-plastic-connector-pending",
+          "category": "Raffreddamento motore",
+          "title": "Raccordo acqua/sfiato in plastica da confermare",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Pagnelli Radiatori",
+          "sourceUrl": "https://www.pagnelliradiatori.it/product-tag/raccordo-90-gradi-con-sfiato-da-22mm-per-lancia-ypsilon-fiat-panda-fiat-cinquecento/",
+          "userText": "Esiste un raccordo acqua/sfiato compatibile con Panda e Ypsilon, ma questa non e prova di un difetto ricorrente. La voce resta da confermare con segnalazioni moderate: controlla il livello refrigerante e il ricambio corretto tramite VIN."
         }
       ]
     },
@@ -310,10 +343,12 @@
           "confidence": "community-repeated",
           "severity": "check_promptly",
           "status": "awaiting-autostorico-reports",
-          "engineScope": "Solo motori diesel BMW N47; identifica sempre il codice motore tramite VIN o libretto",
+          "engineScope": "Solo diesel BMW N47/N47D20: 16d, 18d, 20d e 23d secondo modello; identifica sempre il codice motore tramite VIN o libretto",
+          "affectedProductionScope": "Segnalazioni concentrate sulle prime produzioni circa 2007-2011; non tutte le BMW Serie 1 o tutti i diesel BMW sono interessati",
+          "mechanism": "Usura della catena, guide o tendicatena puo produrre rumore metallico e, nei casi gravi, rottura con danni importanti al motore.",
           "sourceName": "BMW Passion Forum",
-          "sourceUrl": "https://www.bmwpassion.com/forum/threads/bmw-serie-1-f20-f21-n47-catena-distribuzione-problemi-anche-su-f20.189469/",
-          "userText": "Segnalazione riferita al motore N47, non a tutte le Serie 1. Rumori metallici dalla distribuzione richiedono un controllo tempestivo."
+          "sourceUrl": "https://www.bmwpassion.com/forum/threads/rottura-sostituzione-catena-distribuzione-n47.323752/",
+          "userText": "Segnalazione riferita al motore N47, non a tutte le Serie 1. Rumori metallici dalla distribuzione richiedono un controllo tempestivo: non attendere che compaiano spie o cali di prestazione."
         }
       ]
     },
