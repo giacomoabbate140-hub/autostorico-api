@@ -128,6 +128,21 @@ DEFECT_RESEARCH_SOURCES = {
     "mercedesbenzclub.it": ("Mercedes-Benz Club Italia", "community_candidate"),
     "communaute.dacia.fr": ("Comunita Dacia", "community_candidate"),
     "audirsclub.it": ("Audi RS Club Italia", "community_candidate"),
+    "renault.it": ("Renault Italia", "manufacturer_candidate"),
+    "volkswagen.it": ("Volkswagen Italia", "manufacturer_candidate"),
+    "audi.it": ("Audi Italia", "manufacturer_candidate"),
+    "bmw.it": ("BMW Italia", "manufacturer_candidate"),
+    "mercedes-benz.it": ("Mercedes-Benz Italia", "manufacturer_candidate"),
+    "ford.it": ("Ford Italia", "manufacturer_candidate"),
+    "toyota.it": ("Toyota Italia", "manufacturer_candidate"),
+    "nissan.it": ("Nissan Italia", "manufacturer_candidate"),
+    "kia.com": ("Kia", "manufacturer_candidate"),
+    "hyundai.com": ("Hyundai", "manufacturer_candidate"),
+    "skoda-auto.it": ("Skoda Italia", "manufacturer_candidate"),
+    "volvocars.com": ("Volvo Cars", "manufacturer_candidate"),
+    "fordclub.it": ("Ford Club Italia", "community_candidate"),
+    "vwgolfcommunity.com": ("VW Golf Community", "community_candidate"),
+    "hyundai-club.eu": ("Hyundai Club", "community_candidate"),
 }
 
 
@@ -1708,14 +1723,19 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             model = query.get("model", [""])[0]
             result = vehicle_defect_reports(make, model)
             if result is None:
-                self.send_json(
-                    {
-                        "error": "vehicle_not_found",
-                        "detail": "Inserisci marca e modello presenti nel catalogo.",
-                    },
-                    status=404,
-                )
-                return
+                # A catalog entry is optional: every vehicle can still receive
+                # live source candidates from the approved online research flow.
+                result = {
+                    "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
+                    "make": str(make or "").strip(),
+                    "model": str(model or "").strip(),
+                    "vehicles": [],
+                    "reports": [],
+                    "disclaimer": (
+                        "Nessuna segnalazione curata ancora disponibile per questo modello. "
+                        "Le fonti online restano da leggere e verificare."
+                    ),
+                }
             search_online = query.get("searchOnline", ["0"])[0] == "1"
             if search_online and defect_research_configured():
                 try:
