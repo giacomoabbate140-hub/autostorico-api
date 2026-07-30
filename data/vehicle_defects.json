@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 4,
+  "catalogVersion": 5,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -361,6 +361,40 @@
           "sourceName": "Audi RS Club Italia",
           "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-65696.html",
           "userText": "Raccolta community, non richiamo: richiedi diagnosi e verifica aggiornamenti software in caso di anomalie."
+        }
+      ]
+    },
+    {
+      "make": "Audi",
+      "model": "A1",
+      "generation": "8X e GB, secondo motorizzazione",
+      "years": "2010-oggi",
+      "reports": [
+        {
+          "id": "audi-a1-injector-idle-knock-community",
+          "category": "Alimentazione e iniezione",
+          "title": "Segnalazioni su rumore al minimo e verifica degli iniettori",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Alcune A1 benzina o diesel; il rumore da solo non identifica gli iniettori. Conferma il codice motore e l'esito della diagnosi.",
+          "sourceName": "Audi Owners Club",
+          "sourceUrl": "https://www.audiownersclub.com/forums/topic/28061-a1-strange-noise-under-load/",
+          "userText": "Un proprietario riferisce rumore e iniettori risultati guasti dopo prova. Voce community da confermare: rumori al minimo possono avere cause diverse, quindi fai eseguire diagnosi, controllo correzioni iniettori e verifica del sistema di alimentazione."
+        },
+        {
+          "id": "audi-a1-ignition-coil-misfire-community",
+          "category": "Accensione e motore",
+          "title": "Segnalazioni su mancate accensioni e controllo bobine",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "A1 II 1.0 TFSI e altre benzina con codici errore di mancata accensione; le bobine sono una possibile causa, non una diagnosi automatica.",
+          "sourceName": "Forum Audi",
+          "sourceUrl": "https://www.forum-audi.com/topic-8189-soucis-de-rates-d-allumage.html",
+          "userText": "La community riporta codici P0300/P0302/P0303 e ipotesi su bobine dopo la sostituzione delle candele. Se il motore strattona o lampeggia la spia motore, evita di proseguire e richiedi diagnosi professionale."
         }
       ]
     },
