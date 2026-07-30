@@ -1,6 +1,6 @@
 {
-  "catalogVersion": 1,
-  "updatedAt": "2026-07-29",
+  "catalogVersion": 2,
+  "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
     {
@@ -166,6 +166,58 @@
           "sourceName": "ClubAlfa",
           "sourceUrl": "https://forum.clubalfa.it/threads/giulietta-problema-rottura-maniglia-interna-apri-porta.70186/page-230",
           "userText": "Discussione con molte esperienze di proprietari. Non e un richiamo: controlla gioco, crepe o difficolta di apertura."
+        },
+        {
+          "id": "alfa-giulietta-940-passenger-airbag-dashboard-cover-community",
+          "category": "Interni e sicurezza",
+          "title": "Segnalazioni su rigonfiamento o apertura della copertura airbag passeggero",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "ClubAlfa",
+          "sourceUrl": "https://forum.clubalfa.it/threads/giulietta-rigonfiamento-profilo-airbag-passeggero.67689/page-209",
+          "userText": "Molte segnalazioni descrivono deformazione o apertura della plastica della plancia lato passeggero. Non e classificato qui come richiamo o esplosione airbag: evita riparazioni fai-da-te e fai controllare plancia, spie airbag e VIN dalla rete Alfa Romeo."
+        }
+      ]
+    },
+    {
+      "make": "Fiat",
+      "model": "500",
+      "generation": "312",
+      "years": "2007-oggi",
+      "reports": [
+        {
+          "id": "fiat-500-312-passenger-airbag-dashboard-cover-community",
+          "category": "Interni e sicurezza",
+          "title": "Segnalazioni su rigonfiamento della zona copertura airbag passeggero",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "FIAT Forum",
+          "sourceUrl": "https://www.fiatforum.com/threads/passenger-side-airbag-on-dashboard.452811/",
+          "userText": "Segnalazione community, non richiamo: se la copertura della plancia si solleva, si crepa o si deforma, fai verificare il veicolo in rete Fiat e controlla eventuali campagne tramite VIN."
+        }
+      ]
+    },
+    {
+      "make": "Fiat",
+      "model": "Punto Evo",
+      "generation": "199",
+      "years": "2009-2012",
+      "reports": [
+        {
+          "id": "fiat-punto-evo-199-passenger-airbag-dashboard-cover-community",
+          "category": "Interni e sicurezza",
+          "title": "Segnalazioni su crepa o apertura della copertura airbag passeggero",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "FIAT Forum",
+          "sourceUrl": "https://www.fiatforum.com/threads/a-crack-in-the-dashboard.358328/page-2",
+          "userText": "Esperienze di proprietari sulla plancia nella zona airbag passeggero. Non e un richiamo confermato: non intervenire sulla copertura e richiedi un controllo professionale se noti rigonfiamenti, fessure o spie airbag."
         }
       ]
     },
