@@ -76,6 +76,13 @@ class MarketEvidenceTests(unittest.TestCase):
             ["audi-a1-ignition-coil-misfire-community"],
         )
 
+    def test_defect_catalog_filters_duplicate_model_generations_by_year(self):
+        a3_2009 = vehicle_defect_reports("Audi", "A3", 2009, "diesel 1968 cc")
+        a3_2017 = vehicle_defect_reports("Audi", "A3", 2017, "diesel 1968 cc")
+
+        self.assertEqual({vehicle["generation"] for vehicle in a3_2009["vehicles"]}, {"8P"})
+        self.assertEqual({vehicle["generation"] for vehicle in a3_2017["vehicles"]}, {"8V"})
+
     def test_defect_catalog_returns_none_for_unknown_vehicle(self):
         self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))
 

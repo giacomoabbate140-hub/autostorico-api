@@ -163,11 +163,10 @@ VEHICLE_DEFECT_CATALOG = load_vehicle_defect_catalog()
 
 
 def catalog_year_matches(entry: dict[str, Any], year: int | None) -> bool:
-    """Use explicit catalog bounds only; free-form labels are not reliable data."""
+    """Match explicit bounds or a curated generation range when available."""
     if year is None:
         return True
-    from_year = catalog_year_value(entry.get("fromYear"))
-    to_year = catalog_year_value(entry.get("toYear"))
+    from_year, to_year = catalog_year_bounds(entry)
     return (not from_year or year >= from_year) and (not to_year or year <= to_year)
 
 
@@ -176,6 +175,26 @@ def catalog_year_value(value: Any) -> int:
         return max(0, int(str(value or "").strip()))
     except (TypeError, ValueError):
         return 0
+
+
+def catalog_year_bounds(entry: dict[str, Any]) -> tuple[int, int]:
+    """Read the generation range already present in the curated catalog."""
+    from_year = catalog_year_value(entry.get("fromYear"))
+    to_year = catalog_year_value(entry.get("toYear"))
+    if from_year or to_year:
+        return from_year, to_year
+
+    years_label = str(entry.get("years") or "")
+    range_match = re.search(
+        r"\b((?:19|20)\d{2})\s*[-–]\s*((?:19|20)\d{2}|oggi)",
+        years_label,
+        flags=re.IGNORECASE,
+    )
+    if not range_match:
+        return 0, 0
+    from_year = catalog_year_value(range_match.group(1))
+    end = range_match.group(2).casefold()
+    return from_year, 0 if end == "oggi" else catalog_year_value(end)
 
 
 def catalog_engine_matches(entry: dict[str, Any], engine: str) -> bool:
