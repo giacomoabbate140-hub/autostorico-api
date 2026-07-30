@@ -276,6 +276,20 @@
           "userText": "Verifica VIN, motore, manutenzione e condizioni applicabili presso la rete Peugeot."
         },
         {
+          "id": "peugeot-208-puretech-wet-belt-community",
+          "category": "Motore e distribuzione",
+          "title": "Esperienze community su usura della cinghia in bagno d'olio",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Motori benzina 1.2 PureTech/EB2 con cinghia in bagno d'olio; non tutte le 208 e non tutti gli anni sono interessati",
+          "mechanism": "Le discussioni riportano deterioramento della cinghia e possibili residui nel circuito dell'olio. La verifica dell'intervallo di manutenzione deve seguire VIN e prescrizioni aggiornate del costruttore.",
+          "sourceName": "Forum Peugeot",
+          "sourceUrl": "https://www.forum-peugeot.com/Forum/threads/probl%C3%A8me-moteur-puretech-huile-moteur-et-surprise.112263/post-2438957",
+          "userText": "Esperienze ripetute della community, non una diagnosi individuale: controlla con un'officina il motore esatto, lo storico tagliandi e lo stato della cinghia. Se compare una spia pressione olio, fermati in sicurezza."
+        },
+        {
           "id": "peugeot-208-electronics-community",
           "category": "Elettronica",
           "title": "Segnalazioni su centralina e sistemi elettronici",
@@ -286,6 +300,27 @@
           "sourceName": "Forum Quattroruote",
           "sourceUrl": "https://forum.quattroruote.it/threads/problema-centralina-peugeot-208.106720/",
           "userText": "Esperienza singola di proprietario, non difetto confermato: fai eseguire una diagnosi se compaiono anomalie."
+        }
+      ]
+    },
+    {
+      "make": "Fiat",
+      "model": "Panda",
+      "generation": "312",
+      "years": "2012-2018 circa, secondo motore",
+      "reports": [
+        {
+          "id": "fiat-panda-312-12-euro6-calibration-community",
+          "category": "Motore ed elettronica",
+          "title": "Segnalazioni su esitazione in partenza del 1.2 Euro 6",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Alcune Panda 1.2 benzina Euro 6, soprattutto segnalazioni del 2014-2015; identifica sempre anno e software tramite VIN",
+          "sourceName": "FIAT Forum",
+          "sourceUrl": "https://www.fiatforum.com/threads/2014-panda-1-2-lounge-poor-performance.444446/",
+          "userText": "Proprietari descrivono esitazione o vuoto in partenza; nella discussione alcuni riferiscono un miglioramento dopo aggiornamento software. Non e un richiamo: richiedi diagnosi e verifica aggiornamenti alla rete Fiat."
         }
       ]
     },

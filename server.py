@@ -116,6 +116,8 @@ DEFECT_RESEARCH_SOURCES = {
     "forum.alfavirtualclub.it": ("AlfaVirtualClub", "community_candidate"),
     "fiatforum.com": ("FIAT Forum", "community_candidate"),
     "bmwpassion.com": ("BMW Passion Forum", "community_candidate"),
+    "forum-bmw.fr": ("Forum BMW", "community_candidate"),
+    "forum-peugeot.com": ("Forum Peugeot", "community_candidate"),
     "mercedesbenzclub.it": ("Mercedes-Benz Club Italia", "community_candidate"),
     "communaute.dacia.fr": ("Comunita Dacia", "community_candidate"),
     "audirsclub.it": ("Audi RS Club Italia", "community_candidate"),
