@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 13,
+  "catalogVersion": 14,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -212,6 +212,54 @@
           "sourceName": "ClubAlfa",
           "sourceUrl": "https://forum.clubalfa.it/threads/giulietta-rigonfiamento-profilo-airbag-passeggero.67689/page-209",
           "userText": "Molte segnalazioni descrivono deformazione o apertura della plastica della plancia lato passeggero. Non e classificato qui come richiamo o esplosione airbag: evita riparazioni fai-da-te e fai controllare plancia, spie airbag e VIN dalla rete Alfa Romeo."
+        },
+        {
+          "id": "alfa-giulietta-940-trim-chrome-community",
+          "category": "Interni e finiture",
+          "title": "Segnalazioni su cromature interne che si deteriorano",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Alcuni proprietari riferiscono finiture cromate che si opacizzano, si sfogliano o perdono colore. E un difetto estetico da documentare con foto e chilometraggio, non un richiamo confermato."
+        },
+        {
+          "id": "alfa-giulietta-940-headliner-community",
+          "category": "Interni e finiture",
+          "title": "Segnalazioni sul rivestimento del cielo che si scolla",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Segnalazioni di distacco del tessuto del cielo abitacolo. Puoi registrare data, foto e chilometri nella community per rendere la casistica piu precisa."
+        },
+        {
+          "id": "alfa-giulietta-940-gear-knob-chrome-community",
+          "category": "Interni e finiture",
+          "title": "Segnalazioni sul pomello cambio e finiture cromate",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Alcuni utenti riferiscono usura o perdita della cromatura sul pomello cambio. E una segnalazione estetica: non usare prodotti abrasivi e documenta il difetto se vuoi confermarlo nella community."
+        },
+        {
+          "id": "alfa-giulietta-940-wiper-wiring-community",
+          "category": "Impianto elettrico e visibilita",
+          "title": "Segnalazioni su cablaggio o funzionamento dei tergicristalli",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Alcuni proprietari riferiscono anomalie al cablaggio o al comando tergicristalli. Se i tergi sono intermittenti o non funzionano, fai verificare cablaggio, fusibili, relè e motorino prima di guidare con pioggia."
         }
       ]
     },
@@ -613,7 +661,56 @@
       "generation": "356",
       "years": "2015-oggi",
       "researchTopics": ["infotainment", "sensori", "EGR e DPF", "batteria"],
-      "reports": []
+      "reports": [
+        {
+          "id": "fiat-tipo-356-trim-chrome-community",
+          "category": "Interni e finiture",
+          "title": "Segnalazioni su cromature interne che si deteriorano",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Alcuni proprietari riferiscono finiture cromate che si opacizzano, si sfogliano o perdono colore. E un difetto estetico da documentare con foto e chilometraggio, non un richiamo confermato."
+        },
+        {
+          "id": "fiat-tipo-356-headliner-community",
+          "category": "Interni e finiture",
+          "title": "Segnalazioni sul rivestimento del cielo che si scolla",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Segnalazioni di distacco del tessuto del cielo abitacolo. Puoi registrare data, foto e chilometri nella community per rendere la casistica piu precisa."
+        },
+        {
+          "id": "fiat-tipo-356-gear-knob-chrome-community",
+          "category": "Interni e finiture",
+          "title": "Segnalazioni sul pomello cambio e finiture cromate",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Alcuni utenti riferiscono usura o perdita della cromatura sul pomello cambio. E una segnalazione estetica: non usare prodotti abrasivi e documenta il difetto se vuoi confermarlo nella community."
+        },
+        {
+          "id": "fiat-tipo-356-wiper-wiring-community",
+          "category": "Impianto elettrico e visibilita",
+          "title": "Segnalazioni su cablaggio o funzionamento dei tergicristalli",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Alcuni proprietari riferiscono anomalie al cablaggio o al comando tergicristalli. Se i tergi sono intermittenti o non funzionano, fai verificare cablaggio, fusibili, relè e motorino prima di guidare con pioggia."
+        }
+      ]
     },
     {
       "make": "Citroen",
@@ -971,6 +1068,24 @@
           "userText": "La statistica ADAC segnala l'i10 2018 tra le serie con tasso di panne elevato nella propria rilevazione. Non attribuisce un difetto unico: usa il dato come invito a controllare storico manutenzione, batteria e richiami VIN."
         }
       ]
+    },
+    {
+      "make": "Land Rover",
+      "model": "Range Rover Evoque",
+      "aliases": ["Evoque"],
+      "generation": "L538 Ingenium",
+      "years": "2015-2018",
+      "researchTopics": ["2.0 Ingenium diesel", "DPF", "EGR", "diluizione olio", "catena distribuzione", "turbina"],
+      "reports": []
+    },
+    {
+      "make": "Land Rover",
+      "model": "Range Rover Evoque",
+      "aliases": ["Evoque"],
+      "generation": "L551",
+      "years": "2019-oggi",
+      "researchTopics": ["2.0 Ingenium diesel", "2.0 Ingenium benzina", "DPF", "raffreddamento", "VVT", "AdBlue"],
+      "reports": []
     }
   ],
   "engineFamilies": [
@@ -1051,6 +1166,339 @@
           "sourceName": "Segnalazione community fornita dagli utenti",
           "sourceUrl": "",
           "userText": "Segnalazione riferita alle MiTo 1.3 Multijet. Non e un richiamo confermato: spia pressione olio o rumori anomali richiedono arresto del motore e verifica professionale."
+        }
+      ]
+    },
+    {
+      "id": "dacia-15-dci-delphi-metal-contamination-community",
+      "make": "Dacia",
+      "models": ["Duster", "Sandero"],
+      "fromYear": 2010,
+      "toYear": 2017,
+      "engineKeywords": ["1461", "1.5", "dci"],
+      "reports": [
+        {
+          "id": "dacia-15-dci-delphi-metal-contamination-community",
+          "category": "Alimentazione e iniezione diesel",
+          "title": "Segnalazioni su limatura della pompa alta pressione e iniettori",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Duster e Sandero 1.5 dCi (1461 cc) prodotte tra 2010 e 2017 circa. La community riferisce il caso solo per esemplari con pompa Delphi: conferma il componente montato tramite VIN o officina prima di attribuire il difetto al veicolo.",
+          "sourceName": "Comunita Dacia",
+          "sourceUrl": "https://communaute.dacia.fr/forum/DACIA/DACIA-DUSTER/INJECTEURS-1-5-DCI/4945532/188999",
+          "userText": "Discussioni ripetute riferiscono che alcune pompe Delphi possono rilasciare limatura nel circuito diesel e danneggiare o ostruire gli iniettori. Non e una campagna di richiamo e non riguarda automaticamente le pompe Bosch CP4. In presenza di spia iniezione, calo di potenza, fumosita o battito anomalo, evita di sostituire solo un iniettore: chiedi diagnosi dell'intero circuito, verifica del filtro carburante e controllo della pompa."
+        }
+      ]
+    },
+    {
+      "id": "stellantis-12-puretech-wet-belt-community",
+      "make": "Citroen",
+      "models": ["C3", "C3 Aircross", "C4", "C5 Aircross", "Berlingo", "C4 Picasso"],
+      "fromYear": 2013,
+      "toYear": 2022,
+      "engineKeywords": ["1199", "1.2", "puretech"],
+      "reports": [
+        {
+          "id": "citroen-12-puretech-wet-belt-community",
+          "category": "Distribuzione e lubrificazione",
+          "title": "Segnalazioni sulla cinghia in bagno d'olio PureTech",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Motori 1.2 PureTech (1199 cc) fino alle serie antecedenti agli aggiornamenti piu recenti. Verifica intervallo e soluzione previsti esattamente per il VIN.",
+          "sourceName": "Forum Quattroruote",
+          "sourceUrl": "https://forum.quattroruote.it/threads/cinghia-distribuzione-c3-1-2-puretech-110.144017/",
+          "userText": "La community riporta casi di degrado della cinghia in bagno d'olio e possibili residui nel circuito di lubrificazione. Non e una diagnosi automatica: richiedi controllo visivo della cinghia, verifica del pescante olio e della manutenzione secondo VIN, soprattutto se compaiono spie olio o rumori anomali."
+        }
+      ]
+    },
+    {
+      "id": "peugeot-12-puretech-wet-belt-community",
+      "make": "Peugeot",
+      "models": ["208", "2008", "308", "3008", "508"],
+      "fromYear": 2013,
+      "toYear": 2022,
+      "engineKeywords": ["1199", "1.2", "puretech"],
+      "reports": [
+        {
+          "id": "peugeot-12-puretech-wet-belt-community",
+          "category": "Distribuzione e lubrificazione",
+          "title": "Segnalazioni sulla cinghia in bagno d'olio PureTech",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Motori 1.2 PureTech (1199 cc) delle annate 2013-2022 circa; interventi e campagne dipendono dal VIN.",
+          "sourceName": "Segnalazioni community da verificare",
+          "sourceUrl": "",
+          "userText": "La community discute l'usura prematura della cinghia in bagno d'olio su alcune versioni 1.2 PureTech. Mantieni la manutenzione documentata e chiedi un controllo professionale della cinghia e della lubrificazione: non usare questa segnalazione come conferma di guasto sul singolo veicolo."
+        }
+      ]
+    },
+    {
+      "id": "opel-corsa-13-cdti-timing-chain-community",
+      "make": "Opel",
+      "models": ["Corsa"],
+      "fromYear": 2006,
+      "toYear": 2014,
+      "engineKeywords": ["1248", "1.3", "cdti"],
+      "reports": [
+        {
+          "id": "opel-corsa-13-cdti-timing-chain-community",
+          "category": "Distribuzione",
+          "title": "Segnalazioni su rumorosita della catena 1.3 CDTI",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Corsa D 1.3 CDTI / 1.3 Multijet (1248 cc), 2006-2014. La catena non ha un intervallo di sostituzione fisso: conta il rumore e l'esito della verifica in officina.",
+          "sourceName": "Forum Quattroruote",
+          "sourceUrl": "https://forum.quattroruote.it/threads/cinghia-di-distribuzione-opel-corsa-1-3-cdti.138255/",
+          "userText": "Proprietari riportano ticchettio o rumorosita della catena; la discussione ricorda che lubrificante corretto e manutenzione regolare incidono molto. Se compare sferragliamento a freddo o dal lato distribuzione, non attendere: fai controllare catena, tenditore e lubrificazione."
+        }
+      ]
+    },
+    {
+      "id": "audi-tfsi-oil-consumption-community",
+      "make": "Audi",
+      "models": ["A4", "Q5"],
+      "fromYear": 2008,
+      "toYear": 2015,
+      "engineKeywords": ["1798", "1984", "1.8", "2.0", "tfsi"],
+      "reports": [
+        {
+          "id": "audi-tfsi-oil-consumption-community",
+          "category": "Motore e lubrificazione",
+          "title": "Segnalazioni su consumo olio dei TFSI di prima generazione",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "A4 B8 e Q5 con 1.8/2.0 TFSI, soprattutto anni 2008-2015. Identifica codice motore e storico manutenzione prima di associare il caso.",
+          "sourceName": "Forum Audi",
+          "sourceUrl": "https://www.forum-audi.com/topic-7652-a4-b8-2010-conso-huile.html",
+          "userText": "La community segnala casi di consumo olio elevato su alcune versioni TFSI. Controlla spesso il livello e fai eseguire una misura documentata del consumo e una diagnosi perdite/PCV/motore: non tutti gli esemplari sono coinvolti."
+        }
+      ]
+    },
+    {
+      "id": "mercedes-diesel-nox-adblue-community",
+      "make": "Mercedes-Benz",
+      "models": ["Classe A", "Classe C", "Classe E", "GLA", "GLC"],
+      "fromYear": 2016,
+      "engineKeywords": ["diesel", "d", "cdi"],
+      "reports": [
+        {
+          "id": "mercedes-diesel-nox-adblue-community",
+          "category": "Antinquinamento diesel",
+          "title": "Segnalazioni su sensori NOx e messaggi AdBlue",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Versioni diesel con SCR/AdBlue. Il messaggio puo dipendere da sensore, sistema SCR, cablaggio o livello/qualita del fluido: servono codici diagnosi.",
+          "sourceName": "Mercedes-Benz Club Italia",
+          "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?start=15&t=111873",
+          "userText": "La community riporta spie motore, sensori NOx e messaggi AdBlue su alcuni diesel. Non sostituire componenti per tentativi: richiedi lettura codici errore e verifica della campagna VIN presso la rete Mercedes."
+        }
+      ]
+    },
+    {
+      "id": "dacia-09-tce-timing-chain-community",
+      "make": "Dacia",
+      "models": ["Sandero", "Logan"],
+      "fromYear": 2012,
+      "toYear": 2014,
+      "engineKeywords": ["898", "0.9", "tce"],
+      "reports": [
+        {
+          "id": "dacia-09-tce-timing-chain-community",
+          "category": "Distribuzione",
+          "title": "Segnalazioni su allentamento della catena 0.9 TCe",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Sandero e Logan 0.9 TCe (898 cc), soprattutto produzioni 2012-2014. Non applicare la voce alle motorizzazioni SCe o diesel; conferma il codice motore tramite VIN.",
+          "sourceName": "Comunita Dacia",
+          "sourceUrl": "https://communaute.dacia.fr/forum/DACIA/LOGAN-MCV/PROBLEME-CHAINE-DE-DISTRIBUTION-0-9TCE/3925940/XXX",
+          "userText": "La community riporta casi di catena allentata con rumore metallico all'avviamento o fuori fase. La catena non e un componente senza manutenzione: in presenza di sferragliamento, spia motore o avviamento irregolare, evita di continuare a usare l'auto e richiedi un controllo della distribuzione."
+        }
+      ]
+    },
+    {
+      "id": "ford-10-ecoboost-wet-belt-community",
+      "make": "Ford",
+      "models": ["Fiesta"],
+      "fromYear": 2017,
+      "toYear": 2019,
+      "engineKeywords": ["999", "1.0", "ecoboost"],
+      "reports": [
+        {
+          "id": "ford-10-ecoboost-wet-belt-community",
+          "category": "Distribuzione e lubrificazione",
+          "title": "Segnalazioni sulla cinghia in bagno d'olio 1.0 EcoBoost",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Fiesta 1.0 EcoBoost (999 cc) fino alle produzioni 2019 con distribuzione a cinghia in bagno d'olio. Le versioni successive possono avere architettura diversa: controlla sempre VIN e piano manutenzione Ford.",
+          "sourceName": "Forum Quattroruote",
+          "sourceUrl": "https://forum.quattroruote.it/threads/ford-fiesta-1-0-ecoboost-125-cv-hybrid.148808/",
+          "userText": "La community descrive deterioramento della cinghia in bagno d'olio e possibili residui nel circuito. Usa esclusivamente l'olio previsto, conserva i tagliandi e chiedi a un'officina Ford il controllo della cinghia e della lubrificazione. Non attribuire questa voce alle Fiesta piu recenti con soluzione differente senza verifica VIN."
+        }
+      ]
+    },
+    {
+      "id": "volkswagen-10-tsi-turbo-cooling-community",
+      "make": "Volkswagen",
+      "models": ["Golf"],
+      "fromYear": 2015,
+      "engineKeywords": ["tsi"],
+      "reports": [
+        {
+          "id": "volkswagen-10-tsi-turbo-cooling-community",
+          "category": "Turbo e raffreddamento",
+          "title": "Segnalazioni da verificare su comando turbo e circuito refrigerante",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo versioni 1.0 TSI turbo (999 cc), non i 1.0 MPI aspirati. I componenti possono cambiare per anno e codice motore.",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Sono raccolte segnalazioni su spia motore, cali di potenza e perdite di refrigerante. Le cause possono essere diverse, inclusi attuatore turbo/wastegate o pompa acqua: non sostituire parti a tentativi, fai leggere i codici errore e controllare il circuito di raffreddamento."
+        }
+      ]
+    },
+    {
+      "id": "seat-10-tsi-turbo-cooling-community",
+      "make": "SEAT",
+      "models": ["Ibiza", "Leon", "Arona", "Ateca"],
+      "fromYear": 2015,
+      "engineKeywords": ["tsi"],
+      "reports": [
+        {
+          "id": "seat-10-tsi-turbo-cooling-community",
+          "category": "Turbo e raffreddamento",
+          "title": "Segnalazioni da verificare su comando turbo e circuito refrigerante",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo versioni 1.0 TSI turbo (999 cc), non i 1.0 MPI aspirati. I componenti possono cambiare per anno e codice motore.",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Sono raccolte segnalazioni su spia motore, cali di potenza e perdite di refrigerante. Le cause possono essere diverse, inclusi attuatore turbo/wastegate o pompa acqua: non sostituire parti a tentativi, fai leggere i codici errore e controllare il circuito di raffreddamento."
+        }
+      ]
+    },
+    {
+      "id": "audi-10-tfsi-turbo-cooling-community",
+      "make": "Audi",
+      "models": ["A1", "A3", "Q3"],
+      "fromYear": 2015,
+      "engineKeywords": ["tfsi"],
+      "reports": [
+        {
+          "id": "audi-10-tfsi-turbo-cooling-community",
+          "category": "Turbo e raffreddamento",
+          "title": "Segnalazioni da verificare su comando turbo e circuito refrigerante",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo versioni 1.0 TFSI turbo (999 cc). I componenti possono cambiare per anno e codice motore.",
+          "sourceName": "Segnalazioni community in verifica",
+          "sourceUrl": "",
+          "userText": "Sono raccolte segnalazioni su spia motore, cali di potenza e perdite di refrigerante. Le cause possono essere diverse, inclusi attuatore turbo/wastegate o pompa acqua: non sostituire parti a tentativi, fai leggere i codici errore e controllare il circuito di raffreddamento."
+        }
+      ]
+    },
+    {
+      "id": "land-rover-evoque-20-ingenium-diesel-oil-dilution-community",
+      "make": "Land Rover",
+      "models": ["Range Rover Evoque", "Evoque"],
+      "fromYear": 2015,
+      "toYear": 2018,
+      "engineKeywords": ["1999", "2.0", "diesel", "ingenium", "td4"],
+      "reports": [
+        {
+          "id": "land-rover-evoque-20-ingenium-diesel-oil-dilution-community",
+          "category": "Lubrificazione, DPF ed EGR",
+          "title": "Segnalazioni su rigenerazioni DPF e diluizione dell'olio",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque L538 2.0 diesel Ingenium (TD4, 150/180 CV circa), 2015-2018. Non riguarda il precedente 2.2 diesel ne i benzina Ingenium.",
+          "sourceName": "Forum Quattroruote",
+          "sourceUrl": "https://forum.quattroruote.it/threads/evoque-my16-my17-problema-fap-egr-richiesta-manutenzione-anticipata.107038/",
+          "userText": "Le community riportano rigenerazioni DPF/EGR problematiche, soprattutto con uso urbano e tragitti brevi, con possibile aumento del livello olio per diluizione con gasolio. Controlla livello e odore dell'olio, spie filtro/motore e storico tagliandi; in caso di livello sopra il massimo, non rimandare la diagnosi professionale."
+        },
+        {
+          "id": "land-rover-evoque-20-ingenium-diesel-timing-chain-community",
+          "category": "Distribuzione e motore",
+          "title": "Segnalazioni su rumorosita o danni alla distribuzione",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque L538 2.0 diesel Ingenium, 2015-2018. La distribuzione e sul lato cambio e un intervento puo essere complesso: identifica sempre il codice motore e le campagne VIN.",
+          "sourceName": "Land Rover UK Forums",
+          "sourceUrl": "https://www.lrukforums.com/threads/a-very-interesting-read-on-the-ingenium-oil-dilution-issues.306179/",
+          "userText": "Segnalazioni community collegano la contaminazione/diluizione dell'olio a possibili problemi della distribuzione su alcuni diesel Ingenium. Non e una diagnosi automatica: se senti sferragliamento, battito o compaiono errori di fasatura, spegni il motore e richiedi controllo immediato."
+        },
+        {
+          "id": "land-rover-evoque-20-ingenium-diesel-turbo-community",
+          "category": "Turbo e aspirazione",
+          "title": "Segnalazioni isolate su guasto turbina",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque 2.0 diesel Ingenium. La turbina puo guastarsi per cause diverse: manutenzione, lubrificazione, aspirazione o componente stesso.",
+          "sourceName": "Land Rover UK Forums",
+          "sourceUrl": "https://www.lrukforums.com/threads/ingenium-diesel-woes.295678/",
+          "userText": "Un caso community descrive perdita di potenza e guasto turbina. Se ci sono fumo, fischio anomalo, calo di potenza o spia motore, interrompi l'uso gravoso e fai verificare turbo, lubrificazione e intercooler; non considerare la voce una difettosita certa per tutti gli esemplari."
+        }
+      ]
+    },
+    {
+      "id": "land-rover-evoque-20-ingenium-petrol-cooling-community",
+      "make": "Land Rover",
+      "models": ["Range Rover Evoque", "Evoque"],
+      "fromYear": 2019,
+      "engineKeywords": ["1997", "2.0", "benzina", "ingenium", "p200", "p250", "p300"],
+      "reports": [
+        {
+          "id": "land-rover-evoque-20-ingenium-petrol-cooling-community",
+          "category": "Raffreddamento motore",
+          "title": "Verifica perdite dal gruppo termostato e raffreddamento",
+          "sourceType": "manufacturer_support",
+          "confidence": "source-verified",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "engineScope": "Evoque L551 con 2.0 benzina Ingenium. Il bollettino tecnico citato riguarda una casistica definita: verifica copertura e applicabilita tramite VIN presso Land Rover.",
+          "sourceName": "JLR TOPIx",
+          "sourceUrl": "https://dot.report/bulletins/MC-11015332-0001.pdf",
+          "userText": "Esiste documentazione tecnica JLR su possibili perdite dal gruppo termostato del 2.0 benzina. Controlla periodicamente il livello refrigerante; se cala, compare odore di liquido o messaggio temperatura, fai eseguire prova pressione e verifica VIN in rete Land Rover."
+        },
+        {
+          "id": "land-rover-evoque-20-ingenium-petrol-vvt-community",
+          "category": "Fasatura variabile e elettronica motore",
+          "title": "Segnalazioni su solenoidi VVT e codici di fasatura",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Prime Evoque benzina 2.0 Ingenium; la presenza dipende da anno, motore e VIN. Non confondere i codici sensore con la certezza di un guasto al sensore.",
+          "sourceName": "Range Rover Community",
+          "sourceUrl": "https://www.reddit.com/r/LandRover/comments/1mtdmz4/camshaft_position_sensor_replacement/",
+          "userText": "La community segnala spie motore/codici di fasatura che possono dipendere da solenoide VVT, passaggi olio o adattamento elettronico. Prima di sostituire sensori, richiedi lettura codici, controllo qualita/livello olio e verifica delle campagne VIN."
         }
       ]
     }

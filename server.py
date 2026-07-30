@@ -114,6 +114,8 @@ DEFECT_RESEARCH_SOURCES = {
     "aftersales.fiat.com": ("Documentazione ufficiale Stellantis", "manufacturer_candidate"),
     "stellantis.com": ("Stellantis", "manufacturer_candidate"),
     "forum.quattroruote.it": ("Forum Quattroruote", "community_candidate"),
+    "forum-auto.caradisiac.com": ("Forum Auto Caradisiac", "community_candidate"),
+    "forum-auto.com": ("Forum Auto", "community_candidate"),
     "forum.clubalfa.it": ("ClubAlfa", "community_candidate"),
     "forum.alfavirtualclub.it": ("AlfaVirtualClub", "community_candidate"),
     "fiatforum.com": ("FIAT Forum", "community_candidate"),
@@ -143,6 +145,9 @@ DEFECT_RESEARCH_SOURCES = {
     "fordclub.it": ("Ford Club Italia", "community_candidate"),
     "vwgolfcommunity.com": ("VW Golf Community", "community_candidate"),
     "hyundai-club.eu": ("Hyundai Club", "community_candidate"),
+    "lrukforums.com": ("Land Rover UK Forums", "community_candidate"),
+    "landroverforums.com": ("Land Rover Forums", "community_candidate"),
+    "babyrr.com": ("Baby Range Rover Forum", "community_candidate"),
     "whatcar.com": ("What Car? Reliability Survey", "independent_candidate"),
     "adac.de": ("ADAC Pannenstatistik", "independent_candidate"),
 }
@@ -336,7 +341,7 @@ def search_defect_source_candidates(
     )
     query = (
         f'"{clean_make}" "{clean_model}" {context_terms} '
-        "(richiamo OR difetto OR problema OR campagna)"
+        "(forum OR community OR proprietari OR difetto OR problema)"
     )
     params = urllib.parse.urlencode(
         {

@@ -84,8 +84,8 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual({vehicle["generation"] for vehicle in a3_2017["vehicles"]}, {"8V"})
 
     def test_independent_reliability_profiles_keep_golf_generations_separate(self):
-        golf_mk7 = vehicle_defect_reports("Volkswagen", "Golf", 2017)
-        golf_mk8 = vehicle_defect_reports("Volkswagen", "Golf", 2022)
+        golf_mk7 = vehicle_defect_reports("Volkswagen", "Golf", 2017, "diesel 1968 cc")
+        golf_mk8 = vehicle_defect_reports("Volkswagen", "Golf", 2022, "diesel 1968 cc")
 
         self.assertEqual(
             {report["id"] for report in golf_mk7["reports"]},
@@ -106,12 +106,65 @@ class MarketEvidenceTests(unittest.TestCase):
         )
         self.assertIsNone(different_engine)
 
+    def test_dacia_diesel_injection_community_report_is_limited_by_year_and_engine(self):
+        matching = vehicle_defect_reports("Dacia", "Duster", 2015, "diesel 1461 cc")
+        different_engine = vehicle_defect_reports("Dacia", "Duster", 2015, "benzina 1598 cc")
+        newer_vehicle = vehicle_defect_reports("Dacia", "Duster", 2021, "diesel 1461 cc")
+
+        self.assertIn(
+            "dacia-15-dci-delphi-metal-contamination-community",
+            {report["id"] for report in matching["reports"]},
+        )
+        self.assertNotIn(
+            "dacia-15-dci-delphi-metal-contamination-community",
+            {report["id"] for report in different_engine["reports"]},
+        )
+        self.assertNotIn(
+            "dacia-15-dci-delphi-metal-contamination-community",
+            {report["id"] for report in newer_vehicle["reports"]},
+        )
+
     def test_stelvio_and_tonale_community_profiles_are_available(self):
         stelvio = vehicle_defect_reports("Alfa Romeo", "Stelvio", 2020, "diesel 2143 cc")
         tonale = vehicle_defect_reports("Alfa Romeo", "Tonale", 2023, "ibrida")
 
         self.assertEqual(len(stelvio["reports"]), 1)
         self.assertEqual(len(tonale["reports"]), 1)
+
+    def test_giulietta_and_tipo_include_community_trim_and_wiper_reports(self):
+        giulietta = vehicle_defect_reports("Alfa Romeo", "Giulietta", 2016)
+        tipo = vehicle_defect_reports("Fiat", "Tipo", 2020)
+
+        for result in [giulietta, tipo]:
+            report_ids = {report["id"] for report in result["reports"]}
+            self.assertTrue(any("trim-chrome" in report_id for report_id in report_ids))
+            self.assertTrue(any("headliner" in report_id for report_id in report_ids))
+            self.assertTrue(any("gear-knob" in report_id for report_id in report_ids))
+            self.assertTrue(any("wiper-wiring" in report_id for report_id in report_ids))
+
+    def test_three_cylinder_reports_are_scoped_to_the_right_engine_and_year(self):
+        dacia = vehicle_defect_reports("Dacia", "Sandero", 2014, "benzina 898 cc TCe")
+        ford = vehicle_defect_reports("Ford", "Fiesta", 2018, "benzina 999 cc EcoBoost")
+        newer_ford = vehicle_defect_reports("Ford", "Fiesta", 2021, "benzina 999 cc EcoBoost")
+        seat = vehicle_defect_reports("SEAT", "Ibiza", 2020, "benzina 999 cc TSI")
+        seat_mpi = vehicle_defect_reports("SEAT", "Ibiza", 2020, "benzina 999 cc MPI")
+
+        self.assertIn("dacia-09-tce-timing-chain-community", {report["id"] for report in dacia["reports"]})
+        self.assertIn("ford-10-ecoboost-wet-belt-community", {report["id"] for report in ford["reports"]})
+        self.assertNotIn("ford-10-ecoboost-wet-belt-community", {report["id"] for report in newer_ford["reports"]})
+        self.assertIn("seat-10-tsi-turbo-cooling-community", {report["id"] for report in seat["reports"]})
+        self.assertNotIn("seat-10-tsi-turbo-cooling-community", {report["id"] for report in seat_mpi["reports"]})
+
+    def test_evoque_ingenium_reports_distinguish_diesel_and_petrol(self):
+        diesel = vehicle_defect_reports("Land Rover", "Evoque", 2017, "diesel 1999 cc TD4")
+        petrol = vehicle_defect_reports("Land Rover", "Range Rover Evoque", 2021, "benzina 1997 cc P250")
+
+        diesel_ids = {report["id"] for report in diesel["reports"]}
+        petrol_ids = {report["id"] for report in petrol["reports"]}
+        self.assertIn("land-rover-evoque-20-ingenium-diesel-oil-dilution-community", diesel_ids)
+        self.assertNotIn("land-rover-evoque-20-ingenium-petrol-cooling-community", diesel_ids)
+        self.assertIn("land-rover-evoque-20-ingenium-petrol-cooling-community", petrol_ids)
+        self.assertNotIn("land-rover-evoque-20-ingenium-diesel-oil-dilution-community", petrol_ids)
 
     def test_defect_catalog_returns_none_for_unknown_vehicle(self):
         self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))
@@ -124,6 +177,10 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(
             trusted_defect_source("https://www.whatcar.com/ford/fiesta/reliability"),
             ("What Car? Reliability Survey", "independent_candidate"),
+        )
+        self.assertEqual(
+            trusted_defect_source("https://forum-auto.caradisiac.com/topic/defaut-moteur"),
+            ("Forum Auto Caradisiac", "community_candidate"),
         )
         self.assertIsNone(trusted_defect_source("https://example.com/peugeot-208"))
 
