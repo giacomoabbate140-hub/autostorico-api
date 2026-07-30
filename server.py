@@ -1700,6 +1700,21 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     status=404,
                 )
                 return
+            search_online = query.get("searchOnline", ["0"])[0] == "1"
+            if search_online and defect_research_configured():
+                try:
+                    online_research = search_defect_source_candidates(make, model)
+                    result = {
+                        **result,
+                        "onlineCandidates": online_research.get("candidates", []),
+                        "onlineResearchFromCache": online_research.get("fromCache", False),
+                    }
+                except (RuntimeError, ValueError, OSError, urllib.error.URLError):
+                    result = {
+                        **result,
+                        "onlineCandidates": [],
+                        "onlineResearchUnavailable": True,
+                    }
             self.send_json(result)
             return
         if request_path == "/api/admin/defect-source-candidates":
