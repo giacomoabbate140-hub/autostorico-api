@@ -46,6 +46,7 @@ MARKET_RATE_WINDOW_SECONDS = int(os.environ.get("AUTOSTORICO_RATE_WINDOW_SECONDS
 MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
 MARKET_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_REQUESTS: dict[str, list[float]] = {}
+PREMIUM_VERIFY_REQUESTS: dict[str, list[float]] = {}
 MARKET_GUARD_LOCK = threading.Lock()
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = os.environ.get(
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", ""
@@ -60,6 +61,7 @@ GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
     "GOOGLE_PLAY_SUBSCRIPTION_ID", "premium_6_mesi"
 ).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
+PREMIUM_VERIFY_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_PREMIUM_VERIFY_RATE_LIMIT", "12"))
 DEFECT_CATALOG_PATH = Path(__file__).parent / "data" / "vehicle_defects.json"
 DEFECT_RESEARCH_CACHE_TTL_SECONDS = 24 * 60 * 60
 DEFECT_RESEARCH_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
@@ -322,18 +324,30 @@ def cache_market_estimate(cache_key: str, estimate: dict[str, Any]) -> None:
 
 
 def can_run_market_search(client_id: str) -> bool:
+    return can_run_limited_request(MARKET_REQUESTS, client_id, MARKET_RATE_LIMIT)
+
+
+def can_run_premium_verification(client_id: str) -> bool:
+    return can_run_limited_request(
+        PREMIUM_VERIFY_REQUESTS, client_id, PREMIUM_VERIFY_RATE_LIMIT
+    )
+
+
+def can_run_limited_request(
+    requests: dict[str, list[float]], client_id: str, limit: int
+) -> bool:
     now = time.time()
     with MARKET_GUARD_LOCK:
         recent = [
             timestamp
-            for timestamp in MARKET_REQUESTS.get(client_id, [])
+            for timestamp in requests.get(client_id, [])
             if now - timestamp < MARKET_RATE_WINDOW_SECONDS
         ]
-        if len(recent) >= MARKET_RATE_LIMIT:
-            MARKET_REQUESTS[client_id] = recent
+        if len(recent) >= limit:
+            requests[client_id] = recent
             return False
         recent.append(now)
-        MARKET_REQUESTS[client_id] = recent
+        requests[client_id] = recent
         return True
 
 
@@ -1359,7 +1373,6 @@ def google_play_service_account_json() -> str:
 def premium_verification_configured() -> bool:
     return bool(
         google_play_service_account_json()
-        and PREMIUM_API_KEY
         and GOOGLE_PLAY_PACKAGE_NAME
         and GOOGLE_PLAY_SUBSCRIPTION_ID
         and AuthorizedSession is not None
@@ -1749,7 +1762,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
 
         auth = self.headers.get("Authorization", "")
         if request_path == "/api/premium/verify":
-            if not PREMIUM_API_KEY or auth != f"Bearer {PREMIUM_API_KEY}":
+            if auth and PREMIUM_API_KEY and auth != f"Bearer {PREMIUM_API_KEY}":
                 self.send_json({"error": "unauthorized"}, status=401)
                 return
         elif auth and API_KEY and auth != f"Bearer {API_KEY}":
@@ -1766,6 +1779,16 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             if not isinstance(payload, dict):
                 raise ValueError("Payload must be an object")
             if request_path == "/api/premium/verify":
+                client_id = (
+                    self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+                    or self.client_address[0]
+                )
+                if not can_run_premium_verification(client_id):
+                    self.send_json(
+                        {"error": "rate_limited", "retryAfterSeconds": MARKET_RATE_WINDOW_SECONDS},
+                        status=429,
+                    )
+                    return
                 verification = verify_google_play_subscription(
                     str(payload.get("purchaseToken") or "").strip(),
                     str(payload.get("productId") or "").strip(),
