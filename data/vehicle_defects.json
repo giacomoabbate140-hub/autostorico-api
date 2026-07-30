@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 9,
+  "catalogVersion": 10,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -140,6 +140,7 @@
       "model": "C3",
       "generation": "Veicoli interessati da campagne specifiche",
       "years": "Verifica obbligatoria tramite VIN o targa",
+      "researchTopics": ["PureTech 1.0 e 1.2", "cinghia in bagno d'olio", "AdBlue", "infotainment"],
       "reports": [
         {
           "id": "citroen-c3-takata-airbag-2024",
@@ -608,6 +609,55 @@
       "generation": "356",
       "years": "2015-oggi",
       "researchTopics": ["infotainment", "sensori", "EGR e DPF", "batteria"],
+      "reports": []
+    },
+    {
+      "make": "Citroen",
+      "model": "C1",
+      "generation": "Tutte le generazioni",
+      "years": "2005-2022",
+      "researchTopics": ["frizione", "sospensioni", "elettronica", "componenti condivisi secondo generazione"],
+      "reports": []
+    },
+    {
+      "make": "Citroen",
+      "model": "C3 Aircross",
+      "generation": "Tutte le generazioni",
+      "years": "2017-oggi",
+      "researchTopics": ["1.2 PureTech", "1.5 BlueHDi", "cinghia in bagno d'olio", "AdBlue", "cambio", "infotainment"],
+      "reports": []
+    },
+    {
+      "make": "Citroen",
+      "model": "C4",
+      "generation": "Tutte le generazioni",
+      "years": "2004-oggi",
+      "researchTopics": ["PureTech", "BlueHDi", "AdBlue", "EGR e FAP", "elettronica"],
+      "reports": []
+    },
+    {
+      "make": "Citroen",
+      "model": "C5 Aircross",
+      "generation": "Tutte le generazioni",
+      "years": "2018-oggi",
+      "researchTopics": ["PureTech", "BlueHDi", "AdBlue", "sospensioni", "infotainment e ADAS"],
+      "reports": []
+    },
+    {
+      "make": "Citroen",
+      "model": "Berlingo",
+      "generation": "Tutte le generazioni",
+      "years": "1996-oggi",
+      "researchTopics": ["1.5 BlueHDi", "AdBlue", "EGR e FAP", "elettronica", "porte scorrevoli"],
+      "reports": []
+    },
+    {
+      "make": "Citroen",
+      "model": "C4 Picasso",
+      "aliases": ["Grand C4 Picasso", "C4 SpaceTourer", "Grand C4 SpaceTourer"],
+      "generation": "Tutte le generazioni",
+      "years": "2006-2022",
+      "researchTopics": ["elettronica", "sospensioni", "1.6 HDi/BlueHDi", "EGR e FAP"],
       "reports": []
     },
     {

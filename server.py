@@ -119,6 +119,7 @@ DEFECT_RESEARCH_SOURCES = {
     "forum-bmw.fr": ("Forum BMW", "community_candidate"),
     "forum-peugeot.com": ("Forum Peugeot", "community_candidate"),
     "forumpassionepeugeot.it": ("Passione Peugeot Auto Club Italia", "community_candidate"),
+    "citroen-club.it": ("Citroën-Club Italia", "community_candidate"),
     "forum-audi.com": ("Forum Audi", "community_candidate"),
     "audiownersclub.com": ("Audi Owners Club", "community_candidate"),
     "seatforum.de": ("SEAT Forum", "community_candidate"),
