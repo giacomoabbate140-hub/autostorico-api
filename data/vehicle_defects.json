@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 12,
+  "catalogVersion": 13,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -848,6 +848,127 @@
           "sourceName": "Segnalazione community fornita dagli utenti",
           "sourceUrl": "",
           "userText": "Alcuni proprietari segnalano aggiornamenti software per infotainment e ADAS, anomalie con batteria 12 V debole, possibili ricalibrazioni sensori e rumori dalle sospensioni. Sono citati anche casi isolati di comportamento anomalo dell'ibrido nei primi lotti, normalmente da verificare con aggiornamento in garanzia. Non e una diagnosi o un richiamo."
+        }
+      ]
+    },
+    {
+      "make": "Ford",
+      "model": "Fiesta",
+      "generation": "Mk8",
+      "years": "2017-2024",
+      "reports": [
+        {
+          "id": "ford-fiesta-mk8-ecoboost-powershift-independent",
+          "category": "Motore, cambio e infotainment",
+          "title": "Dati indipendenti su EcoBoost, Powershift e Sync 3",
+          "sourceType": "independent_reliability",
+          "confidence": "independent-source",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "engineKeywords": ["1000", "1.0", "ecoboost"],
+          "sourceName": "What Car? Reliability Survey",
+          "sourceUrl": "https://www.whatcar.com/ford/fiesta/hatchback/used-review/n952/reliability",
+          "userText": "Il sondaggio proprietari riporta controlli da approfondire sui motori 1.0 EcoBoost con cinghia in bagno d'olio, sul cambio automatico Powershift e su anomalie Sync 3. Non e un richiamo: verifica motore, manutenzione documentata e VIN prima di intervenire."
+        }
+      ]
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk7",
+      "years": "2013-2020",
+      "reports": [
+        {
+          "id": "volkswagen-golf-mk7-dsg-electrical-independent",
+          "category": "Cambio, climatizzazione ed elettronica",
+          "title": "Dati indipendenti su DSG, climatizzazione ed elettronica",
+          "sourceType": "independent_reliability",
+          "confidence": "independent-source",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "sourceName": "What Car? Reliability Survey",
+          "sourceUrl": "https://www.whatcar.com/volkswagen/golf/hatchback/used-review/n776/reliability",
+          "userText": "Nelle esperienze proprietari sono citati cambiate irregolari o guasti DSG, climatizzazione, spie ed elettronica/infotainment. Sono dati di affidabilita indipendenti, non una diagnosi per ogni Golf: controlla versione, manutenzione e campagne VIN."
+        }
+      ]
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk8",
+      "years": "2020-oggi",
+      "reports": [
+        {
+          "id": "volkswagen-golf-mk8-software-adblue-independent",
+          "category": "Software, elettronica e AdBlue",
+          "title": "Dati indipendenti su spie, infotainment e AdBlue",
+          "sourceType": "independent_reliability",
+          "confidence": "independent-source",
+          "severity": "informative",
+          "status": "source-verified",
+          "sourceName": "What Car? Reliability Survey",
+          "sourceUrl": "https://www.whatcar.com/volkswagen/golf/hatchback/used-review/n23128/reliability",
+          "userText": "Il sondaggio segnala soprattutto spie, anomalie elettriche e infotainment/software; alcuni proprietari diesel riportano controlli sul sistema AdBlue. Verifica aggiornamenti disponibili e diagnosi presso la rete Volkswagen."
+        }
+      ]
+    },
+    {
+      "make": "Renault",
+      "model": "Clio",
+      "generation": "V",
+      "years": "2019-oggi",
+      "reports": [
+        {
+          "id": "renault-clio-v-steering-electrical-independent",
+          "category": "Sterzo ed elettronica",
+          "title": "Dati indipendenti su richiamo sterzo e anomalie elettriche",
+          "sourceType": "independent_reliability",
+          "confidence": "independent-source",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "sourceName": "What Car? Reliability Survey",
+          "sourceUrl": "https://www.whatcar.com/renault/clio/hatchback/used-review/n22574/reliability",
+          "userText": "La fonte descrive un richiamo per una piccola serie 2019 relativo al servosterzo e feedback proprietari su problemi elettrici, in particolare alcune ibride. Verifica sempre il VIN con Renault: non tutte le Clio sono coinvolte."
+        }
+      ]
+    },
+    {
+      "make": "Toyota",
+      "model": "Yaris",
+      "generation": "XP210",
+      "years": "2020-oggi",
+      "reports": [
+        {
+          "id": "toyota-yaris-2020-breakdown-statistics-independent",
+          "category": "Affidabilita e assistenza",
+          "title": "Statistiche indipendenti di panne da approfondire",
+          "sourceType": "independent_reliability",
+          "confidence": "independent-source",
+          "severity": "informative",
+          "status": "source-verified",
+          "sourceName": "ADAC Pannenstatistik",
+          "sourceUrl": "https://www.adac.de/rund-ums-fahrzeug/unfall-schaden-panne/adac-pannenstatistik-2026/",
+          "userText": "Le statistiche ADAC evidenziano per alcune Yaris recenti una frequenza di panne superiore alla media. Il dato non identifica un singolo difetto e non e un richiamo: annota sintomi, verifica batterie e campagne VIN con la rete Toyota."
+        }
+      ]
+    },
+    {
+      "make": "Hyundai",
+      "model": "i10",
+      "generation": "IA",
+      "years": "2014-2020",
+      "reports": [
+        {
+          "id": "hyundai-i10-2018-breakdown-statistics-independent",
+          "category": "Affidabilita e assistenza",
+          "title": "Statistiche indipendenti di panne per alcuni anni",
+          "sourceType": "independent_reliability",
+          "confidence": "independent-source",
+          "severity": "informative",
+          "status": "source-verified",
+          "sourceName": "ADAC Pannenstatistik",
+          "sourceUrl": "https://assets.adac.de/image/upload/v1743002144/ADAC-eV/KOR/Text/PDF/Pannenstatistik-2024_qeltwz.pdf",
+          "userText": "La statistica ADAC segnala l'i10 2018 tra le serie con tasso di panne elevato nella propria rilevazione. Non attribuisce un difetto unico: usa il dato come invito a controllare storico manutenzione, batteria e richiami VIN."
         }
       ]
     }

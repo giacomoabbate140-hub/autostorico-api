@@ -83,6 +83,19 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual({vehicle["generation"] for vehicle in a3_2009["vehicles"]}, {"8P"})
         self.assertEqual({vehicle["generation"] for vehicle in a3_2017["vehicles"]}, {"8V"})
 
+    def test_independent_reliability_profiles_keep_golf_generations_separate(self):
+        golf_mk7 = vehicle_defect_reports("Volkswagen", "Golf", 2017)
+        golf_mk8 = vehicle_defect_reports("Volkswagen", "Golf", 2022)
+
+        self.assertEqual(
+            {report["id"] for report in golf_mk7["reports"]},
+            {"volkswagen-golf-mk7-dsg-electrical-independent"},
+        )
+        self.assertEqual(
+            {report["id"] for report in golf_mk8["reports"]},
+            {"volkswagen-golf-mk8-software-adblue-independent"},
+        )
+
     def test_shared_engine_family_applies_only_to_matching_multijet(self):
         multijet = vehicle_defect_reports("Fiat", "Doblo", 2018, "diesel 1248 cc")
         different_engine = vehicle_defect_reports("Fiat", "Doblo", 2018, "diesel 1598 cc")
@@ -107,6 +120,10 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(
             trusted_defect_source("https://www.peugeot.it/post-vendita"),
             ("Peugeot Italia", "manufacturer_candidate"),
+        )
+        self.assertEqual(
+            trusted_defect_source("https://www.whatcar.com/ford/fiesta/reliability"),
+            ("What Car? Reliability Survey", "independent_candidate"),
         )
         self.assertIsNone(trusted_defect_source("https://example.com/peugeot-208"))
 

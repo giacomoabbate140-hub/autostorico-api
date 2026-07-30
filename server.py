@@ -143,6 +143,8 @@ DEFECT_RESEARCH_SOURCES = {
     "fordclub.it": ("Ford Club Italia", "community_candidate"),
     "vwgolfcommunity.com": ("VW Golf Community", "community_candidate"),
     "hyundai-club.eu": ("Hyundai Club", "community_candidate"),
+    "whatcar.com": ("What Car? Reliability Survey", "independent_candidate"),
+    "adac.de": ("ADAC Pannenstatistik", "independent_candidate"),
 }
 
 
