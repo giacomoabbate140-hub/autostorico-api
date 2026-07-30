@@ -162,7 +162,42 @@ def load_vehicle_defect_catalog() -> dict[str, Any]:
 VEHICLE_DEFECT_CATALOG = load_vehicle_defect_catalog()
 
 
-def vehicle_defect_reports(make: str, model: str) -> dict[str, Any] | None:
+def catalog_year_matches(entry: dict[str, Any], year: int | None) -> bool:
+    """Use explicit catalog bounds only; free-form labels are not reliable data."""
+    if year is None:
+        return True
+    from_year = catalog_year_value(entry.get("fromYear"))
+    to_year = catalog_year_value(entry.get("toYear"))
+    return (not from_year or year >= from_year) and (not to_year or year <= to_year)
+
+
+def catalog_year_value(value: Any) -> int:
+    try:
+        return max(0, int(str(value or "").strip()))
+    except (TypeError, ValueError):
+        return 0
+
+
+def catalog_engine_matches(entry: dict[str, Any], engine: str) -> bool:
+    keywords = entry.get("engineKeywords")
+    if not isinstance(keywords, list) or not keywords:
+        return True
+    wanted_engine = normalize_catalog_text(engine)
+    if not wanted_engine:
+        return True
+    return any(
+        normalize_catalog_text(keyword) in wanted_engine
+        for keyword in keywords
+        if isinstance(keyword, str) and normalize_catalog_text(keyword)
+    )
+
+
+def vehicle_defect_reports(
+    make: str,
+    model: str,
+    year: int | None = None,
+    engine: str = "",
+) -> dict[str, Any] | None:
     wanted_make = normalize_catalog_text(make)
     wanted_model = normalize_catalog_text(model)
     if not wanted_make or not wanted_model:
@@ -181,6 +216,7 @@ def vehicle_defect_reports(make: str, model: str) -> dict[str, Any] | None:
                 if isinstance(alias, str)
             }
         )
+        and catalog_year_matches(vehicle, year)
     ]
     if not matching_vehicles:
         return None
@@ -190,11 +226,14 @@ def vehicle_defect_reports(make: str, model: str) -> dict[str, Any] | None:
         for vehicle in matching_vehicles
         for report in vehicle.get("reports", [])
         if isinstance(report, dict)
+        and catalog_year_matches(report, year)
+        and catalog_engine_matches(report, engine)
     ]
     return {
         "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
         "make": matching_vehicles[0].get("make"),
         "model": matching_vehicles[0].get("model"),
+        "searchContext": {"year": year, "engine": engine.strip()},
         "vehicles": matching_vehicles,
         "reports": reports,
         "disclaimer": (
@@ -210,8 +249,15 @@ def defect_research_configured() -> bool:
     )
 
 
-def defect_research_cache_key(make: str, model: str) -> str:
-    return f"{normalize_catalog_text(make)}|{normalize_catalog_text(model)}"
+def defect_research_cache_key(make: str, model: str, year: int | None = None, engine: str = "") -> str:
+    return "|".join(
+        [
+            normalize_catalog_text(make),
+            normalize_catalog_text(model),
+            str(year or ""),
+            normalize_catalog_text(engine),
+        ]
+    )
 
 
 def trusted_defect_source(url: str) -> tuple[str, str] | None:
@@ -223,21 +269,32 @@ def trusted_defect_source(url: str) -> tuple[str, str] | None:
     return None
 
 
-def search_defect_source_candidates(make: str, model: str) -> dict[str, Any]:
+def search_defect_source_candidates(
+    make: str,
+    model: str,
+    year: int | None = None,
+    engine: str = "",
+) -> dict[str, Any]:
     if not defect_research_configured():
         raise RuntimeError("Ricerca fonti non configurata sul server.")
     clean_make = str(make or "").strip()
     clean_model = str(model or "").strip()
     if not clean_make or not clean_model:
         raise ValueError("Marca e modello sono obbligatori.")
-    cache_key = defect_research_cache_key(clean_make, clean_model)
+    cache_key = defect_research_cache_key(clean_make, clean_model, year, engine)
     now = time.time()
     with DEFECT_RESEARCH_LOCK:
         cached = DEFECT_RESEARCH_CACHE.get(cache_key)
         if cached and now - cached[0] < DEFECT_RESEARCH_CACHE_TTL_SECONDS:
             return {**cached[1], "fromCache": True}
 
-    query = f'"{clean_make}" "{clean_model}" (richiamo OR difetto OR problema OR campagna)'
+    context_terms = " ".join(
+        term for term in [str(year or ""), str(engine or "").strip()] if term
+    )
+    query = (
+        f'"{clean_make}" "{clean_model}" {context_terms} '
+        "(richiamo OR difetto OR problema OR campagna)"
+    )
     params = urllib.parse.urlencode(
         {
             "engine": "google",
@@ -287,6 +344,8 @@ def search_defect_source_candidates(make: str, model: str) -> dict[str, Any]:
     result = {
         "make": clean_make,
         "model": clean_model,
+        "year": year,
+        "engine": str(engine or "").strip(),
         "query": query,
         "candidates": candidates,
         "count": len(candidates),
@@ -1721,7 +1780,9 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             query = urllib.parse.parse_qs(parsed_url.query)
             make = query.get("make", [""])[0]
             model = query.get("model", [""])[0]
-            result = vehicle_defect_reports(make, model)
+            year = catalog_year_value(query.get("year", [""])[0]) or None
+            engine = query.get("engine", [""])[0]
+            result = vehicle_defect_reports(make, model, year, engine)
             if result is None:
                 # A catalog entry is optional: every vehicle can still receive
                 # live source candidates from the approved online research flow.
@@ -1729,6 +1790,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
                     "make": str(make or "").strip(),
                     "model": str(model or "").strip(),
+                    "searchContext": {"year": year, "engine": str(engine or "").strip()},
                     "vehicles": [],
                     "reports": [],
                     "disclaimer": (
@@ -1739,7 +1801,9 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             search_online = query.get("searchOnline", ["0"])[0] == "1"
             if search_online and defect_research_configured():
                 try:
-                    online_research = search_defect_source_candidates(make, model)
+                    online_research = search_defect_source_candidates(
+                        make, model, year, engine
+                    )
                     result = {
                         **result,
                         "onlineCandidates": online_research.get("candidates", []),
@@ -1764,6 +1828,8 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     search_defect_source_candidates(
                         query.get("make", [""])[0],
                         query.get("model", [""])[0],
+                        catalog_year_value(query.get("year", [""])[0]) or None,
+                        query.get("engine", [""])[0],
                     )
                 )
             except (RuntimeError, ValueError) as exc:

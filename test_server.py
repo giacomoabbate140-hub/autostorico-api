@@ -63,6 +63,19 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertIn("Grande Punto", {vehicle["model"] for vehicle in result["vehicles"]})
 
+    def test_defect_catalog_filters_audi_a1_reports_by_year_and_engine(self):
+        first_series = vehicle_defect_reports("Audi", "A1", 2011, "benzina 1390 cc")
+        second_series = vehicle_defect_reports("Audi", "A1", 2021, "benzina 999 cc")
+
+        self.assertEqual(
+            [report["id"] for report in first_series["reports"]],
+            ["audi-a1-injector-idle-knock-community"],
+        )
+        self.assertEqual(
+            [report["id"] for report in second_series["reports"]],
+            ["audi-a1-ignition-coil-misfire-community"],
+        )
+
     def test_defect_catalog_returns_none_for_unknown_vehicle(self):
         self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))
 
@@ -77,6 +90,12 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(
             defect_research_cache_key("Peugeot", "208"),
             defect_research_cache_key("peugeot", " 208 "),
+        )
+
+    def test_defect_research_cache_key_changes_with_vehicle_context(self):
+        self.assertNotEqual(
+            defect_research_cache_key("Audi", "A1", 2011, "benzina 1390 cc"),
+            defect_research_cache_key("Audi", "A1", 2021, "benzina 999 cc"),
         )
 
 

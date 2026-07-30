@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 10,
+  "catalogVersion": 11,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -493,6 +493,8 @@
       "reports": [
         {
           "id": "audi-a1-injector-idle-knock-community",
+          "fromYear": 2010,
+          "toYear": 2018,
           "category": "Alimentazione e iniezione",
           "title": "Segnalazioni su rumore al minimo e verifica degli iniettori",
           "sourceType": "community_source",
@@ -506,6 +508,8 @@
         },
         {
           "id": "audi-a1-ignition-coil-misfire-community",
+          "fromYear": 2019,
+          "engineKeywords": ["benzina", "999", "1.0", "1.5"],
           "category": "Accensione e motore",
           "title": "Segnalazioni su mancate accensioni e controllo bobine",
           "sourceType": "community_source",
