@@ -83,6 +83,23 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual({vehicle["generation"] for vehicle in a3_2009["vehicles"]}, {"8P"})
         self.assertEqual({vehicle["generation"] for vehicle in a3_2017["vehicles"]}, {"8V"})
 
+    def test_shared_engine_family_applies_only_to_matching_multijet(self):
+        multijet = vehicle_defect_reports("Fiat", "Doblo", 2018, "diesel 1248 cc")
+        different_engine = vehicle_defect_reports("Fiat", "Doblo", 2018, "diesel 1598 cc")
+
+        self.assertIn(
+            "fiat-13-multijet-oil-pump-o-ring-community",
+            {report["id"] for report in multijet["reports"]},
+        )
+        self.assertIsNone(different_engine)
+
+    def test_stelvio_and_tonale_community_profiles_are_available(self):
+        stelvio = vehicle_defect_reports("Alfa Romeo", "Stelvio", 2020, "diesel 2143 cc")
+        tonale = vehicle_defect_reports("Alfa Romeo", "Tonale", 2023, "ibrida")
+
+        self.assertEqual(len(stelvio["reports"]), 1)
+        self.assertEqual(len(tonale["reports"]), 1)
+
     def test_defect_catalog_returns_none_for_unknown_vehicle(self):
         self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))
 

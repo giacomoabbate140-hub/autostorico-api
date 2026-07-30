@@ -237,7 +237,21 @@ def vehicle_defect_reports(
         )
         and catalog_year_matches(vehicle, year)
     ]
-    if not matching_vehicles:
+    matching_engine_families = [
+        family
+        for family in VEHICLE_DEFECT_CATALOG.get("engineFamilies", [])
+        if isinstance(family, dict)
+        and normalize_catalog_text(family.get("make")) == wanted_make
+        and wanted_model
+        in {
+            normalize_catalog_text(item)
+            for item in family.get("models", [])
+            if isinstance(item, str)
+        }
+        and catalog_year_matches(family, year)
+        and catalog_engine_matches(family, engine)
+    ]
+    if not matching_vehicles and not matching_engine_families:
         return None
 
     reports = [
@@ -248,10 +262,18 @@ def vehicle_defect_reports(
         and catalog_year_matches(report, year)
         and catalog_engine_matches(report, engine)
     ]
+    reports.extend(
+        report
+        for family in matching_engine_families
+        for report in family.get("reports", [])
+        if isinstance(report, dict)
+        and catalog_year_matches(report, year)
+        and catalog_engine_matches(report, engine)
+    )
     return {
         "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
-        "make": matching_vehicles[0].get("make"),
-        "model": matching_vehicles[0].get("model"),
+        "make": matching_vehicles[0].get("make") if matching_vehicles else make.strip(),
+        "model": matching_vehicles[0].get("model") if matching_vehicles else model.strip(),
         "searchContext": {"year": year, "engine": engine.strip()},
         "vehicles": matching_vehicles,
         "reports": reports,
