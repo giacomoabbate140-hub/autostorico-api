@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 8,
+  "catalogVersion": 9,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -215,6 +215,111 @@
       ]
     },
     {
+      "make": "Dacia",
+      "model": "Sandero",
+      "generation": "Tutte le generazioni",
+      "years": "2008-oggi",
+      "researchTopics": ["0.9 TCe", "1.5 dCi", "bobine", "turbina", "EGR e FAP", "supporti motore"],
+      "reports": []
+    },
+    {
+      "make": "Dacia",
+      "model": "Logan",
+      "generation": "Tutte le generazioni",
+      "years": "2004-oggi",
+      "researchTopics": ["1.5 dCi", "EGR", "cuscinetti ruota", "alzacristalli", "ammortizzatori"],
+      "reports": []
+    },
+    {
+      "make": "Dacia",
+      "model": "Lodgy",
+      "generation": "Tutte le generazioni",
+      "years": "2012-2022",
+      "researchTopics": ["1.5 dCi", "frizione", "FAP", "supporti motore", "elettronica"],
+      "reports": []
+    },
+    {
+      "make": "Dacia",
+      "model": "Jogger",
+      "generation": "Tutte le generazioni",
+      "years": "2021-oggi",
+      "researchTopics": ["TCe", "Hybrid", "infotainment", "sensori ADAS", "batteria 12V"],
+      "reports": []
+    },
+    {
+      "make": "Peugeot",
+      "model": "2008",
+      "generation": "Tutte le generazioni",
+      "years": "2013-oggi",
+      "researchTopics": ["1.2 PureTech", "cinghia distribuzione", "pompa vuoto", "infotainment"],
+      "reports": []
+    },
+    {
+      "make": "Peugeot",
+      "model": "308",
+      "generation": "Tutte le generazioni",
+      "years": "2007-oggi",
+      "researchTopics": ["1.2 PureTech", "1.6 BlueHDi", "cinghia", "AdBlue", "FAP", "elettronica"],
+      "reports": []
+    },
+    {
+      "make": "Peugeot",
+      "model": "3008",
+      "generation": "Tutte le generazioni",
+      "years": "2009-oggi",
+      "researchTopics": ["1.2 PureTech", "2.0 BlueHDi", "AdBlue", "EAT6/EAT8", "sospensioni"],
+      "reports": []
+    },
+    {
+      "make": "Peugeot",
+      "model": "508",
+      "generation": "Tutte le generazioni",
+      "years": "2010-oggi",
+      "researchTopics": ["BlueHDi", "AdBlue", "SCR", "FAP", "sensori NOx"],
+      "reports": []
+    },
+    {
+      "make": "SEAT",
+      "model": "Ibiza",
+      "generation": "Tutte le generazioni",
+      "years": "2002-oggi",
+      "researchTopics": ["1.2 TSI", "1.4 TSI", "catena distribuzione prime serie", "bobine", "DSG"],
+      "reports": []
+    },
+    {
+      "make": "SEAT",
+      "model": "Leon",
+      "aliases": ["León"],
+      "generation": "Tutte le generazioni",
+      "years": "1999-oggi",
+      "researchTopics": ["1.4 TSI", "2.0 TDI", "DSG", "pompa acqua", "EGR", "DPF"],
+      "reports": []
+    },
+    {
+      "make": "SEAT",
+      "model": "Arona",
+      "generation": "Tutte le generazioni",
+      "years": "2017-oggi",
+      "researchTopics": ["1.0 TSI", "sensori", "infotainment", "bobine"],
+      "reports": []
+    },
+    {
+      "make": "SEAT",
+      "model": "Ateca",
+      "generation": "Tutte le generazioni",
+      "years": "2016-oggi",
+      "researchTopics": ["2.0 TDI", "DSG", "AdBlue", "EGR"],
+      "reports": []
+    },
+    {
+      "make": "SEAT",
+      "model": "Altea",
+      "generation": "5P",
+      "years": "2004-2015",
+      "researchTopics": ["1.9 TDI", "2.0 TDI", "volano bimassa", "turbina", "sospensioni"],
+      "reports": []
+    },
+    {
       "make": "Fiat",
       "model": "500",
       "generation": "312",
@@ -272,6 +377,7 @@
       "model": "208",
       "generation": "Tutte le generazioni",
       "years": "2012-oggi",
+      "researchTopics": ["1.2 PureTech", "1.6 BlueHDi", "cinghia in bagno d'olio", "AdBlue", "EGR", "FAP"],
       "reports": [
         {
           "id": "peugeot-208-puretech-timing-belt-support",
@@ -342,6 +448,7 @@
       "model": "Duster",
       "generation": "Tutte le generazioni",
       "years": "2010-oggi",
+      "researchTopics": ["1.5 dCi", "1.2 TCe", "iniettori", "EGR e FAP", "frizione", "sospensioni anteriori"],
       "reports": [
         {
           "id": "dacia-duster-clutch-pedal-community",
