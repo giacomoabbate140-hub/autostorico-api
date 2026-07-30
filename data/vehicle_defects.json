@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 6,
+  "catalogVersion": 7,
   "updatedAt": "2026-07-30",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -433,6 +433,107 @@
           "userText": "Segnalazione riferita al motore N47, non a tutte le Serie 1. Rumori metallici dalla distribuzione richiedono un controllo tempestivo: non attendere che compaiano spie o cali di prestazione."
         }
       ]
+    },
+    {
+      "make": "Fiat",
+      "model": "Grande Punto",
+      "aliases": ["Punto"],
+      "generation": "199",
+      "years": "2005-2009",
+      "researchTopics": ["servosterzo elettrico", "Blue&Me", "EGR e DPF", "cuscinetti", "maniglie"],
+      "reports": []
+    },
+    {
+      "make": "Fiat",
+      "model": "Bravo",
+      "aliases": ["Bravo II"],
+      "generation": "198",
+      "years": "2007-2014",
+      "researchTopics": ["volano e frizione", "EGR e DPF", "sospensioni", "climatizzatore"],
+      "reports": []
+    },
+    {
+      "make": "Fiat",
+      "model": "Tipo",
+      "aliases": ["Tipo 356"],
+      "generation": "356",
+      "years": "2015-oggi",
+      "researchTopics": ["infotainment", "sensori", "EGR e DPF", "batteria"],
+      "reports": []
+    },
+    {
+      "make": "Alfa Romeo",
+      "model": "MiTo",
+      "aliases": ["Mito"],
+      "generation": "955",
+      "years": "2008-2018",
+      "researchTopics": ["MultiAir", "servosterzo", "sospensioni", "Blue&Me"],
+      "reports": []
+    },
+    {
+      "make": "Alfa Romeo",
+      "model": "147",
+      "generation": "937",
+      "years": "2000-2010",
+      "researchTopics": ["variatore di fase", "braccetti", "debimetro", "frizione"],
+      "reports": []
+    },
+    {
+      "make": "Alfa Romeo",
+      "model": "156",
+      "generation": "932",
+      "years": "1997-2007",
+      "researchTopics": ["variatore di fase", "braccetti", "debimetro", "sospensioni"],
+      "reports": []
+    },
+    {
+      "make": "Alfa Romeo",
+      "model": "159",
+      "generation": "939",
+      "years": "2005-2011",
+      "researchTopics": ["EGR e DPF", "sospensioni anteriori", "motori JTDm"],
+      "reports": []
+    },
+    {
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "generation": "952",
+      "years": "2016-oggi",
+      "researchTopics": ["sensori AdBlue", "batteria", "aggiornamenti elettronici"],
+      "reports": []
+    },
+    {
+      "make": "Lancia",
+      "model": "Ypsilon",
+      "generation": "843",
+      "years": "2003-2011",
+      "researchTopics": ["servosterzo", "sospensioni", "alzacristalli"],
+      "reports": []
+    },
+    {
+      "make": "Lancia",
+      "model": "Ypsilon",
+      "generation": "846",
+      "years": "2011-2024",
+      "researchTopics": ["Blue&Me", "TwinAir e MultiAir", "FAP", "batteria"],
+      "reports": []
+    },
+    {
+      "make": "Lancia",
+      "model": "Delta",
+      "aliases": ["Delta III"],
+      "generation": "844",
+      "years": "2008-2014",
+      "researchTopics": ["volano", "EGR", "sospensioni", "elettronica"],
+      "reports": []
+    },
+    {
+      "make": "Lancia",
+      "model": "Musa",
+      "generation": "350",
+      "years": "2004-2012",
+      "researchTopics": ["servosterzo", "climatizzatore", "sospensioni"],
+      "reports": []
     },
     {
       "make": "Mercedes-Benz",

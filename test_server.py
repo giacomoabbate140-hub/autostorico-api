@@ -57,6 +57,12 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(result["reports"][0]["id"], "bmw-serie-1-n47-timing-chain-community")
 
+    def test_defect_catalog_matches_model_aliases(self):
+        result = vehicle_defect_reports("Fiat", "Punto")
+
+        self.assertIsNotNone(result)
+        self.assertIn("Grande Punto", {vehicle["model"] for vehicle in result["vehicles"]})
+
     def test_defect_catalog_returns_none_for_unknown_vehicle(self):
         self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))
 

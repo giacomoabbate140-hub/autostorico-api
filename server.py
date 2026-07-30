@@ -152,7 +152,15 @@ def vehicle_defect_reports(make: str, model: str) -> dict[str, Any] | None:
         vehicle
         for vehicle in VEHICLE_DEFECT_CATALOG.get("vehicles", [])
         if normalize_catalog_text(vehicle.get("make")) == wanted_make
-        and normalize_catalog_text(vehicle.get("model")) == wanted_model
+        and (
+            normalize_catalog_text(vehicle.get("model")) == wanted_model
+            or wanted_model
+            in {
+                normalize_catalog_text(alias)
+                for alias in vehicle.get("aliases", [])
+                if isinstance(alias, str)
+            }
+        )
     ]
     if not matching_vehicles:
         return None
