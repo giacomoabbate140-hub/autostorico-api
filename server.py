@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import hmac
 import json
 import math
 import os
@@ -62,6 +64,15 @@ GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
 ).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 PREMIUM_VERIFY_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_PREMIUM_VERIFY_RATE_LIMIT", "12"))
+PLAY_INTEGRITY_REQUIRED = os.environ.get("AUTOSTORICO_PLAY_INTEGRITY_REQUIRED", "0") == "1"
+PLAY_INTEGRITY_MIN_VERSION_CODE = int(
+    os.environ.get("AUTOSTORICO_PLAY_INTEGRITY_MIN_VERSION_CODE", "31")
+)
+PLAY_INTEGRITY_MAX_TOKEN_AGE_SECONDS = int(
+    os.environ.get("AUTOSTORICO_PLAY_INTEGRITY_MAX_TOKEN_AGE_SECONDS", "180")
+)
+PLAY_INTEGRITY_SEEN: dict[str, float] = {}
+PLAY_INTEGRITY_LOCK = threading.Lock()
 DEFECT_CATALOG_PATH = Path(__file__).parent / "data" / "vehicle_defects.json"
 DEFECT_RESEARCH_CACHE_TTL_SECONDS = 24 * 60 * 60
 DEFECT_RESEARCH_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
@@ -1502,6 +1513,147 @@ def premium_verification_configured() -> bool:
     )
 
 
+def play_integrity_configured() -> bool:
+    return bool(
+        google_play_service_account_json()
+        and GOOGLE_PLAY_PACKAGE_NAME
+        and AuthorizedSession is not None
+        and service_account is not None
+    )
+
+
+def expected_purchase_nonce(
+    purchase_token: str, product_id: str, integrity_salt: str
+) -> str:
+    protected_request = f"{product_id}\n{purchase_token}\n{integrity_salt}".encode("utf-8")
+    return base64.urlsafe_b64encode(hashlib.sha256(protected_request).digest()).decode(
+        "ascii"
+    ).rstrip("=")
+
+
+def verify_play_integrity(payload: dict[str, Any]) -> dict[str, Any]:
+    """Verify that a premium request comes from the Play-recognized app."""
+    integrity_token = str(payload.get("integrityToken") or "").strip()
+    claimed_nonce = str(payload.get("integrityNonce") or "").strip()
+    integrity_salt = str(payload.get("integritySalt") or "").strip()
+    purchase_token = str(payload.get("purchaseToken") or "").strip()
+    product_id = str(payload.get("productId") or "").strip()
+
+    # Staged rollout: keep installed version 30 working until the new release
+    # has reached users, then set AUTOSTORICO_PLAY_INTEGRITY_REQUIRED=1.
+    if not integrity_token:
+        if PLAY_INTEGRITY_REQUIRED:
+            return {
+                "ok": False,
+                "message": "Aggiorna AutoStorico dalla pagina ufficiale Google Play.",
+            }
+        return {"ok": True, "legacy": True}
+
+    if not play_integrity_configured():
+        return {
+            "ok": False,
+            "message": "Controllo sicurezza Google Play temporaneamente non disponibile.",
+        }
+    if (
+        len(integrity_token) < 80
+        or len(claimed_nonce) < 32
+        or len(integrity_salt) < 16
+    ):
+        return {"ok": False, "message": "Controllo integrita non valido."}
+
+    expected_nonce = expected_purchase_nonce(
+        purchase_token, product_id, integrity_salt
+    )
+    if not hmac.compare_digest(expected_nonce, claimed_nonce):
+        return {"ok": False, "message": "Richiesta Premium alterata."}
+
+    try:
+        service_account_info = json.loads(google_play_service_account_json())
+        credentials = service_account.Credentials.from_service_account_info(
+            service_account_info,
+            scopes=["https://www.googleapis.com/auth/playintegrity"],
+        )
+        session = AuthorizedSession(credentials)
+        package_name = urllib.parse.quote(GOOGLE_PLAY_PACKAGE_NAME, safe="")
+        endpoint = (
+            "https://playintegrity.googleapis.com/v1/"
+            f"{package_name}:decodeIntegrityToken"
+        )
+        response = session.post(
+            endpoint,
+            json={"integrity_token": integrity_token},
+            timeout=12,
+        )
+        if response.status_code != 200:
+            return {
+                "ok": False,
+                "message": "Google Play non ha confermato l'integrita dell'app.",
+            }
+
+        verdict = response.json().get("tokenPayloadExternal") or {}
+        request_details = verdict.get("requestDetails") or {}
+        app_integrity = verdict.get("appIntegrity") or {}
+        device_integrity = verdict.get("deviceIntegrity") or {}
+        account_details = verdict.get("accountDetails") or {}
+
+        if request_details.get("requestPackageName") != GOOGLE_PLAY_PACKAGE_NAME:
+            return {"ok": False, "message": "Pacchetto app non riconosciuto."}
+        if not hmac.compare_digest(
+            str(request_details.get("nonce") or ""), expected_nonce
+        ):
+            return {"ok": False, "message": "Richiesta Premium alterata."}
+
+        timestamp_ms = int(request_details.get("timestampMillis") or 0)
+        age_seconds = abs((time.time() * 1000 - timestamp_ms) / 1000)
+        if timestamp_ms <= 0 or age_seconds > PLAY_INTEGRITY_MAX_TOKEN_AGE_SECONDS:
+            return {"ok": False, "message": "Controllo sicurezza scaduto. Riprova."}
+
+        if app_integrity.get("appRecognitionVerdict") != "PLAY_RECOGNIZED":
+            return {
+                "ok": False,
+                "message": "Installa la versione originale da Google Play.",
+            }
+        if app_integrity.get("packageName") != GOOGLE_PLAY_PACKAGE_NAME:
+            return {"ok": False, "message": "Firma o pacchetto app non validi."}
+        version_code = int(app_integrity.get("versionCode") or 0)
+        if version_code < PLAY_INTEGRITY_MIN_VERSION_CODE:
+            return {"ok": False, "message": "Aggiorna AutoStorico da Google Play."}
+
+        device_verdicts = set(device_integrity.get("deviceRecognitionVerdict") or [])
+        if "MEETS_DEVICE_INTEGRITY" not in device_verdicts:
+            return {
+                "ok": False,
+                "message": "Il dispositivo non supera il controllo di sicurezza Google Play.",
+            }
+        if account_details.get("appLicensingVerdict") != "LICENSED":
+            return {
+                "ok": False,
+                "message": "L'installazione non risulta autorizzata da Google Play.",
+            }
+
+        token_fingerprint = hashlib.sha256(integrity_token.encode("utf-8")).hexdigest()
+        now = time.time()
+        with PLAY_INTEGRITY_LOCK:
+            expired_before = now - PLAY_INTEGRITY_MAX_TOKEN_AGE_SECONDS
+            expired = [
+                key for key, seen_at in PLAY_INTEGRITY_SEEN.items()
+                if seen_at < expired_before
+            ]
+            for key in expired:
+                PLAY_INTEGRITY_SEEN.pop(key, None)
+            if token_fingerprint in PLAY_INTEGRITY_SEEN:
+                return {"ok": False, "message": "Controllo sicurezza gia utilizzato."}
+            PLAY_INTEGRITY_SEEN[token_fingerprint] = now
+        return {"ok": True, "legacy": False}
+    except (ValueError, KeyError, TypeError):
+        return {"ok": False, "message": "Risposta sicurezza Google Play non valida."}
+    except Exception:
+        return {
+            "ok": False,
+            "message": "Controllo sicurezza Google Play temporaneamente non disponibile.",
+        }
+
+
 def verify_google_play_subscription(
     purchase_token: str, product_id: str
 ) -> dict[str, Any]:
@@ -1816,6 +1968,9 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
                     "premiumVerificationConfigured": premium_verification_configured(),
+                    "playIntegrityConfigured": play_integrity_configured(),
+                    "playIntegrityRequired": PLAY_INTEGRITY_REQUIRED,
+                    "playIntegrityMinVersionCode": PLAY_INTEGRITY_MIN_VERSION_CODE,
                     "vehicleDefectCatalogReady": bool(VEHICLE_DEFECT_CATALOG.get("vehicles")),
                     "defectResearchConfigured": defect_research_configured(),
                 }
@@ -1921,6 +2076,17 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     self.send_json(
                         {"error": "rate_limited", "retryAfterSeconds": MARKET_RATE_WINDOW_SECONDS},
                         status=429,
+                    )
+                    return
+                integrity = verify_play_integrity(payload)
+                if not integrity.get("ok"):
+                    self.send_json(
+                        {
+                            "active": False,
+                            "isTrial": False,
+                            "message": integrity.get("message")
+                            or "Controllo sicurezza non superato.",
+                        }
                     )
                     return
                 verification = verify_google_play_subscription(
