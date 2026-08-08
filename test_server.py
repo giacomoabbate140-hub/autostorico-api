@@ -8,13 +8,13 @@ from server import (
     market_estimate_from_sources,
     trusted_defect_source,
     verify_defect_online_entitlement,
+    verify_google_play_subscription,
     vehicle_defect_reports,
-    verify_google_play_product,
 )
 
 
 class MarketEvidenceTests(unittest.TestCase):
-    def test_gold_product_verification_uses_google_play_products_endpoint(self):
+    def test_gold_subscription_uses_google_play_subscriptions_endpoint(self):
         class FakeCredentials:
             pass
 
@@ -22,7 +22,15 @@ class MarketEvidenceTests(unittest.TestCase):
             status_code = 200
 
             def json(self):
-                return {"purchaseState": 0}
+                return {
+                    "subscriptionState": "SUBSCRIPTION_STATE_ACTIVE",
+                    "lineItems": [
+                        {
+                            "productId": "premium_gold_6_mesi",
+                            "expiryTime": "2099-12-31T00:00:00Z",
+                        }
+                    ],
+                }
 
         class FakeSession:
             last_endpoint = ""
@@ -43,11 +51,12 @@ class MarketEvidenceTests(unittest.TestCase):
         with patch.object(server, "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", "{}"), patch.object(
             server, "AuthorizedSession", FakeSession
         ), patch.object(server, "service_account", FakeServiceAccount):
-            result = verify_google_play_product("token-123456789", "defects_gold")
+            result = verify_google_play_subscription(
+                "token-123456789", "premium_gold_6_mesi"
+            )
 
         self.assertTrue(result["active"])
-        self.assertIn("/purchases/products/defects_gold/tokens/", FakeSession.last_endpoint)
-        self.assertNotIn("/purchases/subscriptions", FakeSession.last_endpoint)
+        self.assertIn("/purchases/subscriptionsv2/tokens/", FakeSession.last_endpoint)
 
     def test_defect_online_entitlement_requires_both_premium_and_gold(self):
         payload = {
@@ -57,24 +66,20 @@ class MarketEvidenceTests(unittest.TestCase):
         calls = []
 
         def fake_subscription(token, product_id):
-            calls.append(("premium", token, product_id))
-            return {"active": True}
-
-        def fake_product(token, product_id):
-            calls.append(("gold", token, product_id))
+            calls.append((token, product_id))
             return {"active": True}
 
         with patch.object(server, "DEFECT_ENTITLEMENT_CACHE", {}), patch.object(
             server, "verify_google_play_subscription", fake_subscription
-        ), patch.object(server, "verify_google_play_product", fake_product):
+        ):
             entitlement = verify_defect_online_entitlement(payload)
 
         self.assertTrue(entitlement["ok"])
         self.assertEqual(
             calls,
             [
-                ("premium", "premium-token-123", "premium_6_mesi"),
-                ("gold", "gold-token-123", "defects_gold"),
+                ("premium-token-123", "premium_6_mesi"),
+                ("gold-token-123", "premium_gold_6_mesi"),
             ],
         )
 

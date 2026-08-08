@@ -64,7 +64,7 @@ GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
     "GOOGLE_PLAY_SUBSCRIPTION_ID", "premium_6_mesi"
 ).strip()
 GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = os.environ.get(
-    "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "defects_gold"
+    "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "premium_gold_6_mesi"
 ).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 PREMIUM_VERIFY_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_PREMIUM_VERIFY_RATE_LIMIT", "12"))
@@ -78,7 +78,9 @@ PLAY_INTEGRITY_MAX_TOKEN_AGE_SECONDS = int(
 PLAY_INTEGRITY_SEEN: dict[str, float] = {}
 PLAY_INTEGRITY_LOCK = threading.Lock()
 DEFECT_CATALOG_PATH = Path(__file__).parent / "data" / "vehicle_defects.json"
-DEFECT_RESEARCH_CACHE_TTL_SECONDS = 24 * 60 * 60
+DEFECT_RESEARCH_CACHE_TTL_SECONDS = int(
+    os.environ.get("AUTOSTORICO_DEFECT_CACHE_TTL_SECONDS", str(30 * 24 * 60 * 60))
+)
 DEFECT_ENTITLEMENT_CACHE_TTL_SECONDS = int(
     os.environ.get("AUTOSTORICO_DEFECT_ENTITLEMENT_CACHE_SECONDS", "900")
 )
@@ -1673,11 +1675,14 @@ def verify_google_play_subscription(
             "isTrial": False,
             "message": "Verifica Premium non ancora configurata.",
         }
-    if product_id != GOOGLE_PLAY_SUBSCRIPTION_ID:
+    if product_id not in {
+        GOOGLE_PLAY_SUBSCRIPTION_ID,
+        GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID,
+    }:
         return {
             "active": False,
             "isTrial": False,
-            "message": "Piano Premium non valido.",
+            "message": "Piano AutoStorico non valido.",
         }
     if not purchase_token or len(purchase_token) < 12:
         return {
@@ -1731,7 +1736,13 @@ def verify_google_play_subscription(
             "active": active,
             "isTrial": False,
             "expiresAt": expiry if active else None,
-            "message": "Premium verificato e attivo." if active else "Abbonamento non attivo.",
+            "message": (
+                "Premium verificato e attivo."
+                if product_id == GOOGLE_PLAY_SUBSCRIPTION_ID
+                else "Gold Difetti verificato e attivo."
+            )
+            if active
+            else "Abbonamento non attivo.",
         }
     except (ValueError, KeyError, TypeError):
         return {
@@ -1865,7 +1876,7 @@ def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
             "status": 402,
             "message": premium.get("message") or "Premium non attivo.",
         }
-    gold = verify_google_play_product(
+    gold = verify_google_play_subscription(
         gold_token, GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
     )
     if not gold.get("active"):
@@ -2257,10 +2268,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     return
                 product_id = str(payload.get("productId") or "").strip()
                 product_type = str(payload.get("productType") or "").strip().lower()
-                if (
-                    product_type in {"inapp", "product", "one_time"}
-                    or product_id == GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
-                ):
+                if product_type in {"inapp", "product", "one_time"}:
                     verification = verify_google_play_product(
                         str(payload.get("purchaseToken") or "").strip(),
                         product_id,
