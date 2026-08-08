@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 15,
+  "catalogVersion": 16,
   "updatedAt": "2026-08-08",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -1415,6 +1415,51 @@
           "sourceName": "Segnalazioni community in verifica",
           "sourceUrl": "",
           "userText": "Sono raccolte segnalazioni su spia motore, cali di potenza e perdite di refrigerante. Le cause possono essere diverse, inclusi attuatore turbo/wastegate o pompa acqua: non sostituire parti a tentativi, fai leggere i codici errore e controllare il circuito di raffreddamento."
+        }
+      ]
+    },
+    {
+      "id": "toyota-yaris-hybrid-12v-community",
+      "make": "Toyota",
+      "models": ["Yaris"],
+      "fromYear": 2020,
+      "engineKeywords": ["1490", "1.5", "hybrid", "hybrid electric", "116", "130", "m15a"],
+      "reports": [
+        {
+          "id": "toyota-yaris-hybrid-12v-community",
+          "category": "Batteria ausiliaria 12 V",
+          "title": "Segnalazioni su scarica della batteria 12 V dopo soste prolungate",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Toyota Yaris XP210 Hybrid 1.5 dal 2020. Riguarda la batteria ausiliaria 12 V, non la batteria di trazione ibrida.",
+          "sourceName": "Toyota Owners Club",
+          "sourceUrl": "https://www.toyotaownersclub.com/forums/topic/221979-poll-yarisyaris-cross-hybrid-12v-battery-failure/",
+          "userText": "Le community riportano mancata accensione in READY e messaggi elettronici dopo soste o uso ridotto, spesso riconducibili alla batteria 12 V. Non confondere la 12 V con la batteria ibrida: fai eseguire test batteria, controlla eventuali assorbimenti e segui la procedura del manuale per l'avviamento di emergenza."
+        }
+      ]
+    },
+    {
+      "id": "volkswagen-golf-15-tsi-evo-community",
+      "make": "Volkswagen",
+      "models": ["Golf"],
+      "fromYear": 2017,
+      "toYear": 2020,
+      "engineKeywords": ["1498", "1.5", "tsi", "evo", "130", "150"],
+      "reports": [
+        {
+          "id": "volkswagen-golf-15-tsi-evo-jerking-community",
+          "category": "Gestione motore e software",
+          "title": "Segnalazioni su esitazioni o strattoni a basso regime",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Volkswagen Golf Mk7.5 con 1.5 TSI Evo benzina, circa 2017-2020. Non si applica ai 1.0 TSI, diesel o versioni successive senza verifica del codice motore.",
+          "sourceName": "Segnalazioni proprietari Volkswagen",
+          "sourceUrl": "https://indexone.ru/upload/file/11915008187.pdf",
+          "userText": "Sono documentate segnalazioni di erogazione irregolare o effetto 'canguro' a bassa velocita su alcune 1.5 TSI manuali. Prima di ipotizzare guasti meccanici, controlla aggiornamenti centralina, codici motore e storico interventi tramite rete Volkswagen."
         }
       ]
     },
