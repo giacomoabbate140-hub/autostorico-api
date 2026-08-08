@@ -49,6 +49,7 @@ MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
 MARKET_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_REQUESTS: dict[str, list[float]] = {}
 PREMIUM_VERIFY_REQUESTS: dict[str, list[float]] = {}
+DEFECT_ENTITLEMENT_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_GUARD_LOCK = threading.Lock()
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = os.environ.get(
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", ""
@@ -78,6 +79,9 @@ PLAY_INTEGRITY_SEEN: dict[str, float] = {}
 PLAY_INTEGRITY_LOCK = threading.Lock()
 DEFECT_CATALOG_PATH = Path(__file__).parent / "data" / "vehicle_defects.json"
 DEFECT_RESEARCH_CACHE_TTL_SECONDS = 24 * 60 * 60
+DEFECT_ENTITLEMENT_CACHE_TTL_SECONDS = int(
+    os.environ.get("AUTOSTORICO_DEFECT_ENTITLEMENT_CACHE_SECONDS", "900")
+)
 DEFECT_RESEARCH_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 DEFECT_RESEARCH_LOCK = threading.Lock()
 MARKET_SITES = [
@@ -1810,6 +1814,110 @@ def verify_google_play_product(
         }
 
 
+def cached_defect_entitlement(
+    premium_token: str, gold_token: str
+) -> dict[str, Any] | None:
+    cache_key = hashlib.sha256(
+        f"{premium_token}\n{gold_token}".encode("utf-8")
+    ).hexdigest()
+    now = time.time()
+    with MARKET_GUARD_LOCK:
+        cached = DEFECT_ENTITLEMENT_CACHE.get(cache_key)
+        if not cached:
+            return None
+        created_at, entitlement = cached
+        if now - created_at > DEFECT_ENTITLEMENT_CACHE_TTL_SECONDS:
+            DEFECT_ENTITLEMENT_CACHE.pop(cache_key, None)
+            return None
+        return entitlement
+
+
+def cache_defect_entitlement(
+    premium_token: str, gold_token: str, entitlement: dict[str, Any]
+) -> None:
+    cache_key = hashlib.sha256(
+        f"{premium_token}\n{gold_token}".encode("utf-8")
+    ).hexdigest()
+    with MARKET_GUARD_LOCK:
+        DEFECT_ENTITLEMENT_CACHE[cache_key] = (time.time(), entitlement)
+
+
+def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
+    premium_token = str(payload.get("premiumPurchaseToken") or "").strip()
+    gold_token = str(payload.get("defectsGoldPurchaseToken") or "").strip()
+    if not premium_token or not gold_token:
+        return {
+            "ok": False,
+            "status": 402,
+            "message": "Per Difetti Gold servono Premium attivo e acquisto Gold verificato.",
+        }
+
+    cached = cached_defect_entitlement(premium_token, gold_token)
+    if cached is not None:
+        return cached
+
+    premium = verify_google_play_subscription(
+        premium_token, GOOGLE_PLAY_SUBSCRIPTION_ID
+    )
+    if not premium.get("active"):
+        return {
+            "ok": False,
+            "status": 402,
+            "message": premium.get("message") or "Premium non attivo.",
+        }
+    gold = verify_google_play_product(
+        gold_token, GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
+    )
+    if not gold.get("active"):
+        return {
+            "ok": False,
+            "status": 402,
+            "message": gold.get("message") or "Difetti Gold non acquistata.",
+        }
+
+    entitlement = {"ok": True, "status": 200, "message": "Difetti Gold verificata."}
+    cache_defect_entitlement(premium_token, gold_token, entitlement)
+    return entitlement
+
+
+def vehicle_defects_response(
+    make: str, model: str, year: int | None, engine: str, search_online: bool
+) -> dict[str, Any]:
+    result = vehicle_defect_reports(make, model, year, engine)
+    if result is None:
+        # A catalog entry is optional: every vehicle can still receive live
+        # source candidates from the approved online research flow.
+        result = {
+            "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
+            "make": str(make or "").strip(),
+            "model": str(model or "").strip(),
+            "searchContext": {"year": year, "engine": str(engine or "").strip()},
+            "vehicles": [],
+            "reports": [],
+            "disclaimer": (
+                "Nessuna segnalazione curata ancora disponibile per questo modello. "
+                "Le fonti online restano da leggere e verificare."
+            ),
+        }
+    if search_online and defect_research_configured():
+        try:
+            online_research = search_defect_source_candidates(
+                make, model, year, engine
+            )
+            result = {
+                **result,
+                "onlineCandidates": online_research.get("candidates", []),
+                "onlineResearchFromCache": online_research.get("fromCache", False),
+            }
+        except (RuntimeError, ValueError, OSError, urllib.error.URLError):
+            result = {
+                **result,
+                "onlineCandidates": [],
+                "onlineResearchUnavailable": True,
+            }
+    return result
+
+
 DEFECT_SOURCE_OFFICIAL = "NHTSA richiami/reclami ufficiali"
 DEFECT_SOURCE_COMMUNITY = "Community/forum utenti da verificare"
 DEFECT_SOURCE_SURVEY = "Owner reviews/survey affidabilita da verificare"
@@ -2057,40 +2165,19 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             model = query.get("model", [""])[0]
             year = catalog_year_value(query.get("year", [""])[0]) or None
             engine = query.get("engine", [""])[0]
-            result = vehicle_defect_reports(make, model, year, engine)
-            if result is None:
-                # A catalog entry is optional: every vehicle can still receive
-                # live source candidates from the approved online research flow.
-                result = {
-                    "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
-                    "make": str(make or "").strip(),
-                    "model": str(model or "").strip(),
-                    "searchContext": {"year": year, "engine": str(engine or "").strip()},
-                    "vehicles": [],
-                    "reports": [],
-                    "disclaimer": (
-                        "Nessuna segnalazione curata ancora disponibile per questo modello. "
-                        "Le fonti online restano da leggere e verificare."
-                    ),
-                }
             search_online = query.get("searchOnline", ["0"])[0] == "1"
-            if search_online and defect_research_configured():
-                try:
-                    online_research = search_defect_source_candidates(
-                        make, model, year, engine
-                    )
-                    result = {
-                        **result,
-                        "onlineCandidates": online_research.get("candidates", []),
-                        "onlineResearchFromCache": online_research.get("fromCache", False),
-                    }
-                except (RuntimeError, ValueError, OSError, urllib.error.URLError):
-                    result = {
-                        **result,
-                        "onlineCandidates": [],
-                        "onlineResearchUnavailable": True,
-                    }
-            self.send_json(result)
+            if search_online:
+                self.send_json(
+                    {
+                        "error": "gold_required",
+                        "message": "La ricerca online Difetti Gold richiede verifica server-side.",
+                    },
+                    status=402,
+                )
+                return
+            self.send_json(
+                vehicle_defects_response(make, model, year, engine, search_online=False)
+            )
             return
         if request_path == "/api/admin/defect-source-candidates":
             auth = self.headers.get("Authorization", "")
@@ -2117,7 +2204,11 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         request_path = urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
-        if request_path not in {"/api/vehicle-value", "/api/premium/verify"}:
+        if request_path not in {
+            "/api/vehicle-value",
+            "/api/premium/verify",
+            "/api/vehicle-defects",
+        }:
             self.send_json({"error": "not_found"}, status=404)
             return
 
@@ -2146,7 +2237,10 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 )
                 if not can_run_premium_verification(client_id):
                     self.send_json(
-                        {"error": "rate_limited", "retryAfterSeconds": MARKET_RATE_WINDOW_SECONDS},
+                        {
+                            "error": "rate_limited",
+                            "retryAfterSeconds": MARKET_RATE_WINDOW_SECONDS,
+                        },
                         status=429,
                     )
                     return
@@ -2163,7 +2257,10 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     return
                 product_id = str(payload.get("productId") or "").strip()
                 product_type = str(payload.get("productType") or "").strip().lower()
-                if product_type in {"inapp", "product", "one_time"} or product_id == GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID:
+                if (
+                    product_type in {"inapp", "product", "one_time"}
+                    or product_id == GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
+                ):
                     verification = verify_google_play_product(
                         str(payload.get("purchaseToken") or "").strip(),
                         product_id,
@@ -2174,6 +2271,41 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                         product_id,
                     )
                 self.send_json(verification)
+                return
+            if request_path == "/api/vehicle-defects":
+                client_id = (
+                    self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+                    or self.client_address[0]
+                )
+                if not can_run_market_search(client_id):
+                    self.send_json(
+                        {
+                            "error": "rate_limited",
+                            "retryAfterSeconds": MARKET_RATE_WINDOW_SECONDS,
+                        },
+                        status=429,
+                    )
+                    return
+                entitlement = verify_defect_online_entitlement(payload)
+                if not entitlement.get("ok"):
+                    self.send_json(
+                        {
+                            "error": "gold_required",
+                            "message": entitlement.get("message")
+                            or "Difetti Gold non verificata.",
+                        },
+                        status=int(entitlement.get("status") or 402),
+                    )
+                    return
+                make = str(payload.get("make") or "").strip()
+                model = str(payload.get("model") or "").strip()
+                year = catalog_year_value(payload.get("year")) or None
+                engine = str(payload.get("engine") or "").strip()
+                self.send_json(
+                    vehicle_defects_response(
+                        make, model, year, engine, search_online=True
+                    )
+                )
                 return
             cache_key = market_cache_key(payload)
             estimate = cached_market_estimate(cache_key)
