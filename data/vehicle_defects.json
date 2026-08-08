@@ -1,6 +1,6 @@
 {
-  "catalogVersion": 14,
-  "updatedAt": "2026-07-30",
+  "catalogVersion": 15,
+  "updatedAt": "2026-08-08",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
     {
@@ -1419,6 +1419,129 @@
       ]
     },
     {
+      "id": "ford-puma-10-ecoboost-mhev-community",
+      "make": "Ford",
+      "models": ["Puma"],
+      "fromYear": 2019,
+      "engineKeywords": ["999", "1.0", "ecoboost", "mhev", "mild hybrid", "125", "155", "170"],
+      "reports": [
+        {
+          "id": "ford-puma-10-mhev-oil-pump-belt-community",
+          "category": "Lubrificazione motore",
+          "title": "Controllo cinghia pompa olio immersa e aspirazione olio",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Ford Puma 1.0 EcoBoost mild hybrid dal 2019. La distribuzione ai camme e normalmente a catena sulle versioni Puma: questa voce riguarda la cinghia immersa che aziona la pompa olio, non va chiamata cinghia di distribuzione.",
+          "sourceName": "Ford Puma Forum",
+          "sourceUrl": "https://www.pumaforums.co.uk/viewtopic.php?t=2623",
+          "userText": "Alcune discussioni riportano usura o detriti della cinghia della pompa olio con possibile ostruzione del pescante e perdita di pressione olio. Rispetta strettamente intervalli e specifica dell'olio Ford; se compare la spia pressione olio, spegni il motore e non proseguire. Verifica la configurazione esatta tramite VIN e piano manutenzione ufficiale."
+        },
+        {
+          "id": "ford-puma-10-mhev-48v-community",
+          "category": "Sistema mild hybrid e batterie",
+          "title": "Segnalazioni su stop-start e funzione mild hybrid non disponibile",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo Ford Puma 1.0 EcoBoost mild hybrid con sistema 48 V. Non si applica alla Puma benzina non mild-hybrid o alla Puma elettrica.",
+          "sourceName": "Ford Owners Club",
+          "sourceUrl": "https://www.fordownersclub.com/forums/topic/156630-mild-hybrid-not-working-on-2024-puma/",
+          "userText": "Le community riportano assenza temporanea della funzione mild hybrid o dello stop-start, messaggi batteria e in alcuni casi aggiornamenti software o controlli della batteria 12 V/48 V. Lo stop-start puo anche essere inibito per condizioni normali di carica e temperatura: fai leggere i codici errore prima di considerarlo un guasto."
+        },
+        {
+          "id": "ford-puma-10-mhev-12v-battery-community",
+          "category": "Impianto elettrico",
+          "title": "Segnalazioni su scarica della batteria 12 V e messaggi elettronici",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Ford Puma prima generazione dal 2019; il controllo e utile anche sulle mild hybrid, dove una 12 V debole puo disabilitare funzioni accessorie.",
+          "sourceName": "Ford Owners Club",
+          "sourceUrl": "https://www.fordownersclub.com/forums/topic/141880-dead-battery/",
+          "userText": "Sono riportati avviamenti difficili, messaggi 'preserva batteria' e anomalie elettroniche con batteria 12 V scarica. Controlla test batteria, alternatore, assorbimento a riposo e software prima di sostituire centraline o sensori."
+        },
+        {
+          "id": "ford-puma-10-mhev-transmission-community",
+          "category": "Cambio e trasmissione",
+          "title": "Segnalazioni da verificare su innesti e funzionamento del cambio",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Ford Puma 1.0 EcoBoost mild hybrid con cambio manuale o Powershift: cambio e anno devono essere identificati tramite VIN, poiche le casistiche non sono sovrapponibili.",
+          "sourceName": "Segnalazioni community Puma",
+          "sourceUrl": "",
+          "userText": "Le discussioni citano innesti duri, esitazioni o comportamento irregolare del cambio su alcuni esemplari. Prima di attribuire il problema al cambio, verifica aggiornamenti software, batteria, frizione o attuatori secondo il tipo di trasmissione."
+        }
+      ]
+    },
+    {
+      "id": "land-rover-evoque-22-td4-sd4-community",
+      "make": "Land Rover",
+      "models": ["Range Rover Evoque", "Evoque"],
+      "fromYear": 2011,
+      "toYear": 2015,
+      "engineKeywords": ["2179", "2.2", "diesel", "td4", "sd4", "ed4"],
+      "reports": [
+        {
+          "id": "land-rover-evoque-22-diesel-dpf-egr-community",
+          "category": "DPF ed EGR",
+          "title": "Segnalazioni su rigenerazioni DPF ed EGR sporca",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque L538 con 2.2 diesel TD4, SD4 o eD4, anni 2011-2015. Non riguarda il 2.0 Ingenium successivo.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Con uso cittadino e tragitti brevi alcune community riportano rigenerazioni DPF ravvicinate e spia motore; sono citati anche depositi sulla valvola EGR. Controlla messaggi sul filtro, storico delle rigenerazioni e codici errore prima di sostituire componenti."
+        },
+        {
+          "id": "land-rover-evoque-22-diesel-intercooler-oil-community",
+          "category": "Aspirazione e perdite",
+          "title": "Controllo manicotti intercooler e perdite d'olio",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque L538 2.2 diesel, 2011-2015.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Sono riportati manicotti dell'intercooler che possono fessurarsi e trasudamenti o perdite d'olio. In presenza di fischio, calo di potenza, fumo o macchie sotto l'auto, fai controllare tubazioni turbo/intercooler e l'origine della perdita."
+        },
+        {
+          "id": "land-rover-evoque-22-diesel-awd-electronics-community",
+          "category": "Trasmissione 4x4 ed elettronica",
+          "title": "Segnalazioni su Haldex, sensori e batteria 12 V",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque 2.2 diesel 4x4, 2011-2015. La parte Haldex non si applica alle versioni non 4x4.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Le community citano rumori da cuscinetti del differenziale o Haldex, anomalie ABS/TPMS e molti messaggi elettronici con batteria 12 V debole. Prima di attribuire un guasto a una centralina, verifica stato batteria, carica alternatore e codici diagnosi."
+        },
+        {
+          "id": "land-rover-evoque-22-infotainment-community",
+          "category": "Infotainment",
+          "title": "Segnalazioni su lentezza o blocchi dell'infotainment",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque prima generazione, 2011-2015; dotazione e software dipendono dall'allestimento.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Sono riportati avvii lenti, blocchi e riavvii del sistema multimediale. Verifica aggiornamenti disponibili, stato batteria e diagnosi prima di sostituire lo schermo o il modulo."
+        }
+      ]
+    },
+    {
       "id": "land-rover-evoque-20-ingenium-diesel-oil-dilution-community",
       "make": "Land Rover",
       "models": ["Range Rover Evoque", "Evoque"],
@@ -1464,6 +1587,80 @@
           "sourceName": "Land Rover UK Forums",
           "sourceUrl": "https://www.lrukforums.com/threads/ingenium-diesel-woes.295678/",
           "userText": "Un caso community descrive perdita di potenza e guasto turbina. Se ci sono fumo, fischio anomalo, calo di potenza o spia motore, interrompi l'uso gravoso e fai verificare turbo, lubrificazione e intercooler; non considerare la voce una difettosita certa per tutti gli esemplari."
+        },
+        {
+          "id": "land-rover-evoque-20-ingenium-diesel-fuel-egr-community",
+          "category": "Alimentazione diesel ed EGR",
+          "title": "Segnalazioni su iniettori e raffreddatore EGR",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque L538 con 2.0 diesel Ingenium, 2015-2018. Non usare questa voce per il precedente 2.2 diesel.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Le community riportano spie motore, fumosita o funzionamento irregolare attribuiti in alcuni casi a iniettori, EGR o relativo raffreddatore. Sono sintomi con cause diverse: richiedi lettura codici, controllo pressione carburante e circuito EGR prima di sostituire componenti."
+        },
+        {
+          "id": "land-rover-evoque-zf9hp-community",
+          "category": "Cambio automatico",
+          "title": "Segnalazioni su esitazioni o strattoni del cambio a 9 marce",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque con cambio automatico ZF 9 marce; non si applica alle versioni manuali. Verifica anno e codice cambio tramite VIN.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Sono segnalati esitazioni, cambiate brusche o strattoni, soprattutto a freddo. Verifica aggiornamenti software, adattamenti e lo storico di manutenzione previsto per la trasmissione con un centro qualificato."
+        }
+      ]
+    },
+    {
+      "id": "land-rover-evoque-l551-diesel-electronics-community",
+      "make": "Land Rover",
+      "models": ["Range Rover Evoque", "Evoque"],
+      "fromYear": 2019,
+      "engineKeywords": ["1999", "2.0", "diesel", "ingenium", "d150", "d165", "d180", "d200"],
+      "reports": [
+        {
+          "id": "land-rover-evoque-l551-diesel-adblue-community",
+          "category": "Antinquinamento diesel",
+          "title": "Segnalazioni su sensori AdBlue, DPF e spie emissioni",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque L551 diesel Ingenium dal 2019. Non si applica ai benzina o plug-in hybrid.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Le discussioni citano spie AdBlue o emissioni, sensori NOx e rigenerazioni DPF. Controlla il codice errore e le campagne VIN: un messaggio AdBlue non identifica da solo il componente guasto."
+        },
+        {
+          "id": "land-rover-evoque-l551-infotainment-adas-community",
+          "category": "Infotainment, ADAS e batteria 12 V",
+          "title": "Segnalazioni su software, sensori ADAS e batteria 12 V",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Evoque L551 dal 2019; sistema e dotazione dipendono da anno, allestimento e aggiornamenti software.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Le community riportano blocchi o lentezza dell'infotainment, avvisi ADAS e messaggi casuali quando la batteria 12 V e debole. Prima di cambiare sensori o moduli, fai controllare batteria, aggiornamenti software e codici diagnosi."
+        },
+        {
+          "id": "land-rover-evoque-l551-phev-community",
+          "category": "Sistema ibrido",
+          "title": "Segnalazioni da verificare su anomalie plug-in hybrid",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo Evoque plug-in hybrid L551. Non si applica alle versioni diesel o benzina non ibride.",
+          "sourceName": "Segnalazioni community Evoque",
+          "sourceUrl": "",
+          "userText": "Sono riportati messaggi di anomalia del sistema ibrido e tempi di riparazione variabili. Per qualunque avviso relativo all'alta tensione, non intervenire autonomamente: salva il messaggio, verifica le campagne VIN e rivolgiti alla rete qualificata."
         }
       ]
     },
