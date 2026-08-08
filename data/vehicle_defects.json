@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 16,
+  "catalogVersion": 17,
   "updatedAt": "2026-08-08",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -1415,6 +1415,87 @@
           "sourceName": "Segnalazioni community in verifica",
           "sourceUrl": "",
           "userText": "Sono raccolte segnalazioni su spia motore, cali di potenza e perdite di refrigerante. Le cause possono essere diverse, inclusi attuatore turbo/wastegate o pompa acqua: non sostituire parti a tentativi, fai leggere i codici errore e controllare il circuito di raffreddamento."
+        }
+      ]
+    },
+    {
+      "id": "fiat-500x-14-multiair-community",
+      "make": "Fiat",
+      "models": ["500X"],
+      "fromYear": 2015,
+      "toYear": 2018,
+      "engineKeywords": ["1368", "1.4", "multiair", "turbo", "140", "170"],
+      "reports": [
+        {
+          "id": "fiat-500x-14-multiair-actuator-community",
+          "category": "Aspirazione e comando valvole",
+          "title": "Segnalazioni su attuatore MultiAir e comando wastegate",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Fiat 500X con 1.4 MultiAir turbo benzina, 2015-2018 circa. Non riguarda 1.3 Multijet diesel o le versioni FireFly successive.",
+          "sourceName": "FIAT Forum",
+          "sourceUrl": "https://www.fiatforum.com/threads/what-common-faults-on-500x.517248/",
+          "userText": "Le discussioni proprietari citano irregolarita di erogazione, spia motore o calo potenza da verificare su attuatore MultiAir e regolazione turbo/wastegate. Le cause possono includere olio non idoneo, elettrovalvole o aspirazione: fai leggere i codici errore prima di sostituire il modulo MultiAir."
+        }
+      ]
+    },
+    {
+      "id": "renault-captur-12-tce-h5ft-oil-consumption",
+      "make": "Renault",
+      "models": ["Captur"],
+      "fromYear": 2013,
+      "toYear": 2016,
+      "engineKeywords": ["1197", "1.2", "tce", "h5ft", "120", "edc"],
+      "reports": [
+        {
+          "id": "renault-captur-12-tce-h5ft-oil-consumption",
+          "category": "Motore e lubrificazione",
+          "title": "Verifica consumo olio e stato motore 1.2 TCe",
+          "sourceType": "independent_reliability",
+          "confidence": "independent-source",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "engineScope": "Renault Captur I con 1.2 TCe H5Ft benzina prodotto circa 2013-2016. Non riguarda il 0.9 TCe H4Bt o il 1.3 TCe successivo.",
+          "sourceName": "Inchiesta Motorgate Renault",
+          "sourceUrl": "https://www.lemonde.fr/economie/article/2025/06/26/motorgate-renault-vise-par-une-enquete-de-la-repression-des-fraudes-a-propos-de-ses-moteurs-defectueux_6615992_6615992.html",
+          "userText": "Fonti indipendenti e associazioni consumatori hanno riportato casi di consumo olio anomalo su alcuni 1.2 TCe antecedenti alla meta del 2016. Controlla livello olio, fumo allo scarico, storico tagliandi e consumo tra due controlli; non estendere l'avviso ad altri motori TCe. Per eventuali campagne o assistenza, verifica il VIN con Renault."
+        }
+      ]
+    },
+    {
+      "id": "nissan-qashqai-13-digt-cooling-community",
+      "make": "Nissan",
+      "models": ["Qashqai"],
+      "fromYear": 2019,
+      "engineKeywords": ["1332", "1.3", "dig-t", "digt", "hr13ddt", "140", "158", "160"],
+      "reports": [
+        {
+          "id": "nissan-qashqai-13-digt-thermostat-community",
+          "category": "Raffreddamento motore",
+          "title": "Segnalazioni su perdite dal gruppo termostato",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Nissan Qashqai J11 con 1.3 DIG-T benzina, dal 2019 circa. Non riguarda il precedente 1.2 DIG-T o i diesel.",
+          "sourceName": "Qashqai Passion Forum",
+          "sourceUrl": "https://www.qashqai-passion.fr/viewtopic.php?sid=af087c098d69346a5683477b8e81ec05&t=1384",
+          "userText": "Sono riportate perdite o cedimenti del gruppo termostato con calo del refrigerante e rischio di surriscaldamento. Controlla a freddo il livello liquido e le tracce di perdita; se compare avviso temperatura o il livello cala, ferma l'auto e fai eseguire prova pressione."
+        },
+        {
+          "id": "nissan-qashqai-13-digt-turbo-community",
+          "category": "Turbo e aspirazione",
+          "title": "Segnalazioni isolate su rumori e perdita di potenza turbo",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Nissan Qashqai J11 con 1.3 DIG-T benzina. Non e una difettosita certa per tutti gli esemplari.",
+          "sourceName": "Qashqai Forum",
+          "sourceUrl": "https://www.qashqaiforum.de/threads/ratterndes-und-rasselndes-ger%C3%A4usch-aus-motorraum-1-3-dig-t.14826/",
+          "userText": "Le community descrivono singoli casi di rumore dal vano motore, spia e perdita potenza poi associati al turbo. Se senti fischi o rumori metallici con calo potenza, fai verificare errori, aspirazione, lubrificazione e turbo senza continuare a richiedere pieno carico al motore."
         }
       ]
     },
