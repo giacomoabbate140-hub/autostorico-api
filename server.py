@@ -55,7 +55,7 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = os.environ.get(
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", ""
 ).strip()
 GOOGLE_PLAY_SERVICE_ACCOUNT_FILE = os.environ.get(
-    "GOOGLE_PLAY_SERVICE_ACCOUNT_FILE", ""
+    "GOOGLE_PLAY_SERVICE_ACCOUNT_FILE", "/etc/secrets/google-play-publisher.json"
 ).strip()
 GOOGLE_PLAY_PACKAGE_NAME = os.environ.get(
     "GOOGLE_PLAY_PACKAGE_NAME", "autostorico.myapp"
