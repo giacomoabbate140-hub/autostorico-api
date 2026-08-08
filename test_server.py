@@ -1,15 +1,53 @@
 import unittest
+from unittest.mock import patch
 
+import server
 from server import (
     defect_research_cache_key,
     market_cache_key,
     market_estimate_from_sources,
     trusted_defect_source,
     vehicle_defect_reports,
+    verify_google_play_product,
 )
 
 
 class MarketEvidenceTests(unittest.TestCase):
+    def test_gold_product_verification_uses_google_play_products_endpoint(self):
+        class FakeCredentials:
+            pass
+
+        class FakeResponse:
+            status_code = 200
+
+            def json(self):
+                return {"purchaseState": 0}
+
+        class FakeSession:
+            last_endpoint = ""
+
+            def __init__(self, credentials):
+                self.credentials = credentials
+
+            def get(self, endpoint, timeout):
+                FakeSession.last_endpoint = endpoint
+                return FakeResponse()
+
+        class FakeServiceAccount:
+            class Credentials:
+                @staticmethod
+                def from_service_account_info(info, scopes):
+                    return FakeCredentials()
+
+        with patch.object(server, "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", "{}"), patch.object(
+            server, "AuthorizedSession", FakeSession
+        ), patch.object(server, "service_account", FakeServiceAccount):
+            result = verify_google_play_product("token-123456789", "defects_gold")
+
+        self.assertTrue(result["active"])
+        self.assertIn("/purchases/products/defects_gold/tokens/", FakeSession.last_endpoint)
+        self.assertNotIn("/purchases/subscriptions", FakeSession.last_endpoint)
+
     def test_market_estimate_requires_three_comparable_listings(self):
         two_listings = [
             {"price": 8000, "weight": 1.0},

@@ -62,6 +62,9 @@ GOOGLE_PLAY_PACKAGE_NAME = os.environ.get(
 GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
     "GOOGLE_PLAY_SUBSCRIPTION_ID", "premium_6_mesi"
 ).strip()
+GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = os.environ.get(
+    "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "defects_gold"
+).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 PREMIUM_VERIFY_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_PREMIUM_VERIFY_RATE_LIMIT", "12"))
 PLAY_INTEGRITY_REQUIRED = os.environ.get("AUTOSTORICO_PLAY_INTEGRITY_REQUIRED", "0") == "1"
@@ -1503,23 +1506,25 @@ def google_play_service_account_json() -> str:
         return ""
 
 
-def premium_verification_configured() -> bool:
+def google_play_publisher_configured() -> bool:
     return bool(
         google_play_service_account_json()
         and GOOGLE_PLAY_PACKAGE_NAME
-        and GOOGLE_PLAY_SUBSCRIPTION_ID
         and AuthorizedSession is not None
         and service_account is not None
     )
+
+
+def premium_verification_configured() -> bool:
+    return bool(google_play_publisher_configured() and GOOGLE_PLAY_SUBSCRIPTION_ID)
+
+
+def product_verification_configured() -> bool:
+    return bool(google_play_publisher_configured() and GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID)
 
 
 def play_integrity_configured() -> bool:
-    return bool(
-        google_play_service_account_json()
-        and GOOGLE_PLAY_PACKAGE_NAME
-        and AuthorizedSession is not None
-        and service_account is not None
-    )
+    return google_play_publisher_configured()
 
 
 def expected_purchase_nonce(
@@ -1735,6 +1740,73 @@ def verify_google_play_subscription(
             "active": False,
             "isTrial": False,
             "message": "Verifica Premium temporaneamente non disponibile.",
+        }
+
+
+def verify_google_play_product(
+    purchase_token: str, product_id: str
+) -> dict[str, Any]:
+    """Confirm a Google Play one-time product server-side."""
+    if not product_verification_configured():
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Verifica acquisto Gold non ancora configurata.",
+        }
+    if product_id != GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID:
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Prodotto Gold non valido.",
+        }
+    if not purchase_token or len(purchase_token) < 12:
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Token di acquisto non valido.",
+        }
+
+    try:
+        service_account_info = json.loads(google_play_service_account_json())
+        credentials = service_account.Credentials.from_service_account_info(
+            service_account_info,
+            scopes=["https://www.googleapis.com/auth/androidpublisher"],
+        )
+        session = AuthorizedSession(credentials)
+        package_name = urllib.parse.quote(GOOGLE_PLAY_PACKAGE_NAME, safe="")
+        encoded_product = urllib.parse.quote(product_id, safe="")
+        encoded_token = urllib.parse.quote(purchase_token, safe="")
+        endpoint = (
+            "https://androidpublisher.googleapis.com/androidpublisher/v3/"
+            f"applications/{package_name}/purchases/products/{encoded_product}"
+            f"/tokens/{encoded_token}"
+        )
+        response = session.get(endpoint, timeout=12)
+        if response.status_code != 200:
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Acquisto Gold non confermato da Google Play.",
+            }
+        data = response.json()
+        purchase_state = int(data.get("purchaseState", 1))
+        active = purchase_state == 0
+        return {
+            "active": active,
+            "isTrial": False,
+            "message": "Difetti Gold acquistata." if active else "Acquisto Gold non attivo.",
+        }
+    except (ValueError, KeyError, TypeError):
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Configurazione Gold non valida sul server.",
+        }
+    except Exception:
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Verifica Gold temporaneamente non disponibile.",
         }
 
 
@@ -2089,10 +2161,18 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                         }
                     )
                     return
-                verification = verify_google_play_subscription(
-                    str(payload.get("purchaseToken") or "").strip(),
-                    str(payload.get("productId") or "").strip(),
-                )
+                product_id = str(payload.get("productId") or "").strip()
+                product_type = str(payload.get("productType") or "").strip().lower()
+                if product_type in {"inapp", "product", "one_time"} or product_id == GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID:
+                    verification = verify_google_play_product(
+                        str(payload.get("purchaseToken") or "").strip(),
+                        product_id,
+                    )
+                else:
+                    verification = verify_google_play_subscription(
+                        str(payload.get("purchaseToken") or "").strip(),
+                        product_id,
+                    )
                 self.send_json(verification)
                 return
             cache_key = market_cache_key(payload)

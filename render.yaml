@@ -19,6 +19,8 @@ services:
         value: autostorico.myapp
       - key: GOOGLE_PLAY_SUBSCRIPTION_ID
         value: premium_6_mesi
+      - key: GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
+        value: defects_gold
       - key: BRAVE_SEARCH_API_KEY
         sync: false
       - key: SERPAPI_API_KEY

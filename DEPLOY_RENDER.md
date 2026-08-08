@@ -46,12 +46,17 @@ Per vendere il piano `premium_6_mesi` aggiungi su Render queste variabili:
 AUTOSTORICO_PREMIUM_API_KEY=una_seconda_chiave_lunga_segreta
 GOOGLE_PLAY_PACKAGE_NAME=autostorico.myapp
 GOOGLE_PLAY_SUBSCRIPTION_ID=premium_6_mesi
+GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID=defects_gold
 GOOGLE_PLAY_SERVICE_ACCOUNT_FILE=/etc/secrets/google-play-service-account.json
 ```
 
 La service account deve avere l'accesso alla Google Play Developer API per l'app
 `autostorico.myapp`. Carica il suo JSON come Secret File di Render con nome
 `google-play-service-account.json`; non inserirlo mai nel repository GitHub.
+
+Premium viene verificato con l'endpoint Google Play subscriptions. La card
+`defects_gold`, essendo un acquisto una tantum, viene verificata con l'endpoint
+Google Play products.
 
 Compila l'app con:
 
