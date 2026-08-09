@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-09T01:08:56.561375+00:00",
-  "cursor": 1,
+  "updatedAt": "2026-08-09T13:16:18.929245+00:00",
+  "cursor": 2,
   "candidates": [
     {
       "status": "pending_review",
@@ -30,6 +30,20 @@
       "title": "INFO GIULIETTA 1.6 120 CV ANNO 2016 DIESEL",
       "snippet": "... Forum · Marche · Alfa Romeo; INFO GIULIETTA 1.6 120 CV ANNO 2016 DIESEL ... problema: vale la pena riparare la macchina o è meglio comprarne una ...",
       "sourceUrl": "https://forum.quattroruote.it/threads/info-giulietta-1-6-120-cv-anno-2016-diesel.144232/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-09T13:16:18.929245+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Consiglio Alfa romeo Giulia - 2.2 Diesel - ClubAlfa.it Forum",
+      "snippet": "Intanto mi presento qui, mi chiamo Danilo e a breve diventerò il possessore di una fantastica Alfa Romeo Giulia. Sto valutando diversi esemplari ...",
+      "sourceUrl": "https://forum.clubalfa.it/threads/consiglio-alfa-romeo-giulia.147684/"
     }
   ]
 }
