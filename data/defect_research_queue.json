@@ -1,6 +1,35 @@
 {
   "schemaVersion": 1,
-  "updatedAt": null,
-  "cursor": 0,
-  "candidates": []
+  "updatedAt": "2026-08-09T01:08:56.561375+00:00",
+  "cursor": 1,
+  "candidates": [
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-09T01:08:56.561375+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "year": 2016,
+      "engine": "1.6 Multijet",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Problemi generali Giulietta MY2014 1.6 Jtdm - Club Alfa Forum",
+      "snippet": "Modelli Alfa Romeo · Alfa Storiche o Fuori Produzione · Giulietta ... Giulietta MY2014 - 1.6 JTDm2 120cv - Sprint - Bianco Ghiaccio - 2016- RM.",
+      "sourceUrl": "https://forum.clubalfa.it/threads/problemi-generali-giulietta-my2014-1-6-jtdm.131810/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-09T01:08:56.561375+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "year": 2016,
+      "engine": "1.6 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "INFO GIULIETTA 1.6 120 CV ANNO 2016 DIESEL",
+      "snippet": "... Forum · Marche · Alfa Romeo; INFO GIULIETTA 1.6 120 CV ANNO 2016 DIESEL ... problema: vale la pena riparare la macchina o è meglio comprarne una ...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/info-giulietta-1-6-120-cv-anno-2016-diesel.144232/"
+    }
+  ]
 }
