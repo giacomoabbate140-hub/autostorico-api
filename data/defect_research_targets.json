@@ -2,6 +2,7 @@
   "targets": [
     {"make": "Alfa Romeo", "model": "Giulietta", "year": 2016, "engine": "1.6 Multijet"},
     {"make": "Alfa Romeo", "model": "Giulia", "year": 2018, "engine": "2.2 diesel"},
+    {"make": "Audi", "model": "A1", "year": 2011, "engine": "1.6 TDI CAYB"},
     {"make": "Audi", "model": "A3", "year": 2017, "engine": "1.6 TDI"},
     {"make": "Audi", "model": "Q3", "year": 2020, "engine": "2.0 TDI"},
     {"make": "BMW", "model": "Serie 1", "year": 2015, "engine": "2.0 diesel N47"},

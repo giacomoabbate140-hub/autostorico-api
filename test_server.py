@@ -143,12 +143,18 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("Grande Punto", {vehicle["model"] for vehicle in result["vehicles"]})
 
     def test_defect_catalog_filters_audi_a1_reports_by_year_and_engine(self):
-        first_series = vehicle_defect_reports("Audi", "A1", 2011, "benzina 1390 cc")
+        first_series = vehicle_defect_reports("Audi", "A1", 2011, "diesel 1598 cc CAYB")
         second_series = vehicle_defect_reports("Audi", "A1", 2021, "benzina 999 cc")
 
         self.assertEqual(
             [report["id"] for report in first_series["reports"]],
-            ["audi-a1-injector-idle-knock-community"],
+            [
+                "audi-a1-injector-idle-knock-community",
+                "audi-a1-cayb-injector-community",
+                "audi-a1-cayb-egr-community",
+                "audi-a1-cayb-dpf-pressure-sensor-community",
+                "audi-a1-cayb-turbo-hoses-community",
+            ],
         )
         self.assertEqual(
             [report["id"] for report in second_series["reports"]],
