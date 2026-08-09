@@ -11,5 +11,12 @@ jobs:
     steps:
       - name: Ping health endpoint
         run: |
-          curl --fail --silent --show-error --max-time 30 \
-            https://autostorico-api-1.onrender.com/health
+          for attempt in 1 2 3 4; do
+            if curl --fail --silent --show-error --max-time 45 \
+              https://autostorico-api-1.onrender.com/health; then
+              exit 0
+            fi
+            echo "Tentativo $attempt non riuscito: attendo prima di riprovare."
+            sleep 30
+          done
+          exit 1
