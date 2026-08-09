@@ -4,7 +4,7 @@
   "cursor": 3,
   "candidates": [
     {
-      "status": "pending_review",
+      "status": "approved",
       "collectedAt": "2026-08-09T01:08:56.561375+00:00",
       "make": "Alfa Romeo",
       "model": "Giulietta",
@@ -15,10 +15,12 @@
       "researchCategory": "community",
       "title": "Problemi generali Giulietta MY2014 1.6 Jtdm - Club Alfa Forum",
       "snippet": "Modelli Alfa Romeo · Alfa Storiche o Fuori Produzione · Giulietta ... Giulietta MY2014 - 1.6 JTDm2 120cv - Sprint - Bianco Ghiaccio - 2016- RM.",
-      "sourceUrl": "https://forum.clubalfa.it/threads/problemi-generali-giulietta-my2014-1-6-jtdm.131810/"
+      "sourceUrl": "https://forum.clubalfa.it/threads/problemi-generali-giulietta-my2014-1-6-jtdm.131810/",
+      "reviewedAt": "2026-08-09T17:00:53.755391+00:00",
+      "reviewNote": "Estratti 3 difetti nuovi (airbag anteriore, pompa/cilindro maestro frizione, sensore antifurto porta) aggiunti a vehicle_defects.json come unverified."
     },
     {
-      "status": "pending_review",
+      "status": "rejected",
       "collectedAt": "2026-08-09T01:08:56.561375+00:00",
       "make": "Alfa Romeo",
       "model": "Giulietta",
@@ -29,10 +31,12 @@
       "researchCategory": "community",
       "title": "INFO GIULIETTA 1.6 120 CV ANNO 2016 DIESEL",
       "snippet": "... Forum · Marche · Alfa Romeo; INFO GIULIETTA 1.6 120 CV ANNO 2016 DIESEL ... problema: vale la pena riparare la macchina o è meglio comprarne una ...",
-      "sourceUrl": "https://forum.quattroruote.it/threads/info-giulietta-1-6-120-cv-anno-2016-diesel.144232/"
+      "sourceUrl": "https://forum.quattroruote.it/threads/info-giulietta-1-6-120-cv-anno-2016-diesel.144232/",
+      "reviewedAt": "2026-08-09T17:00:53.755391+00:00",
+      "reviewNote": "Fonte senza contenuto tecnico utile nello snippet (thread generico / richiesta consiglio acquisto)."
     },
     {
-      "status": "pending_review",
+      "status": "rejected",
       "collectedAt": "2026-08-09T13:16:18.929245+00:00",
       "make": "Alfa Romeo",
       "model": "Giulia",
@@ -43,7 +47,9 @@
       "researchCategory": "community",
       "title": "Consiglio Alfa romeo Giulia - 2.2 Diesel - ClubAlfa.it Forum",
       "snippet": "Intanto mi presento qui, mi chiamo Danilo e a breve diventerò il possessore di una fantastica Alfa Romeo Giulia. Sto valutando diversi esemplari ...",
-      "sourceUrl": "https://forum.clubalfa.it/threads/consiglio-alfa-romeo-giulia.147684/"
+      "sourceUrl": "https://forum.clubalfa.it/threads/consiglio-alfa-romeo-giulia.147684/",
+      "reviewedAt": "2026-08-09T17:00:53.755391+00:00",
+      "reviewNote": "Fonte senza contenuto tecnico utile nello snippet (thread generico / richiesta consiglio acquisto)."
     }
   ]
 }

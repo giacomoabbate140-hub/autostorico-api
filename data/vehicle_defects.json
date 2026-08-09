@@ -1,6 +1,6 @@
 {
-  "catalogVersion": 18,
-  "updatedAt": "2026-08-08",
+  "catalogVersion": 19,
+  "updatedAt": "2026-08-09",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
     {
@@ -140,7 +140,12 @@
       "model": "C3",
       "generation": "Veicoli interessati da campagne specifiche",
       "years": "Verifica obbligatoria tramite VIN o targa",
-      "researchTopics": ["PureTech 1.0 e 1.2", "cinghia in bagno d'olio", "AdBlue", "infotainment"],
+      "researchTopics": [
+        "PureTech 1.0 e 1.2",
+        "cinghia in bagno d'olio",
+        "AdBlue",
+        "infotainment"
+      ],
       "reports": [
         {
           "id": "citroen-c3-takata-airbag-2024",
@@ -260,6 +265,42 @@
           "sourceName": "Segnalazioni community in verifica",
           "sourceUrl": "",
           "userText": "Alcuni proprietari riferiscono anomalie al cablaggio o al comando tergicristalli. Se i tergi sono intermittenti o non funzionano, fai verificare cablaggio, fusibili, relè e motorino prima di guidare con pioggia."
+        },
+        {
+          "id": "alfa-giulietta-940-front-airbag-module-community",
+          "category": "Interni e sicurezza",
+          "title": "Segnalazione su guasto del modulo airbag anteriore",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "ClubAlfa",
+          "sourceUrl": "https://forum.clubalfa.it/threads/problemi-generali-giulietta-my2014-1-6-jtdm.131810/",
+          "userText": "Segnalazione da un singolo proprietario, non un richiamo ne un pattern confermato. Se la spia airbag si accende o resta accesa, fai verificare il modulo in officina prima di continuare a guidare."
+        },
+        {
+          "id": "alfa-giulietta-940-clutch-pump-master-cylinder-community",
+          "category": "Trasmissione e frizione",
+          "title": "Segnalazione su guasto pompa frizione e cilindro maestro",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "ClubAlfa",
+          "sourceUrl": "https://forum.clubalfa.it/threads/problemi-generali-giulietta-my2014-1-6-jtdm.131810/",
+          "userText": "Segnalazione da un singolo proprietario, non un pattern confermato. Se noti frizione dura, rumorosa o pedale che perde corsa, fai controllare pompa e cilindro maestro frizione."
+        },
+        {
+          "id": "alfa-giulietta-940-door-antitheft-sensor-community",
+          "category": "Impianto elettrico",
+          "title": "Segnalazione su guasto del sensore antifurto porta anteriore",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "ClubAlfa",
+          "sourceUrl": "https://forum.clubalfa.it/threads/problemi-generali-giulietta-my2014-1-6-jtdm.131810/",
+          "userText": "Segnalazione da un singolo proprietario. Se l'antifurto perimetrale da falsi allarmi o non si inserisce, fai controllare il sensore della porta anteriore."
         }
       ]
     },
@@ -268,7 +309,14 @@
       "model": "Sandero",
       "generation": "Tutte le generazioni",
       "years": "2008-oggi",
-      "researchTopics": ["0.9 TCe", "1.5 dCi", "bobine", "turbina", "EGR e FAP", "supporti motore"],
+      "researchTopics": [
+        "0.9 TCe",
+        "1.5 dCi",
+        "bobine",
+        "turbina",
+        "EGR e FAP",
+        "supporti motore"
+      ],
       "reports": []
     },
     {
@@ -276,7 +324,13 @@
       "model": "Logan",
       "generation": "Tutte le generazioni",
       "years": "2004-oggi",
-      "researchTopics": ["1.5 dCi", "EGR", "cuscinetti ruota", "alzacristalli", "ammortizzatori"],
+      "researchTopics": [
+        "1.5 dCi",
+        "EGR",
+        "cuscinetti ruota",
+        "alzacristalli",
+        "ammortizzatori"
+      ],
       "reports": []
     },
     {
@@ -284,7 +338,13 @@
       "model": "Lodgy",
       "generation": "Tutte le generazioni",
       "years": "2012-2022",
-      "researchTopics": ["1.5 dCi", "frizione", "FAP", "supporti motore", "elettronica"],
+      "researchTopics": [
+        "1.5 dCi",
+        "frizione",
+        "FAP",
+        "supporti motore",
+        "elettronica"
+      ],
       "reports": []
     },
     {
@@ -292,7 +352,13 @@
       "model": "Jogger",
       "generation": "Tutte le generazioni",
       "years": "2021-oggi",
-      "researchTopics": ["TCe", "Hybrid", "infotainment", "sensori ADAS", "batteria 12V"],
+      "researchTopics": [
+        "TCe",
+        "Hybrid",
+        "infotainment",
+        "sensori ADAS",
+        "batteria 12V"
+      ],
       "reports": []
     },
     {
@@ -300,7 +366,12 @@
       "model": "2008",
       "generation": "Tutte le generazioni",
       "years": "2013-oggi",
-      "researchTopics": ["1.2 PureTech", "cinghia distribuzione", "pompa vuoto", "infotainment"],
+      "researchTopics": [
+        "1.2 PureTech",
+        "cinghia distribuzione",
+        "pompa vuoto",
+        "infotainment"
+      ],
       "reports": []
     },
     {
@@ -308,7 +379,14 @@
       "model": "308",
       "generation": "Tutte le generazioni",
       "years": "2007-oggi",
-      "researchTopics": ["1.2 PureTech", "1.6 BlueHDi", "cinghia", "AdBlue", "FAP", "elettronica"],
+      "researchTopics": [
+        "1.2 PureTech",
+        "1.6 BlueHDi",
+        "cinghia",
+        "AdBlue",
+        "FAP",
+        "elettronica"
+      ],
       "reports": []
     },
     {
@@ -316,7 +394,13 @@
       "model": "3008",
       "generation": "Tutte le generazioni",
       "years": "2009-oggi",
-      "researchTopics": ["1.2 PureTech", "2.0 BlueHDi", "AdBlue", "EAT6/EAT8", "sospensioni"],
+      "researchTopics": [
+        "1.2 PureTech",
+        "2.0 BlueHDi",
+        "AdBlue",
+        "EAT6/EAT8",
+        "sospensioni"
+      ],
       "reports": []
     },
     {
@@ -324,7 +408,13 @@
       "model": "508",
       "generation": "Tutte le generazioni",
       "years": "2010-oggi",
-      "researchTopics": ["BlueHDi", "AdBlue", "SCR", "FAP", "sensori NOx"],
+      "researchTopics": [
+        "BlueHDi",
+        "AdBlue",
+        "SCR",
+        "FAP",
+        "sensori NOx"
+      ],
       "reports": []
     },
     {
@@ -332,16 +422,31 @@
       "model": "Ibiza",
       "generation": "Tutte le generazioni",
       "years": "2002-oggi",
-      "researchTopics": ["1.2 TSI", "1.4 TSI", "catena distribuzione prime serie", "bobine", "DSG"],
+      "researchTopics": [
+        "1.2 TSI",
+        "1.4 TSI",
+        "catena distribuzione prime serie",
+        "bobine",
+        "DSG"
+      ],
       "reports": []
     },
     {
       "make": "SEAT",
       "model": "Leon",
-      "aliases": ["León"],
+      "aliases": [
+        "León"
+      ],
       "generation": "Tutte le generazioni",
       "years": "1999-oggi",
-      "researchTopics": ["1.4 TSI", "2.0 TDI", "DSG", "pompa acqua", "EGR", "DPF"],
+      "researchTopics": [
+        "1.4 TSI",
+        "2.0 TDI",
+        "DSG",
+        "pompa acqua",
+        "EGR",
+        "DPF"
+      ],
       "reports": []
     },
     {
@@ -349,7 +454,12 @@
       "model": "Arona",
       "generation": "Tutte le generazioni",
       "years": "2017-oggi",
-      "researchTopics": ["1.0 TSI", "sensori", "infotainment", "bobine"],
+      "researchTopics": [
+        "1.0 TSI",
+        "sensori",
+        "infotainment",
+        "bobine"
+      ],
       "reports": []
     },
     {
@@ -357,7 +467,12 @@
       "model": "Ateca",
       "generation": "Tutte le generazioni",
       "years": "2016-oggi",
-      "researchTopics": ["2.0 TDI", "DSG", "AdBlue", "EGR"],
+      "researchTopics": [
+        "2.0 TDI",
+        "DSG",
+        "AdBlue",
+        "EGR"
+      ],
       "reports": []
     },
     {
@@ -365,7 +480,13 @@
       "model": "Altea",
       "generation": "5P",
       "years": "2004-2015",
-      "researchTopics": ["1.9 TDI", "2.0 TDI", "volano bimassa", "turbina", "sospensioni"],
+      "researchTopics": [
+        "1.9 TDI",
+        "2.0 TDI",
+        "volano bimassa",
+        "turbina",
+        "sospensioni"
+      ],
       "reports": []
     },
     {
@@ -426,7 +547,14 @@
       "model": "208",
       "generation": "Tutte le generazioni",
       "years": "2012-oggi",
-      "researchTopics": ["1.2 PureTech", "1.6 BlueHDi", "cinghia in bagno d'olio", "AdBlue", "EGR", "FAP"],
+      "researchTopics": [
+        "1.2 PureTech",
+        "1.6 BlueHDi",
+        "cinghia in bagno d'olio",
+        "AdBlue",
+        "EGR",
+        "FAP"
+      ],
       "reports": [
         {
           "id": "peugeot-208-puretech-timing-belt-support",
@@ -497,7 +625,14 @@
       "model": "Duster",
       "generation": "Tutte le generazioni",
       "years": "2010-oggi",
-      "researchTopics": ["1.5 dCi", "1.2 TCe", "iniettori", "EGR e FAP", "frizione", "sospensioni anteriori"],
+      "researchTopics": [
+        "1.5 dCi",
+        "1.2 TCe",
+        "iniettori",
+        "EGR e FAP",
+        "frizione",
+        "sospensioni anteriori"
+      ],
       "reports": [
         {
           "id": "dacia-duster-clutch-pedal-community",
@@ -558,7 +693,10 @@
           "id": "audi-a1-cayb-injector-community",
           "fromYear": 2010,
           "toYear": 2014,
-          "engineKeywords": ["diesel", "1598"],
+          "engineKeywords": [
+            "diesel",
+            "1598"
+          ],
           "category": "Alimentazione e iniezione",
           "title": "CAYB 1.6 TDI: segnalazioni su iniettori e minimo irregolare",
           "sourceType": "community_source",
@@ -574,7 +712,10 @@
           "id": "audi-a1-cayb-egr-community",
           "fromYear": 2010,
           "toYear": 2014,
-          "engineKeywords": ["diesel", "1598"],
+          "engineKeywords": [
+            "diesel",
+            "1598"
+          ],
           "category": "Antinquinamento",
           "title": "CAYB 1.6 TDI: segnalazioni su valvola EGR e raffreddatore",
           "sourceType": "community_source",
@@ -590,7 +731,10 @@
           "id": "audi-a1-cayb-dpf-pressure-sensor-community",
           "fromYear": 2010,
           "toYear": 2014,
-          "engineKeywords": ["diesel", "1598"],
+          "engineKeywords": [
+            "diesel",
+            "1598"
+          ],
           "category": "Filtro antiparticolato",
           "title": "CAYB 1.6 TDI: rigenerazioni frequenti e sensore pressione DPF",
           "sourceType": "community_source",
@@ -606,7 +750,10 @@
           "id": "audi-a1-cayb-turbo-hoses-community",
           "fromYear": 2010,
           "toYear": 2014,
-          "engineKeywords": ["diesel", "1598"],
+          "engineKeywords": [
+            "diesel",
+            "1598"
+          ],
           "category": "Aspirazione e sovralimentazione",
           "title": "CAYB 1.6 TDI: controllo manicotti turbo e perdite di sovralimentazione",
           "sourceType": "community_source",
@@ -621,7 +768,12 @@
         {
           "id": "audi-a1-ignition-coil-misfire-community",
           "fromYear": 2019,
-          "engineKeywords": ["benzina", "999", "1.0", "1.5"],
+          "engineKeywords": [
+            "benzina",
+            "999",
+            "1.0",
+            "1.5"
+          ],
           "category": "Accensione e motore",
           "title": "Segnalazioni su mancate accensioni e controllo bobine",
           "sourceType": "community_source",
@@ -640,25 +792,46 @@
       "model": "A3",
       "generation": "8P",
       "years": "2003-2013",
-      "researchTopics": ["2.0 TDI", "1.8 TFSI", "volano", "EGR", "iniettori", "consumo olio"],
+      "researchTopics": [
+        "2.0 TDI",
+        "1.8 TFSI",
+        "volano",
+        "EGR",
+        "iniettori",
+        "consumo olio"
+      ],
       "reports": []
     },
     {
       "make": "Audi",
       "model": "A4",
-      "aliases": ["A4 B8"],
+      "aliases": [
+        "A4 B8"
+      ],
       "generation": "B8",
       "years": "2007-2015",
-      "researchTopics": ["2.0 TFSI", "consumo olio", "distribuzione", "pompa acqua"],
+      "researchTopics": [
+        "2.0 TFSI",
+        "consumo olio",
+        "distribuzione",
+        "pompa acqua"
+      ],
       "reports": []
     },
     {
       "make": "Audi",
       "model": "A6",
-      "aliases": ["A6 C7"],
+      "aliases": [
+        "A6 C7"
+      ],
       "generation": "C7",
       "years": "2011-2018",
-      "researchTopics": ["3.0 TDI", "catena distribuzione", "EGR", "sospensioni pneumatiche"],
+      "researchTopics": [
+        "3.0 TDI",
+        "catena distribuzione",
+        "EGR",
+        "sospensioni pneumatiche"
+      ],
       "reports": []
     },
     {
@@ -666,7 +839,12 @@
       "model": "Q3",
       "generation": "8U e F3",
       "years": "2011-oggi",
-      "researchTopics": ["TDI e TFSI", "DSG/S tronic", "pompa acqua", "EGR"],
+      "researchTopics": [
+        "TDI e TFSI",
+        "DSG/S tronic",
+        "pompa acqua",
+        "EGR"
+      ],
       "reports": []
     },
     {
@@ -674,7 +852,13 @@
       "model": "Q5",
       "generation": "8R e FY",
       "years": "2008-oggi",
-      "researchTopics": ["2.0 TDI", "S tronic", "volano", "DPF", "sospensioni"],
+      "researchTopics": [
+        "2.0 TDI",
+        "S tronic",
+        "volano",
+        "DPF",
+        "sospensioni"
+      ],
       "reports": []
     },
     {
@@ -703,28 +887,50 @@
     {
       "make": "Fiat",
       "model": "Grande Punto",
-      "aliases": ["Punto"],
+      "aliases": [
+        "Punto"
+      ],
       "generation": "199",
       "years": "2005-2009",
-      "researchTopics": ["servosterzo elettrico", "Blue&Me", "EGR e DPF", "cuscinetti", "maniglie"],
+      "researchTopics": [
+        "servosterzo elettrico",
+        "Blue&Me",
+        "EGR e DPF",
+        "cuscinetti",
+        "maniglie"
+      ],
       "reports": []
     },
     {
       "make": "Fiat",
       "model": "Bravo",
-      "aliases": ["Bravo II"],
+      "aliases": [
+        "Bravo II"
+      ],
       "generation": "198",
       "years": "2007-2014",
-      "researchTopics": ["volano e frizione", "EGR e DPF", "sospensioni", "climatizzatore"],
+      "researchTopics": [
+        "volano e frizione",
+        "EGR e DPF",
+        "sospensioni",
+        "climatizzatore"
+      ],
       "reports": []
     },
     {
       "make": "Fiat",
       "model": "Tipo",
-      "aliases": ["Tipo 356"],
+      "aliases": [
+        "Tipo 356"
+      ],
       "generation": "356",
       "years": "2015-oggi",
-      "researchTopics": ["infotainment", "sensori", "EGR e DPF", "batteria"],
+      "researchTopics": [
+        "infotainment",
+        "sensori",
+        "EGR e DPF",
+        "batteria"
+      ],
       "reports": [
         {
           "id": "fiat-tipo-356-trim-chrome-community",
@@ -781,7 +987,12 @@
       "model": "C1",
       "generation": "Tutte le generazioni",
       "years": "2005-2022",
-      "researchTopics": ["frizione", "sospensioni", "elettronica", "componenti condivisi secondo generazione"],
+      "researchTopics": [
+        "frizione",
+        "sospensioni",
+        "elettronica",
+        "componenti condivisi secondo generazione"
+      ],
       "reports": []
     },
     {
@@ -789,7 +1000,14 @@
       "model": "C3 Aircross",
       "generation": "Tutte le generazioni",
       "years": "2017-oggi",
-      "researchTopics": ["1.2 PureTech", "1.5 BlueHDi", "cinghia in bagno d'olio", "AdBlue", "cambio", "infotainment"],
+      "researchTopics": [
+        "1.2 PureTech",
+        "1.5 BlueHDi",
+        "cinghia in bagno d'olio",
+        "AdBlue",
+        "cambio",
+        "infotainment"
+      ],
       "reports": []
     },
     {
@@ -797,7 +1015,13 @@
       "model": "C4",
       "generation": "Tutte le generazioni",
       "years": "2004-oggi",
-      "researchTopics": ["PureTech", "BlueHDi", "AdBlue", "EGR e FAP", "elettronica"],
+      "researchTopics": [
+        "PureTech",
+        "BlueHDi",
+        "AdBlue",
+        "EGR e FAP",
+        "elettronica"
+      ],
       "reports": []
     },
     {
@@ -805,7 +1029,13 @@
       "model": "C5 Aircross",
       "generation": "Tutte le generazioni",
       "years": "2018-oggi",
-      "researchTopics": ["PureTech", "BlueHDi", "AdBlue", "sospensioni", "infotainment e ADAS"],
+      "researchTopics": [
+        "PureTech",
+        "BlueHDi",
+        "AdBlue",
+        "sospensioni",
+        "infotainment e ADAS"
+      ],
       "reports": []
     },
     {
@@ -813,25 +1043,47 @@
       "model": "Berlingo",
       "generation": "Tutte le generazioni",
       "years": "1996-oggi",
-      "researchTopics": ["1.5 BlueHDi", "AdBlue", "EGR e FAP", "elettronica", "porte scorrevoli"],
+      "researchTopics": [
+        "1.5 BlueHDi",
+        "AdBlue",
+        "EGR e FAP",
+        "elettronica",
+        "porte scorrevoli"
+      ],
       "reports": []
     },
     {
       "make": "Citroen",
       "model": "C4 Picasso",
-      "aliases": ["Grand C4 Picasso", "C4 SpaceTourer", "Grand C4 SpaceTourer"],
+      "aliases": [
+        "Grand C4 Picasso",
+        "C4 SpaceTourer",
+        "Grand C4 SpaceTourer"
+      ],
       "generation": "Tutte le generazioni",
       "years": "2006-2022",
-      "researchTopics": ["elettronica", "sospensioni", "1.6 HDi/BlueHDi", "EGR e FAP"],
+      "researchTopics": [
+        "elettronica",
+        "sospensioni",
+        "1.6 HDi/BlueHDi",
+        "EGR e FAP"
+      ],
       "reports": []
     },
     {
       "make": "Alfa Romeo",
       "model": "MiTo",
-      "aliases": ["Mito"],
+      "aliases": [
+        "Mito"
+      ],
       "generation": "955",
       "years": "2008-2018",
-      "researchTopics": ["MultiAir", "servosterzo", "sospensioni", "Blue&Me"],
+      "researchTopics": [
+        "MultiAir",
+        "servosterzo",
+        "sospensioni",
+        "Blue&Me"
+      ],
       "reports": []
     },
     {
@@ -839,7 +1091,12 @@
       "model": "147",
       "generation": "937",
       "years": "2000-2010",
-      "researchTopics": ["variatore di fase", "braccetti", "debimetro", "frizione"],
+      "researchTopics": [
+        "variatore di fase",
+        "braccetti",
+        "debimetro",
+        "frizione"
+      ],
       "reports": []
     },
     {
@@ -847,7 +1104,12 @@
       "model": "156",
       "generation": "932",
       "years": "1997-2007",
-      "researchTopics": ["variatore di fase", "braccetti", "debimetro", "sospensioni"],
+      "researchTopics": [
+        "variatore di fase",
+        "braccetti",
+        "debimetro",
+        "sospensioni"
+      ],
       "reports": []
     },
     {
@@ -855,7 +1117,11 @@
       "model": "159",
       "generation": "939",
       "years": "2005-2011",
-      "researchTopics": ["EGR e DPF", "sospensioni anteriori", "motori JTDm"],
+      "researchTopics": [
+        "EGR e DPF",
+        "sospensioni anteriori",
+        "motori JTDm"
+      ],
       "reports": []
     },
     {
@@ -863,7 +1129,11 @@
       "model": "Giulia",
       "generation": "952",
       "years": "2016-oggi",
-      "researchTopics": ["sensori AdBlue", "batteria", "aggiornamenti elettronici"],
+      "researchTopics": [
+        "sensori AdBlue",
+        "batteria",
+        "aggiornamenti elettronici"
+      ],
       "reports": []
     },
     {
@@ -871,7 +1141,11 @@
       "model": "Ypsilon",
       "generation": "843",
       "years": "2003-2011",
-      "researchTopics": ["servosterzo", "sospensioni", "alzacristalli"],
+      "researchTopics": [
+        "servosterzo",
+        "sospensioni",
+        "alzacristalli"
+      ],
       "reports": []
     },
     {
@@ -879,16 +1153,28 @@
       "model": "Ypsilon",
       "generation": "846",
       "years": "2011-2024",
-      "researchTopics": ["Blue&Me", "TwinAir e MultiAir", "FAP", "batteria"],
+      "researchTopics": [
+        "Blue&Me",
+        "TwinAir e MultiAir",
+        "FAP",
+        "batteria"
+      ],
       "reports": []
     },
     {
       "make": "Lancia",
       "model": "Delta",
-      "aliases": ["Delta III"],
+      "aliases": [
+        "Delta III"
+      ],
       "generation": "844",
       "years": "2008-2014",
-      "researchTopics": ["volano", "EGR", "sospensioni", "elettronica"],
+      "researchTopics": [
+        "volano",
+        "EGR",
+        "sospensioni",
+        "elettronica"
+      ],
       "reports": []
     },
     {
@@ -896,7 +1182,11 @@
       "model": "Musa",
       "generation": "350",
       "years": "2004-2012",
-      "researchTopics": ["servosterzo", "climatizzatore", "sospensioni"],
+      "researchTopics": [
+        "servosterzo",
+        "climatizzatore",
+        "sospensioni"
+      ],
       "reports": []
     },
     {
@@ -922,19 +1212,34 @@
     {
       "make": "Mercedes-Benz",
       "model": "Classe C",
-      "aliases": ["C-Class"],
+      "aliases": [
+        "C-Class"
+      ],
       "generation": "W204, W205 e W206",
       "years": "2007-oggi",
-      "researchTopics": ["180d", "200 CDI", "cambio 7G-DCT", "AdBlue", "sensori NOx"],
+      "researchTopics": [
+        "180d",
+        "200 CDI",
+        "cambio 7G-DCT",
+        "AdBlue",
+        "sensori NOx"
+      ],
       "reports": []
     },
     {
       "make": "Mercedes-Benz",
       "model": "Classe E",
-      "aliases": ["E-Class"],
+      "aliases": [
+        "E-Class"
+      ],
       "generation": "W212, W213 e W214",
       "years": "2009-oggi",
-      "researchTopics": ["220 CDI", "iniettori", "bloccasterzo elettronico", "catena benzina"],
+      "researchTopics": [
+        "220 CDI",
+        "iniettori",
+        "bloccasterzo elettronico",
+        "catena benzina"
+      ],
       "reports": []
     },
     {
@@ -942,7 +1247,12 @@
       "model": "GLA",
       "generation": "X156 e H247",
       "years": "2014-oggi",
-      "researchTopics": ["200d", "cambio automatico", "AdBlue", "sensori NOx"],
+      "researchTopics": [
+        "200d",
+        "cambio automatico",
+        "AdBlue",
+        "sensori NOx"
+      ],
       "reports": []
     },
     {
@@ -950,7 +1260,12 @@
       "model": "GLC",
       "generation": "X253 e X254",
       "years": "2015-oggi",
-      "researchTopics": ["220d", "sensori NOx", "AdBlue", "infotainment"],
+      "researchTopics": [
+        "220d",
+        "sensori NOx",
+        "AdBlue",
+        "infotainment"
+      ],
       "reports": []
     },
     {
@@ -986,7 +1301,11 @@
           "confidence": "unverified",
           "severity": "check_promptly",
           "status": "awaiting-autostorico-reports",
-          "engineKeywords": ["diesel", "2.2", "2143"],
+          "engineKeywords": [
+            "diesel",
+            "2.2",
+            "2143"
+          ],
           "sourceName": "Segnalazione community fornita dagli utenti",
           "sourceUrl": "",
           "userText": "Per le versioni diesel sono riportati controlli su sensore NOx, valvola EGR e DPF, soprattutto con uso urbano. Sono inoltre segnalati batteria 12 V debole, aggiornamenti di infotainment/centraline e possibile usura dei bracci anteriori su alcuni esemplari. Non e un richiamo: fai diagnosi e verifica VIN in rete Alfa Romeo."
@@ -1026,7 +1345,11 @@
           "confidence": "independent-source",
           "severity": "check_promptly",
           "status": "source-verified",
-          "engineKeywords": ["1000", "1.0", "ecoboost"],
+          "engineKeywords": [
+            "1000",
+            "1.0",
+            "ecoboost"
+          ],
           "sourceName": "What Car? Reliability Survey",
           "sourceUrl": "https://www.whatcar.com/ford/fiesta/hatchback/used-review/n952/reliability",
           "userText": "Il sondaggio proprietari riporta controlli da approfondire sui motori 1.0 EcoBoost con cinghia in bagno d'olio, sul cambio automatico Powershift e su anomalie Sync 3. Non e un richiamo: verifica motore, manutenzione documentata e VIN prima di intervenire."
@@ -1136,19 +1459,37 @@
     {
       "make": "Land Rover",
       "model": "Range Rover Evoque",
-      "aliases": ["Evoque"],
+      "aliases": [
+        "Evoque"
+      ],
       "generation": "L538 Ingenium",
       "years": "2015-2018",
-      "researchTopics": ["2.0 Ingenium diesel", "DPF", "EGR", "diluizione olio", "catena distribuzione", "turbina"],
+      "researchTopics": [
+        "2.0 Ingenium diesel",
+        "DPF",
+        "EGR",
+        "diluizione olio",
+        "catena distribuzione",
+        "turbina"
+      ],
       "reports": []
     },
     {
       "make": "Land Rover",
       "model": "Range Rover Evoque",
-      "aliases": ["Evoque"],
+      "aliases": [
+        "Evoque"
+      ],
       "generation": "L551",
       "years": "2019-oggi",
-      "researchTopics": ["2.0 Ingenium diesel", "2.0 Ingenium benzina", "DPF", "raffreddamento", "VVT", "AdBlue"],
+      "researchTopics": [
+        "2.0 Ingenium diesel",
+        "2.0 Ingenium benzina",
+        "DPF",
+        "raffreddamento",
+        "VVT",
+        "AdBlue"
+      ],
       "reports": []
     }
   ],
@@ -1156,8 +1497,19 @@
     {
       "id": "fiat-13-multijet-oil-pump-o-ring-community",
       "make": "Fiat",
-      "models": ["Punto Evo", "Grande Punto", "Panda", "500", "Doblo", "Qubo"],
-      "engineKeywords": ["1248", "1.3", "multijet"],
+      "models": [
+        "Punto Evo",
+        "Grande Punto",
+        "Panda",
+        "500",
+        "Doblo",
+        "Qubo"
+      ],
+      "engineKeywords": [
+        "1248",
+        "1.3",
+        "multijet"
+      ],
       "reports": [
         {
           "id": "fiat-13-multijet-oil-pump-o-ring-community",
@@ -1176,8 +1528,14 @@
     {
       "id": "alfa-giulietta-16-multijet-oil-pump-o-ring-community",
       "make": "Alfa Romeo",
-      "models": ["Giulietta"],
-      "engineKeywords": ["1598", "1.6", "multijet"],
+      "models": [
+        "Giulietta"
+      ],
+      "engineKeywords": [
+        "1598",
+        "1.6",
+        "multijet"
+      ],
       "reports": [
         {
           "id": "alfa-giulietta-16-multijet-oil-pump-o-ring-community",
@@ -1196,8 +1554,14 @@
     {
       "id": "lancia-ypsilon-13-multijet-oil-pump-o-ring-community",
       "make": "Lancia",
-      "models": ["Ypsilon"],
-      "engineKeywords": ["1248", "1.3", "multijet"],
+      "models": [
+        "Ypsilon"
+      ],
+      "engineKeywords": [
+        "1248",
+        "1.3",
+        "multijet"
+      ],
       "reports": [
         {
           "id": "lancia-ypsilon-13-multijet-oil-pump-o-ring-community",
@@ -1216,8 +1580,15 @@
     {
       "id": "alfa-mito-13-multijet-oil-pump-o-ring-community",
       "make": "Alfa Romeo",
-      "models": ["MiTo", "Mito"],
-      "engineKeywords": ["1248", "1.3", "multijet"],
+      "models": [
+        "MiTo",
+        "Mito"
+      ],
+      "engineKeywords": [
+        "1248",
+        "1.3",
+        "multijet"
+      ],
       "reports": [
         {
           "id": "alfa-mito-13-multijet-oil-pump-o-ring-community",
@@ -1236,10 +1607,17 @@
     {
       "id": "dacia-15-dci-delphi-metal-contamination-community",
       "make": "Dacia",
-      "models": ["Duster", "Sandero"],
+      "models": [
+        "Duster",
+        "Sandero"
+      ],
       "fromYear": 2010,
       "toYear": 2017,
-      "engineKeywords": ["1461", "1.5", "dci"],
+      "engineKeywords": [
+        "1461",
+        "1.5",
+        "dci"
+      ],
       "reports": [
         {
           "id": "dacia-15-dci-delphi-metal-contamination-community",
@@ -1259,10 +1637,21 @@
     {
       "id": "stellantis-12-puretech-wet-belt-community",
       "make": "Citroen",
-      "models": ["C3", "C3 Aircross", "C4", "C5 Aircross", "Berlingo", "C4 Picasso"],
+      "models": [
+        "C3",
+        "C3 Aircross",
+        "C4",
+        "C5 Aircross",
+        "Berlingo",
+        "C4 Picasso"
+      ],
       "fromYear": 2013,
       "toYear": 2022,
-      "engineKeywords": ["1199", "1.2", "puretech"],
+      "engineKeywords": [
+        "1199",
+        "1.2",
+        "puretech"
+      ],
       "reports": [
         {
           "id": "citroen-12-puretech-wet-belt-community",
@@ -1282,10 +1671,20 @@
     {
       "id": "peugeot-12-puretech-wet-belt-community",
       "make": "Peugeot",
-      "models": ["208", "2008", "308", "3008", "508"],
+      "models": [
+        "208",
+        "2008",
+        "308",
+        "3008",
+        "508"
+      ],
       "fromYear": 2013,
       "toYear": 2022,
-      "engineKeywords": ["1199", "1.2", "puretech"],
+      "engineKeywords": [
+        "1199",
+        "1.2",
+        "puretech"
+      ],
       "reports": [
         {
           "id": "peugeot-12-puretech-wet-belt-community",
@@ -1305,10 +1704,16 @@
     {
       "id": "opel-corsa-13-cdti-timing-chain-community",
       "make": "Opel",
-      "models": ["Corsa"],
+      "models": [
+        "Corsa"
+      ],
       "fromYear": 2006,
       "toYear": 2014,
-      "engineKeywords": ["1248", "1.3", "cdti"],
+      "engineKeywords": [
+        "1248",
+        "1.3",
+        "cdti"
+      ],
       "reports": [
         {
           "id": "opel-corsa-13-cdti-timing-chain-community",
@@ -1328,10 +1733,19 @@
     {
       "id": "audi-tfsi-oil-consumption-community",
       "make": "Audi",
-      "models": ["A4", "Q5"],
+      "models": [
+        "A4",
+        "Q5"
+      ],
       "fromYear": 2008,
       "toYear": 2015,
-      "engineKeywords": ["1798", "1984", "1.8", "2.0", "tfsi"],
+      "engineKeywords": [
+        "1798",
+        "1984",
+        "1.8",
+        "2.0",
+        "tfsi"
+      ],
       "reports": [
         {
           "id": "audi-tfsi-oil-consumption-community",
@@ -1351,9 +1765,19 @@
     {
       "id": "mercedes-diesel-nox-adblue-community",
       "make": "Mercedes-Benz",
-      "models": ["Classe A", "Classe C", "Classe E", "GLA", "GLC"],
+      "models": [
+        "Classe A",
+        "Classe C",
+        "Classe E",
+        "GLA",
+        "GLC"
+      ],
       "fromYear": 2016,
-      "engineKeywords": ["diesel", "d", "cdi"],
+      "engineKeywords": [
+        "diesel",
+        "d",
+        "cdi"
+      ],
       "reports": [
         {
           "id": "mercedes-diesel-nox-adblue-community",
@@ -1373,10 +1797,17 @@
     {
       "id": "dacia-09-tce-timing-chain-community",
       "make": "Dacia",
-      "models": ["Sandero", "Logan"],
+      "models": [
+        "Sandero",
+        "Logan"
+      ],
       "fromYear": 2012,
       "toYear": 2014,
-      "engineKeywords": ["898", "0.9", "tce"],
+      "engineKeywords": [
+        "898",
+        "0.9",
+        "tce"
+      ],
       "reports": [
         {
           "id": "dacia-09-tce-timing-chain-community",
@@ -1396,10 +1827,16 @@
     {
       "id": "ford-10-ecoboost-wet-belt-community",
       "make": "Ford",
-      "models": ["Fiesta"],
+      "models": [
+        "Fiesta"
+      ],
       "fromYear": 2017,
       "toYear": 2019,
-      "engineKeywords": ["999", "1.0", "ecoboost"],
+      "engineKeywords": [
+        "999",
+        "1.0",
+        "ecoboost"
+      ],
       "reports": [
         {
           "id": "ford-10-ecoboost-wet-belt-community",
@@ -1419,9 +1856,13 @@
     {
       "id": "volkswagen-10-tsi-turbo-cooling-community",
       "make": "Volkswagen",
-      "models": ["Golf"],
+      "models": [
+        "Golf"
+      ],
       "fromYear": 2015,
-      "engineKeywords": ["tsi"],
+      "engineKeywords": [
+        "tsi"
+      ],
       "reports": [
         {
           "id": "volkswagen-10-tsi-turbo-cooling-community",
@@ -1441,9 +1882,16 @@
     {
       "id": "seat-10-tsi-turbo-cooling-community",
       "make": "SEAT",
-      "models": ["Ibiza", "Leon", "Arona", "Ateca"],
+      "models": [
+        "Ibiza",
+        "Leon",
+        "Arona",
+        "Ateca"
+      ],
       "fromYear": 2015,
-      "engineKeywords": ["tsi"],
+      "engineKeywords": [
+        "tsi"
+      ],
       "reports": [
         {
           "id": "seat-10-tsi-turbo-cooling-community",
@@ -1463,9 +1911,15 @@
     {
       "id": "audi-10-tfsi-turbo-cooling-community",
       "make": "Audi",
-      "models": ["A1", "A3", "Q3"],
+      "models": [
+        "A1",
+        "A3",
+        "Q3"
+      ],
       "fromYear": 2015,
-      "engineKeywords": ["tfsi"],
+      "engineKeywords": [
+        "tfsi"
+      ],
       "reports": [
         {
           "id": "audi-10-tfsi-turbo-cooling-community",
@@ -1485,10 +1939,19 @@
     {
       "id": "nissan-juke-12-digt-oil-chain-community",
       "make": "Nissan",
-      "models": ["Juke"],
+      "models": [
+        "Juke"
+      ],
       "fromYear": 2014,
       "toYear": 2018,
-      "engineKeywords": ["1197", "1.2", "dig-t", "digt", "hr12ddt", "115"],
+      "engineKeywords": [
+        "1197",
+        "1.2",
+        "dig-t",
+        "digt",
+        "hr12ddt",
+        "115"
+      ],
       "reports": [
         {
           "id": "nissan-juke-12-digt-oil-chain-community",
@@ -1521,9 +1984,18 @@
     {
       "id": "jeep-renegade-16-multijet-emissions-community",
       "make": "Jeep",
-      "models": ["Renegade"],
+      "models": [
+        "Renegade"
+      ],
       "fromYear": 2015,
-      "engineKeywords": ["1598", "1.6", "multijet", "diesel", "120", "130"],
+      "engineKeywords": [
+        "1598",
+        "1.6",
+        "multijet",
+        "diesel",
+        "120",
+        "130"
+      ],
       "reports": [
         {
           "id": "jeep-renegade-16-multijet-dpf-egr-community",
@@ -1543,10 +2015,19 @@
     {
       "id": "kia-sportage-17-crdi-dpf-community",
       "make": "Kia",
-      "models": ["Sportage"],
+      "models": [
+        "Sportage"
+      ],
       "fromYear": 2011,
       "toYear": 2018,
-      "engineKeywords": ["1685", "1.7", "crdi", "diesel", "115", "141"],
+      "engineKeywords": [
+        "1685",
+        "1.7",
+        "crdi",
+        "diesel",
+        "115",
+        "141"
+      ],
       "reports": [
         {
           "id": "kia-sportage-17-crdi-dpf-egr-community",
@@ -1579,10 +2060,19 @@
     {
       "id": "fiat-500x-14-multiair-community",
       "make": "Fiat",
-      "models": ["500X"],
+      "models": [
+        "500X"
+      ],
       "fromYear": 2015,
       "toYear": 2018,
-      "engineKeywords": ["1368", "1.4", "multiair", "turbo", "140", "170"],
+      "engineKeywords": [
+        "1368",
+        "1.4",
+        "multiair",
+        "turbo",
+        "140",
+        "170"
+      ],
       "reports": [
         {
           "id": "fiat-500x-14-multiair-actuator-community",
@@ -1602,10 +2092,19 @@
     {
       "id": "renault-captur-12-tce-h5ft-oil-consumption",
       "make": "Renault",
-      "models": ["Captur"],
+      "models": [
+        "Captur"
+      ],
       "fromYear": 2013,
       "toYear": 2016,
-      "engineKeywords": ["1197", "1.2", "tce", "h5ft", "120", "edc"],
+      "engineKeywords": [
+        "1197",
+        "1.2",
+        "tce",
+        "h5ft",
+        "120",
+        "edc"
+      ],
       "reports": [
         {
           "id": "renault-captur-12-tce-h5ft-oil-consumption",
@@ -1625,9 +2124,20 @@
     {
       "id": "nissan-qashqai-13-digt-cooling-community",
       "make": "Nissan",
-      "models": ["Qashqai"],
+      "models": [
+        "Qashqai"
+      ],
       "fromYear": 2019,
-      "engineKeywords": ["1332", "1.3", "dig-t", "digt", "hr13ddt", "140", "158", "160"],
+      "engineKeywords": [
+        "1332",
+        "1.3",
+        "dig-t",
+        "digt",
+        "hr13ddt",
+        "140",
+        "158",
+        "160"
+      ],
       "reports": [
         {
           "id": "nissan-qashqai-13-digt-thermostat-community",
@@ -1660,9 +2170,19 @@
     {
       "id": "toyota-yaris-hybrid-12v-community",
       "make": "Toyota",
-      "models": ["Yaris"],
+      "models": [
+        "Yaris"
+      ],
       "fromYear": 2020,
-      "engineKeywords": ["1490", "1.5", "hybrid", "hybrid electric", "116", "130", "m15a"],
+      "engineKeywords": [
+        "1490",
+        "1.5",
+        "hybrid",
+        "hybrid electric",
+        "116",
+        "130",
+        "m15a"
+      ],
       "reports": [
         {
           "id": "toyota-yaris-hybrid-12v-community",
@@ -1682,10 +2202,19 @@
     {
       "id": "volkswagen-golf-15-tsi-evo-community",
       "make": "Volkswagen",
-      "models": ["Golf"],
+      "models": [
+        "Golf"
+      ],
       "fromYear": 2017,
       "toYear": 2020,
-      "engineKeywords": ["1498", "1.5", "tsi", "evo", "130", "150"],
+      "engineKeywords": [
+        "1498",
+        "1.5",
+        "tsi",
+        "evo",
+        "130",
+        "150"
+      ],
       "reports": [
         {
           "id": "volkswagen-golf-15-tsi-evo-jerking-community",
@@ -1705,9 +2234,20 @@
     {
       "id": "ford-puma-10-ecoboost-mhev-community",
       "make": "Ford",
-      "models": ["Puma"],
+      "models": [
+        "Puma"
+      ],
       "fromYear": 2019,
-      "engineKeywords": ["999", "1.0", "ecoboost", "mhev", "mild hybrid", "125", "155", "170"],
+      "engineKeywords": [
+        "999",
+        "1.0",
+        "ecoboost",
+        "mhev",
+        "mild hybrid",
+        "125",
+        "155",
+        "170"
+      ],
       "reports": [
         {
           "id": "ford-puma-10-mhev-oil-pump-belt-community",
@@ -1766,10 +2306,20 @@
     {
       "id": "land-rover-evoque-22-td4-sd4-community",
       "make": "Land Rover",
-      "models": ["Range Rover Evoque", "Evoque"],
+      "models": [
+        "Range Rover Evoque",
+        "Evoque"
+      ],
       "fromYear": 2011,
       "toYear": 2015,
-      "engineKeywords": ["2179", "2.2", "diesel", "td4", "sd4", "ed4"],
+      "engineKeywords": [
+        "2179",
+        "2.2",
+        "diesel",
+        "td4",
+        "sd4",
+        "ed4"
+      ],
       "reports": [
         {
           "id": "land-rover-evoque-22-diesel-dpf-egr-community",
@@ -1828,10 +2378,19 @@
     {
       "id": "land-rover-evoque-20-ingenium-diesel-oil-dilution-community",
       "make": "Land Rover",
-      "models": ["Range Rover Evoque", "Evoque"],
+      "models": [
+        "Range Rover Evoque",
+        "Evoque"
+      ],
       "fromYear": 2015,
       "toYear": 2018,
-      "engineKeywords": ["1999", "2.0", "diesel", "ingenium", "td4"],
+      "engineKeywords": [
+        "1999",
+        "2.0",
+        "diesel",
+        "ingenium",
+        "td4"
+      ],
       "reports": [
         {
           "id": "land-rover-evoque-20-ingenium-diesel-oil-dilution-community",
@@ -1903,9 +2462,21 @@
     {
       "id": "land-rover-evoque-l551-diesel-electronics-community",
       "make": "Land Rover",
-      "models": ["Range Rover Evoque", "Evoque"],
+      "models": [
+        "Range Rover Evoque",
+        "Evoque"
+      ],
       "fromYear": 2019,
-      "engineKeywords": ["1999", "2.0", "diesel", "ingenium", "d150", "d165", "d180", "d200"],
+      "engineKeywords": [
+        "1999",
+        "2.0",
+        "diesel",
+        "ingenium",
+        "d150",
+        "d165",
+        "d180",
+        "d200"
+      ],
       "reports": [
         {
           "id": "land-rover-evoque-l551-diesel-adblue-community",
@@ -1951,9 +2522,20 @@
     {
       "id": "land-rover-evoque-20-ingenium-petrol-cooling-community",
       "make": "Land Rover",
-      "models": ["Range Rover Evoque", "Evoque"],
+      "models": [
+        "Range Rover Evoque",
+        "Evoque"
+      ],
       "fromYear": 2019,
-      "engineKeywords": ["1997", "2.0", "benzina", "ingenium", "p200", "p250", "p300"],
+      "engineKeywords": [
+        "1997",
+        "2.0",
+        "benzina",
+        "ingenium",
+        "p200",
+        "p250",
+        "p300"
+      ],
       "reports": [
         {
           "id": "land-rover-evoque-20-ingenium-petrol-cooling-community",
