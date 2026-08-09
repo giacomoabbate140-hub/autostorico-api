@@ -10,6 +10,8 @@ from __future__ import annotations
 import json
 import os
 import sys
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -49,13 +51,38 @@ def fetch_candidates(target: dict) -> dict:
         f"{API_URL}?{urllib.parse.urlencode(params)}",
         headers={"Authorization": f"Bearer {API_KEY}", "Accept": "application/json"},
     )
-    with urllib.request.urlopen(request, timeout=60) as response:
-        if response.status != 200:
-            raise RuntimeError(f"API response {response.status}")
-        payload = json.loads(response.read().decode("utf-8"))
-    if not isinstance(payload, dict):
-        raise RuntimeError("Invalid API response")
-    return payload
+
+    attempts = 4
+    last_error: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=75) as response:
+                if response.status != 200:
+                    raise RuntimeError(f"API response {response.status}")
+                payload = json.loads(response.read().decode("utf-8"))
+            if not isinstance(payload, dict):
+                raise RuntimeError("Invalid API response")
+            return payload
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as exc:
+            last_error = exc
+            transient = isinstance(exc, urllib.error.HTTPError) and exc.code in (
+                429,
+                500,
+                502,
+                503,
+                504,
+            )
+            transient = transient or isinstance(exc, (urllib.error.URLError, TimeoutError))
+            if attempt < attempts and transient:
+                print(
+                    f"Tentativo {attempt} fallito ({exc}); il server potrebbe essere in "
+                    "cold start, riprovo tra 25s...",
+                    file=sys.stderr,
+                )
+                time.sleep(25)
+                continue
+            raise
+    raise RuntimeError(f"fetch_candidates failed after {attempts} attempts") from last_error
 
 
 def main() -> int:
