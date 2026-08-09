@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 17,
+  "catalogVersion": 18,
   "updatedAt": "2026-08-08",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -1415,6 +1415,100 @@
           "sourceName": "Segnalazioni community in verifica",
           "sourceUrl": "",
           "userText": "Sono raccolte segnalazioni su spia motore, cali di potenza e perdite di refrigerante. Le cause possono essere diverse, inclusi attuatore turbo/wastegate o pompa acqua: non sostituire parti a tentativi, fai leggere i codici errore e controllare il circuito di raffreddamento."
+        }
+      ]
+    },
+    {
+      "id": "nissan-juke-12-digt-oil-chain-community",
+      "make": "Nissan",
+      "models": ["Juke"],
+      "fromYear": 2014,
+      "toYear": 2018,
+      "engineKeywords": ["1197", "1.2", "dig-t", "digt", "hr12ddt", "115"],
+      "reports": [
+        {
+          "id": "nissan-juke-12-digt-oil-chain-community",
+          "category": "Motore e distribuzione",
+          "title": "Segnalazioni su consumo olio e catena distribuzione",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Nissan Juke F15 con 1.2 DIG-T benzina, 2014-2018 circa. Non riguarda il 1.6 aspirato, il 1.6 DIG-T o il Juke di seconda generazione.",
+          "sourceName": "Nissan Owners Club e Juke Forum",
+          "sourceUrl": "https://www.nissanownersclub.com/forums/topic/35032-timing-chain-worries-on-nissan-juke-petrol-engines/",
+          "userText": "Le community riportano consumo olio, rumorosita della catena a freddo e in alcuni casi problemi turbo. Controlla spesso il livello olio, ascolta eventuali sferragliamenti all'avviamento e richiedi prova compressione/lettura errori prima di decidere la sostituzione della catena o del motore."
+        },
+        {
+          "id": "nissan-juke-12-digt-cvt-community",
+          "category": "Cambio automatico CVT",
+          "title": "Verifica comportamento e manutenzione del cambio CVT",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo Nissan Juke F15 1.2 DIG-T con cambio CVT. Non si applica alle versioni manuali.",
+          "sourceName": "Segnalazioni proprietari Juke",
+          "sourceUrl": "https://club.auto-doc.fr/forum/topic/nissan-juke-modele-a-eviter/",
+          "userText": "Alcuni proprietari citano vibrazioni, strattoni o rumorosita su CVT senza uno storico manutentivo chiaro. In prova su strada verifica partenze, accelerazione costante e presenza di errori; fai valutare il cambio da uno specialista prima dell'acquisto."
+        }
+      ]
+    },
+    {
+      "id": "jeep-renegade-16-multijet-emissions-community",
+      "make": "Jeep",
+      "models": ["Renegade"],
+      "fromYear": 2015,
+      "engineKeywords": ["1598", "1.6", "multijet", "diesel", "120", "130"],
+      "reports": [
+        {
+          "id": "jeep-renegade-16-multijet-dpf-egr-community",
+          "category": "DPF, EGR e AdBlue",
+          "title": "Segnalazioni su spie emissioni e sistema SCR",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Jeep Renegade 1.6 Multijet diesel. Il sistema AdBlue/SCR e presente sulle versioni Euro 6D piu recenti: verifica anno e VIN, perche le prime versioni non hanno la stessa dotazione.",
+          "sourceName": "Segnalazioni assistenza Jeep",
+          "sourceUrl": "https://autoricambitritella.it/blogs/problematiche-e-guasti-delle-vetture/adblue-e-scr-jeep-renegade-problemi-e-blocco-avvio",
+          "userText": "Con uso urbano sono segnalate rigenerazioni DPF, depositi EGR e messaggi AdBlue/SCR sulle versioni equipaggiate. Non cancellare gli errori senza diagnosi: verifica livello e qualita reagente, codici sensori NOx e stato DPF presso un'officina."
+        }
+      ]
+    },
+    {
+      "id": "kia-sportage-17-crdi-dpf-community",
+      "make": "Kia",
+      "models": ["Sportage"],
+      "fromYear": 2011,
+      "toYear": 2018,
+      "engineKeywords": ["1685", "1.7", "crdi", "diesel", "115", "141"],
+      "reports": [
+        {
+          "id": "kia-sportage-17-crdi-dpf-egr-community",
+          "category": "Antinquinamento diesel",
+          "title": "Segnalazioni su DPF, EGR e aumento livello olio",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Kia Sportage con 1.7 CRDi diesel, anni 2011-2018 circa. Non estendere automaticamente la voce ai 1.6 benzina, 2.0 CRDi o alle generazioni successive.",
+          "sourceName": "Kia Motors Forum",
+          "sourceUrl": "https://forum.kia-motors.pl/en/viewtopic.php%3Ft%3D4765",
+          "userText": "Sono riportate rigenerazioni DPF ravvicinate, calo potenza e in alcuni casi aumento del livello olio dopo tragitti brevi. Se il livello supera il massimo, non rimandare: controlla DPF, EGR, iniezione e qualita dell'olio con diagnosi professionale."
+        },
+        {
+          "id": "kia-sportage-17-crdi-clutch-community",
+          "category": "Frizione e volano",
+          "title": "Segnalazioni su strappi frizione e volano bimassa",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Kia Sportage 1.7 CRDi con cambio manuale. Non si applica alle versioni automatiche.",
+          "sourceName": "Segnalazioni community Sportage",
+          "sourceUrl": "",
+          "userText": "Le discussioni proprietari citano talvolta strappi in partenza, vibrazioni e rumorosita del gruppo frizione/volano. I sintomi possono dipendere anche da supporti motore o software anti-stallo: fai una prova su strada e controllo meccanico prima di preventivare la sostituzione."
         }
       ]
     },
