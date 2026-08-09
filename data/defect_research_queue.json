@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-09T16:56:27.339125+00:00",
-  "cursor": 3,
+  "updatedAt": "2026-08-09T19:00:48.232739+00:00",
+  "cursor": 4,
   "candidates": [
     {
       "status": "approved",
@@ -50,6 +50,34 @@
       "sourceUrl": "https://forum.clubalfa.it/threads/consiglio-alfa-romeo-giulia.147684/",
       "reviewedAt": "2026-08-09T17:00:53.755391+00:00",
       "reviewNote": "Fonte senza contenuto tecnico utile nello snippet (thread generico / richiesta consiglio acquisto)."
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-09T19:00:48.232739+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Consiglio su acquisto audi a3 sportback 2017",
+      "snippet": "Sono Giuseppe e sono in procinto di comprare un AUDI A3 SPORTBACK 1.6 TDI SPORT anno 2017. E'un ottimo usato direi Semi nuovo, circa 40.000 km, ...",
+      "sourceUrl": "https://forum.audirsclub.it/showthread.php?78390-Consiglio-su-acquisto-audi-a3-sportback-2017"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-09T19:00:48.232739+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Audi A3 Sportback, che delusione",
+      "snippet": "Buongiorno, ho acquistato una Audi A3 Sportback in data 25 maggio 2016 e vorrei mettere a conoscenza di tutti coloro che vogliono acquistare ...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-sportback-che-delusione.109743/"
     }
   ]
 }
