@@ -361,7 +361,8 @@ def search_defect_source_candidates(
     )
     query = (
         f'"{clean_make}" "{clean_model}" {context_terms} '
-        "(forum OR community OR proprietari OR difetto OR problema)"
+        "(richiamo OR recall OR campagna OR bollettino OR forum OR community "
+        "OR proprietari OR difetto OR problema)"
     )
     params = urllib.parse.urlencode(
         {
@@ -396,6 +397,11 @@ def search_defect_source_candidates(
             continue
         source_name, source_type = trusted
         seen_urls.add(url)
+        research_category = (
+            "community"
+            if source_type == "community_candidate"
+            else "official_or_technical"
+        )
         candidates.append(
             {
                 "title": str(item.get("title") or "Fonte da verificare"),
@@ -403,6 +409,7 @@ def search_defect_source_candidates(
                 "snippet": str(item.get("snippet") or ""),
                 "sourceName": source_name,
                 "sourceType": source_type,
+                "researchCategory": research_category,
                 "status": "pending_review",
             }
         )
@@ -415,6 +422,7 @@ def search_defect_source_candidates(
         "year": year,
         "engine": str(engine or "").strip(),
         "query": query,
+        "researchCoverage": ["official_recalls", "manufacturer", "community"],
         "candidates": candidates,
         "count": len(candidates),
         "fromCache": False,

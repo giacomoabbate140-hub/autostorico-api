@@ -1,0 +1,30 @@
+name: Collect AutoStorico defect sources
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect one source batch for review
+        env:
+          AUTOSTORICO_DEFECT_RESEARCH_API_KEY: ${{ secrets.AUTOSTORICO_DEFECT_RESEARCH_API_KEY }}
+        run: python tools/collect_defect_candidates.py
+      - name: Save review queue
+        run: |
+          if git diff --quiet -- data/defect_research_queue.json; then
+            echo "No new candidates."
+            exit 0
+          fi
+          git config user.name "autostorico-research-bot"
+          git config user.email "autostorico-research-bot@users.noreply.github.com"
+          git add data/defect_research_queue.json
+          git commit -m "Collect defect source candidates"
+          git push

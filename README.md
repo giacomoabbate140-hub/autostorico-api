@@ -82,3 +82,11 @@ Per test sul telefono in Wi-Fi locale, sostituire `tuodominio.it` con l'IP del P
 ```text
 http://192.168.1.50:8088/api/vehicle-value
 ```
+
+## Raccolta automatica delle fonti sui difetti
+
+Il workflow `.github/workflows/defect-research.yml` esegue una raccolta circa ogni ora. A rotazione analizza un veicolo del file `data/defect_research_targets.json` e cerca candidati provenienti da fonti ufficiali, case costruttrici e community approvate.
+
+I risultati vengono salvati in `data/defect_research_queue.json` con stato `pending_review`: non entrano automaticamente nel catalogo visibile ai clienti. Prima di aggiungere un difetto in `data/vehicle_defects.json`, bisogna verificare modello, anno, motore e attendibilita della fonte.
+
+Per attivare il workflow su GitHub, creare nelle impostazioni del repository un secret Actions chiamato esattamente `AUTOSTORICO_DEFECT_RESEARCH_API_KEY`, usando lo stesso valore della variabile omonima configurata su Render. Poi, dalla sezione Actions, si puo eseguire una prima volta manualmente il workflow **Collect AutoStorico defect sources**.

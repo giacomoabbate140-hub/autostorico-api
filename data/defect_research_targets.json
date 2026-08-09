@@ -1,0 +1,32 @@
+{
+  "targets": [
+    {"make": "Alfa Romeo", "model": "Giulietta", "year": 2016, "engine": "1.6 Multijet"},
+    {"make": "Alfa Romeo", "model": "Giulia", "year": 2018, "engine": "2.2 diesel"},
+    {"make": "Audi", "model": "A3", "year": 2017, "engine": "1.6 TDI"},
+    {"make": "Audi", "model": "Q3", "year": 2020, "engine": "2.0 TDI"},
+    {"make": "BMW", "model": "Serie 1", "year": 2015, "engine": "2.0 diesel N47"},
+    {"make": "Citroen", "model": "C3", "year": 2019, "engine": "1.2 PureTech"},
+    {"make": "Dacia", "model": "Duster", "year": 2018, "engine": "1.5 dCi"},
+    {"make": "Fiat", "model": "Panda", "year": 2018, "engine": "1.3 Multijet"},
+    {"make": "Fiat", "model": "Tipo", "year": 2018, "engine": "1.6 Multijet"},
+    {"make": "Ford", "model": "Fiesta", "year": 2018, "engine": "1.0 EcoBoost"},
+    {"make": "Ford", "model": "Focus", "year": 2020, "engine": "1.0 EcoBoost mild hybrid"},
+    {"make": "Ford", "model": "Puma", "year": 2021, "engine": "1.0 EcoBoost mild hybrid"},
+    {"make": "Hyundai", "model": "Tucson", "year": 2017, "engine": "1.7 CRDi"},
+    {"make": "Jeep", "model": "Renegade", "year": 2021, "engine": "1.6 Multijet"},
+    {"make": "Kia", "model": "Sportage", "year": 2017, "engine": "1.7 CRDi"},
+    {"make": "Land Rover", "model": "Range Rover Evoque", "year": 2017, "engine": "2.0 Ingenium diesel"},
+    {"make": "Mercedes-Benz", "model": "Classe A", "year": 2018, "engine": "180d"},
+    {"make": "Nissan", "model": "Juke", "year": 2016, "engine": "1.2 DIG-T"},
+    {"make": "Nissan", "model": "Qashqai", "year": 2020, "engine": "1.3 DIG-T"},
+    {"make": "Opel", "model": "Corsa", "year": 2019, "engine": "1.2 benzina"},
+    {"make": "Peugeot", "model": "208", "year": 2020, "engine": "1.2 PureTech"},
+    {"make": "Peugeot", "model": "3008", "year": 2019, "engine": "1.5 BlueHDi"},
+    {"make": "Renault", "model": "Captur", "year": 2015, "engine": "1.2 TCe"},
+    {"make": "Renault", "model": "Clio", "year": 2018, "engine": "0.9 TCe"},
+    {"make": "SEAT", "model": "Leon", "year": 2017, "engine": "1.4 TSI"},
+    {"make": "Toyota", "model": "Yaris", "year": 2021, "engine": "1.5 Hybrid"},
+    {"make": "Volkswagen", "model": "Golf", "year": 2018, "engine": "1.5 TSI Evo"},
+    {"make": "Volkswagen", "model": "T-Roc", "year": 2020, "engine": "1.0 TSI"}
+  ]
+}
