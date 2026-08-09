@@ -1,5 +1,5 @@
 {
-  "catalogVersion": 19,
+  "catalogVersion": 20,
   "updatedAt": "2026-08-09",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
@@ -665,6 +665,18 @@
           "sourceName": "Audi RS Club Italia",
           "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-65696.html",
           "userText": "Raccolta community, non richiamo: richiedi diagnosi e verifica aggiornamenti software in caso di anomalie."
+        },
+        {
+          "id": "audi-a3-8v-door-seal-water-leak-community",
+          "category": "Carrozzeria e infiltrazioni",
+          "title": "Segnalazione su infiltrazione d'acqua dalla guarnizione delle porte",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "sourceName": "Forum Quattroruote",
+          "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-sportback-che-delusione.109743/",
+          "userText": "Segnalazione da un proprietario, confermata dal concessionario come conforme alle specifiche (quindi non riparabile in garanzia). Se dopo la pioggia l'acqua scende sui sedili aprendo la portiera, controlla la guarnizione e lo scarico della porta."
         }
       ]
     },
