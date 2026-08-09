@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-09T19:00:48.232739+00:00",
-  "cursor": 4,
+  "updatedAt": "2026-08-09T19:58:48.336164+00:00",
+  "cursor": 5,
   "candidates": [
     {
       "status": "approved",
@@ -78,6 +78,20 @@
       "title": "Audi A3 Sportback, che delusione",
       "snippet": "Buongiorno, ho acquistato una Audi A3 Sportback in data 25 maggio 2016 e vorrei mettere a conoscenza di tutti coloro che vogliono acquistare ...",
       "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-sportback-che-delusione.109743/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-09T19:58:48.336164+00:00",
+      "make": "Audi",
+      "model": "Q3",
+      "year": 2020,
+      "engine": "2.0 TDI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "AUDI Q3 2020 S TRONIC",
+      "snippet": "Ciao a tutti, vi scrivo perchè a fine luglio ho ritirato la Q3 2020 35 TDI S TRONIC, ad oggi ho percorso 3500 km ... Forum · Marche · Audi; AUDI ...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/audi-q3-2020-s-tronic.130679/"
     }
   ]
 }
