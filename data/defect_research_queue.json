@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-10T13:44:16.262123+00:00",
-  "cursor": 8,
+  "updatedAt": "2026-08-10T19:18:11.974444+00:00",
+  "cursor": 9,
   "candidates": [
     {
       "status": "approved",
@@ -154,6 +154,20 @@
       "title": "Campagne di richiamo: elenchi e controlli",
       "snippet": "DUSTER. anche. full hybrid. DUSTER. prezzo a partire da 19.900 €. DUSTER ... Inserisci il numero del telaio della tua Dacia per verifica. Se il tuo veicolo ...",
       "sourceUrl": "https://www.dacia.it/campagne-richiamo.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-10T19:18:11.974444+00:00",
+      "make": "Fiat",
+      "model": "Panda",
+      "year": 2018,
+      "engine": "1.3 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Opinioni e pareri su migliore modello Panda 1.3 Multijet",
+      "snippet": "Ciao a tutti, sto valutando l'acquisto di una Fiat Panda 1.3 Multijet terza serie, la seconda serie mi sembra un po' troppo vecchiotta ormai ...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/opinioni-e-pareri-su-migliore-modello-panda-1-3-multijet.149273/"
     }
   ]
 }
