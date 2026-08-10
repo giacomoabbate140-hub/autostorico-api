@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-09T19:58:48.336164+00:00",
-  "cursor": 5,
+  "updatedAt": "2026-08-10T02:35:04.539489+00:00",
+  "cursor": 6,
   "candidates": [
     {
       "status": "approved",
@@ -98,6 +98,20 @@
       "sourceUrl": "https://forum.quattroruote.it/threads/audi-q3-2020-s-tronic.130679/",
       "reviewedAt": "2026-08-09T20:00:10.869192+00:00",
       "reviewNote": "Domanda generica sul comportamento normale del cambio S-Tronic (regime di cambiata), non un guasto documentato."
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-10T02:35:04.539489+00:00",
+      "make": "BMW",
+      "model": "Serie 1",
+      "year": 2015,
+      "engine": "2.0 diesel N47",
+      "sourceName": "BMW Passion Forum",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "BMW Serie 1 F20/F21 - N47 e catena. Riconoscete il difetto?",
+      "snippet": "BMW Serie 1 F20/F21 N47 e catena. Riconoscete il difetto?",
+      "sourceUrl": "https://www.bmwpassion.com/forum/threads/n47-e-catena-riconoscete-il-difetto.359292/"
     }
   ]
 }
