@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-10T08:04:56.062679+00:00",
-  "cursor": 7,
+  "updatedAt": "2026-08-10T13:44:16.262123+00:00",
+  "cursor": 8,
   "candidates": [
     {
       "status": "approved",
@@ -140,6 +140,20 @@
       "title": "Estensione Garanzia Citroën sui Motori PureTech 1.0 e 1.2",
       "snippet": "C3. ElettricaBenzinaIbrida. Nuova C3. Nuovo Suv C3 Aircross. Elettrica ... La sicurezza e la soddisfazione dei nostri clienti sono la priorità di Citroen.",
       "sourceUrl": "https://www.citroen.it/post-vendita/estensione-garanzia-puretech-citroen.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-10T13:44:16.262123+00:00",
+      "make": "Dacia",
+      "model": "Duster",
+      "year": 2018,
+      "engine": "1.5 dCi",
+      "sourceName": "Dacia Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Campagne di richiamo: elenchi e controlli",
+      "snippet": "DUSTER. anche. full hybrid. DUSTER. prezzo a partire da 19.900 €. DUSTER ... Inserisci il numero del telaio della tua Dacia per verifica. Se il tuo veicolo ...",
+      "sourceUrl": "https://www.dacia.it/campagne-richiamo.html"
     }
   ]
 }
