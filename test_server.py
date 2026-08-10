@@ -273,6 +273,17 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("land-rover-evoque-22-diesel-dpf-egr-community", report_ids)
         self.assertIn("land-rover-evoque-22-diesel-awd-electronics-community", report_ids)
 
+    def test_evoque_22_diesel_matches_ocr_epoque_alias(self):
+        result = vehicle_defect_reports(
+            "Range Rover",
+            "Epoque",
+            2013,
+            "diesel 2179 cc 2.2 TD4",
+        )
+
+        self.assertIsNotNone(result)
+        self.assertEqual(4, len(result["reports"]))
+
     def test_defect_catalog_returns_none_for_unknown_vehicle(self):
         self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))
 

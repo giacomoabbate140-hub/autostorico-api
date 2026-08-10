@@ -1,9 +1,9 @@
 {
-  "catalogVersion": 20,
-  "updatedAt": "2026-08-09",
+  "catalogVersion": 21,
+  "updatedAt": "2026-08-11",
   "latestUpdate": {
-    "id": "catalog-20",
-    "summary": "Nuove segnalazioni community e controlli per motori diesel e benzina.",
+    "id": "catalog-21",
+    "summary": "Corretto il riconoscimento OCR della Range Rover Evoque 2.2 diesel e aggiornate le segnalazioni community.",
     "vehicles": [
       {"make": "Land Rover", "model": "Range Rover Evoque"},
       {"make": "Audi", "model": "A1"},
@@ -2329,7 +2329,8 @@
       "make": "Land Rover",
       "models": [
         "Range Rover Evoque",
-        "Evoque"
+        "Evoque",
+        "Epoque"
       ],
       "fromYear": 2011,
       "toYear": 2015,
