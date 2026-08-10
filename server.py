@@ -178,6 +178,17 @@ def normalize_catalog_text(value: Any) -> str:
     return re.sub(r"\s+", " ", str(value or "").strip().casefold())
 
 
+def canonical_catalog_make(value: Any) -> str:
+    """Resolve common marque variants used by OCR and vehicle registrations."""
+    normalized = normalize_catalog_text(value).replace("-", " ")
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return {
+        "landrover": "land rover",
+        "range rover": "land rover",
+        "range rover land rover": "land rover",
+    }.get(normalized, normalized)
+
+
 def load_vehicle_defect_catalog() -> dict[str, Any]:
     try:
         catalog = json.loads(DEFECT_CATALOG_PATH.read_text(encoding="utf-8"))
@@ -244,7 +255,7 @@ def vehicle_defect_reports(
     year: int | None = None,
     engine: str = "",
 ) -> dict[str, Any] | None:
-    wanted_make = normalize_catalog_text(make)
+    wanted_make = canonical_catalog_make(make)
     wanted_model = normalize_catalog_text(model)
     if not wanted_make or not wanted_model:
         return None
@@ -252,7 +263,7 @@ def vehicle_defect_reports(
     matching_vehicles = [
         vehicle
         for vehicle in VEHICLE_DEFECT_CATALOG.get("vehicles", [])
-        if normalize_catalog_text(vehicle.get("make")) == wanted_make
+        if canonical_catalog_make(vehicle.get("make")) == wanted_make
         and (
             normalize_catalog_text(vehicle.get("model")) == wanted_model
             or wanted_model
@@ -268,7 +279,7 @@ def vehicle_defect_reports(
         family
         for family in VEHICLE_DEFECT_CATALOG.get("engineFamilies", [])
         if isinstance(family, dict)
-        and normalize_catalog_text(family.get("make")) == wanted_make
+        and canonical_catalog_make(family.get("make")) == wanted_make
         and wanted_model
         in {
             normalize_catalog_text(item)
