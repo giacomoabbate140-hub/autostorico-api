@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-10T02:35:04.539489+00:00",
-  "cursor": 6,
+  "updatedAt": "2026-08-10T08:04:56.062679+00:00",
+  "cursor": 7,
   "candidates": [
     {
       "status": "approved",
@@ -112,6 +112,34 @@
       "title": "BMW Serie 1 F20/F21 - N47 e catena. Riconoscete il difetto?",
       "snippet": "BMW Serie 1 F20/F21 N47 e catena. Riconoscete il difetto?",
       "sourceUrl": "https://www.bmwpassion.com/forum/threads/n47-e-catena-riconoscete-il-difetto.359292/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-10T08:04:56.062679+00:00",
+      "make": "Citroen",
+      "model": "C3",
+      "year": 2019,
+      "engine": "1.2 PureTech",
+      "sourceName": "Citroën-Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "rottura cinghia distribuzione 1.2 puretech 2019 benzi 131 cv",
+      "snippet": "Il primo richiamo sulle problematiche delle cinghia fu lo HFC di Gennaio 2021, poi vi sono stati richiami successivi. Ti ricordo che la Citroen ...",
+      "sourceUrl": "https://www.citroen-club.it/forum/viewtopic.php?f=169&t=44605"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-10T08:04:56.062679+00:00",
+      "make": "Citroen",
+      "model": "C3",
+      "year": 2019,
+      "engine": "1.2 PureTech",
+      "sourceName": "Citroen Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Estensione Garanzia Citroën sui Motori PureTech 1.0 e 1.2",
+      "snippet": "C3. ElettricaBenzinaIbrida. Nuova C3. Nuovo Suv C3 Aircross. Elettrica ... La sicurezza e la soddisfazione dei nostri clienti sono la priorità di Citroen.",
+      "sourceUrl": "https://www.citroen.it/post-vendita/estensione-garanzia-puretech-citroen.html"
     }
   ]
 }
