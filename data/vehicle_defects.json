@@ -1,6 +1,15 @@
 {
   "catalogVersion": 20,
   "updatedAt": "2026-08-09",
+  "latestUpdate": {
+    "id": "catalog-20",
+    "summary": "Nuove segnalazioni community e controlli per motori diesel e benzina.",
+    "vehicles": [
+      {"make": "Land Rover", "model": "Range Rover Evoque"},
+      {"make": "Audi", "model": "A1"},
+      {"make": "Ford", "model": "Puma"}
+    ]
+  },
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
     {

@@ -200,6 +200,29 @@ def load_vehicle_defect_catalog() -> dict[str, Any]:
 VEHICLE_DEFECT_CATALOG = load_vehicle_defect_catalog()
 
 
+def catalog_update_status() -> dict[str, Any]:
+    """Expose only the public metadata used by clients to detect catalog updates."""
+    latest = VEHICLE_DEFECT_CATALOG.get("latestUpdate")
+    latest = latest if isinstance(latest, dict) else {}
+    vehicles = latest.get("vehicles")
+    safe_vehicles = [
+        {
+            "make": str(vehicle.get("make") or "").strip(),
+            "model": str(vehicle.get("model") or "").strip(),
+        }
+        for vehicle in vehicles if isinstance(vehicle, dict)
+    ] if isinstance(vehicles, list) else []
+    return {
+        "catalogVersion": catalog_year_value(VEHICLE_DEFECT_CATALOG.get("catalogVersion")),
+        "updatedAt": str(VEHICLE_DEFECT_CATALOG.get("updatedAt") or "").strip(),
+        "latestUpdate": {
+            "id": str(latest.get("id") or "").strip(),
+            "summary": str(latest.get("summary") or "").strip(),
+            "vehicles": safe_vehicles,
+        },
+    }
+
+
 def catalog_year_matches(entry: dict[str, Any], year: int | None) -> bool:
     """Match explicit bounds or a curated generation range when available."""
     if year is None:
@@ -2188,6 +2211,9 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             return
         if request_path in {"/api/defects", "/defects"}:
             self.send_json(lookup_defects(urllib.parse.parse_qs(parsed_url.query)))
+            return
+        if request_path == "/api/defect-catalog-status":
+            self.send_json(catalog_update_status())
             return
         if request_path == "/api/vehicle-defects":
             query = urllib.parse.parse_qs(parsed_url.query)

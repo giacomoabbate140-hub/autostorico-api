@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import server
 from server import (
+    catalog_update_status,
     defect_research_cache_key,
     market_cache_key,
     market_estimate_from_sources,
@@ -14,6 +15,14 @@ from server import (
 
 
 class MarketEvidenceTests(unittest.TestCase):
+    def test_catalog_update_status_exposes_safe_update_metadata(self):
+        status = catalog_update_status()
+
+        self.assertGreater(status["catalogVersion"], 0)
+        self.assertIn("updatedAt", status)
+        self.assertIn("latestUpdate", status)
+        self.assertIsInstance(status["latestUpdate"]["vehicles"], list)
+
     def test_gold_subscription_uses_google_play_subscriptions_endpoint(self):
         class FakeCredentials:
             pass
