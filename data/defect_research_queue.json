@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-11T13:43:35.337795+00:00",
-  "cursor": 12,
+  "updatedAt": "2026-08-11T19:21:27.363828+00:00",
+  "cursor": 13,
   "candidates": [
     {
       "status": "approved",
@@ -210,6 +210,20 @@
       "title": "Campagna di richiamo",
       "snippet": "Il mio veicolo Ford | Ford Italia>Campagne di richiamo. Search Icon ... Nuova Fiesta · Ecosport · Puma · Focus · Kuga · Mach-E · Explorer · Mustang · Puma ST ...",
       "sourceUrl": "https://www.ford.it/supporto/campagne-di-richiamo/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-11T19:21:27.363828+00:00",
+      "make": "Ford",
+      "model": "Puma",
+      "year": 2021,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Consiglio acquisto ford puma 1.0 125cv s&s",
+      "snippet": "Consiglio acquisto ford puma 1.0 125cv s&s. Creatore Discussione aes; Data di Inizio 23 Novembre 2024.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/consiglio-acquisto-ford-puma-1-0-125cv-s-s.148476/"
     }
   ]
 }
