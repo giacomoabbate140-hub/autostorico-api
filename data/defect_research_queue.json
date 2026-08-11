@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-11T02:28:19.701681+00:00",
-  "cursor": 10,
+  "updatedAt": "2026-08-11T07:38:08.714514+00:00",
+  "cursor": 11,
   "candidates": [
     {
       "status": "approved",
@@ -196,6 +196,20 @@
       "title": "Fiat Tipo 1.6 multijet DTC",
       "snippet": "Ciao a tutti, ho avuto modo di percorrere in questa settimana, 1500km a bordo della Fiat Tipo 1.6 multijet DTC 5p Business aziendale.",
       "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=110593"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-11T07:38:08.714514+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Campagna di richiamo",
+      "snippet": "Il mio veicolo Ford | Ford Italia>Campagne di richiamo. Search Icon ... Nuova Fiesta · Ecosport · Puma · Focus · Kuga · Mach-E · Explorer · Mustang · Puma ST ...",
+      "sourceUrl": "https://www.ford.it/supporto/campagne-di-richiamo/"
     }
   ]
 }
