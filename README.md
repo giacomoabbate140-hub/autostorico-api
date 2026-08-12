@@ -24,7 +24,7 @@ Le chiavi non vanno inserite nell'APK o in Git. In Render, apri il servizio, vai
 
 ## Ricerca automatica delle fonti difetti
 
-`GET /api/admin/defect-source-candidates?make=Peugeot&model=208` cerca candidati con SerpApi soltanto sui domini attendibili configurati dal server. Richiede `Authorization: Bearer <AUTOSTORICO_DEFECT_RESEARCH_API_KEY>` e restituisce solo risultati `pending_review`: nessuna fonte viene pubblicata automaticamente nell'app.
+`GET /api/admin/defect-source-candidates?make=Peugeot&model=208` cerca candidati con Brave Search API soltanto sui domini attendibili configurati dal server. Richiede `Authorization: Bearer <AUTOSTORICO_DEFECT_RESEARCH_API_KEY>` e restituisce solo risultati `pending_review`: nessuna fonte viene pubblicata automaticamente nell'app.
 
 Su Render aggiungi un valore segreto per `AUTOSTORICO_DEFECT_RESEARCH_API_KEY` e imposta `AUTOSTORICO_DEFECT_RESEARCH_ENABLED=1`. Questa chiave e solo per il pannello amministrativo, non per l'app.
 

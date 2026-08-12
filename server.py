@@ -378,7 +378,7 @@ def vehicle_defect_reports(
 
 def defect_research_configured() -> bool:
     return bool(
-        DEFECT_RESEARCH_ENABLED and DEFECT_RESEARCH_API_KEY and SERPAPI_API_KEY
+        DEFECT_RESEARCH_ENABLED and DEFECT_RESEARCH_API_KEY and BRAVE_SEARCH_API_KEY
     )
 
 
@@ -431,32 +431,31 @@ def search_defect_source_candidates(
     )
     params = urllib.parse.urlencode(
         {
-            "engine": "google",
             "q": query,
-            "api_key": SERPAPI_API_KEY,
-            "google_domain": "google.it",
-            "gl": "it",
-            "hl": "it",
-            "num": 20,
+            "count": 20,
+            "country": "it",
+            "search_lang": "it",
+            "safesearch": "moderate",
         }
     )
     request = urllib.request.Request(
-        f"https://serpapi.com/search.json?{params}",
+        f"https://api.search.brave.com/res/v1/web/search?{params}",
         headers={
             "Accept": "application/json",
             "Accept-Encoding": "identity",
             "User-Agent": "AutoStoricoDefectResearch/1.0",
+            "X-Subscription-Token": BRAVE_SEARCH_API_KEY,
         },
     )
     with urllib.request.urlopen(request, timeout=15) as response:
         data = json.loads(response.read().decode("utf-8"))
-    if data.get("error"):
-        raise RuntimeError(str(data["error"]))
+    if data.get("type") == "ErrorResponse":
+        raise RuntimeError(str(data.get("message") or "Brave Search error"))
 
     candidates: list[dict[str, str]] = []
     seen_urls: set[str] = set()
-    for item in data.get("organic_results") or []:
-        url = str(item.get("link") or "").strip()
+    for item in data.get("web", {}).get("results", []) or []:
+        url = str(item.get("url") or "").strip()
         trusted = trusted_defect_source(url)
         if not trusted or not url or url in seen_urls:
             continue
@@ -471,7 +470,12 @@ def search_defect_source_candidates(
             {
                 "title": str(item.get("title") or "Fonte da verificare"),
                 "url": url,
-                "snippet": str(item.get("snippet") or ""),
+                "snippet": " ".join(
+                    [
+                        str(item.get("description") or ""),
+                        *[str(value) for value in item.get("extra_snippets") or []],
+                    ]
+                ).strip(),
                 "sourceName": source_name,
                 "sourceType": source_type,
                 "researchCategory": research_category,
