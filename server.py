@@ -67,6 +67,9 @@ GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = os.environ.get(
     "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "premium_gold_6_mesi"
 ).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
+DEVELOPER_DEVICE_ID_HASH = os.environ.get(
+    "AUTOSTORICO_DEVELOPER_DEVICE_ID_HASH", ""
+).strip().lower()
 PREMIUM_VERIFY_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_PREMIUM_VERIFY_RATE_LIMIT", "12"))
 PLAY_INTEGRITY_REQUIRED = os.environ.get("AUTOSTORICO_PLAY_INTEGRITY_REQUIRED", "0") == "1"
 PLAY_INTEGRITY_MIN_VERSION_CODE = int(
@@ -1931,6 +1934,12 @@ def cache_defect_entitlement(
 
 
 def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
+    if developer_device_is_authorized(payload.get("developerDeviceIdHash")):
+        return {
+            "ok": True,
+            "status": 200,
+            "message": "Autorizzazione verificata.",
+        }
     premium_token = str(payload.get("premiumPurchaseToken") or "").strip()
     gold_token = str(payload.get("defectsGoldPurchaseToken") or "").strip()
     if not premium_token or not gold_token:
@@ -1966,6 +1975,16 @@ def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
     entitlement = {"ok": True, "status": 200, "message": "Difetti Gold verificata."}
     cache_defect_entitlement(premium_token, gold_token, entitlement)
     return entitlement
+
+
+def developer_device_is_authorized(device_id_hash: Any) -> bool:
+    """Match the owner device only against a Render secret, never APK data."""
+    candidate = str(device_id_hash or "").strip().lower()
+    return bool(
+        re.fullmatch(r"[a-f0-9]{64}", candidate)
+        and re.fullmatch(r"[a-f0-9]{64}", DEVELOPER_DEVICE_ID_HASH)
+        and hmac.compare_digest(candidate, DEVELOPER_DEVICE_ID_HASH)
+    )
 
 
 def vehicle_defects_response(
@@ -2298,6 +2317,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
         if request_path not in {
             "/api/vehicle-value",
             "/api/premium/verify",
+            "/api/developer/entitlement",
             "/api/vehicle-defects",
         }:
             self.send_json({"error": "not_found"}, status=404)
@@ -2359,6 +2379,19 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                         product_id,
                     )
                 self.send_json(verification)
+                return
+            if request_path == "/api/developer/entitlement":
+                client_id = (
+                    self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+                    or self.client_address[0]
+                )
+                if not can_run_premium_verification(client_id):
+                    self.send_json({"active": False}, status=429)
+                    return
+                active = developer_device_is_authorized(
+                    payload.get("deviceIdHash")
+                )
+                self.send_json({"active": active})
                 return
             if request_path == "/api/vehicle-defects":
                 client_id = (

@@ -13,6 +13,8 @@ services:
         value: 0.0.0.0
       - key: AUTOSTORICO_PREMIUM_API_KEY
         sync: false
+      - key: AUTOSTORICO_DEVELOPER_DEVICE_ID_HASH
+        sync: false
       - key: GOOGLE_PLAY_SERVICE_ACCOUNT_FILE
         value: /etc/secrets/google-play-service-account.json
       - key: GOOGLE_PLAY_PACKAGE_NAME

@@ -10,11 +10,19 @@ from server import (
     trusted_defect_source,
     verify_defect_online_entitlement,
     verify_google_play_subscription,
+    developer_device_is_authorized,
     vehicle_defect_reports,
 )
 
 
 class MarketEvidenceTests(unittest.TestCase):
+    def test_developer_device_authorization_only_accepts_render_hash(self):
+        owner_hash = "a" * 64
+        with patch.object(server, "DEVELOPER_DEVICE_ID_HASH", owner_hash):
+            self.assertTrue(developer_device_is_authorized(owner_hash))
+            self.assertFalse(developer_device_is_authorized("b" * 64))
+            self.assertFalse(developer_device_is_authorized("not-a-hash"))
+
     def test_catalog_update_status_exposes_safe_update_metadata(self):
         status = catalog_update_status()
 
