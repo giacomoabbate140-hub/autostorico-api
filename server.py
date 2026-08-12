@@ -78,6 +78,7 @@ PLAY_INTEGRITY_MAX_TOKEN_AGE_SECONDS = int(
 PLAY_INTEGRITY_SEEN: dict[str, float] = {}
 PLAY_INTEGRITY_LOCK = threading.Lock()
 DEFECT_CATALOG_PATH = Path(__file__).parent / "data" / "vehicle_defects.json"
+DEFECT_RESEARCH_QUEUE_PATH = Path(__file__).parent / "data" / "defect_research_queue.json"
 DEFECT_RESEARCH_CACHE_TTL_SECONDS = int(
     os.environ.get("AUTOSTORICO_DEFECT_CACHE_TTL_SECONDS", str(30 * 24 * 60 * 60))
 )
@@ -200,6 +201,35 @@ def load_vehicle_defect_catalog() -> dict[str, Any]:
 VEHICLE_DEFECT_CATALOG = load_vehicle_defect_catalog()
 
 
+def defect_research_update_status() -> dict[str, Any]:
+    """Expose safe metadata for new source candidates awaiting review."""
+    try:
+        queue = json.loads(DEFECT_RESEARCH_QUEUE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        queue = {}
+    candidates = queue.get("candidates") if isinstance(queue, dict) else []
+    pending = [
+        item
+        for item in candidates
+        if isinstance(item, dict) and item.get("status") == "pending_review"
+    ] if isinstance(candidates, list) else []
+    recent = pending[-3:]
+    vehicles = [
+        {
+            "make": str(item.get("make") or "").strip(),
+            "model": str(item.get("model") or "").strip(),
+        }
+        for item in recent
+    ]
+    updated_at = str(queue.get("updatedAt") or "").strip() if isinstance(queue, dict) else ""
+    return {
+        "id": updated_at,
+        "updatedAt": updated_at,
+        "pendingCount": len(pending),
+        "vehicles": vehicles,
+    }
+
+
 def catalog_update_status() -> dict[str, Any]:
     """Expose only the public metadata used by clients to detect catalog updates."""
     latest = VEHICLE_DEFECT_CATALOG.get("latestUpdate")
@@ -220,6 +250,7 @@ def catalog_update_status() -> dict[str, Any]:
             "summary": str(latest.get("summary") or "").strip(),
             "vehicles": safe_vehicles,
         },
+        "researchUpdate": defect_research_update_status(),
     }
 
 
