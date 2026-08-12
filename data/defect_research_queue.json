@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-12T13:48:41.813832+00:00",
-  "cursor": 16,
+  "updatedAt": "2026-08-12T19:20:35.583148+00:00",
+  "cursor": 17,
   "candidates": [
     {
       "status": "approved",
@@ -252,6 +252,20 @@
       "title": "tucson | Pagina 2",
       "snippet": "Salve a tutti, mi chiamo Marco, sono nuovo del Forum e da 3 settimane sono possessore di una Hyundai Tucson modello CRDI 1.7 X-Plus con Executive Pack.",
       "sourceUrl": "https://www.hyundai-club.eu/tags/tucson/page-2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-12T19:20:35.583148+00:00",
+      "make": "Land Rover",
+      "model": "Range Rover Evoque",
+      "year": 2017,
+      "engine": "2.0 Ingenium diesel",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Range Rover Evoque problema cofano aiuto! | Il Forum di Quattroruote",
+      "snippet": "mi spiace... anche io un sacco di problemi mai avuti con altri costruttori. <strong>La Evoque Marzo 2017 con motore Ingenium diesel l&#x27;ho cambiata perche&#x27; non ci sono soluzioni e la Land Rover non risolve i problemi</strong>. Era meglio rifinita e curata la precedente (il primo modello). Questa a mio avviso oltre ai vari problemi del propulsore ingenium e di elettronica (ho avuto anche questi ma niente di serio) e' meno curata e i controlli di qualità sono penosi, assurdo per tale marchio e per 43000 euro! Ho due casi di miei conoscenti che hanno spaccato il motore a 40000 km.... uno ha spaccato la turbina e pezzi di bronzine sono andati a finire in aspirazione con conseguenza drammatica; l'altro ha fuso. un mio amico con una Velar (motore ingenium da 240cv) HA FUSO A 30000. mi spiace... anche io un sacco di problemi mai avuti con altri costruttori. La Evoque Marzo 2017 con motore Ingenium diesel l'ho cambiata perche' non ci sono soluzioni e la Land Rover non risolve i problemi. Ho avuto la dico 3 , 4 (3000 td6 245 cv) ed ora devo ritirare la disco 5 240 cv versione s. del 2017(compro con 16000 km) Vorrei sapere se i tegliandoìi vengono registrati su libretto oppure con le nuove si usa altro sistema. Alcuni di voi possono dirmi pregi e difetti?",
+      "sourceUrl": "https://forum.quattroruote.it/threads/range-rover-evoque-problema-cofano-aiuto.120066/"
     }
   ]
 }
