@@ -67,6 +67,7 @@ GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = os.environ.get(
     "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "premium_gold_6_mesi"
 ).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
+OWNER_ACCESS_CODE = os.environ.get("AUTOSTORICO_OWNER_ACCESS_CODE", "").strip()
 PREMIUM_VERIFY_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_PREMIUM_VERIFY_RATE_LIMIT", "12"))
 PLAY_INTEGRITY_REQUIRED = os.environ.get("AUTOSTORICO_PLAY_INTEGRITY_REQUIRED", "0") == "1"
 PLAY_INTEGRITY_MIN_VERSION_CODE = int(
@@ -1895,7 +1896,44 @@ def cache_defect_entitlement(
         DEFECT_ENTITLEMENT_CACHE[cache_key] = (time.time(), entitlement)
 
 
+def owner_access_token(device_id: str) -> str:
+    """Return a stateless owner token, bound to one app installation."""
+    device_hash = hashlib.sha256(device_id.encode("utf-8")).hexdigest()
+    payload = base64.urlsafe_b64encode(
+        json.dumps({"v": 1, "device": device_hash}, separators=(",", ":")).encode("utf-8")
+    ).decode("ascii").rstrip("=")
+    signature = hmac.new(
+        OWNER_ACCESS_CODE.encode("utf-8"), payload.encode("ascii"), hashlib.sha256
+    ).hexdigest()
+    return f"{payload}.{signature}"
+
+
+def valid_owner_access_token(device_id: str, token: str) -> bool:
+    if not OWNER_ACCESS_CODE or not device_id or not token:
+        return False
+    try:
+        payload, signature = token.rsplit(".", 1)
+        expected = hmac.new(
+            OWNER_ACCESS_CODE.encode("utf-8"), payload.encode("ascii"), hashlib.sha256
+        ).hexdigest()
+        if not hmac.compare_digest(signature, expected):
+            return False
+        padding = "=" * (-len(payload) % 4)
+        data = json.loads(base64.urlsafe_b64decode(f"{payload}{padding}").decode("utf-8"))
+        return hmac.compare_digest(
+            str(data.get("device") or ""),
+            hashlib.sha256(device_id.encode("utf-8")).hexdigest(),
+        )
+    except (ValueError, UnicodeDecodeError, json.JSONDecodeError):
+        return False
+
+
 def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
+    if valid_owner_access_token(
+        str(payload.get("ownerDeviceId") or "").strip(),
+        str(payload.get("ownerAccessToken") or "").strip(),
+    ):
+        return {"ok": True, "status": 200, "message": "Accesso proprietario verificato."}
     premium_token = str(payload.get("premiumPurchaseToken") or "").strip()
     gold_token = str(payload.get("defectsGoldPurchaseToken") or "").strip()
     if not premium_token or not gold_token:
@@ -2206,6 +2244,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "playIntegrityMinVersionCode": PLAY_INTEGRITY_MIN_VERSION_CODE,
                     "vehicleDefectCatalogReady": bool(VEHICLE_DEFECT_CATALOG.get("vehicles")),
                     "defectResearchConfigured": defect_research_configured(),
+                    "ownerAccessConfigured": bool(OWNER_ACCESS_CODE),
                 }
             )
             return
@@ -2264,6 +2303,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             "/api/vehicle-value",
             "/api/premium/verify",
             "/api/vehicle-defects",
+            "/api/owner-access",
         }:
             self.send_json({"error": "not_found"}, status=404)
             return
@@ -2324,6 +2364,33 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                         product_id,
                     )
                 self.send_json(verification)
+                return
+            if request_path == "/api/owner-access":
+                client_id = (
+                    self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+                    or self.client_address[0]
+                )
+                if not can_run_premium_verification(client_id):
+                    self.send_json({"active": False, "message": "Riprova tra poco."}, status=429)
+                    return
+                device_id = str(payload.get("deviceId") or "").strip()
+                if payload.get("verifyOnly") is True:
+                    active = valid_owner_access_token(
+                        device_id, str(payload.get("ownerAccessToken") or "").strip()
+                    )
+                    self.send_json({"active": active}, status=200 if active else 403)
+                    return
+                code = str(payload.get("code") or "").strip()
+                if not OWNER_ACCESS_CODE or not device_id or not hmac.compare_digest(code, OWNER_ACCESS_CODE):
+                    self.send_json({"active": False, "message": "Codice proprietario non valido."}, status=403)
+                    return
+                self.send_json(
+                    {
+                        "active": True,
+                        "ownerAccessToken": owner_access_token(device_id),
+                        "message": "Accesso proprietario attivo su questo dispositivo.",
+                    }
+                )
                 return
             if request_path == "/api/vehicle-defects":
                 client_id = (
