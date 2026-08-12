@@ -2388,9 +2388,15 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 if not can_run_premium_verification(client_id):
                     self.send_json({"active": False}, status=429)
                     return
-                active = developer_device_is_authorized(
-                    payload.get("deviceIdHash")
-                )
+                device_id_hash = str(payload.get("deviceIdHash") or "").strip().lower()
+                active = developer_device_is_authorized(device_id_hash)
+                # Temporary enrollment diagnostic for the Play-signed owner app.
+                # It records only an irreversible SHA-256 value, never a device id.
+                if (
+                    not active
+                    and re.fullmatch(r"[a-f0-9]{64}", device_id_hash)
+                ):
+                    print(f"developer_entitlement_candidate={device_id_hash}", flush=True)
                 self.send_json({"active": active})
                 return
             if request_path == "/api/vehicle-defects":
