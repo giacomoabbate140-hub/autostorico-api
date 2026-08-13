@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-13T11:01:25.687210+00:00",
-  "cursor": 21,
+  "updatedAt": "2026-08-13T13:49:30.102869+00:00",
+  "cursor": 22,
   "candidates": [
     {
       "status": "approved",
@@ -420,6 +420,65 @@
       "title": "qashqai +2 1.5 (2012) - richiamo \"campagna di assistenza P6313\" | Il Forum di Quattroruote",
       "snippet": "Oggi mi è arrivata la seguente mail: Gentile Cliente, La informiamo che Nissan ha individuato un potenziale problema che interessa il software controllo motore del Suo veicolo identificato dalla targa XXXXX: <strong>la logica di gestione potrebbe non proteggere adeguatamente i componenti dello scarico</strong>... La mia ricerca è per la soluzione (i fatti ci sono), ho chiesto chiarimenti alla nissan e non ho ancora ricevuto alcuna risposta (per quel che puo valere) ... Ma il numero di telaio della tua auto rientra in quelle \"incriminate\"? Perchè altrimenti è inutile fasciarsi la testa. Per le qashqai ci sono stati anche diversi altri richiami, tra cui uno grave per la sostituzione del piantone dello sterzo. Non ti seguo, su internet si parla di problemi con il motore renault montato sul 2.0 e 1.5, per esempio: http://www.autofficinasicura.com/14874-nissan-qashqai-bronzine/ La maggior parte dei problemi vengono segnalati da chi ha il modello 1.5 (probabilmente piu persone hanno piu interesse all'economico motore 1.5), probabilmente non hai guardato minimamente la pagina facebook in cui si accumulano piu segnalazioni. Nel caso della 2.0, è un motore che ha dato molte meno noie, e anche qui sul forum gli utenti che sono arrivati quasi a 300mila km senza problemi sono diversi (Laguna ed Espace), anche con lo step di potenza di 180cv. Delle bronzine sul 2.0 apprendo solo da questo articolo che hai postato: http://www.autofficinasicura.com/14874-nissan-qashqai-bronzine/ ma fa il paio con la sciocchezza che le bronzine inchiodate sfondino il monoblocco. Su internet invece ho visto alcuni dopo il 2010 con il problema delle bronzine... ho letto uno che diceva che la nissan avrebbe \"rinforzato il banco motore\", ma non è detto che ci siano meno casi per queste 'eventuali' modifiche e non perché la gente ha smesso di acquistare la qashqai oppure non ha fatto ancora i km che servono.",
       "sourceUrl": "https://forum.quattroruote.it/threads/qashqai-2-1-5-2012-richiamo-campagna-di-assistenza-p6313.105952/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T13:49:30.102869+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Nuovo problema a 1.2 PureTech - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Secondo quanto riportato in esclusiva da L’Argus, il propulsore presenta “difetti di gioventù” legati all’albero a camme, con conseguenze anche serie sul funzionamento del motore. Il problema: <strong>allarme al motore e cali di potenza</strong> Nonostante l’abbandono della nota cinghia a bagno d’olio ... Secondo quanto riportato in esclusiva da L’Argus, il propulsore presenta “difetti di gioventù” legati all’albero a camme, con conseguenze anche serie sul funzionamento del motore. Il problema: allarme al motore e cali di potenza Nonostante l’abbandono della nota cinghia a bagno d’olio — spesso al centro di campagne di richiamo nella generazione precedente —, il nuovo 1.2 PureTech continua a manifestare criticità tecniche. Il tutto è stato confermato da testimonianze raccolte da officine che hanno affrontato il difetto. I modelli coinvolti Il motore 1.2 PureTech a catena è disponibile sia in versione aspirata da 100 CV che microibrida da 136 CV, ed equipaggia una trentina di modelli a marchio Peugeot, Citroën, Opel, Fiat, DS e Jeep. Tra questi ci sono veicoli molto popolari come Peugeot 208, 2008 e 3008, Citroën C4 e C5 Aircross, DS 3, Opel Mokka, Fiat 600 e Jeep Avenger. Le soluzioni (e chi è a rischio) Sempre secondo L’Argus, Stellantis ha già iniziato ad affrontare il problema in fabbrica: a partire dal 31 gennaio 2024 è stato migliorato il sistema di fasatura dell’albero a camme, mentre il 18 febbraio è stata aggiornata anche la vite del pignone. Tutti i motori prodotti fino al 17 febbraio 2024 potrebbero quindi essere soggetti al difetto.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=126226"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T13:49:30.102869+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo JZR su motore 1.2 PureTech Turbo - Pagina 23 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Peugeottista D.O.C. ... 20/03/2023, 20:23 Ciao a tutti, mi quoto a distanza di 2 anni in merito a questo argomento, raccontandovi un po&#x27; come è andata gli anni successivi. Di rado compariva in autostrada in fase di decelerazione (chissà perchè) l&#x27;avviso &quot;difetto al motore, far riparare il veicolo&quot;, relativa spia gialla fissa e service. Fatto richiamo nel 2021 appena ricevuto invito. La mia è del 2014. Peugeot nel 2021 mi ha detto che cinghia era ok e che entro 4 anni la avrei dovuti sostituire. Ora ha cominciato a sfaldarsi... 9 anni, 85.000 km · Peugeot 208 Allure 5 porte 1.4 95 CV Colore(Bianco banchisa) - Cerchi in lega 16\" HELIUM - Touchscreen con Navigatore, Pack Comfort, Pack Urban Peugeot 308 SW Allure 1.2 PureTech 130 CV Colore(Grigio Hurricane) - Cerchi in lega 17\" RUBIS - Tetto \"Ciel\" panoramico in cristallo oscurato - Park Assist + Retrocamera - Interni Misto TEP / Alcantara® Mistral - Driver Assistance Pack - Touchscreen con Navigatore e lettore CD/MP3 Peugeottista D.O.C. ... 20/03/2023, 20:23 Ciao a tutti, mi quoto a distanza di 2 anni in merito a questo argomento, raccontandovi un po' come è andata gli anni successivi. Di rado compariva in autostrada in fase di decelerazione (chissà perchè) l'avviso \"difetto al motore, far riparare il veicolo\", relativa spia gialla fissa e service. Peugeottista D.O.C. ... Ok, direi allora officina da cambiare quanto prima.....soprattutto perchè, appunto, le direttive e piani di manutenzione sono cambiati dal 2018, cugggina in firma docet avranno dimenticato nel cassetto il bollettino tecnico che è loro arrivato nel frattempo e non me lo spiego altrimenti. La sequenza per tutto il viaggio è stata -spia motore e avviso di difetto al motore - 15/20 minuti di moto perfetto, scritta arrestare veicolo e taglio della potenza (ho scoperto che andava in modalità di protezione del motore), accostavo, spegnevo e riaccendendevo senza spie - 2 minuti dopo spia gialla motore e difetto motore e dopo 15/20 di nuovo lo stop.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=119601&start=330"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T13:49:30.102869+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "difetto antinquinamento - Pagina 2 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Ciao, questa mattina la mia 208 mi ha segnalato lo stesso problema: spia service accesa fissa, spia urea accesa fissa e messaggio difetto antinquinamento. Ho cliccato sul tasto sul cruscotto e mi dice urea superiore a 2400 km. Pensate che il problema sia lo stesso? La macchina ha 64.000 KM (immatricolata a novembre 2015) ed è sempre stata tagliandata presso la concessionaria. Guardando le vecchie fatture ho fatto anche le campagne di richiamo HUH, HXG, HNV, HFF, una dovrebbe essere per il tappo urea...spero che non debba sostituire il serbatoio urea adesso Ciao, questa mattina la mia 208 mi ha segnalato lo stesso problema: spia service accesa fissa, spia urea accesa fissa e messaggio difetto antinquinamento. Ho cliccato sul tasto sul cruscotto e mi dice urea superiore a 2400 km. Pensate che il problema sia lo stesso? La macchina ha 64.000 KM (immatricolata a novembre 2015) ed è sempre stata tagliandata presso la concessionaria. Guardando le vecchie fatture ho fatto anche le campagne di richiamo HUH, HXG, HNV, HFF, una dovrebbe essere per il tappo urea...spero che non debba sostituire il serbatoio urea adesso Salve ragazzi, ho una 208 1.6 bluehdi del 2016 con appena 90mila km, dopo aver fatto il rabbocco adblue mi si accese urea poi service e poi avaria motore. Dopo una rigenerazione fap la spia mi si spense e dopo più o meno una 20ina di km mi si sono riaccese le spie. Dato che è una anomalia ormai nota dovrebbero sistemare senza spese? Su google ho trovato: Per risolvere questo malfunzionamento, il quale si verifica per veicoli Peugeot 208, 308, 3008 e 5008, occorre semplicemente effettuare un aggiornamento della centralina. Partner 1,6 Hdi 90hp 261k km :10/2008 C3 Aircross 1,2 Puretech 110hp EAT6 114k km :05/2018 Ex Citroen C3 Elegance 1,1 60hp 47k km :10/2006 Ex Citroen C3 Picasso Exclusive 1,6 Hdi 92hp 72k km : 08/2014 Ex Fiat scudo JLX 1.9TD 90hp :12/1996 149k km App MyCitroen r.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=120584&start=15"
     }
-  ]
+  ],
+  "latestUpdate": {
+    "id": "2026-08-13T13:49:30.102869+00:00",
+    "updatedAt": "2026-08-13T13:49:30.102869+00:00",
+    "addedCount": 3,
+    "summary": "Raccolte 3 nuove fonti per Peugeot 208, in revisione.",
+    "details": [
+      "Passione Peugeot Auto Club Italia: Nuovo problema a 1.2 PureTech - Passione Peugeot Auto Club Italia - FORUM",
+      "Passione Peugeot Auto Club Italia: Campagna di richiamo JZR su motore 1.2 PureTech Turbo - Pagina 23 - Passione Peugeot Auto Club Italia - FORUM",
+      "Passione Peugeot Auto Club Italia: difetto antinquinamento - Pagina 2 - Passione Peugeot Auto Club Italia - FORUM"
+    ],
+    "vehicles": [
+      {
+        "make": "Peugeot",
+        "model": "208"
+      }
+    ]
+  }
 }
