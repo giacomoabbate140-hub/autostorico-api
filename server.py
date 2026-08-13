@@ -67,7 +67,7 @@ GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
     "GOOGLE_PLAY_SUBSCRIPTION_ID", "premium_6_mesi"
 ).strip()
 GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = os.environ.get(
-    "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "premium_gold_6_mesi"
+    "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "goldseimesi"
 ).strip()
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 DEVELOPER_DEVICE_ID_HASH = os.environ.get(
