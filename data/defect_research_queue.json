@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-13T13:49:30.102869+00:00",
-  "cursor": 22,
+  "updatedAt": "2026-08-13T16:10:36.480613+00:00",
+  "cursor": 23,
   "candidates": [
     {
       "status": "approved",
@@ -462,22 +462,163 @@
       "title": "difetto antinquinamento - Pagina 2 - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Ciao, questa mattina la mia 208 mi ha segnalato lo stesso problema: spia service accesa fissa, spia urea accesa fissa e messaggio difetto antinquinamento. Ho cliccato sul tasto sul cruscotto e mi dice urea superiore a 2400 km. Pensate che il problema sia lo stesso? La macchina ha 64.000 KM (immatricolata a novembre 2015) ed è sempre stata tagliandata presso la concessionaria. Guardando le vecchie fatture ho fatto anche le campagne di richiamo HUH, HXG, HNV, HFF, una dovrebbe essere per il tappo urea...spero che non debba sostituire il serbatoio urea adesso Ciao, questa mattina la mia 208 mi ha segnalato lo stesso problema: spia service accesa fissa, spia urea accesa fissa e messaggio difetto antinquinamento. Ho cliccato sul tasto sul cruscotto e mi dice urea superiore a 2400 km. Pensate che il problema sia lo stesso? La macchina ha 64.000 KM (immatricolata a novembre 2015) ed è sempre stata tagliandata presso la concessionaria. Guardando le vecchie fatture ho fatto anche le campagne di richiamo HUH, HXG, HNV, HFF, una dovrebbe essere per il tappo urea...spero che non debba sostituire il serbatoio urea adesso Salve ragazzi, ho una 208 1.6 bluehdi del 2016 con appena 90mila km, dopo aver fatto il rabbocco adblue mi si accese urea poi service e poi avaria motore. Dopo una rigenerazione fap la spia mi si spense e dopo più o meno una 20ina di km mi si sono riaccese le spie. Dato che è una anomalia ormai nota dovrebbero sistemare senza spese? Su google ho trovato: Per risolvere questo malfunzionamento, il quale si verifica per veicoli Peugeot 208, 308, 3008 e 5008, occorre semplicemente effettuare un aggiornamento della centralina. Partner 1,6 Hdi 90hp 261k km :10/2008 C3 Aircross 1,2 Puretech 110hp EAT6 114k km :05/2018 Ex Citroen C3 Elegance 1,1 60hp 47k km :10/2006 Ex Citroen C3 Picasso Exclusive 1,6 Hdi 92hp 72k km : 08/2014 Ex Fiat scudo JLX 1.9TD 90hp :12/1996 149k km App MyCitroen r.",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=120584&start=15"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "richiamo per 1.5 BlueHdi, catena albero a camme (MXL) - Pagina 9 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Quindi: Non è solo “campagna qualità” → <strong>è ufficialmente un richiamo di sicurezza notificato alla Commissione Europea tramite il sistema RAPEX (oggi “Safety Gate”).</strong> Peugeot ha quindi l’obbligo legale di intervenire gratuitamente e informare i clienti. Sono proprietario di una 3008 gt-line del 2019 con all'incirca 100 mila km. Sentito del problema mi sono recato in concessionaria e dopo un check della rumorosità della cinghia risultava anomalia e quindi consigliavano sostituzione a mie spese perchè non dal VIN la macchina non era interessata nella campagna di richiamo. Vista la spesa ingente ho preso tempo ed ho contattato più volte la Peugeot tramite sito ufficiale e dopo varie mie insistenze finalmente anche la mia Leonessa è rientrata nella campagna di richiamo. Finalmente domani devo portare la macchina in Peugeot per la sostituzione della ormai famosissima catena da 7mm, poi vi farò sapere....... premetto che il check l'ho fatto a mie spese, circa 70 euro, perchè all'epoca non rientravo ancora nella campagna di richiamo ( immatricolazione marzo 2019). Peugeot 3008 1.5 BlueHDI 130 cv GT Line (Marzo 2019) Quindi: Non è solo “campagna qualità” → è ufficialmente un richiamo di sicurezza notificato alla Commissione Europea tramite il sistema RAPEX (oggi “Safety Gate”). Peugeot ha quindi l’obbligo legale di intervenire gratuitamente e informare i clienti. Questo spiega perché sulla lettera appare la dicitura “SAFETY RECALL”: è coerente con la classificazione europea. Sapete se ci sono class-action a cui aderire... autorità da coinvolgere per avere un minimo di leva nei confronti di questi mezzucci? grazie a tutti ms Buongiorno, situazione simile alla tua con Peugeot 3008 cambio manuale del 2018, il 30 giugno sento rumore di ferraglia all'accensione a freddo, conoscendo la problematica chiamo il carro attrezzi e la trasporto da un meccanico.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=126449&start=120"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Problema a seguito richiamo antinquinamento aggiornamento software 1.5 hdi | Il Forum di Quattroruote",
+      "snippet": "A mio parere la 3008 avrebbe meritato un 1.8/2.0 da 150/160cv (come c&#x27;era nella prima versione), il 1.5 130cv è davvero molto al limite nonostante il cambio lavori molto bene per compensare. ... Anche a me hanno costretto ad aderire alla campagna antiinquinamento con la glk e ho avuto gli stessi problemi evidenziati,poi risolti sempre in MB grazie ad un amico che lavora in concessionaria, da allora va molto meglio di prima, meglio dall&#x27;uscita dalla fabbrica E soprattutto se altri con questa campagna di richiamo Peugeot che ho scoperto pare si chiami \"MKS\", siano nella mia stessa situazione oppure sia per loro filato tutto liscio. Grazie ancora ... Noi avremo il secondo tagliando della 3008 (1.5 BlueHDI 130 EAT8) a fine mese, solo che essendo aziendale verrà fatto da centro autorizzato del NLT quindi NON Peugeot, per cui questa campagna non mi aspetto venga fatta. A mio parere la 3008 avrebbe meritato un 1.8/2.0 da 150/160cv (come c'era nella prima versione), il 1.5 130cv è davvero molto al limite nonostante il cambio lavori molto bene per compensare. ... Anche a me hanno costretto ad aderire alla campagna antiinquinamento con la glk e ho avuto gli stessi problemi evidenziati,poi risolti sempre in MB grazie ad un amico che lavora in concessionaria, da allora va molto meglio di prima, meglio dall'uscita dalla fabbrica Quando fecero l'aggiornamento SW sulla Leòn 1.6 tdi di mia moglie, è andata male (ma molto male) per un paio d'anni: rigenerazioni eccessive, marcia a colpi, ripresa \"seduta\" in quarta ma consumi un po' minori. Durante un tagliando, eseguito in Seat nonostante l'età dell'auto grazie alle ottime campagne di fidelizzazione, hanno di nuovo aggiornato il software con una nuova release e devo dire che l'auto è migliorata nettamente. La mia media calcolata su 60.000 km era di 21 km/l. Dopo l'aggiornamento software di qualche settimana fa, il consumo è pari a 16,9 km/l!!! La concessionaria Peugeot che ha effettuato la modifica mi dice che per lei è tutto a posto, non ha fatto altro che caricare quanto ricevuto da Stellantis.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/problema-a-seguito-richiamo-antinquinamento-aggiornamento-software-1-5-hdi.148425/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Anomalia serbatoio antinquinamento nuova 3008 - Pagina 5 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Auguri Buona serata A me pare assurdo non abbiano ancora, la causa univoca del problema, una soluzione robusta e fatto partire una campagna di richiamo al 100% dei veicoli coinvolti. L&#x27;avessi saputo per tempo (colpa mia), avrei riflettuto due volte sull&#x27;acquisto di tale vettura. Mi rode avere un&#x27;auto che non si sa quando (magari dopo la garanzia), potrà incorrere in un problema di cui i produttori non ne sanno niente ed i clienti pagano in denaro e disagi le conseguenze. Speriamo bene davide · 5008 2019 1.5 BlueHDi 130cv EAT8 Allure + AGC + KS + ACC + VP180 + DAB Ora mi organizzo un viaggetto a Lourdes....in treno però.... nel frattempo qualcuno mi può girare il link o il doc dove Peugeot ammette con nota tecnica il difetto al serbatoio AdBlue? Cercando online ho solo trovato riporti di terzi ma mai qualcosa della casa madre... Grazie Un saluto a tutti. Andrea · Peugeot 3008 Business 1.5 BlueHDi 130 CV - 09/2019 ... Mi aggiungo anche io tra gli sfortunati proprietari che hanno problemi con Adblue ovvero con il sistema antinquinamento. Auguri Buona serata A me pare assurdo non abbiano ancora, la causa univoca del problema, una soluzione robusta e fatto partire una campagna di richiamo al 100% dei veicoli coinvolti. L'avessi saputo per tempo (colpa mia), avrei riflettuto due volte sull'acquisto di tale vettura. Mi rode avere un'auto che non si sa quando (magari dopo la garanzia), potrà incorrere in un problema di cui i produttori non ne sanno niente ed i clienti pagano in denaro e disagi le conseguenze. Speriamo bene davide · 5008 2019 1.5 BlueHDi 130cv EAT8 Allure + AGC + KS + ACC + VP180 + DAB Dal 06/22 >>> Nuova 3008 GT (03/19) 2.0 BlueHdi 180cv EAT8 - Grigio Amazonite - Portellone hands free - Visiopark 360 - Ruotino di scorta - Tetto panoramico apribile - WSC+Presa 220V Dal 11/19 al 06/22: Nuova 3008 Crossway,1.5 BlueHdi 130cv 6M - Grigio Artense - Proiettori Full Led - Visio Park 180 - DAB+ Dal 09/16 al 11/19: Nuova 308 Allure 5p - 2.0 BlueHdi 150cv EAT6 - Nero Perla - Interni misto TEP Alcantara Mistral - Cerchi 17\" Rubis - DAP - Pack Ciel - Blind corner assist - Park assist + Retrocamera - Lettore CD/MP3 ... Andrea Novara ha scritto:Solo per info. ... la pistola è scattata a Personale: Peugeot 308 1.6 BlueHdi 120cv Allure manuale bianco madreperla Optional: interni in alcantara-misto TEP, pack ciel, park assist con retrocamera e sensore angolo cieco, DAP, ruotino di scorta e lettore CD. In famiglia Peugeot 5008 1.5 BlueHDi 131cv Eat8 Allure grigio artense Optional: Fari full led, AGC, 7 posti.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=115026&start=60"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo JDE - verifica filtro antiparticolato - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Peugeot 3008 Crossway 1.5 BlueHDi 130 manuale S&amp;S visiopark 180 + keyless Grigio Artense Gennaio 2018 ... Ritirata questa sera la mia 308 soggetta al richiamo per il fap difettoso, <strong>pare che un lotto di motori 1.5blue HDi Monti fap con un particolare in plastica che danneggia l&#x27;interno, viene</strong> ... Peugeot 3008 Crossway 1.5 BlueHDi 130 manuale S&S visiopark 180 + keyless Grigio Artense Gennaio 2018 ... Ritirata questa sera la mia 308 soggetta al richiamo per il fap difettoso, pare che un lotto di motori 1.5blue HDi Monti fap con un particolare in plastica che danneggia l'interno, viene sostituito tutto il gruppo catalizzatore,scr,fap e rimappata centralina. 308 GT Line 1.5 BlueHDi 131cv Grigio Artense Interni misto TEP/Tessuto Oxford GT Line Mistral con cuciture rosse Tetto ciel pan. in vetro oscurato - Visionparck (retrocamera 180) - Park assist - 3D con.Navigation Drive Assistance Pack II - cerchi in lega 18 Diamant - ruotino di scorta - tappetini in gomma OEM Vasca baule in poliuretano OEM ex Peugeot 2008 dal 2016-2017 (venduta per necessità) 35.000km ex Peugeot 3008 I°serie dal 2011-2017 proprietario il boss da 2017 a Marzo 2019 mia in tutto km 224.000 con normale manutenzione ordinaria Nuova 3008 1.5 Bluehdi 130cv EAT8 GTLine Rosso Ultimate, Cruise adattivo, Keyless, Advanced Grip Control, DAB, Visiopark 180°, barre al tetto. ... Mettete la data delle vostre auto soggette a richiamo per favore. Peugeot 3008 BlueHDi 1.5 eat8 Allure Peugeot 1.5 BlueHDi 130 cv eat8 2018 Cellulare Samsung A52 con Android 14. ... immatricolata nel giugno 2018 km 18410 intervento eseguito il 03/06/2019 IL concessionario mi ha detto di aver sostituito solo un filtro di cotone e riprogrammato la centralina, senza la sostituzione del FAP. Questo mi lascia un poco dubbioso ! Secondo voi, che ne pensate ? Peugeot 3008 BlueHDi 1.5 eat8 Business",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=115132"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo JZU - Peugeot 3008, 5008 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Ciao, oggi ho ricevuto una lettera dalla Peugeot per una &#x27;campagna di richiamo JZU&#x27;. C&#x27;è scritto che riguarda l&#x27;aggiornamento del &quot;...software di controllo del motore, al fine di evitare il bloccaggio dell&#x27;iniettore d&#x27;urea...&quot; Che abbiano trovato la soluzione al problema manifestato da tanti peugeottisti? 3008 1.5 BlueHDi 130cv EAT8 Allure 104 1.0 309 1.9D 406 2.0 406 2.0 TD SW 206 1.4 TD 307 2.0 TD SW 407 2.0 TD SW Ciao, oggi ho ricevuto una lettera dalla Peugeot per una 'campagna di richiamo JZU'. C'è scritto che riguarda l'aggiornamento del \"...software di controllo del motore, al fine di evitare il bloccaggio dell'iniettore d'urea...\" Che abbiano trovato la soluzione al problema manifestato da tanti peugeottisti? 3008 1.5 BlueHDi 130cv EAT8 Allure 104 1.0 309 1.9D 406 2.0 406 2.0 TD SW 206 1.4 TD 307 2.0 TD SW 407 2.0 TD SW Forse dopo aver testato che questo tipo di intervento sembra risolutivo, han deciso di aprire una campagna di richiamo. Vediamo se arriva anche a me la letterina..... ciao · Peugeot 3008 1.5 ehdi 130 cv cambio manuale, allestimento Allure con: pacchetto visiopak 180, tetto blackdiamond, keyless system, advance grip control, barre sul tetto, vetri posteriore oscurati,color grigio amazonite. BAS GARAGE ... 3008 1.5 BlueHDi 130cv EAT8 GTline 02/2020 confermi di aver ricevuto anche io la lettera di richiamo JZU Anche io ho ritirato la mia 2008 1.5 bluehdi 10 giorni fa, ed ho scoperto solo dopo di questo benedetto problema all'urea. Approfondiamo questo argomento per favore. Ho visto decine di persone nel forum che hanno avuto problemi con questa benedetta spia dell'urea. Chi ha già effettuato il richiamo, può dirci per favore cosa gli hanno detto i tecnici all'atto dell'intervento? A cosa serviva...",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=118917"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo JZU - Peugeot 3008, 5008 - Pagina 2 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Questa settimana ho portato l&#x27;auto in conce per il richiamo (ci avranno messo circa 30 minuti). Ho chiesto al responsabile dell&#x27;officina delucidazioni sull&#x27;intervento e mi ha risposto che <strong>si tratta di un aggiornamento del software della centralina per ottimizzare la gestione dell&#x27;urea</strong>. Questa settimana ho portato l'auto in conce per il richiamo (ci avranno messo circa 30 minuti). Ho chiesto al responsabile dell'officina delucidazioni sull'intervento e mi ha risposto che si tratta di un aggiornamento del software della centralina per ottimizzare la gestione dell'urea. 3008 1.5 BlueHDi 130cv EAT8 Allure 104 1.0 309 1.9D 406 2.0 406 2.0 TD SW 206 1.4 TD 307 2.0 TD SW 407 2.0 TD SW Ho portato oggi in officina la mia 3008 1.5 BlueHDI EAT8 prodotta ad ottobre 2019 per l'anomalia del sistema antinquinamento (seconda volta che compare il messaggio, la prima a circa 2000 km, ora 16000 km). Con l'occasione è stato aggiornato il software come da lettera di richiamo che ho ricevuto qualche settimana fa. Segnalazioni di richiamo da auto prodotte dopo l'ottobre 2019? Se ci sono postatele.... Peugeot 3008 1.5 HDI 8 eats bianco banchisa - tetto apribile-black diamond, visiopark 180°, advanced grip control, keyless, fari full led ... 3008 1.5 BlueHDi 130cv EAT8 Allure 104 1.0 309 1.9D 406 2.0 406 2.0 TD SW 206 1.4 TD 307 2.0 TD SW 407 2.0 TD SW Quello che risulta strano è che si va a fare un richiamo per un difetto dell'iniettore dell' adblue, per cui non mi sembra (ma correggete se dico una stupidaggine) si sia lamentato nessuno.....e per un difetto segnalato da decine e decine di utenti....nessun richiamo.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=118917&start=15"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Impossibilità consegna Nuova 3008 causa richiamo - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Campagna richiamo su FAP TUTTO OK ... Il mio venditore non sapeva nulla di specifico ma mi diceva che è abbastanza normale che possa capitare, mi faceva l esempio su alcune 308 dove c&#x27;era un bullone da sostituire e li hanno bloccato pure le consegne. Sulla mia che dovrebbe arrivare tra 1-2 settimane non mi ha detto nulla su questo richiamo. SUV 3008 2.0 BlueHDi 150CV - Allure Grigio Artense - Pack City Plus - Fari full led - Tetto Black Diamond - Tetto panoramico apribile - Radio DAB - Grip Control - Allarme volumetrico Campagna richiamo su FAP TUTTO OK ... Il mio venditore non sapeva nulla di specifico ma mi diceva che è abbastanza normale che possa capitare, mi faceva l esempio su alcune 308 dove c'era un bullone da sostituire e li hanno bloccato pure le consegne. Sulla mia che dovrebbe arrivare tra 1-2 settimane non mi ha detto nulla su questo richiamo. SUV 3008 2.0 BlueHDi 150CV - Allure Grigio Artense - Pack City Plus - Fari full led - Tetto Black Diamond - Tetto panoramico apribile - Radio DAB - Grip Control - Allarme volumetrico Campagna richiamo su FAP TUTTO OK ... Umbi1969 ha scritto:Oggi esce la specifica e i motivi del richiamo Peugeot su 3008. Non so ancora di cosa si tratta . Magari è una sciocchezza . Staremo a vedere ...... Novità? SUV 3008 2.0 BlueHDi 150CV - Allure Grigio Artense - Pack City Plus - Fari full led - Tetto Black Diamond - Tetto panoramico apribile - Radio DAB - Grip Control - Allarme volumetrico Peugeot 3008 1.6 HDI EAT 6 Allure. Bianco Madreperla Tetto Nero GRIP Telec.180 Keyless Antifurto. Ordinata a Novembre '17. Consegnata entro natale '17. Campagna richiamo su FAP TUTTO OK Guasti, difetti, problemi e cose che non ci piacciono; costi dei tagliandi e delle riparazioni",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=110094"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Peugeot Italia inesistente e gravi inadempienze | Il Forum di Quattroruote",
+      "snippet": "io ho speso molto meno di acquisto per un 208 hdi ma stessi problemi di tutti, ammortizzatori cambiati e anomalia adblue causa sensore 1 volta e centralina la seconda volta. per un totale 1000 euro mai spesi in vita mia su altre auto. vista la numerosità nei vari post degli stessi problemi mi sarei aspettato un richiamo ufficiale della casa. contenti loro di perdere clienti...... mai più. adesso la cambio · Clicca per allargare... fatto ieri per la cronaca e cambiata con una coreana. son veramente dei buffoni non ho altre parole. ... Dal 25 maggio la mia 3008 con 53.000 km e 40 mesi di vita è ferma in officina per un problema con il serbatoio urea che andrebbe cambiato al costo di 1000 euro. io ho speso molto meno di acquisto per un 208 hdi ma stessi problemi di tutti, ammortizzatori cambiati e anomalia adblue causa sensore 1 volta e centralina la seconda volta. per un totale 1000 euro mai spesi in vita mia su altre auto. vista la numerosità nei vari post degli stessi problemi mi sarei aspettato un richiamo ufficiale della casa. contenti loro di perdere clienti...... mai più. adesso la cambio ... Buonasera. Ero alla ricerca su internet del problema che si è verificato oggi alla mia 3008 1.2 bluehdi ( 2016) e ho con SGOMENTO mi sono imbattuto in questo forum,mi è parso di capire che il problema sia noto e parecchio diffuso.Tra l'altro sono anche uno dei \" fortunati\" che ha dovuto cambiare gli ammortizzatori a 30.000 km, altro difetto ben noto alla casa. Sono proprietario di una 3008, anche se il problema di cui voglio parlare non è specifico della vettura, ma di come Peugeot gestisce il rapporto con i propri clienti e, cioè: non lo gestisce. La mia 3008 ha presentato una 15ina di giorni fa un'anomalia tecnica relativa al sistema antinquinamento e, nello specifico, sul serbatoio dell'UREA...difetto ben conosciuto dalle officine e dalla stessa casa madre (gli stessi operatori del servizio relazioni con il cliente ne erano a conoscenza). io ho speso molto meno di acquisto per un 208 hdi ma stessi problemi di tutti, ammortizzatori cambiati e anomalia adblue causa sensore 1 volta e centralina la seconda volta. per un totale 1000 euro mai spesi in vita mia su altre auto. vista la numerosità nei vari post degli stessi problemi mi sarei aspettato un richiamo ufficiale della casa. contenti loro di perdere clienti...... mai più. adesso la cambio · Clicca per allargare... fatto ieri per la cronaca e cambiata con una coreana. son veramente dei buffoni non ho altre parole. ... Dal 25 maggio la mia 3008 con 53.000 km e 40 mesi di vita è ferma in officina per un problema con il serbatoio urea che andrebbe cambiato al costo di 1000 euro. Sostanzialmente il problema è nato dal fatto che il ricambio non era disponibile...e che, quindi, avrebbe richiesto un certo numero di giorni per fornirlo. E qui sorge il primo problema: se il difetto è noto, se sono a conoscenza del fatto che provoca un blocco tecnico del veicolo, perché non hanno programmato un sufficiente numero di ricambi in magazzino (centrale e pure in quelli di smistamento) per garantire un pronto approvvigionamento del ricambio?",
+      "sourceUrl": "https://forum.quattroruote.it/threads/peugeot-italia-inesistente-e-gravi-inadempienze.129154/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo 1.6 Bluehdi 120 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "08/02/2021, 11:00 P.S. E non sperare nella clemenza del concessionario... <strong>Loro sono obbligati ad aggiornare all&#x27;ultima versione se il TSB legato al richiamo prevede, come accade al 90%, l&#x27;aggiornamento dell&#x27; ECU motore</strong>. Ciao Grazie mille dell&#x27;assolutamente esaustiva risposta. Ciao, ho appena ricevuto anch'io una lettera di richiamo, 3008 1.5 130cv acquistata a Novembre 2020. La campagna era KJH? Ciao, qui si va sul soggettivo e su varie \"scuole di pensiero\" SE, se sottolineo SE, i richiami fossero fatti \"seriamente\" non ci sarebbe altro cha affidarsi, perchè si presuppone che il richiamo ponga rimedio ad un problema grave, tutelando al massimo il consumatore... Purtroppo l'esperinza Dieselgate (gruppo VW in primis, ma anche altri) ha portato alla luce invece l'abitudine del richiamo \"para...lo\", ovvero il richiamo effettuato per tutelare la casa e non il consumatore, che viene considerato il \"fesso\" che magari ha \"pagato\" anche per quella potenza, e che per rientrare nei prametri ora gliela tolgono alla \"togliere alla zittina\".. 08/02/2021, 11:00 P.S. E non sperare nella clemenza del concessionario... Loro sono obbligati ad aggiornare all'ultima versione se il TSB legato al richiamo prevede, come accade al 90%, l'aggiornamento dell' ECU motore. Ciao Grazie mille dell'assolutamente esaustiva risposta.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=119875"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T16:10:36.480613+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo 308! - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Trasporti costruttore: Peugeot Automobili Italia S.p.a. marca: Peugeot modello: 308/partner Numero Veicoli: 797 Periodo di produzione: marzo 2008 Descrizione Difetto: Scatola servitù motore (BSM) non conforme Azioni correttive: Sostituzione Riferimento 800900901 Note Cod. campagna YPK Intervallo telai da: 308: VF34C5FWC55159061 Intervallo telai a: VF34HRHRH55143230 Intervallo telai da: PARTNER: VF37B9HXC68501312 Intervallo telai a: VF37B9HXC68501132 A quanto pare sui motori 1.6 HDI FAP 110CV per un difetto di produzione va sostituita la centralina BSM, resta da comprendere se anche le 2Tronic (la maggior parte di quelle del forum sono state prodotte a marzo) sono comprese ma io non ho ricevuto nessuna comunicazione... Peugeot 3008 SUV 1.6 BlueHDi 130 Allure + Advace grip control + Portellone Hands Free e Keyless + VisioPark 180° + Tetto Panoramico Apribile \"Black Diamond\".. Trasporti costruttore: Peugeot Automobili Italia S.p.a. marca: Peugeot modello: 308/partner Numero Veicoli: 797 Periodo di produzione: marzo 2008 Descrizione Difetto: Scatola servitù motore (BSM) non conforme Azioni correttive: Sostituzione Riferimento 800900901 Note Cod. campagna YPK Intervallo telai da: 308: VF34C5FWC55159061 Intervallo telai a: VF34HRHRH55143230 Intervallo telai da: PARTNER: VF37B9HXC68501312 Intervallo telai a: VF37B9HXC68501132 A quanto pare sui motori 1.6 HDI FAP 110CV per un difetto di produzione va sostituita la centralina BSM, resta da comprendere se anche le 2Tronic (la maggior parte di quelle del forum sono state prodotte a marzo) sono comprese ma io non ho ricevuto nessuna comunicazione... Si può sapere quale centralina potrebbe essere difettosa ?? Io ho un piccolo problema ai fari anabbaglianti , ogni tanto lampeggiano lievemente ... però lo fa una volta ogni tanto e ancora non ho avuto modo di portarla dal conce. Scusatemi anche io ho una 308 acquistata a maggio del 2008 potrei entrarci anche io nel richiamo ??? fin'ora nn ho avuto nessuna comunicazione ne noto anomalie se nn quella sui fari che ogni tanto mi da qualche errore, ma secondo me è dovuto al fatto che ho montato le lampade azzurre con una piccola centralina, secondo amici andavano montate mettendoci delle resistenze ai fari...cmq sapete dirmi come faccio a vedere se anche la mia auto potrebbe essere tra quelle difettate??",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?f=27&t=20903"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-13T13:49:30.102869+00:00",
-    "updatedAt": "2026-08-13T13:49:30.102869+00:00",
-    "addedCount": 3,
-    "summary": "Raccolte 3 nuove fonti per Peugeot 208, in revisione.",
+    "id": "2026-08-13T16:10:36.480613+00:00",
+    "updatedAt": "2026-08-13T16:10:36.480613+00:00",
+    "addedCount": 10,
+    "summary": "Raccolte 10 nuove fonti per Peugeot 3008, in revisione.",
     "details": [
-      "Passione Peugeot Auto Club Italia: Nuovo problema a 1.2 PureTech - Passione Peugeot Auto Club Italia - FORUM",
-      "Passione Peugeot Auto Club Italia: Campagna di richiamo JZR su motore 1.2 PureTech Turbo - Pagina 23 - Passione Peugeot Auto Club Italia - FORUM",
-      "Passione Peugeot Auto Club Italia: difetto antinquinamento - Pagina 2 - Passione Peugeot Auto Club Italia - FORUM"
+      "Passione Peugeot Auto Club Italia: richiamo per 1.5 BlueHdi, catena albero a camme (MXL) - Pagina 9 - Passione Peugeot Auto Club Italia - FORUM",
+      "Forum Quattroruote: Problema a seguito richiamo antinquinamento aggiornamento software 1.5 hdi | Il Forum di Quattroruote",
+      "Passione Peugeot Auto Club Italia: Anomalia serbatoio antinquinamento nuova 3008 - Pagina 5 - Passione Peugeot Auto Club Italia - FORUM",
+      "Passione Peugeot Auto Club Italia: Campagna di richiamo JDE - verifica filtro antiparticolato - Passione Peugeot Auto Club Italia - FORUM"
     ],
     "vehicles": [
       {
         "make": "Peugeot",
-        "model": "208"
+        "model": "3008"
       }
     ]
   }
