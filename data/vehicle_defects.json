@@ -1,13 +1,11 @@
 {
-  "catalogVersion": 21,
-  "updatedAt": "2026-08-11",
+  "catalogVersion": 22,
+  "updatedAt": "2026-08-13",
   "latestUpdate": {
-    "id": "catalog-21",
-    "summary": "Corretto il riconoscimento OCR della Range Rover Evoque 2.2 diesel e aggiornate le segnalazioni community.",
+    "id": "catalog-22",
+    "summary": "Collegate le varianti BMW Serie 1 diesel al profilo N47 e migliorata la ricerca delle fonti di mercato.",
     "vehicles": [
-      {"make": "Land Rover", "model": "Range Rover Evoque"},
-      {"make": "Audi", "model": "A1"},
-      {"make": "Ford", "model": "Puma"}
+      {"make": "BMW", "model": "Serie 1"}
     ]
   },
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
@@ -885,6 +883,15 @@
     {
       "make": "BMW",
       "model": "Serie 1",
+      "aliases": [
+        "116d",
+        "118d",
+        "120d",
+        "123d",
+        "125d",
+        "1 Series",
+        "Serie 1 BMW"
+      ],
       "generation": "E8x e F20/F21",
       "years": "2007-2015 circa, secondo motorizzazione",
       "reports": [

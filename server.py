@@ -1162,6 +1162,10 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
                 continue
             if provider_results:
                 query_results.extend(provider_results)
+            # Brave is the primary source. If it returns too few priced listings,
+            # use the next configured provider as a fallback rather than turning a
+            # thin web result into an internal-only estimate.
+            if len(query_results) >= MINIMUM_MARKET_LISTINGS:
                 break
         for listing in query_results:
             url = str(listing.get("url") or "")

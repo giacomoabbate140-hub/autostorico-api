@@ -159,6 +159,16 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertIn("Grande Punto", {vehicle["model"] for vehicle in result["vehicles"]})
 
+    def test_defect_catalog_matches_bmw_120d_as_serie_1(self):
+        result = vehicle_defect_reports("BMW", "120d", 2010, "diesel 1995 cc")
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["model"], "Serie 1")
+        self.assertIn(
+            "bmw-serie-1-n47-timing-chain-community",
+            {report["id"] for report in result["reports"]},
+        )
+
     def test_defect_catalog_filters_audi_a1_reports_by_year_and_engine(self):
         first_series = vehicle_defect_reports("Audi", "A1", 2011, "diesel 1598 cc CAYB")
         second_series = vehicle_defect_reports("Audi", "A1", 2021, "benzina 999 cc")
