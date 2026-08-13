@@ -42,7 +42,10 @@ DEFECT_RESEARCH_ENABLED = (
     os.environ.get("AUTOSTORICO_DEFECT_RESEARCH_ENABLED", "0") == "1"
 )
 MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
+# One compatible listing can be shown as a clearly labelled, low-confidence
+# external estimate. Three or more remain the consolidated threshold.
 MINIMUM_MARKET_LISTINGS = 3
+MINIMUM_EXTERNAL_LISTINGS = 1
 MARKET_CACHE_TTL_SECONDS = int(os.environ.get("AUTOSTORICO_CACHE_TTL_SECONDS", str(30 * 24 * 60 * 60)))
 MARKET_RATE_WINDOW_SECONDS = int(os.environ.get("AUTOSTORICO_RATE_WINDOW_SECONDS", "3600"))
 MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
@@ -1204,11 +1207,8 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
                 continue
             if provider_results:
                 query_results.extend(provider_results)
-            # Brave is the primary source. If it returns too few priced listings,
-            # use the next configured provider as a fallback rather than turning a
-            # thin web result into an internal-only estimate.
-            if len(query_results) >= MINIMUM_MARKET_LISTINGS:
-                break
+            # Keep checking configured sources: broader coverage improves the
+            # result and prevents a single source from deciding the outcome.
         for listing in query_results:
             url = str(listing.get("url") or "")
             if url in seen_urls:
@@ -1251,8 +1251,13 @@ def market_estimate_from_sources(
             if relaxed_lower <= float(item.get("price") or 0) <= relaxed_upper
         ]
         filtered_prices = [float(item["price"]) for item in filtered]
-    if len(filtered_prices) < 3:
+    if len(filtered_prices) < MINIMUM_EXTERNAL_LISTINGS:
         return None, filtered
+    if len(filtered_prices) < MINIMUM_MARKET_LISTINGS:
+        source_average = weighted_median(filtered)
+        if internal_average > 0:
+            return (source_average * 0.35) + (internal_average * 0.65), filtered
+        return source_average, filtered
     ordered_prices = sorted(filtered_prices)
     q1 = quartile(ordered_prices, 0.25)
     q3 = quartile(ordered_prices, 0.75)
@@ -1580,13 +1585,13 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
 
     has_details = bool(fuel_type and engine_cc and gearbox and condition and previous_owners)
     matched_count = len(filtered_listings)
-    market_based = matched_count >= MINIMUM_MARKET_LISTINGS
+    market_based = matched_count >= MINIMUM_EXTERNAL_LISTINGS
     market_configured = any(market_diagnostics.get("configuredProviders", {}).values())
     source_names = sorted({str(item.get("source") or "Fonte web") for item in filtered_listings})
     confidence = (
         f"Alta: valore confrontato con {matched_count} annunci/fonti web compatibili."
         if matched_count >= 8
-        else f"Media: valore confrontato con {matched_count} annunci/fonti web compatibili."
+        else f"Dati limitati: valore confrontato con {matched_count} annuncio/fonte web compatibile."
         if market_based
         else "Server online, ma fonti mercato non configurate. Aggiungi SerpApi o Brave su Render per usare prezzi web reali."
         if not market_configured
@@ -1596,6 +1601,8 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     )
     method = (
         "Valore calcolato partendo da annunci/fonti mercato compatibili, poi corretto verso un prezzo realistico di vendita tra privati."
+        if matched_count >= MINIMUM_MARKET_LISTINGS
+        else "Stima esterna prudente: confronto web limitato, integrato con i dati del veicolo."
         if market_based
         else "API online ma fonti mercato assenti: configura SERPAPI_API_KEY o BRAVE_SEARCH_API_KEY su Render."
         if not market_configured
@@ -1612,7 +1619,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "historicCriteria": historic_kind,
         "vehicleAge": actual_age,
         "matchedListings": matched_count,
-        "minimumListingsRequired": MINIMUM_MARKET_LISTINGS,
+        "minimumListingsRequired": MINIMUM_EXTERNAL_LISTINGS,
         "sourcesUsed": source_names,
         "marketBased": market_based,
         "marketCheckedAt": datetime.now(timezone.utc).isoformat(),
