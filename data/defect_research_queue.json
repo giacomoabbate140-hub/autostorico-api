@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-13T07:53:22.998335+00:00",
-  "cursor": 19,
+  "updatedAt": "2026-08-13T10:29:11.114073+00:00",
+  "cursor": 20,
   "candidates": [
     {
       "status": "approved",
@@ -378,6 +378,48 @@
       "title": "Nissan juke che dolori | Il Forum di Quattroruote",
       "snippet": "Sembra che il tubo in questione non sia reperibile a livello nazionale e ci siano altre 12 vetture ferme per lo stesso motivo al centro di assistenza di Ostia. Il punto da dibattere è il seguente; visto che sembra un anomalia ricorrente una Casa Automobilistica seria dovrebbe immediatamente attivare una Campagna di Richiamo senza indugio. Ho scritto a Nissan, facendo presente che probabilmente è un difetto di materiale o di produzione , visto che parecchie persone hanno avuto il medesimo danno!!! Nonostante sia a conoscenza del problema, non ha pensato a richiamare le auto (come invece altre case automobilistiche fanno !). Sembra che il tubo in questione non sia reperibile a livello nazionale e ci siano altre 12 vetture ferme per lo stesso motivo al centro di assistenza di Ostia. Il punto da dibattere è il seguente; visto che sembra un anomalia ricorrente una Casa Automobilistica seria dovrebbe immediatamente attivare una Campagna di Richiamo senza indugio. Non ho capito perchè dobbiate pagare un componente non soggetto a usura programmata. Comunque è la prima volta che sento di un difetto del genere su quel motore, se fosse un problema di progettazione saremmo invasi dalle lamentele, come di solito. Più probabile che la sostituzione non sia stata fatta a regola d'arte. Clicca per allargare... Il difetto è noto alla rete, e sembra sia generato da un lotto di manicotti difettosi, quindi non dovrebbe riguardare tutte le juke ante restyling. Il pezzo dovrebbe essere stato modificato nella new juke, ma per le rotture che si sono verificate, che non sono poche, sembrerebbe che la rete nissan di norma non intervenga in correntezza.",
       "sourceUrl": "https://forum.quattroruote.it/threads/nissan-juke-che-dolori.97744/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T10:29:11.114073+00:00",
+      "make": "Nissan",
+      "model": "Qashqai",
+      "year": 2020,
+      "engine": "1.3 DIG-T",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Qashqai 2.0 Dci 4wd - richiamo per riprogrammazione ECM (P3230) | Il Forum di Quattroruote",
+      "snippet": "Contatto il servizio clienti Nissan Italia facendo la stessa richiesta , motivando che sia inamissibile alterare le caratteristiche tecniche e le prestazioni del motore, ma sopratutto aumentare i costi di gestione dell&#x27;auto dovuti ai maggiori consumi di carburante solo per loro salvaguardia e senza informare adeguatamente il proprietario sulle conseguenze della rimappatura, loro ad oggi mi hanno risposto che non è possibile rimappare la centralina !!! Sono proprietario di una Nissan Qashqai 2.0 dCi DPF 4WD (110Kw, M9R) immatricolato nel Gennaio 2010, Tempo fa, in corrispodenza del tagliando dei 60K-Km, per cercare informazioni e verificare la mia situazione sono entrato nel sito You+Nissan, e all'accesso nel sito mi si e' aperto un messaggio pop-up con la comunicazione per un intervento gratuito di richiamo con la seguente motivazione:Riprogrammazione ECM motore 2.0 L [P3230], suggerendomi di rivolgermi ad una concessionaria Nissan per ulteriori informazioni. Contatto il servizio clienti Nissan Italia facendo la stessa richiesta , motivando che sia inamissibile alterare le caratteristiche tecniche e le prestazioni del motore, ma sopratutto aumentare i costi di gestione dell'auto dovuti ai maggiori consumi di carburante solo per loro salvaguardia e senza informare adeguatamente il proprietario sulle conseguenze della rimappatura, loro ad oggi mi hanno risposto che non è possibile rimappare la centralina !!! XXXXXXX La ringraziamo per aver scelto il Servizio Clienti Pronto Nissan in data xx/xx/xxx riguardo la campagna di servizio sulla Nissan Qashqai 2.0 Diesel (M9R). Come prima cosa mi scuso della risposta non attinente al problema. Avevo letto male, mea culpa. Per quanto riguarda la campagna di servizio (e non di richiamo, per questo non ha ricevuto una lettera raccomandata) P3230 trovera' qui di seguito le informazioni ufficiali diramate da Nissan Italia (che probabilmente avra' gia' letto). Non ho quindi provveduto all'intervento e sono ovviamente preoccupato dal quadro che emerge: pare che con questo richiamo Nissan cerchi di ovviare ad un difetto congenito dei veicoli interessati con una riprogrammazione della centralina che riducendo la potenza rende meno probabile il guasto causato da una criticità meccanica.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/qashqai-2-0-dci-4wd-richiamo-per-riprogrammazione-ecm-p3230.93387/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T10:29:11.114073+00:00",
+      "make": "Nissan",
+      "model": "Qashqai",
+      "year": 2020,
+      "engine": "1.3 DIG-T",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Difetto di fabbrica componenti essenziali Nissan qashqai e power | Il Forum di Quattroruote",
+      "snippet": "Clicca per allargare... Buongiorno e benvenuta sul forum Flavy2021! Per prima cosa perchè ti appoggi ad un officina autorizzata e non all&#x27;officina di una concessionaria? Per quanto riguarda la richiesta di sostituzione del mezzo penso che non ci siano i presupposti. Clicca per allargare... Buongiorno e benvenuta sul forum Flavy2021! Per prima cosa perchè ti appoggi ad un officina autorizzata e non all'officina di una concessionaria? Per quanto riguarda la richiesta di sostituzione del mezzo penso che non ci siano i presupposti.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/difetto-di-fabbrica-componenti-essenziali-nissan-qashqai-e-power.145532/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T10:29:11.114073+00:00",
+      "make": "Nissan",
+      "model": "Qashqai",
+      "year": 2020,
+      "engine": "1.3 DIG-T",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "qashqai +2 1.5 (2012) - richiamo \"campagna di assistenza P6313\" | Il Forum di Quattroruote",
+      "snippet": "Oggi mi è arrivata la seguente mail: Gentile Cliente, La informiamo che Nissan ha individuato un potenziale problema che interessa il software controllo motore del Suo veicolo identificato dalla targa XXXXX: <strong>la logica di gestione potrebbe non proteggere adeguatamente i componenti dello scarico</strong>... La mia ricerca è per la soluzione (i fatti ci sono), ho chiesto chiarimenti alla nissan e non ho ancora ricevuto alcuna risposta (per quel che puo valere) ... Ma il numero di telaio della tua auto rientra in quelle \"incriminate\"? Perchè altrimenti è inutile fasciarsi la testa. Per le qashqai ci sono stati anche diversi altri richiami, tra cui uno grave per la sostituzione del piantone dello sterzo. Non ti seguo, su internet si parla di problemi con il motore renault montato sul 2.0 e 1.5, per esempio: http://www.autofficinasicura.com/14874-nissan-qashqai-bronzine/ La maggior parte dei problemi vengono segnalati da chi ha il modello 1.5 (probabilmente piu persone hanno piu interesse all'economico motore 1.5), probabilmente non hai guardato minimamente la pagina facebook in cui si accumulano piu segnalazioni. Nel caso della 2.0, è un motore che ha dato molte meno noie, e anche qui sul forum gli utenti che sono arrivati quasi a 300mila km senza problemi sono diversi (Laguna ed Espace), anche con lo step di potenza di 180cv. Delle bronzine sul 2.0 apprendo solo da questo articolo che hai postato: http://www.autofficinasicura.com/14874-nissan-qashqai-bronzine/ ma fa il paio con la sciocchezza che le bronzine inchiodate sfondino il monoblocco. Su internet invece ho visto alcuni dopo il 2010 con il problema delle bronzine... ho letto uno che diceva che la nissan avrebbe \"rinforzato il banco motore\", ma non è detto che ci siano meno casi per queste 'eventuali' modifiche e non perché la gente ha smesso di acquistare la qashqai oppure non ha fatto ancora i km che servono.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/qashqai-2-1-5-2012-richiamo-campagna-di-assistenza-p6313.105952/"
     }
   ]
 }
