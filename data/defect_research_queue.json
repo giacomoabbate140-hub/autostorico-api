@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-13T16:10:36.480613+00:00",
-  "cursor": 23,
+  "updatedAt": "2026-08-13T19:27:40.162756+00:00",
+  "cursor": 24,
   "candidates": [
     {
       "status": "approved",
@@ -602,23 +602,34 @@
       "title": "Richiamo 308! - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Trasporti costruttore: Peugeot Automobili Italia S.p.a. marca: Peugeot modello: 308/partner Numero Veicoli: 797 Periodo di produzione: marzo 2008 Descrizione Difetto: Scatola servitù motore (BSM) non conforme Azioni correttive: Sostituzione Riferimento 800900901 Note Cod. campagna YPK Intervallo telai da: 308: VF34C5FWC55159061 Intervallo telai a: VF34HRHRH55143230 Intervallo telai da: PARTNER: VF37B9HXC68501312 Intervallo telai a: VF37B9HXC68501132 A quanto pare sui motori 1.6 HDI FAP 110CV per un difetto di produzione va sostituita la centralina BSM, resta da comprendere se anche le 2Tronic (la maggior parte di quelle del forum sono state prodotte a marzo) sono comprese ma io non ho ricevuto nessuna comunicazione... Peugeot 3008 SUV 1.6 BlueHDi 130 Allure + Advace grip control + Portellone Hands Free e Keyless + VisioPark 180° + Tetto Panoramico Apribile \"Black Diamond\".. Trasporti costruttore: Peugeot Automobili Italia S.p.a. marca: Peugeot modello: 308/partner Numero Veicoli: 797 Periodo di produzione: marzo 2008 Descrizione Difetto: Scatola servitù motore (BSM) non conforme Azioni correttive: Sostituzione Riferimento 800900901 Note Cod. campagna YPK Intervallo telai da: 308: VF34C5FWC55159061 Intervallo telai a: VF34HRHRH55143230 Intervallo telai da: PARTNER: VF37B9HXC68501312 Intervallo telai a: VF37B9HXC68501132 A quanto pare sui motori 1.6 HDI FAP 110CV per un difetto di produzione va sostituita la centralina BSM, resta da comprendere se anche le 2Tronic (la maggior parte di quelle del forum sono state prodotte a marzo) sono comprese ma io non ho ricevuto nessuna comunicazione... Si può sapere quale centralina potrebbe essere difettosa ?? Io ho un piccolo problema ai fari anabbaglianti , ogni tanto lampeggiano lievemente ... però lo fa una volta ogni tanto e ancora non ho avuto modo di portarla dal conce. Scusatemi anche io ho una 308 acquistata a maggio del 2008 potrei entrarci anche io nel richiamo ??? fin'ora nn ho avuto nessuna comunicazione ne noto anomalie se nn quella sui fari che ogni tanto mi da qualche errore, ma secondo me è dovuto al fatto che ho montato le lampade azzurre con una piccola centralina, secondo amici andavano montate mettendoci delle resistenze ai fari...cmq sapete dirmi come faccio a vedere se anche la mia auto potrebbe essere tra quelle difettate??",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?f=27&t=20903"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T19:27:40.162756+00:00",
+      "make": "Renault",
+      "model": "Captur",
+      "year": 2015,
+      "engine": "1.2 TCe",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Renault captur: serio problema di sicurezza, necessario ...",
+      "snippet": "Powered and protected by · Privacy",
+      "sourceUrl": "https://forum.quattroruote.it/threads/renault-captur-serio-problema-di-sicurezza-necessario-richiamo-ma-la-casa-non-richiama.137640/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-13T16:10:36.480613+00:00",
-    "updatedAt": "2026-08-13T16:10:36.480613+00:00",
-    "addedCount": 10,
-    "summary": "Raccolte 10 nuove fonti per Peugeot 3008, in revisione.",
+    "id": "2026-08-13T19:27:40.162756+00:00",
+    "updatedAt": "2026-08-13T19:27:40.162756+00:00",
+    "addedCount": 1,
+    "summary": "Raccolte 1 nuove fonti per Renault Captur, in revisione.",
     "details": [
-      "Passione Peugeot Auto Club Italia: richiamo per 1.5 BlueHdi, catena albero a camme (MXL) - Pagina 9 - Passione Peugeot Auto Club Italia - FORUM",
-      "Forum Quattroruote: Problema a seguito richiamo antinquinamento aggiornamento software 1.5 hdi | Il Forum di Quattroruote",
-      "Passione Peugeot Auto Club Italia: Anomalia serbatoio antinquinamento nuova 3008 - Pagina 5 - Passione Peugeot Auto Club Italia - FORUM",
-      "Passione Peugeot Auto Club Italia: Campagna di richiamo JDE - verifica filtro antiparticolato - Passione Peugeot Auto Club Italia - FORUM"
+      "Forum Quattroruote: Renault captur: serio problema di sicurezza, necessario ..."
     ],
     "vehicles": [
       {
-        "make": "Peugeot",
-        "model": "3008"
+        "make": "Renault",
+        "model": "Captur"
       }
     ]
   }
