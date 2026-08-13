@@ -1,4 +1,7 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import server
@@ -31,6 +34,29 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("latestUpdate", status)
         self.assertIsInstance(status["latestUpdate"]["vehicles"], list)
         self.assertIsInstance(status["latestUpdate"]["details"], list)
+
+    def test_research_update_exposes_the_latest_collected_batch(self):
+        queue = {
+            "updatedAt": "2026-08-13T11:00:00+00:00",
+            "candidates": [{"status": "pending_review"}],
+            "latestUpdate": {
+                "id": "2026-08-13T10:59:00+00:00",
+                "updatedAt": "2026-08-13T10:59:00+00:00",
+                "addedCount": 2,
+                "summary": "Raccolte 2 nuove fonti per Ford Puma, in revisione.",
+                "details": ["Ford Italia: Campagne di richiamo"],
+                "vehicles": [{"make": "Ford", "model": "Puma"}],
+            },
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            queue_path = Path(directory) / "queue.json"
+            queue_path.write_text(json.dumps(queue), encoding="utf-8")
+            with patch.object(server, "DEFECT_RESEARCH_QUEUE_PATH", queue_path):
+                update = server.defect_research_update_status()
+
+        self.assertEqual(update["id"], "2026-08-13T10:59:00+00:00")
+        self.assertEqual(update["addedCount"], 2)
+        self.assertEqual(update["vehicles"], [{"make": "Ford", "model": "Puma"}])
 
     def test_gold_subscription_uses_google_play_subscriptions_endpoint(self):
         class FakeCredentials:

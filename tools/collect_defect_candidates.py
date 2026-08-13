@@ -136,6 +136,29 @@ def main() -> int:
     queue["updatedAt"] = now
     queue["cursor"] = (cursor + 1) % len(targets)
     queue["candidates"] = [*queue.get("candidates", []), *accepted][-1000:]
+    # Keep a separate immutable summary for the notification.  The cursor moves
+    # even when a search finds no new URL, but clients must not be notified then.
+    if accepted:
+        source_labels = []
+        for candidate in accepted:
+            label = str(candidate.get("sourceName") or "Fonte verificabile").strip()
+            title = str(candidate.get("title") or "").strip()
+            detail = f"{label}: {title}" if title else label
+            if detail not in source_labels:
+                source_labels.append(detail)
+        queue["latestUpdate"] = {
+            "id": now,
+            "updatedAt": now,
+            "addedCount": len(accepted),
+            "summary": (
+                f"Raccolte {len(accepted)} nuove fonti per "
+                f"{target['make']} {target['model']}, in revisione."
+            ),
+            "details": source_labels[:4],
+            "vehicles": [
+                {"make": target["make"], "model": target["model"]},
+            ],
+        }
     write_json(QUEUE_PATH, queue)
     print(
         f"Checked {target['make']} {target['model']}; added {len(accepted)} review candidates."

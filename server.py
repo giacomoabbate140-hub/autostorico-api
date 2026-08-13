@@ -216,20 +216,55 @@ def defect_research_update_status() -> dict[str, Any]:
         for item in candidates
         if isinstance(item, dict) and item.get("status") == "pending_review"
     ] if isinstance(candidates, list) else []
-    recent = pending[-3:]
-    vehicles = [
+    latest = queue.get("latestUpdate") if isinstance(queue, dict) else {}
+    latest = latest if isinstance(latest, dict) else {}
+    update_id = str(latest.get("id") or "").strip()
+
+    # Queues created before latestUpdate existed still expose their newest batch
+    # correctly, rather than returning an empty notification detail screen.
+    if not update_id and pending:
+        newest_at = max(str(item.get("collectedAt") or "") for item in pending)
+        newest = [
+            item for item in pending if str(item.get("collectedAt") or "") == newest_at
+        ]
+        latest = {
+            "id": newest_at,
+            "updatedAt": newest_at,
+            "addedCount": len(newest),
+            "summary": "Nuove fonti raccolte e in attesa di revisione.",
+            "details": [
+                str(item.get("title") or item.get("sourceName") or "Fonte da verificare")
+                for item in newest[:4]
+            ],
+            "vehicles": [
+                {"make": item.get("make"), "model": item.get("model")}
+                for item in newest
+            ],
+        }
+        update_id = newest_at
+
+    vehicles = latest.get("vehicles") if isinstance(latest.get("vehicles"), list) else []
+    safe_vehicles = [
         {
             "make": str(item.get("make") or "").strip(),
             "model": str(item.get("model") or "").strip(),
         }
-        for item in recent
+        for item in vehicles
+        if isinstance(item, dict)
     ]
-    updated_at = str(queue.get("updatedAt") or "").strip() if isinstance(queue, dict) else ""
+    details = latest.get("details") if isinstance(latest.get("details"), list) else []
+    safe_details = [
+        str(item).strip() for item in details if isinstance(item, str) and str(item).strip()
+    ]
+    updated_at = str(latest.get("updatedAt") or update_id).strip()
     return {
-        "id": updated_at,
+        "id": update_id,
         "updatedAt": updated_at,
         "pendingCount": len(pending),
-        "vehicles": vehicles,
+        "addedCount": catalog_year_value(latest.get("addedCount")),
+        "summary": str(latest.get("summary") or "").strip(),
+        "details": safe_details,
+        "vehicles": safe_vehicles,
     }
 
 
