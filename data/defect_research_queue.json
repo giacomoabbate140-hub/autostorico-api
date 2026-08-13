@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-12T19:20:35.583148+00:00",
-  "cursor": 17,
+  "updatedAt": "2026-08-13T02:47:50.407742+00:00",
+  "cursor": 18,
   "candidates": [
     {
       "status": "approved",
@@ -266,6 +266,104 @@
       "title": "Range Rover Evoque problema cofano aiuto! | Il Forum di Quattroruote",
       "snippet": "mi spiace... anche io un sacco di problemi mai avuti con altri costruttori. <strong>La Evoque Marzo 2017 con motore Ingenium diesel l&#x27;ho cambiata perche&#x27; non ci sono soluzioni e la Land Rover non risolve i problemi</strong>. Era meglio rifinita e curata la precedente (il primo modello). Questa a mio avviso oltre ai vari problemi del propulsore ingenium e di elettronica (ho avuto anche questi ma niente di serio) e' meno curata e i controlli di qualità sono penosi, assurdo per tale marchio e per 43000 euro! Ho due casi di miei conoscenti che hanno spaccato il motore a 40000 km.... uno ha spaccato la turbina e pezzi di bronzine sono andati a finire in aspirazione con conseguenza drammatica; l'altro ha fuso. un mio amico con una Velar (motore ingenium da 240cv) HA FUSO A 30000. mi spiace... anche io un sacco di problemi mai avuti con altri costruttori. La Evoque Marzo 2017 con motore Ingenium diesel l'ho cambiata perche' non ci sono soluzioni e la Land Rover non risolve i problemi. Ho avuto la dico 3 , 4 (3000 td6 245 cv) ed ora devo ritirare la disco 5 240 cv versione s. del 2017(compro con 16000 km) Vorrei sapere se i tegliandoìi vengono registrati su libretto oppure con le nuove si usa altro sistema. Alcuni di voi possono dirmi pregi e difetti?",
       "sourceUrl": "https://forum.quattroruote.it/threads/range-rover-evoque-problema-cofano-aiuto.120066/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T02:47:50.407742+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "PROBLEMI RISCONTRATI - Pagina 3 - Mercedes-Benz Club Italia",
+      "snippet": "- a 110km orari rumore sportelli (come se qualcosa di metallico sbatte), in attesa di sistemazione paratie ecc (a quanto pare difetto comune di tutte). - telefono Bluetooth che si scollega spesso in chiamata o non risponde al comando di chiusura (richiamo ricevuto per aggiornamento MBUX ma problema NON RISOLTO). Buondì a tutti, ho una Classe A 180D del 2022 Premium versione pacchetto Amg (versione 1950cm3).. vi elenco i problemi riscontrati: - sostituzione per due 2 volte di tutte le luci led colorate (in modalità Glaciar Blue saltano a volte).. ricevuto anche richiamo Mercedes (NON RISOLTO, si ripresenta). - a 110km orari rumore sportelli (come se qualcosa di metallico sbatte), in attesa di sistemazione paratie ecc (a quanto pare difetto comune di tutte). - telefono Bluetooth che si scollega spesso in chiamata o non risponde al comando di chiusura (richiamo ricevuto per aggiornamento MBUX ma problema NON RISOLTO). Non ricordo... Il difetto lo fa in un certo range di velocità? buonasera a tutti, ho una classe a 200, problemi riscontrati dopo 116,000 km rumore oltre i 100 km/h proveniente dagli sportelli, ma leggendovi a questo punto mi viene da pensare che sia il problema del passaruota, quando l'ho portata in officina, mi hanno detto che a causa del covid non potevano testare la vettura. da un pò il sistema di riconoscimento vocale sembra non capire, in particolare le richieste telefoniche: se chiedo di chiamare mia moglie mi dice che non sa il nome del mio segretario, mia madre diventa mio nipote etc.",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=141881&start=30"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T02:47:50.407742+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Problemi con classe A 180CDI automatica - Mercedes-Benz Club Italia",
+      "snippet": "Carissimi tutti il problema è il seguente: mi è capitato durante la marcia che la macchina ha fatto un brusco arresto pericoloso e si sono accese tutte le spie In pratica l'auto quando è in marcia e nel caso specifico passando da D3 a D4 ha avuto un brutto contraccolpo come se fosse mancata corrente ma poi premendo sull'acceleratore si è ripresa partendo dalla prima marcia. Tutte le spie del cruscotto si sono accese ma l'arresto è stato forte tanto che la cintura di sicurezza si è tensionata...aggiungo che l'auto è usata, immatricolata nell'anno 2014 e io ne sono proprietario da febbraio 2016.",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=97696"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T02:47:50.407742+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "PROBLEMI CLASSE A.... - Pagina 10 - Mercedes-Benz Club Italia",
+      "snippet": "Viamb ha scritto:E&#x27; stata la prima volta. C&#x27;era ancora molta cera. E il lavaggista mi ha fatto notare due &quot;difetti&quot;: <strong>una guarnizione del finestrino anteriore sinistro, non aderente e facilmente staccabile</strong>. Mi ha detto che prima che si possa staccare devo portarla in concessionaria e farla sistemare. Viamb ha scritto:E' stata la prima volta. C'era ancora molta cera. E il lavaggista mi ha fatto notare due \"difetti\": una guarnizione del finestrino anteriore sinistro, non aderente e facilmente staccabile. Mi ha detto che prima che si possa staccare devo portarla in concessionaria e farla sistemare. Poi mi ha fatto notare che il coperchio (non il tappo) che copre la benzina non è perfettamente aderente con la carrozzeria. Nella parte posteriore. Io non me ne ero accorto ma nemmeno i benzinai presso cui mi sono rifornito. Probabilmente è così dappertutto. Il discorso del tappo serbatoio l'ho notato anche io in fase di test drive, ma ho sperato fosse un \"difetto\" isolato... collo90 ha scritto:Anche nella mia! Soluzioni? mi sa che lo sportellino e difettoso di progettazione ho provato a sistemarlo ma non e stato possibile io provo in mb e speriamo che possano sostituirlo con uno riprogettato Io invece avrei una domanda...guido la mia nuova macchinina da qualche giorno, soddisfattissimo...un unica perplessità: Il triangolo di vetro nella portiera destra posteriore non è oscurato come gli altri....difetto o é voluto per consentire visibilità agli incroci?",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?p=891910&t=66136"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T02:47:50.407742+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiesta per intervento Casa Madre - Pagina 2 - Mercedes-Benz Club Italia",
+      "snippet": "Un scherzetto da 500 euro a botta, ma MB non vuole sentire parlare di pezzi difettosi, problema noto ecc ecc,,,,,, Quindi in conclusione continua pure la tua raccolta dati, ma non aspettarti nulla, per risolvere i problema scricchiolii, che non intacca la sicurezza della vettura, doveta andare in officina e far compilare la scheda di accettazione, se non risolvono il problema scrivete a Vellucci, solo così sarete ascoltati e MB troverà la soluzione definita al problema. Solo queste segnalazioni verificate, dettagliate entrano nelle statistiche e possono originare una azione di richiamo o di servizio per la risoluzione dei problemi. Le denunce “anonime” attraverso i Forum non interessano a MB essenzialmente per 3 motivi 1) sono anonime i presunti proprietari sono protetti da un Nik 2) non sono accertate da personale MB 3) possono essere il frutto di sentito dire Se leggi nella sez. Un scherzetto da 500 euro a botta, ma MB non vuole sentire parlare di pezzi difettosi, problema noto ecc ecc,,,,,, Quindi in conclusione continua pure la tua raccolta dati, ma non aspettarti nulla, per risolvere i problema scricchiolii, che non intacca la sicurezza della vettura, doveta andare in officina e far compilare la scheda di accettazione, se non risolvono il problema scrivete a Vellucci, solo così sarete ascoltati e MB troverà la soluzione definita al problema. per adesso non ho nessun tiipo di scricchiolio,forse perche e una delle prime e il controllo qualita era piu efficiente pero dop o aver sistemato personalmente alcune magagne tipo bulloni a vista seggiolini e portiera baule o coprire di moquette il contorno degli attacchi posteriori delle cinture di sicurezza dove si notano in maniera impressionante le mollette oppure chiiudere i piccoli spazi vuoti da assemblaggi imperfetti nei portaoggetti delle portiere anteriori in modo particolare quella dx e per finire chiudere quell odioso buco nel pianale del baule che quando bisogna aprirlo glioggetti",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?f=87&start=15&t=68056"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T02:47:50.407742+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo n.9196004 airbag lato guida - Mercedes-Benz Club Italia",
+      "snippet": "Salve a tutti, mi è arrivata una lettera di richiamo per la sostituzione dell’airbag lato guida classe A 169 del 2004. Ne sapete niente? Un saluto",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=134371"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T02:47:50.407742+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "la mia completa NON soddisfazione - Mercedes-Benz Club Italia",
+      "snippet": "l&#x27;auto rimane in officina 3 giorni fino a sabato 25 ma alla consegna nessun difetto era stato risolto il tecnico in turno prima mi chiede se l&#x27;automobile ha subito un incidente (300 km circa al contachilometri praticamente nuova) poi mi comunica che MB monta tutte le portiere sia le anteriori che le posteriori leggermente fuori filo con la lamiera retrostante per favorire l&#x27; aerodinamica e limitare il fruscio di avanzamento a vantaggio del confort; subito lo smentisco mostrando il perfetto accoppiamento in un veicolo identico vicino al mio sul piazzale (vi posto la fotografia); vista la sua insistenza chiedo di verbalizzare quanto sosteneva producendomi un documento scritto e firmato MB da poter esibire in futuro al momento della rivendita per tranquillizzare l&#x27;eventuale acquirente che come me mostrasse segni di franca perplessità.. in data 10 luglio 2015 ricevo in consegna una classe A cdi 180 Premium presso una grande concessionaria di Milano, zona EXPO... in autostrada al rientro noto lo sterzo posizionato 3-4 gradi a sinistra in rettilineo; il tentativo di riportarlo a 0° produce un deviazione netta a destra. in sosta noto che le portiere posteriori non chiudono bene lasciando un gradino netto al tatto ed alla vista con il filo del montante posteriore (vi posto la fotografia) immediatamente comunico il tutto al servizio clienti MB che apre una pratica (numero 53607) ed alla concessionaria. dopo circa 6-7 gg ottengo un appuntamento sono in officina il giorno 22 luglio 2015 dove registrano i difetti e mi consegnano l'auto sostitutiva. EX A180cdi premium - bianco calcite - becker map pilot - telecamera posteriore - Tempomat - Fari bi-xeno - cerchi 18 AMG 5 razze Cod 781 - pack fumatori - light & sight pack - vetri posteriori oscurati - tetto panorama apribile. GLA H247 - 180d Automatic - Premium - Digital White - pack Luxury - night pack - cerchi 20\" neri. l'auto rimane in officina 3 giorni fino a sabato 25 ma alla consegna nessun difetto era stato risolto il tecnico in turno prima mi chiede se l'automobile ha subito un incidente (300 km circa al contachilometri praticamente nuova) poi mi comunica che MB monta tutte le portiere sia le anteriori che le posteriori leggermente fuori filo con la lamiera retrostante per favorire l' aerodinamica e limitare il fruscio di avanzamento a vantaggio del confort; subito lo smentisco mostrando il perfetto accoppiamento in un veicolo identico vicino al mio sul piazzale (vi posto la fotografia); vista la sua insistenza chiedo di verbalizzare quanto sosteneva producendomi un documento scritto e firmato MB da poter esibire in futuro al momento della rivendita per tranquillizzare l'eventuale acquirente che come me mostrasse segni di franca perplessità..",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?f=87&start=0&t=91591"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T02:47:50.407742+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "problema avviamento classe a 180 - Mercedes-Benz Club Italia",
+      "snippet": "ciao a tutti, sono nuovo del forum e ho bisogno del vostro aiuto. ho una classe a 180 (w169) del 2008, mi sono allontanato per un weekend e questa mattina vado ciao a tutti, sono nuovo del forum e ho bisogno del vostro aiuto. ho una classe a 180 (w169) del 2008, mi sono allontanato per un weekend e questa mattina vado per ripartire e tornare a casa...ma la macchina non parte!!praticamente girando la chiave si accende tutta la strumentazione, ma facendo l'ultimo giro per avviarla si sente un lieve TIC ma il motorino non gira e la macchina non parte!!ho provato ad accenderla con i cavi pensando fosse la batteria...ma nulla!premetto che mi era accaduto una sola volta il giorno prima ma chiudendo la macchina e riaprendola poi era partita normalmente. all",
+      "sourceUrl": "https://mercedesbenzclub.it/forum/viewtopic.php?f=6&t=67910"
     }
   ]
 }
