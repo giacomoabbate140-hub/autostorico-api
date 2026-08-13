@@ -245,12 +245,19 @@ def catalog_update_status() -> dict[str, Any]:
         }
         for vehicle in vehicles if isinstance(vehicle, dict)
     ] if isinstance(vehicles, list) else []
+    details = latest.get("details")
+    safe_details = [
+        str(item).strip()
+        for item in details
+        if isinstance(item, str) and str(item).strip()
+    ] if isinstance(details, list) else []
     return {
         "catalogVersion": catalog_year_value(VEHICLE_DEFECT_CATALOG.get("catalogVersion")),
         "updatedAt": str(VEHICLE_DEFECT_CATALOG.get("updatedAt") or "").strip(),
         "latestUpdate": {
             "id": str(latest.get("id") or "").strip(),
             "summary": str(latest.get("summary") or "").strip(),
+            "details": safe_details,
             "vehicles": safe_vehicles,
         },
         "researchUpdate": defect_research_update_status(),

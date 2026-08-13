@@ -4,6 +4,11 @@
   "latestUpdate": {
     "id": "catalog-22",
     "summary": "Collegate le varianti BMW Serie 1 diesel al profilo N47 e migliorata la ricerca delle fonti di mercato.",
+    "details": [
+      "BMW 116d, 118d, 120d, 123d e 125d sono ora collegate alla scheda Serie 1.",
+      "La segnalazione community sulla distribuzione N47 resta separata dai richiami ufficiali.",
+      "Per il valore auto Brave resta la fonte principale e SerpAPI interviene solo quando mancano prezzi confrontabili."
+    ],
     "vehicles": [
       {"make": "BMW", "model": "Serie 1"}
     ]

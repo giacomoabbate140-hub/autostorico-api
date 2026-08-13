@@ -30,6 +30,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("updatedAt", status)
         self.assertIn("latestUpdate", status)
         self.assertIsInstance(status["latestUpdate"]["vehicles"], list)
+        self.assertIsInstance(status["latestUpdate"]["details"], list)
 
     def test_gold_subscription_uses_google_play_subscriptions_endpoint(self):
         class FakeCredentials:
