@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-13T02:47:50.407742+00:00",
-  "cursor": 18,
+  "updatedAt": "2026-08-13T07:53:22.998335+00:00",
+  "cursor": 19,
   "candidates": [
     {
       "status": "approved",
@@ -364,6 +364,20 @@
       "title": "problema avviamento classe a 180 - Mercedes-Benz Club Italia",
       "snippet": "ciao a tutti, sono nuovo del forum e ho bisogno del vostro aiuto. ho una classe a 180 (w169) del 2008, mi sono allontanato per un weekend e questa mattina vado ciao a tutti, sono nuovo del forum e ho bisogno del vostro aiuto. ho una classe a 180 (w169) del 2008, mi sono allontanato per un weekend e questa mattina vado per ripartire e tornare a casa...ma la macchina non parte!!praticamente girando la chiave si accende tutta la strumentazione, ma facendo l'ultimo giro per avviarla si sente un lieve TIC ma il motorino non gira e la macchina non parte!!ho provato ad accenderla con i cavi pensando fosse la batteria...ma nulla!premetto che mi era accaduto una sola volta il giorno prima ma chiudendo la macchina e riaprendola poi era partita normalmente. all",
       "sourceUrl": "https://mercedesbenzclub.it/forum/viewtopic.php?f=6&t=67910"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T07:53:22.998335+00:00",
+      "make": "Nissan",
+      "model": "Juke",
+      "year": 2016,
+      "engine": "1.2 DIG-T",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Nissan juke che dolori | Il Forum di Quattroruote",
+      "snippet": "Sembra che il tubo in questione non sia reperibile a livello nazionale e ci siano altre 12 vetture ferme per lo stesso motivo al centro di assistenza di Ostia. Il punto da dibattere è il seguente; visto che sembra un anomalia ricorrente una Casa Automobilistica seria dovrebbe immediatamente attivare una Campagna di Richiamo senza indugio. Ho scritto a Nissan, facendo presente che probabilmente è un difetto di materiale o di produzione , visto che parecchie persone hanno avuto il medesimo danno!!! Nonostante sia a conoscenza del problema, non ha pensato a richiamare le auto (come invece altre case automobilistiche fanno !). Sembra che il tubo in questione non sia reperibile a livello nazionale e ci siano altre 12 vetture ferme per lo stesso motivo al centro di assistenza di Ostia. Il punto da dibattere è il seguente; visto che sembra un anomalia ricorrente una Casa Automobilistica seria dovrebbe immediatamente attivare una Campagna di Richiamo senza indugio. Non ho capito perchè dobbiate pagare un componente non soggetto a usura programmata. Comunque è la prima volta che sento di un difetto del genere su quel motore, se fosse un problema di progettazione saremmo invasi dalle lamentele, come di solito. Più probabile che la sostituzione non sia stata fatta a regola d'arte. Clicca per allargare... Il difetto è noto alla rete, e sembra sia generato da un lotto di manicotti difettosi, quindi non dovrebbe riguardare tutte le juke ante restyling. Il pezzo dovrebbe essere stato modificato nella new juke, ma per le rotture che si sono verificate, che non sono poche, sembrerebbe che la rete nissan di norma non intervenga in correntezza.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/nissan-juke-che-dolori.97744/"
     }
   ]
 }
