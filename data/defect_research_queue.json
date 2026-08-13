@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-13T19:27:40.162756+00:00",
-  "cursor": 24,
+  "updatedAt": "2026-08-13T22:04:12.507073+00:00",
+  "cursor": 25,
   "candidates": [
     {
       "status": "approved",
@@ -616,20 +616,49 @@
       "title": "Renault captur: serio problema di sicurezza, necessario ...",
       "snippet": "Powered and protected by · Privacy",
       "sourceUrl": "https://forum.quattroruote.it/threads/renault-captur-serio-problema-di-sicurezza-necessario-richiamo-ma-la-casa-non-richiama.137640/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T22:04:12.507073+00:00",
+      "make": "Renault",
+      "model": "Clio",
+      "year": 2018,
+      "engine": "0.9 TCe",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "PROBLEMA RENAULT CLIO V 1.0 BENZINA | Il Forum di Quattroruote",
+      "snippet": "È un problema conosciuto da tempo e <strong>renault sta provando a risolverlo tramite un aggiornamento software della centralina motore</strong> che dovrebbe dare il comando all&#x27;attuazione di tenere l&#x27;astinenza sempre in tensione. Strano che in renault non te ne abbiano parlato, lo sanno anche i muri. È un problema conosciuto da tempo e renault sta provando a risolverlo tramite un aggiornamento software della centralina motore che dovrebbe dare il comando all'attuazione di tenere l'astinenza sempre in tensione. Strano che in renault non te ne abbiano parlato, lo sanno anche i muri. Ti linko un video di un utente dacia che lamenta il difetto sul medesimo motore, per farti rendere conto. Clicca per allargare... Il 1.0 tce è affetto da un fastidioso ma non problematico rumore all'asta che comanda la valvola wastegate posta sul turbo.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/problema-renault-clio-v-1-0-benzina.145478/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-13T22:04:12.507073+00:00",
+      "make": "Renault",
+      "model": "Clio",
+      "year": 2018,
+      "engine": "0.9 TCe",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Difetto di fabbrica noto causa guasto da 18.000 euro su auto Renault E-tech | Page 2 | Il Forum di Quattroruote",
+      "snippet": "Sono nella vostra stessa situazione, Clio V E Tech full hybrid del 2020 ferma in officina da un mese, settimana scorsa ci hanno confermato che <strong>il danno è stato provocato dal difetto di fabbrica della guarnizione</strong>. Clicca per allargare... a volte per risparmiare qualche decina di euro si prende il rischio di affidarsi ad officine o circuiti non in grado di rispettare le disposizioni della casa. Una leggerezza che si rischia di pagare molto cara. Da dire anche che questo E tech era da subito un innovazione piuttosto rilevante e complessa per Renault e sarebbe stato saggio evitare di fare da beta test. In altre parole, quando si esaltano gli ibridi Toyota è perchè hanno un esperienza di tanti tanti anni dimostrando estrema affidabilità e competenza Che poi la casa si stia comportando in modo poco etico nei confronti dei clienti proponendo motori di ricambio al prezzo di un intera autovettura non ci piove Clicca per allargare... hai ragione, è possibile solo per la garanzia obbligatoria. Tuttavia io sono sempre stato molto scettico sulle garanzie aggiuntive.. di fatto non comprendono tutto quello che è soggetto ad usura e spesso la copertura scema in modo importante nel tempo. Sono nella vostra stessa situazione, Clio V E Tech full hybrid del 2020 ferma in officina da un mese, settimana scorsa ci hanno confermato che il danno è stato provocato dal difetto di fabbrica della guarnizione.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/difetto-di-fabbrica-noto-causa-guasto-da-18-000-euro-su-auto-renault-e-tech.148074/page-2"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-13T19:27:40.162756+00:00",
-    "updatedAt": "2026-08-13T19:27:40.162756+00:00",
-    "addedCount": 1,
-    "summary": "Raccolte 1 nuove fonti per Renault Captur, in revisione.",
+    "id": "2026-08-13T22:04:12.507073+00:00",
+    "updatedAt": "2026-08-13T22:04:12.507073+00:00",
+    "addedCount": 2,
+    "summary": "Raccolte 2 nuove fonti per Renault Clio, in revisione.",
     "details": [
-      "Forum Quattroruote: Renault captur: serio problema di sicurezza, necessario ..."
+      "Forum Quattroruote: PROBLEMA RENAULT CLIO V 1.0 BENZINA | Il Forum di Quattroruote",
+      "Forum Quattroruote: Difetto di fabbrica noto causa guasto da 18.000 euro su auto Renault E-tech | Page 2 | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
         "make": "Renault",
-        "model": "Captur"
+        "model": "Clio"
       }
     ]
   }
