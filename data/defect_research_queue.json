@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-14T19:17:51.861989+00:00",
-  "cursor": 3,
+  "updatedAt": "2026-08-14T21:42:33.702868+00:00",
+  "cursor": 4,
   "candidates": [
     {
       "status": "approved",
@@ -1022,22 +1022,93 @@
       "title": "Pessima esperienza con la mia prima AUDI | Il Forum di Quattroruote",
       "snippet": "<strong>la velocità è un non problema, probabilmente deve ancora slegarsi</strong>. Sul trattamento ricevuto invece per i difetti, pollice verso. Probabilmente in Audi non tengono molto in considerazione chi acquista una &quot;misera&quot; A1. Velocità: ma ti sembra il caso di lanciarti a 200kmh in discesa su di una A1? Non ti piacerebbe invecchiare? Clicca per allargare... Ne hai mai guidata una? Già la mia del 2011 con assetto sportivo a 190 orari è veramente molto stabile e dà veramente un senso di sicurezza molto più di una Polo con la stessa piattaforma ma senza assetto sportivo (e forse anche altri componenti diversi) e il volante non vibra neanche a volerlo (110k km all'attivo). la velocità è un non problema, probabilmente deve ancora slegarsi. Sul trattamento ricevuto invece per i difetti, pollice verso. Probabilmente in Audi non tengono molto in considerazione chi acquista una \"misera\" A1. Nella prova di gennaio di quest'anno la A1 ha superato brillantemente i 190 km/h, raggiungendo ben i 191,5, ma sicuramente gli 11,5 mancanti all'appello avranno anche qui una giustificazione, in fondo è solo il 5,6% in meno. Concordo con la scarsa attenzione che le case madri rivolgono ai consumatori, purtroppo dipende anche da una carenza nella normativa per la tutela dei consumatori. Qualità: le auto del gruppo VW e Audi in particolare sono degne di rispetto, e te lo dico dopo cinque vetture e 20 anni di Audi-VW, e altrettanti di altre marche. Velocità: ma ti sembra il caso di lanciarti a 200kmh in discesa su di una A1?",
       "sourceUrl": "https://forum.quattroruote.it/threads/pessima-esperienza-con-la-mia-prima-audi.131571/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T21:42:33.702868+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo dieselgate A3 - Pagina 4",
+      "snippet": "Hai avuto modo di verificare anche solo a sensazioni quello che riguarda le prestazioni? perchè un mio amico che ha due 1.6 tdi in famiglia lamenta un calo di prestazioni su entrambe dopo l&#x27;aggiornamento (fatto in 2 concessionari diversi in quanto uno montato su VW e l&#x27;altro su Audi) Cmq è arrivata anche a me la comunicazione, ma sono praticamente certo di non partecipare al richiamo in quanto la mia è mappata e, da quello che mi ha spiegato il mio meccanico, con l&#x27;aggiornamento in Audi caricherebbero una mappa completamente nuova facendomi perdere la mia. Ciao a tutti oggi mi sono rifiutato di fare l'aggiornamento alla mia audi a3 2.0 tdi per la campagna dieselgate. Volevo sapere a cosa vado in contro dopo tale rifiuto nel momento in cui vado a fare la revisione. Grazie. Inviato dal mio LG-H850 utilizzando Tapatalk Ma ATTUALMENTE quando fai la revisione credo non avrai nessun problema... Audi A3 8pa 2.0 tdi s-line. Ad ora non c'è ne obbligo ne si conosce la conseguenza se non si effettua l'aggiornamento. Le revisioni le si passa come sempre. ... Grazie per le risposte. Onestamente mi basta essere tranquillo con le revisioni o con le forze dell'ordine. Penso anche io che non dovrebbero esserci problemi altrimenti avrebbero reso obbligatorio il richiamo o per lo meno avvisare il cliente dei rischi qualora si rifiutasse. Audi A3 Sportback F.A.P. S Tronic 2.0 TDI da 140 CV · Ciao a Tutti. Fatto il Richiamo, sono andato in Audi e mi hanno spiegato per filo e per segno cosa han fatto. Mi hanno spiegato che il software incriminato è quello che interagisce con i tester di omologazione. Hai avuto modo di verificare anche solo a sensazioni quello che riguarda le prestazioni? perchè un mio amico che ha due 1.6 tdi in famiglia lamenta un calo di prestazioni su entrambe dopo l'aggiornamento (fatto in 2 concessionari diversi in quanto uno montato su VW e l'altro su Audi) Cmq è arrivata anche a me la comunicazione, ma sono praticamente certo di non partecipare al richiamo in quanto la mia è mappata e, da quello che mi ha spiegato il mio meccanico, con l'aggiornamento in Audi caricherebbero una mappa completamente nuova facendomi perdere la mia.",
+      "sourceUrl": "https://forum.audirsclub.it/showthread.php?67344-Richiamo-dieselgate-A3/page4&67344-Richiamo-dieselgate-A3/page4=&p=1385827"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T21:42:33.702868+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Audi A3 1.6 tdi 110cv azione richiamo | Il Forum di Quattroruote",
+      "snippet": "Salve, sapete cosa serve azione di richiamo 96E1 riguardo gestione energia? Grazie",
+      "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-1-6-tdi-110cv-azione-richiamo.107104/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T21:42:33.702868+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo modelli 2.0 tdi 170 cv per sostituzione iniettori difettosi [Archivio] - Forum dell'Audi RS Club",
+      "snippet": "se vi dicono che non c&#x27;è richiamo primo incazza.....vi.secondo il richiamo esiste è il n° 23k1 del 01-09-2012.Non tutte le auto sono soggette potreste avere già gli iniettori modificati.un controllo è d&#x27;obbligo.terzo cambiate service audi. ... scusa ma tu hai pagato i cavi? Io non ho pagato nulla e hanno cambiato tutto. beato te a me hanno detto che la campagna era esclusiva sugli iniettori,non essendo una causa (non aveva avuto ancora il guasto) il cablaggio era a mio carico. Forum dell'Audi RS Club > AUDI > A3 > 8P/8PA (2003 ->2013) > Richiamo modelli 2.0 tdi 170 cv per sostituzione iniettori difettosi ... In data 01/09/2012 è stata fatta un'azione di richiamo per i motori bmn (170 cv) prodotti dal 2006 al 2008.Sono stati segnalati ai concessionari i telai delle auto che potrebbero avere problemi agli iniettori.I concessionari stessi dovrebbero provvedere a contattare i proprietari delle auto in questione e provvedere alla sostituzione di tutti e 4 gli iniettori.L'azione è la numero 23k1. Ciao a tutti sono stato oggi in audi service qui a Ts a far controllare la mia a3 motore bnm, preciso che sono gia rimasto fermo in autostrada per iniettore guasto e con sostituzione a mie spese. L 'addetto mi comunica che per il mio telaio non risulta che ci sia niente da verificare, che non si tratta di un vero e proprio richiamo solo di verifiche su alcuni motori, gli faccio notare che mi è già successo di restare in panne e lui mi dice che se si dovesse ripresentare il problema mi verrà sostituito l' iniettore guasto in garanzia.... sono passato in audi e con la scusa di provare la nuova A3 ho fatto controllare il mio numero di telaio e... non risulta nessun richiamo... se vi dicono che non c'è richiamo primo incazza.....vi.secondo il richiamo esiste è il n° 23k1 del 01-09-2012.Non tutte le auto sono soggette potreste avere già gli iniettori modificati.un controllo è d'obbligo.terzo cambiate service audi. ... scusa ma tu hai pagato i cavi? Io non ho pagato nulla e hanno cambiato tutto. beato te a me hanno detto che la campagna era esclusiva sugli iniettori,non essendo una causa (non aveva avuto ancora il guasto) il cablaggio era a mio carico.",
+      "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-42299.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T21:42:33.702868+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo Audi Centralina | Il Forum di Quattroruote",
+      "snippet": "Dopo la raccomandata dell Audi per la mia A3 sportback 1.9 8P 2009 ho portato l auto in officina Audi dove hanno fatto l aggiornamento della centralina dicendomi che non c era bisogno di cambiarla. Dopo 6 mesi mi ritrovo con le seguenti spie accesse: ABS ESP FRENO A MANO Provo a sentire nelle...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/richiamo-audi-centralina.132764/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T21:42:33.702868+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Azioni di richiamo A3 8P [Archivio] - Forum dell'Audi RS Club",
+      "snippet": "23j8 Modello: A3 Con Motore Tdi 2.0i Numero Veicoli: 1040 Periodo Di Produzione: 2008-2009-2010-2011 Descrizione Difetto: <strong>POSSIBILE VIBRAZIONE TUBAZIONI ALTA PRESSIONE</strong> Azioni Correttive: APPLICAZIONE ANTI VIBRANTI Riferimento: CONCESSIONARI Note: COD 23J8 - TELAI NON INDICATI Mi e&#x27; arrivata ... Apro questa discussione per raggruppare le varie azioni di richiamo eseguite su Audi A3 8P Postate qui i vostri richiami e lavorazioni eseguite sulla propria auto con sigla azione e denominazione richiamo. Audi A3 8P AZIONE: 72B6 DATA: 18-02-2005 DENOMINAZIONE: PERNI DI ANCORAGGIO DEL TELAIO SEDILE ANTERIORE DESCRIZIONE: in pratica il richiamo consiste nel verificare con una specie di calibro alcuni perni dei telai dei sedili anteriori (dove ci sono snodi o giunzioni tra i vari pezzi Azione di richiamo num. 23j8 Modello: A3 Con Motore Tdi 2.0i Numero Veicoli: 1040 Periodo Di Produzione: 2008-2009-2010-2011 Descrizione Difetto: POSSIBILE VIBRAZIONE TUBAZIONI ALTA PRESSIONE Azioni Correttive: APPLICAZIONE ANTI VIBRANTI Riferimento: CONCESSIONARI Note: COD 23J8 - TELAI NON INDICATI Mi e' arrivata oggi la raccomandata dall'Audi.. AZIONE: DATA: 29/11/2006 DENOMINAZIONE: AGGIORNAMENTO SOFTWARE CENTRALINA MOTORE 2.0 TDI AZIONE: DATA: 03/08/2007 DENOMINAZIONE: SOSTITUZIONE CONDOTTO DI SOVRALIMENTAZIONE ... Apro questa discussione per raggruppare le varie azioni di richiamo eseguite su Audi A3 8P Postate qui i vostri richiami e lavorazioni eseguite sulla propria auto con sigla azione e denominazione richiamo. Se i perni sono a posto tutto bene, nel caso fossero più piccoli del dovuto si deve cambiare il telaio del sedile per evitare che col tempo si creino giochi tali da far uscire i perni dalle loro sedi. AZIONE: DATA: 29/11/2006 DENOMINAZIONE: AGGIORNAMENTO SOFTWARE CENTRALINA MOTORE 2.0 TDI AZIONE: DATA: 03/08/2007 DENOMINAZIONE: SOSTITUZIONE CONDOTTO DI SOVRALIMENTAZIONE L'elenco dei richiami non l'ho fatto io.:laugh: Io ho solo il problema:sad:",
+      "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-459.html"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-14T19:17:51.861989+00:00",
-    "updatedAt": "2026-08-14T19:17:51.861989+00:00",
-    "addedCount": 3,
-    "summary": "Raccolte 3 nuove fonti per Audi A1, in revisione.",
+    "id": "2026-08-14T21:42:33.702868+00:00",
+    "updatedAt": "2026-08-14T21:42:33.702868+00:00",
+    "addedCount": 5,
+    "summary": "Raccolte 5 nuove fonti per Audi A3, in revisione.",
     "details": [
-      "Audi RS Club Italia: A1 [Archivio] - Forum dell'Audi RS Club",
-      "Audi Italia: Campagna d'Intervento | Audi Service",
-      "Forum Quattroruote: Pessima esperienza con la mia prima AUDI | Il Forum di Quattroruote"
+      "Audi RS Club Italia: Richiamo dieselgate A3 - Pagina 4",
+      "Forum Quattroruote: Audi A3 1.6 tdi 110cv azione richiamo | Il Forum di Quattroruote",
+      "Audi RS Club Italia: Richiamo modelli 2.0 tdi 170 cv per sostituzione iniettori difettosi [Archivio] - Forum dell'Audi RS Club",
+      "Forum Quattroruote: Richiamo Audi Centralina | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
         "make": "Audi",
-        "model": "A1"
+        "model": "A3"
       }
     ]
   }
