@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-14T05:04:27.603220+00:00",
-  "cursor": 27,
+  "updatedAt": "2026-08-14T07:51:36.735944+00:00",
+  "cursor": 28,
   "candidates": [
     {
       "status": "approved",
@@ -686,20 +686,64 @@
       "title": "Toyota Yaris Hybrid 4a generazione , anomalia gestione motore termico / elettrico. | Il Forum di Quattroruote",
       "snippet": "Secondo molti proprietari di queste auto <strong>il problema potrebbe essere la gestione del GPF (filtro anti particolato) utilizzato per la prima volta sul sistema ibrido</strong>. E&#x27; stato utilizzato per rientrare nelle stringenti normative anti inquinamento EU6D essendo il 1.5 un motore a iniezione diretta. Il verbo condizionale non e' usato per sminuire i proprietari delle auto in questione o l'entita' stessa del problema, tutt'altro. Ci troviamo in una fase di analisi del problema che e' tutta in divenire. ... Buonasera a tutti. Mi scuso inizialmente con i moderatori per aver affrontato il discorso nell’altro topic. Come richiesto da @Yaris Mille, riporto di seguito ciò che ho scritto: Sto partecipando ad un'altra discussione su altro forum, dove i casi sono su circa 11 Yaris, più circa 9 persone su Gruppo Facebook - per ora. Secondo molti proprietari di queste auto il problema potrebbe essere la gestione del GPF (filtro anti particolato) utilizzato per la prima volta sul sistema ibrido. E' stato utilizzato per rientrare nelle stringenti normative anti inquinamento EU6D essendo il 1.5 un motore a iniezione diretta. Problematiche simili sul 2.0 che monta anch'esso un GPF in coda. Possibile che sia solo un difetto di gioventu' dovuto ad una errata gestione dell'elettronica. In questa prova la differenza tra le emissioni misurate nel ciclo in laboratorio (limite per i NOx 60 mg/km per i benzina e 80 mg/km per i diesel) e in quello su strada potrà arrivare massimo al 110% (limite per i NOx 126 mg/km per i benzina e 168 mg/km per i diesel). Euro 6d: per le immatricolazioni da gennaio 2021, stabilisce che la differenza rilevata tra le emissioni WLTP e quelle misurate nella prova RDE non possa superare il 50% (limite per i NOx 90 mg/km per i benzina e 120 mg/km per i diesel).",
       "sourceUrl": "https://forum.quattroruote.it/threads/toyota-yaris-hybrid-4a-generazione-anomalia-gestione-motore-termico-elettrico.137422/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T07:51:36.735944+00:00",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year": 2018,
+      "engine": "1.5 TSI Evo",
+      "sourceName": "VW Golf Community",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo \"centralina sos\" - The VW Golf Community",
+      "snippet": "Sui gruppi Facebook gira voce di un richiamo per un problema alla &quot;centralina&quot; sos. Riporto: <strong>È un aggiornamento della centralina della chiamata sos che non comunica con quella centrale</strong> ... non è nulla di grave l&#x27;unico problema è che deve ancora uscire l&#x27;aggiornamento e quindi macchine ferme ... Sui gruppi Facebook gira voce di un richiamo per un problema alla \"centralina\" sos. Riporto: È un aggiornamento della centralina della chiamata sos che non comunica con quella centrale ... non è nulla di grave l'unico problema è che deve ancora uscire l'aggiornamento e quindi macchine ferme Sembra che non vengano manco consegnate le auto. La Volkswagen deciderà nei prossimi giorni su come procedere con l'inevitabile richiamo necessario per sottoporre le auto interessate a un aggiornamento del software. Molto dipende dalla Kba: l'autorità tedesca di vigilanza del settore dei trasporti è in trattative con i responsabili di Wolfsburg per definire i dettagli della campagna di riparazione dei modelli già consegnati. Per la Casa tedesca il difetto all'eCall è solo l'ultimo di una serie di criticità emerse nel campo dello sviluppo dei software di alcuni importanti modelli: i problemi hanno determinato ritardi nel lancio non solo della nuova Golf ma anche, se non sopratutto, della ID.3, la prima elettrica del marchio Volkswagen. VW GOLF COMMUNITY Tutto il materiale presente nel Sito (immagini, loghi, articoli, messaggi, etc) appartiene ai legittimi proprietari.",
+      "sourceUrl": "https://www.vwgolfcommunity.com/vb/forum/vw-golf-world/vw-golf-8/guasti-problemi-richiami-ad/richiami-ufficiali-ac/1302656-richiamo-centralina-sos"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T07:51:36.735944+00:00",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year": 2018,
+      "engine": "1.5 TSI Evo",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "GOLF 8 e i continui aggiornamenti SW ! | Il Forum di Quattroruote",
+      "snippet": "Il tpi per aggiornare l’infotainment (2065241/4) rimanda al tpi per aggiornamento a 1896 ma serve sempre il gateway C. Quindi non aggiornano neanche alla 1668… per verificare se la tua auto necessita si o no di RICHIAMI vedi qui inserendo il tuo VIN (il numero del telaio ) : RICHIAMI VW: https://www.volkswagen.com.au/.../service-campaigns-recalls che dire .... Il tpi per aggiornare l’infotainment (2065241/4) rimanda al tpi per aggiornamento a 1896 ma serve sempre il gateway C. Quindi non aggiornano neanche alla 1668… per verificare se la tua auto necessita si o no di RICHIAMI vedi qui inserendo il tuo VIN (il numero del telaio ) : RICHIAMI VW: https://www.volkswagen.com.au/.../service-campaigns-recalls che dire .... Poi cambiate con la \"nuova\" finale C che permette appunto TUTTI gli aggiornamenti via OTA , cosa NON possibile con la vecchia B che prima deve essere sostituita e poi e' possibile fare l'aggiornamento in officina ... il famoso richiamo 91CU che poi da' l'ultimo SW 1899 . non saprei esattamente, so solo le GOLF 8 del primo anno e/o forse anche del secondo .... fatto sta che le \"prime\" avevano questa centralina incriminata che fino a pochi gg fa' vw cambiava finiva con la lettera B ... ora sono solo con la C finale . cmq per saperlo basta andare nel sito VW che ho segnato qui in un altro post ! se non ti appare nessun richiamo e' molto probabile che hai la centralina del gateway col numero di parte 5WA907530B invece del 5WA907530C.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/golf-8-e-i-continui-aggiornamenti-sw.142979/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T07:51:36.735944+00:00",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year": 2018,
+      "engine": "1.5 TSI Evo",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Difetti Volkswagen Golf 8 [quando la tecnologia è troppa ed inutile] ! | Il Forum di Quattroruote",
+      "snippet": "Clicca per allargare... Te li segui , io ho quel modello. Il richiamo per la ecall è diversa dai malfunzionamenti del mib3. Nel 2020 tanto per dirti le consegne erano state bloccate per qualche mese appunto per dei problemi all’ecall. Clicca per allargare... Te li segui , io ho quel modello. Il richiamo per la ecall è diversa dai malfunzionamenti del mib3. Nel 2020 tanto per dirti le consegne erano state bloccate per qualche mese appunto per dei problemi all’ecall. infatti li sto seguendo e per questo che dico cosi ! infatti ora RICHIAMO in officina ( il 91GM ) per il solito problema alla centralina SOS ....",
+      "sourceUrl": "https://forum.quattroruote.it/threads/difetti-volkswagen-golf-8-quando-la-tecnologia-%C3%A8-troppa-ed-inutile.148079/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-14T05:04:27.603220+00:00",
-    "updatedAt": "2026-08-14T05:04:27.603220+00:00",
-    "addedCount": 1,
-    "summary": "Raccolte 1 nuove fonti per Toyota Yaris, in revisione.",
+    "id": "2026-08-14T07:51:36.735944+00:00",
+    "updatedAt": "2026-08-14T07:51:36.735944+00:00",
+    "addedCount": 3,
+    "summary": "Raccolte 3 nuove fonti per Volkswagen Golf, in revisione.",
     "details": [
-      "Forum Quattroruote: Toyota Yaris Hybrid 4a generazione , anomalia gestione motore termico / elettrico. | Il Forum di Quattroruote"
+      "VW Golf Community: Richiamo \"centralina sos\" - The VW Golf Community",
+      "Forum Quattroruote: GOLF 8 e i continui aggiornamenti SW ! | Il Forum di Quattroruote",
+      "Forum Quattroruote: Difetti Volkswagen Golf 8 [quando la tecnologia è troppa ed inutile] ! | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
-        "make": "Toyota",
-        "model": "Yaris"
+        "make": "Volkswagen",
+        "model": "Golf"
       }
     ]
   }
