@@ -70,7 +70,7 @@ class MarketEvidenceTests(unittest.TestCase):
                     "subscriptionState": "SUBSCRIPTION_STATE_ACTIVE",
                     "lineItems": [
                         {
-                            "productId": "premium_gold_6_mesi",
+                            "productId": "goldseimesi",
                             "expiryTime": "2099-12-31T00:00:00Z",
                         }
                     ],
@@ -96,7 +96,7 @@ class MarketEvidenceTests(unittest.TestCase):
             server, "AuthorizedSession", FakeSession
         ), patch.object(server, "service_account", FakeServiceAccount):
             result = verify_google_play_subscription(
-                "token-123456789", "premium_gold_6_mesi"
+                "token-123456789", "goldseimesi"
             )
 
         self.assertTrue(result["active"])
@@ -123,7 +123,7 @@ class MarketEvidenceTests(unittest.TestCase):
             calls,
             [
                 ("premium-token-123", "premium_6_mesi"),
-                ("gold-token-123", "premium_gold_6_mesi"),
+                ("gold-token-123", "goldseimesi"),
             ],
         )
 
@@ -133,14 +133,14 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertFalse(entitlement["ok"])
         self.assertEqual(entitlement["status"], 402)
 
-    def test_market_estimate_requires_three_comparable_listings(self):
+    def test_market_estimate_returns_prudent_estimate_with_two_comparable_listings(self):
         two_listings = [
             {"price": 8000, "weight": 1.0},
             {"price": 8200, "weight": 1.0},
         ]
         estimate, filtered = market_estimate_from_sources(two_listings, 8000)
 
-        self.assertIsNone(estimate)
+        self.assertIsNotNone(estimate)
         self.assertEqual(len(filtered), 2)
 
     def test_market_estimate_keeps_three_comparable_listings(self):
@@ -327,7 +327,7 @@ class MarketEvidenceTests(unittest.TestCase):
         )
 
         self.assertIsNotNone(result)
-        self.assertEqual(4, len(result["reports"]))
+        self.assertEqual(5, len(result["reports"]))
 
     def test_defect_catalog_returns_none_for_unknown_vehicle(self):
         self.assertIsNone(vehicle_defect_reports("Marca inesistente", "Modello inesistente"))

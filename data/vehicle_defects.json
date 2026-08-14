@@ -1,16 +1,16 @@
 {
-  "catalogVersion": 22,
-  "updatedAt": "2026-08-13",
+  "catalogVersion": 23,
+  "updatedAt": "2026-08-14",
   "latestUpdate": {
-    "id": "catalog-22",
-    "summary": "Collegate le varianti BMW Serie 1 diesel al profilo N47 e migliorata la ricerca delle fonti di mercato.",
+    "id": "catalog-23",
+    "summary": "Aggiunta una guida community per Range Rover Evoque sulle verifiche della distribuzione.",
     "details": [
-      "BMW 116d, 118d, 120d, 123d e 125d sono ora collegate alla scheda Serie 1.",
-      "La segnalazione community sulla distribuzione N47 resta separata dai richiami ufficiali.",
-      "Per il valore auto Brave resta la fonte principale e SerpAPI interviene solo quando mancano prezzi confrontabili."
+      "Le varianti Evoque ed Epoque sono ricondotte allo stesso modello nel catalogo.",
+      "Aggiunta una segnalazione community sui rumori dopo un intervento alla distribuzione.",
+      "La segnalazione community resta distinta dai richiami ufficiali e richiede sempre verifica VIN e motore."
     ],
     "vehicles": [
-      {"make": "BMW", "model": "Serie 1"}
+      {"make": "Land Rover", "model": "Range Rover Evoque"}
     ]
   },
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
@@ -2406,6 +2406,19 @@
           "sourceName": "Segnalazioni community Evoque",
           "sourceUrl": "",
           "userText": "Sono riportati avvii lenti, blocchi e riavvii del sistema multimediale. Verifica aggiornamenti disponibili, stato batteria e diagnosi prima di sostituire lo schermo o il modulo."
+        },
+        {
+          "id": "land-rover-evoque-distribution-post-service-community",
+          "category": "Distribuzione",
+          "title": "Discussioni su rumore dopo intervento alla distribuzione",
+          "sourceType": "community_source",
+          "confidence": "unverified",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Range Rover Evoque prima generazione: identifica con VIN e codice motore il tipo di distribuzione e i componenti montati. Non classificare questa discussione come richiamo ufficiale.",
+          "sourceName": "Evoque Forum - presentazione utenti",
+          "sourceUrl": "",
+          "userText": "Nel forum sono presenti discussioni intitolate 'Rumore strano dopo cambio catena distribuzione' e 'Catena distribuzione'. Se il rumore compare dopo un intervento, torna dall'officina che ha eseguito il lavoro per controllare fasatura, tenditori, componenti accessori e codici errore. La voce riporta esperienze di utenti, non una campagna della casa madre."
         }
       ]
     },
