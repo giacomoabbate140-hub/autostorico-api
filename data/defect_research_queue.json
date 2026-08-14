@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-14T16:07:10.834634+00:00",
-  "cursor": 2,
+  "updatedAt": "2026-08-14T19:17:51.861989+00:00",
+  "cursor": 3,
   "candidates": [
     {
       "status": "approved",
@@ -980,23 +980,64 @@
       "title": "Club Alfa Forum - ClubAlfa.it",
       "snippet": "Nel forum parliamo di novità, curiosità, pregi, problemi, guasti, e difetti. Unisciti a migliaia di altri fan e proprietari. ... Forum Alfa Romeo Stelvio, sezioni tecniche Motori, informazioni, sconti, preventivi e consumi del primo SUV Alfa Romeo. ... Forum Alfa Romeo Giulia, sezioni tecniche Motori, informazioni, sconti, preventivi e consumi sulla nuova berlina 2016 Nel forum parliamo di novità, curiosità, pregi, problemi, guasti, e difetti. Unisciti a migliaia di altri fan e proprietari. ... Forum Alfa Romeo Stelvio, sezioni tecniche Motori, informazioni, sconti, preventivi e consumi del primo SUV Alfa Romeo. ... Forum Alfa Romeo Giulia, sezioni tecniche Motori, informazioni, sconti, preventivi e consumi sulla nuova berlina 2016 Sogna con noi il futuro di Alfa Romeo! Qui troverai i programmi dei raduni e degli eventi Nazionali e Internazionali relativi ad appassionati e Club Alfa Romeo. Sezione dedicata alle segnalazioni da parte degli utenti in fatto di officine autorizzate Alfa Romeo sul territorio Italiano Sezione a Moderazione Preventiva!",
       "sourceUrl": "https://forum.clubalfa.it/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T19:17:51.861989+00:00",
+      "make": "Audi",
+      "model": "A1",
+      "year": 2011,
+      "engine": "1.6 TDI CAYB",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "A1 [Archivio] - Forum dell'Audi RS Club",
+      "snippet": "DoDj - Audi A1 Sporback Admired 1.6 90cv TDI · a1 2015 in arrivo · Coprimozzo Audi · Navigatore senza pinna · Info x acquisto A1 del 2011, 1.4 TFSI 122cv S-tronic, Difetti, Problemi, Richiami · Delucidazioni FAP e valvola egr · Sta per arrivare tra voi un&#x27;altra piccola belva · DoDj - Audi A1 Sporback Admired 1.6 90cv TDI · a1 2015 in arrivo · Coprimozzo Audi · Navigatore senza pinna · Info x acquisto A1 del 2011, 1.4 TFSI 122cv S-tronic, Difetti, Problemi, Richiami · Delucidazioni FAP e valvola egr · Sta per arrivare tra voi un'altra piccola belva ·",
+      "sourceUrl": "https://forum.audirsclub.it/archive/index.php/f-188.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T19:17:51.861989+00:00",
+      "make": "Audi",
+      "model": "A1",
+      "year": 2011,
+      "engine": "1.6 TDI CAYB",
+      "sourceName": "Audi Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Campagna d'Intervento | Audi Service",
+      "snippet": "Per assicurare un’implementazione efficiente della Campagna d’intervento, i modelli interessati sono stati suddivisi in diversi gruppi. Tutti i proprietari delle vetture interessate sono già stati informati direttamente da Audi Italia mediante raccomandata. Per il motore 2.0 TDI EA189 è stata sviluppata una soluzione software. Per assicurare un’implementazione efficiente della Campagna d’intervento, i modelli interessati sono stati suddivisi in diversi gruppi. Tutti i proprietari delle vetture interessate sono già stati informati direttamente da Audi Italia mediante raccomandata. Per il motore 2.0 TDI EA189 è stata sviluppata una soluzione software. Per qualsiasi richiesta ti invitiamo a contattarci utilizzando l'indirizzo e-mail o il numero dedicato.<br> Email: info@audi.it<br> Telefono: 800 18 97 08<br> <br><br> Attivo dal lunedì al venerdì dalle 8.00 alle 20.00<br> Il sabato dalle 8.00 alle 14.00.",
+      "sourceUrl": "https://www.audi.it/it/modelli/campagna-intervento/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T19:17:51.861989+00:00",
+      "make": "Audi",
+      "model": "A1",
+      "year": 2011,
+      "engine": "1.6 TDI CAYB",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Pessima esperienza con la mia prima AUDI | Il Forum di Quattroruote",
+      "snippet": "<strong>la velocità è un non problema, probabilmente deve ancora slegarsi</strong>. Sul trattamento ricevuto invece per i difetti, pollice verso. Probabilmente in Audi non tengono molto in considerazione chi acquista una &quot;misera&quot; A1. Velocità: ma ti sembra il caso di lanciarti a 200kmh in discesa su di una A1? Non ti piacerebbe invecchiare? Clicca per allargare... Ne hai mai guidata una? Già la mia del 2011 con assetto sportivo a 190 orari è veramente molto stabile e dà veramente un senso di sicurezza molto più di una Polo con la stessa piattaforma ma senza assetto sportivo (e forse anche altri componenti diversi) e il volante non vibra neanche a volerlo (110k km all'attivo). la velocità è un non problema, probabilmente deve ancora slegarsi. Sul trattamento ricevuto invece per i difetti, pollice verso. Probabilmente in Audi non tengono molto in considerazione chi acquista una \"misera\" A1. Nella prova di gennaio di quest'anno la A1 ha superato brillantemente i 190 km/h, raggiungendo ben i 191,5, ma sicuramente gli 11,5 mancanti all'appello avranno anche qui una giustificazione, in fondo è solo il 5,6% in meno. Concordo con la scarsa attenzione che le case madri rivolgono ai consumatori, purtroppo dipende anche da una carenza nella normativa per la tutela dei consumatori. Qualità: le auto del gruppo VW e Audi in particolare sono degne di rispetto, e te lo dico dopo cinque vetture e 20 anni di Audi-VW, e altrettanti di altre marche. Velocità: ma ti sembra il caso di lanciarti a 200kmh in discesa su di una A1?",
+      "sourceUrl": "https://forum.quattroruote.it/threads/pessima-esperienza-con-la-mia-prima-audi.131571/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-14T16:07:10.834634+00:00",
-    "updatedAt": "2026-08-14T16:07:10.834634+00:00",
-    "addedCount": 5,
-    "summary": "Raccolte 5 nuove fonti per Alfa Romeo Giulia, in revisione.",
+    "id": "2026-08-14T19:17:51.861989+00:00",
+    "updatedAt": "2026-08-14T19:17:51.861989+00:00",
+    "addedCount": 3,
+    "summary": "Raccolte 3 nuove fonti per Audi A1, in revisione.",
     "details": [
-      "ClubAlfa: Richiami e soluzioni AlfaRomeo Giulia - Club Alfa Forum",
-      "ClubAlfa: Alfa Romeo Giulia 2018 - 2.2 Diesel - ClubAlfa.it Forum",
-      "Forum Quattroruote: Difetti della Giulia? Un aiuto per possibili acquirenti... | Il Forum di Quattroruote",
-      "ClubAlfa: Campagna di richiamo 8242 - ClubAlfa.it Forum"
+      "Audi RS Club Italia: A1 [Archivio] - Forum dell'Audi RS Club",
+      "Audi Italia: Campagna d'Intervento | Audi Service",
+      "Forum Quattroruote: Pessima esperienza con la mia prima AUDI | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
-        "make": "Alfa Romeo",
-        "model": "Giulia"
+        "make": "Audi",
+        "model": "A1"
       }
     ]
   }
