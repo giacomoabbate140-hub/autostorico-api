@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-14T02:47:11.590050+00:00",
-  "cursor": 26,
+  "updatedAt": "2026-08-14T05:04:27.603220+00:00",
+  "cursor": 27,
   "candidates": [
     {
       "status": "approved",
@@ -672,21 +672,34 @@
       "title": "Seat Leon tdi o tsi? | Il Forum di Quattroruote",
       "snippet": "ciao a tutti!! Mi chiamo Daniele e tra meno di un mese comprerò la macchina nuova, ma sono indeciso su quale motorizzazione scegliere. In genere faccio dai 15000 ai 18000 km all&#x27;anno. 15 km tratto extraurbano per andare a lavoro (30 km totali), 5 km tratto urbano per andare in palestra e poi il...",
       "sourceUrl": "https://forum.quattroruote.it/threads/seat-leon-tdi-o-tsi.112693/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T05:04:27.603220+00:00",
+      "make": "Toyota",
+      "model": "Yaris",
+      "year": 2021,
+      "engine": "1.5 Hybrid",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Toyota Yaris Hybrid 4a generazione , anomalia gestione motore termico / elettrico. | Il Forum di Quattroruote",
+      "snippet": "Secondo molti proprietari di queste auto <strong>il problema potrebbe essere la gestione del GPF (filtro anti particolato) utilizzato per la prima volta sul sistema ibrido</strong>. E&#x27; stato utilizzato per rientrare nelle stringenti normative anti inquinamento EU6D essendo il 1.5 un motore a iniezione diretta. Il verbo condizionale non e' usato per sminuire i proprietari delle auto in questione o l'entita' stessa del problema, tutt'altro. Ci troviamo in una fase di analisi del problema che e' tutta in divenire. ... Buonasera a tutti. Mi scuso inizialmente con i moderatori per aver affrontato il discorso nell’altro topic. Come richiesto da @Yaris Mille, riporto di seguito ciò che ho scritto: Sto partecipando ad un'altra discussione su altro forum, dove i casi sono su circa 11 Yaris, più circa 9 persone su Gruppo Facebook - per ora. Secondo molti proprietari di queste auto il problema potrebbe essere la gestione del GPF (filtro anti particolato) utilizzato per la prima volta sul sistema ibrido. E' stato utilizzato per rientrare nelle stringenti normative anti inquinamento EU6D essendo il 1.5 un motore a iniezione diretta. Problematiche simili sul 2.0 che monta anch'esso un GPF in coda. Possibile che sia solo un difetto di gioventu' dovuto ad una errata gestione dell'elettronica. In questa prova la differenza tra le emissioni misurate nel ciclo in laboratorio (limite per i NOx 60 mg/km per i benzina e 80 mg/km per i diesel) e in quello su strada potrà arrivare massimo al 110% (limite per i NOx 126 mg/km per i benzina e 168 mg/km per i diesel). Euro 6d: per le immatricolazioni da gennaio 2021, stabilisce che la differenza rilevata tra le emissioni WLTP e quelle misurate nella prova RDE non possa superare il 50% (limite per i NOx 90 mg/km per i benzina e 120 mg/km per i diesel).",
+      "sourceUrl": "https://forum.quattroruote.it/threads/toyota-yaris-hybrid-4a-generazione-anomalia-gestione-motore-termico-elettrico.137422/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-14T02:47:11.590050+00:00",
-    "updatedAt": "2026-08-14T02:47:11.590050+00:00",
-    "addedCount": 2,
-    "summary": "Raccolte 2 nuove fonti per SEAT Leon, in revisione.",
+    "id": "2026-08-14T05:04:27.603220+00:00",
+    "updatedAt": "2026-08-14T05:04:27.603220+00:00",
+    "addedCount": 1,
+    "summary": "Raccolte 1 nuove fonti per Toyota Yaris, in revisione.",
     "details": [
-      "Forum Quattroruote: Problemi importanti per Seat Leon FR | Il Forum di Quattroruote",
-      "Forum Quattroruote: Seat Leon tdi o tsi? | Il Forum di Quattroruote"
+      "Forum Quattroruote: Toyota Yaris Hybrid 4a generazione , anomalia gestione motore termico / elettrico. | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
-        "make": "SEAT",
-        "model": "Leon"
+        "make": "Toyota",
+        "model": "Yaris"
       }
     ]
   }
