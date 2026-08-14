@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-14T07:51:36.735944+00:00",
-  "cursor": 28,
+  "updatedAt": "2026-08-14T10:17:38.820201+00:00",
+  "cursor": 0,
   "candidates": [
     {
       "status": "approved",
@@ -728,22 +728,79 @@
       "title": "Difetti Volkswagen Golf 8 [quando la tecnologia è troppa ed inutile] ! | Il Forum di Quattroruote",
       "snippet": "Clicca per allargare... Te li segui , io ho quel modello. Il richiamo per la ecall è diversa dai malfunzionamenti del mib3. Nel 2020 tanto per dirti le consegne erano state bloccate per qualche mese appunto per dei problemi all’ecall. Clicca per allargare... Te li segui , io ho quel modello. Il richiamo per la ecall è diversa dai malfunzionamenti del mib3. Nel 2020 tanto per dirti le consegne erano state bloccate per qualche mese appunto per dei problemi all’ecall. infatti li sto seguendo e per questo che dico cosi ! infatti ora RICHIAMO in officina ( il 91GM ) per il solito problema alla centralina SOS ....",
       "sourceUrl": "https://forum.quattroruote.it/threads/difetti-volkswagen-golf-8-quando-la-tecnologia-%C3%A8-troppa-ed-inutile.148079/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T10:17:38.820201+00:00",
+      "make": "Volkswagen",
+      "model": "T-Roc",
+      "year": 2020,
+      "engine": "1.0 TSI",
+      "sourceName": "VW Golf Community",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "T-ROC: Difetti e problemi riscontrati - The VW Golf Community",
+      "snippet": "Ciao a tutti. Ho ritirato la mia T-Roc 2.0Tdi Dsg 4M il 02/01/2018 e ho riscontrato da subito i seguenti difetti: -<strong>fruscio aerodinamico con finestrini chiusi già alla velocità di 70/80 kmh, probabilmente all&#x27;altezza specchietto lato guida; -sedile lato guida scomodo già dopo 20 minuti di</strong> ... Ciao a tutti. Ho ritirato la mia T-Roc 2.0Tdi Dsg 4M il 02/01/2018 e ho riscontrato da subito i seguenti difetti: -fruscio aerodinamico con finestrini chiusi già alla velocità di 70/80 kmh, probabilmente all'altezza specchietto lato guida; -sedile lato guida scomodo già dopo 20 minuti di guida; -uscita d'aria dal bocchettone VW GOLF COMMUNITY Tutto il materiale presente nel Sito (immagini, loghi, articoli, messaggi, etc) appartiene ai legittimi proprietari. Re: T-ROC: Difetti e problemi riscontrati Dico la mia, ho la T-Roc 1.5 tsi manuale da 3 mesi e 2800km (ancora pochi insomma) e arrivo da una Giulietta Io mi trovo bene, trovo la macchina meno rumorosa della Giulietta che avevo, la qualità dei materiali cambia di poco (i sedili sono migliori ad esempio) e il comfort è decisamente maggiore. Fatta sentire/guidare in prova dal collaudatore dell'officina della conce, questo il suo verdetto: la rumorosità in effetti c'è, è dovuta al cambio DSG nel momento in cui attacca/stacca la trazione, ed è assolutamente entro i \"limiti fisiologici\" del cambio automatico Volkswagen.",
+      "sourceUrl": "https://www.vwgolfcommunity.com/vb/forum/vw-golf-world/vw-t-roc/guasti-problemi-richiami-ac/19259-t-roc-difetti-e-problemi-riscontrati/page4"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T10:17:38.820201+00:00",
+      "make": "Volkswagen",
+      "model": "T-Roc",
+      "year": 2020,
+      "engine": "1.0 TSI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Wv T-ROC CONVIENE? Problemi? | Il Forum di Quattroruote",
+      "snippet": "Ludo0809 io ho una troc 1000 da poco piu di un mese, l&#x27;auto a parte le plastiche dell&#x27;abitacolo non proprio stupende, ancorche ben assemblate, per il momento non ha altri difetti anzi va, a mio parere, molto bene. Comoda, spaziosa, ben insonorizzata e perfino prestante malgrado la cilindrata. Ludo0809 io ho una troc 1000 da poco piu di un mese, l'auto a parte le plastiche dell'abitacolo non proprio stupende, ancorche ben assemblate, per il momento non ha altri difetti anzi va, a mio parere, molto bene. Comoda, spaziosa, ben insonorizzata e perfino prestante malgrado la cilindrata. Mi è sempre piaciuta l'impostazione della Volkswagen. Ho avuto la golf II serie e la Passat III serie, la Polo IV e V serie. Ho provato la T roc 1600 disel perchè mi piace esteticamente ma sono rimasto molto deluso. acquisto aiuto alfa romeo assicurazione audi auto auto nuova auto usata autoradio batteria benzina bmw cambio cambio automatico clio consigli consiglio consiglio acquisto auto consumi diesel fiat fiesta ford frizione garanzia golf gpl grande punto hybrid mercedes metano motogp motore nissan olio opel panda pneumatici polo problema punto renault seat subaru suv suzuki toyota usato volkswagen yaris",
+      "sourceUrl": "https://forum.quattroruote.it/threads/wv-t-roc-conviene-problemi.115906/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T10:17:38.820201+00:00",
+      "make": "Volkswagen",
+      "model": "T-Roc",
+      "year": 2020,
+      "engine": "1.0 TSI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "T - Roc TSI 1.0 | Il Forum di Quattroruote",
+      "snippet": "Ultimamente mi sono imbattuta sulla tipologia di Suv, sto valutando di prendere un usato e sarebbe la mia prima auto. Leggo spesso pareri contrastanti e avrei bisogno di sapere qualcosa in più per chi forse l’ha già acquistata e potuta provare, l’auto in questione è la volkswagen t-roc tsi 1.0. Ultimamente mi sono imbattuta sulla tipologia di Suv, sto valutando di prendere un usato e sarebbe la mia prima auto. Leggo spesso pareri contrastanti e avrei bisogno di sapere qualcosa in più per chi forse l’ha già acquistata e potuta provare, l’auto in questione è la volkswagen t-roc tsi 1.0.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/t-roc-tsi-1-0.149103/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T10:17:38.820201+00:00",
+      "make": "Volkswagen",
+      "model": "T-Roc",
+      "year": 2020,
+      "engine": "1.0 TSI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "VOLKSWAGEN T-ROC 1.0 TSI motore fuso a 12.170 km!! | Page 3 | Il Forum di Quattroruote",
+      "snippet": "Il difetto riportato riguarda i motori tra 2008 e 2011 , il motore oggetto della discussione e&#x27; stato prodotto nel 2020. Clicca per allargare... In realtà ci sono tutta una serie di problemi.. Problemi frequenti dei motori TFSI: cosa riferiscono i proprietari di auto Aumento del consumo di olio: uno dei classici punti deboli dei TFSI Un problema noto di molti motori TFSI (soprattutto 1.8 e 2.0 TFSI fino al 2012 circa) è l&#x27;elevato consumo di olio. Il difetto riportato riguarda i motori tra 2008 e 2011 , il motore oggetto della discussione e' stato prodotto nel 2020. Clicca per allargare... In realtà ci sono tutta una serie di problemi.. Problemi frequenti dei motori TFSI: cosa riferiscono i proprietari di auto Aumento del consumo di olio: uno dei classici punti deboli dei TFSI Un problema noto di molti motori TFSI (soprattutto 1.8 e 2.0 TFSI fino al 2012 circa) è l'elevato consumo di olio. Difetti della pompa dell'acqua Molti motori TFSI hanno problemi con pompe dell'acqua difettose, solitamente a causa di materiali scadenti o microfessurazioni. Una perdita di liquido di raffreddamento non rilevata può causare surriscaldamento e gravi danni al motore. Audi TFSI Probleme verständlich erklärt: typische Ursachen, Warnzeichen und Reparaturlösungen bei Ölverbrauch, Steuerkette & Turbo. ... In realtà ci sono tutta una serie di problemi.. Problemi frequenti dei motori TFSI: cosa riferiscono i proprietari di auto Aumento del consumo di olio: uno dei classici punti deboli dei TFSI Un problema noto di molti motori TFSI (soprattutto 1.8 e 2.0 TFSI fino al 2012 circa) è l'elevato consumo di olio. I principali problemi riscontrati sul motore 1.0 TFSI includono: la formazione di depositi carboniosi sulle valvole di aspirazione un'usura precoce degli alberi a camme dovuta a difetti della pompa del carburante problemi con i lembi di aspirazione nelle versioni più recenti, un elevato consumo d'olio. Ciò porta a depositi che si traducono in perdita di potenza e strappi durante l'accelerazione: un problema frequente in molti modelli TFSI. Difetti della pompa dell'acqua Molti motori TFSI hanno problemi con pompe dell'acqua difettose, solitamente a causa di materiali scadenti o microfessurazioni.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/volkswagen-t-roc-1-0-tsi-motore-fuso-a-12-170-km.149573/page-3"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-14T07:51:36.735944+00:00",
-    "updatedAt": "2026-08-14T07:51:36.735944+00:00",
-    "addedCount": 3,
-    "summary": "Raccolte 3 nuove fonti per Volkswagen Golf, in revisione.",
+    "id": "2026-08-14T10:17:38.820201+00:00",
+    "updatedAt": "2026-08-14T10:17:38.820201+00:00",
+    "addedCount": 4,
+    "summary": "Raccolte 4 nuove fonti per Volkswagen T-Roc, in revisione.",
     "details": [
-      "VW Golf Community: Richiamo \"centralina sos\" - The VW Golf Community",
-      "Forum Quattroruote: GOLF 8 e i continui aggiornamenti SW ! | Il Forum di Quattroruote",
-      "Forum Quattroruote: Difetti Volkswagen Golf 8 [quando la tecnologia è troppa ed inutile] ! | Il Forum di Quattroruote"
+      "VW Golf Community: T-ROC: Difetti e problemi riscontrati - The VW Golf Community",
+      "Forum Quattroruote: Wv T-ROC CONVIENE? Problemi? | Il Forum di Quattroruote",
+      "Forum Quattroruote: T - Roc TSI 1.0 | Il Forum di Quattroruote",
+      "Forum Quattroruote: VOLKSWAGEN T-ROC 1.0 TSI motore fuso a 12.170 km!! | Page 3 | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
         "make": "Volkswagen",
-        "model": "Golf"
+        "model": "T-Roc"
       }
     ]
   }
