@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-13T22:04:12.507073+00:00",
-  "cursor": 25,
+  "updatedAt": "2026-08-14T02:47:11.590050+00:00",
+  "cursor": 26,
   "candidates": [
     {
       "status": "approved",
@@ -644,21 +644,49 @@
       "title": "Difetto di fabbrica noto causa guasto da 18.000 euro su auto Renault E-tech | Page 2 | Il Forum di Quattroruote",
       "snippet": "Sono nella vostra stessa situazione, Clio V E Tech full hybrid del 2020 ferma in officina da un mese, settimana scorsa ci hanno confermato che <strong>il danno è stato provocato dal difetto di fabbrica della guarnizione</strong>. Clicca per allargare... a volte per risparmiare qualche decina di euro si prende il rischio di affidarsi ad officine o circuiti non in grado di rispettare le disposizioni della casa. Una leggerezza che si rischia di pagare molto cara. Da dire anche che questo E tech era da subito un innovazione piuttosto rilevante e complessa per Renault e sarebbe stato saggio evitare di fare da beta test. In altre parole, quando si esaltano gli ibridi Toyota è perchè hanno un esperienza di tanti tanti anni dimostrando estrema affidabilità e competenza Che poi la casa si stia comportando in modo poco etico nei confronti dei clienti proponendo motori di ricambio al prezzo di un intera autovettura non ci piove Clicca per allargare... hai ragione, è possibile solo per la garanzia obbligatoria. Tuttavia io sono sempre stato molto scettico sulle garanzie aggiuntive.. di fatto non comprendono tutto quello che è soggetto ad usura e spesso la copertura scema in modo importante nel tempo. Sono nella vostra stessa situazione, Clio V E Tech full hybrid del 2020 ferma in officina da un mese, settimana scorsa ci hanno confermato che il danno è stato provocato dal difetto di fabbrica della guarnizione.",
       "sourceUrl": "https://forum.quattroruote.it/threads/difetto-di-fabbrica-noto-causa-guasto-da-18-000-euro-su-auto-renault-e-tech.148074/page-2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T02:47:11.590050+00:00",
+      "make": "SEAT",
+      "model": "Leon",
+      "year": 2017,
+      "engine": "1.4 TSI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Problemi importanti per Seat Leon FR | Il Forum di Quattroruote",
+      "snippet": "Quasi ogni giorno c&#x27;è qualcuno che chiede come togliere il FAP, svuotarlo o mettere un downpipe per risolvere una volta per tutte i problemi.. ma ci sono anche quelli che ci hanno fatto 200k km con una rigenerazione ogni 400km di cui nemmeno se ne accorgono. Dipende tutto da come la usi. In ogni caso da settembre 2018 anche i benzina hanno il FAP (che specie se a iniezione diretta come i TSI comunque producono particolato). Io l'ho appena presa, 1.0 TSI, consumo medio sui 18/19 con un litro, in città sui 15, in extraurbano sui 22, in autostrada sui 20. Ovviamente guidando con attenzione ma non da vecchio. Non vibra niente, il motore non si sente, spinge bene e in generale io sono molto soddisfatto. A tutti capitano rigenerazioni nei momenti meno opportuni o più spesso, così come diluizione dell'olio ecc., gli unici che non hanno problemi sono quelli che fanno tanti km alla volta, specie se prendi il 2.0, che per il resto è comunque un ottimo motore. Comunque 20k all'anno non sono sicuro siano abbastanza per giustificarlo, i TSI sono ottimi motori che consumano poco e il punto di pareggio è molto in là con gli anni ,fatti due conti. Quasi ogni giorno c'è qualcuno che chiede come togliere il FAP, svuotarlo o mettere un downpipe per risolvere una volta per tutte i problemi.. ma ci sono anche quelli che ci hanno fatto 200k km con una rigenerazione ogni 400km di cui nemmeno se ne accorgono. Dipende tutto da come la usi. In ogni caso da settembre 2018 anche i benzina hanno il FAP (che specie se a iniezione diretta come i TSI comunque producono particolato).",
+      "sourceUrl": "https://forum.quattroruote.it/threads/problemi-importanti-per-seat-leon-fr.132265/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-14T02:47:11.590050+00:00",
+      "make": "SEAT",
+      "model": "Leon",
+      "year": 2017,
+      "engine": "1.4 TSI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Seat Leon tdi o tsi? | Il Forum di Quattroruote",
+      "snippet": "ciao a tutti!! Mi chiamo Daniele e tra meno di un mese comprerò la macchina nuova, ma sono indeciso su quale motorizzazione scegliere. In genere faccio dai 15000 ai 18000 km all&#x27;anno. 15 km tratto extraurbano per andare a lavoro (30 km totali), 5 km tratto urbano per andare in palestra e poi il...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/seat-leon-tdi-o-tsi.112693/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-13T22:04:12.507073+00:00",
-    "updatedAt": "2026-08-13T22:04:12.507073+00:00",
+    "id": "2026-08-14T02:47:11.590050+00:00",
+    "updatedAt": "2026-08-14T02:47:11.590050+00:00",
     "addedCount": 2,
-    "summary": "Raccolte 2 nuove fonti per Renault Clio, in revisione.",
+    "summary": "Raccolte 2 nuove fonti per SEAT Leon, in revisione.",
     "details": [
-      "Forum Quattroruote: PROBLEMA RENAULT CLIO V 1.0 BENZINA | Il Forum di Quattroruote",
-      "Forum Quattroruote: Difetto di fabbrica noto causa guasto da 18.000 euro su auto Renault E-tech | Page 2 | Il Forum di Quattroruote"
+      "Forum Quattroruote: Problemi importanti per Seat Leon FR | Il Forum di Quattroruote",
+      "Forum Quattroruote: Seat Leon tdi o tsi? | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
-        "make": "Renault",
-        "model": "Clio"
+        "make": "SEAT",
+        "model": "Leon"
       }
     ]
   }
