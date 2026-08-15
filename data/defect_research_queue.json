@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-15T09:42:29.303454+00:00",
-  "cursor": 8,
+  "updatedAt": "2026-08-15T12:59:42.910998+00:00",
+  "cursor": 9,
   "candidates": [
     {
       "status": "approved",
@@ -1134,21 +1134,34 @@
       "title": "Citroën-Club e DS Forum • Leggi argomento - Campagna di richiamo GWK",
       "snippet": "Indice » DISCUSSIONI E AREA TECNICA » Vetture Citroën » C3 III » C3 III | Argomenti a Carattere Tecnico · Tutti gli orari sono UTC + 1 ora [ ora legale ]",
       "sourceUrl": "https://www.citroen-club.it/forum/viewtopic.php?f=191&t=36176"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-15T12:59:42.910998+00:00",
+      "make": "Fiat",
+      "model": "Panda",
+      "year": 2018,
+      "engine": "1.3 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "richiamo Panda 1.3 MJT | Il Forum di Quattroruote",
+      "snippet": "mi è arrivata la lettera da FCA per un richiamo di aggiornamento centralina sulla Panda del 12/2014. qualcuno lo ha già fatto? in cosa consiste? ... No, è la cross da 80 cv... ... Forse sono le candelette. Vai in concessionaria, poi fammi sapere. ... ritirato la Panda aggiornata... a primo impatto, sembra uguale, ma mi sono scontrato con un muro di omertà... ha detto il capo officina che l?hanno collegata al computer centrale ed ha fatto tutto la Fiat, ma non si sa cosa... mi è arrivata la lettera da FCA per un richiamo di aggiornamento centralina sulla Panda del 12/2014. qualcuno lo ha già fatto? in cosa consiste? ... No, è la cross da 80 cv... ... Forse sono le candelette. Vai in concessionaria, poi fammi sapere. ... ritirato la Panda aggiornata... a primo impatto, sembra uguale, ma mi sono scontrato con un muro di omertà... ha detto il capo officina che l?hanno collegata al computer centrale ed ha fatto tutto la Fiat, ma non si sa cosa...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/richiamo-panda-1-3-mjt.101644/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-15T06:58:23.226322+00:00",
-    "updatedAt": "2026-08-15T06:58:23.226322+00:00",
-    "addedCount": 2,
-    "summary": "Raccolte 2 nuove fonti per Citroen C3, in revisione.",
+    "id": "2026-08-15T12:59:42.910998+00:00",
+    "updatedAt": "2026-08-15T12:59:42.910998+00:00",
+    "addedCount": 1,
+    "summary": "Raccolte 1 nuove fonti per Fiat Panda, in revisione.",
     "details": [
-      "Citroen Italia: Campagna di richiamo Citroën: il tuo veicolo è interessato?",
-      "Citroën-Club Italia: Citroën-Club e DS Forum • Leggi argomento - Campagna di richiamo GWK"
+      "Forum Quattroruote: richiamo Panda 1.3 MJT | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
-        "make": "Citroen",
-        "model": "C3"
+        "make": "Fiat",
+        "model": "Panda"
       }
     ]
   }
