@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-15T01:50:13.570349+00:00",
-  "cursor": 5,
+  "updatedAt": "2026-08-15T03:55:14.834880+00:00",
+  "cursor": 6,
   "candidates": [
     {
       "status": "approved",
@@ -1092,23 +1092,34 @@
       "title": "Azioni di richiamo A3 8P [Archivio] - Forum dell'Audi RS Club",
       "snippet": "23j8 Modello: A3 Con Motore Tdi 2.0i Numero Veicoli: 1040 Periodo Di Produzione: 2008-2009-2010-2011 Descrizione Difetto: <strong>POSSIBILE VIBRAZIONE TUBAZIONI ALTA PRESSIONE</strong> Azioni Correttive: APPLICAZIONE ANTI VIBRANTI Riferimento: CONCESSIONARI Note: COD 23J8 - TELAI NON INDICATI Mi e&#x27; arrivata ... Apro questa discussione per raggruppare le varie azioni di richiamo eseguite su Audi A3 8P Postate qui i vostri richiami e lavorazioni eseguite sulla propria auto con sigla azione e denominazione richiamo. Audi A3 8P AZIONE: 72B6 DATA: 18-02-2005 DENOMINAZIONE: PERNI DI ANCORAGGIO DEL TELAIO SEDILE ANTERIORE DESCRIZIONE: in pratica il richiamo consiste nel verificare con una specie di calibro alcuni perni dei telai dei sedili anteriori (dove ci sono snodi o giunzioni tra i vari pezzi Azione di richiamo num. 23j8 Modello: A3 Con Motore Tdi 2.0i Numero Veicoli: 1040 Periodo Di Produzione: 2008-2009-2010-2011 Descrizione Difetto: POSSIBILE VIBRAZIONE TUBAZIONI ALTA PRESSIONE Azioni Correttive: APPLICAZIONE ANTI VIBRANTI Riferimento: CONCESSIONARI Note: COD 23J8 - TELAI NON INDICATI Mi e' arrivata oggi la raccomandata dall'Audi.. AZIONE: DATA: 29/11/2006 DENOMINAZIONE: AGGIORNAMENTO SOFTWARE CENTRALINA MOTORE 2.0 TDI AZIONE: DATA: 03/08/2007 DENOMINAZIONE: SOSTITUZIONE CONDOTTO DI SOVRALIMENTAZIONE ... Apro questa discussione per raggruppare le varie azioni di richiamo eseguite su Audi A3 8P Postate qui i vostri richiami e lavorazioni eseguite sulla propria auto con sigla azione e denominazione richiamo. Se i perni sono a posto tutto bene, nel caso fossero più piccoli del dovuto si deve cambiare il telaio del sedile per evitare che col tempo si creino giochi tali da far uscire i perni dalle loro sedi. AZIONE: DATA: 29/11/2006 DENOMINAZIONE: AGGIORNAMENTO SOFTWARE CENTRALINA MOTORE 2.0 TDI AZIONE: DATA: 03/08/2007 DENOMINAZIONE: SOSTITUZIONE CONDOTTO DI SOVRALIMENTAZIONE L'elenco dei richiami non l'ho fatto io.:laugh: Io ho solo il problema:sad:",
       "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-459.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-15T03:55:14.834880+00:00",
+      "make": "BMW",
+      "model": "Serie 1",
+      "year": 2015,
+      "engine": "2.0 diesel N47",
+      "sourceName": "BMW Passion Forum",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "BMW Serie 1 F40 - Richiamo per rischio incendio | BMWpassion forum e blog",
+      "snippet": "Qualcuno sa qualcosa o è stato contattato da BMW, per la notizia che circola da qualche giorno, riguardo il richiamo per sostituzione motorino di... Discussione in 'Segnalazione RICHIAMI' iniziata da Antony60, 3 Ottobre 2025.",
+      "sourceUrl": "https://www.bmwpassion.com/forum/threads/richiamo-per-rischio-incendio.398329/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-14T21:42:33.702868+00:00",
-    "updatedAt": "2026-08-14T21:42:33.702868+00:00",
-    "addedCount": 5,
-    "summary": "Raccolte 5 nuove fonti per Audi A3, in revisione.",
+    "id": "2026-08-15T03:55:14.834880+00:00",
+    "updatedAt": "2026-08-15T03:55:14.834880+00:00",
+    "addedCount": 1,
+    "summary": "Raccolte 1 nuove fonti per BMW Serie 1, in revisione.",
     "details": [
-      "Audi RS Club Italia: Richiamo dieselgate A3 - Pagina 4",
-      "Forum Quattroruote: Audi A3 1.6 tdi 110cv azione richiamo | Il Forum di Quattroruote",
-      "Audi RS Club Italia: Richiamo modelli 2.0 tdi 170 cv per sostituzione iniettori difettosi [Archivio] - Forum dell'Audi RS Club",
-      "Forum Quattroruote: Richiamo Audi Centralina | Il Forum di Quattroruote"
+      "BMW Passion Forum: BMW Serie 1 F40 - Richiamo per rischio incendio | BMWpassion forum e blog"
     ],
     "vehicles": [
       {
-        "make": "Audi",
-        "model": "A3"
+        "make": "BMW",
+        "model": "Serie 1"
       }
     ]
   }
