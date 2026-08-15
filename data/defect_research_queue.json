@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-15T03:55:14.834880+00:00",
-  "cursor": 6,
+  "updatedAt": "2026-08-15T06:58:23.226322+00:00",
+  "cursor": 7,
   "candidates": [
     {
       "status": "approved",
@@ -1106,20 +1106,49 @@
       "title": "BMW Serie 1 F40 - Richiamo per rischio incendio | BMWpassion forum e blog",
       "snippet": "Qualcuno sa qualcosa o è stato contattato da BMW, per la notizia che circola da qualche giorno, riguardo il richiamo per sostituzione motorino di... Discussione in 'Segnalazione RICHIAMI' iniziata da Antony60, 3 Ottobre 2025.",
       "sourceUrl": "https://www.bmwpassion.com/forum/threads/richiamo-per-rischio-incendio.398329/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-15T06:58:23.226322+00:00",
+      "make": "Citroen",
+      "model": "C3",
+      "year": 2019,
+      "engine": "1.2 PureTech",
+      "sourceName": "Citroen Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Campagna di richiamo Citroën: il tuo veicolo è interessato?",
+      "snippet": "Con il controllo del VIN qui sotto puoi facilmente scoprire se la tua auto è coinvolta e se è già stata richiamata o lo sarà presto. Assicurati di avere a portata di mano il numero di identificazione del tuo veicolo (VIN). Puoi trovare queste informazioni nei documenti di immatricolazione del veicolo o nei documenti assicurativi: è un codice alfanumerico di 17 caratteri assegnato a ogni veicolo. Si prega di notare che alcuni modelli Citroën C3, Citroën C4, Citroën DS3, Citroën DS4, Citroën DS5 et Citroën C Zéro, sono soggetti a un avviso di &quot;stop drive&quot;. Con il controllo del VIN qui sotto puoi facilmente scoprire se la tua auto è coinvolta e se è già stata richiamata o lo sarà presto. Assicurati di avere a portata di mano il numero di identificazione del tuo veicolo (VIN). Puoi trovare queste informazioni nei documenti di immatricolazione del veicolo o nei documenti assicurativi: è un codice alfanumerico di 17 caratteri assegnato a ogni veicolo. Si prega di notare che alcuni modelli Citroën C3, Citroën C4, Citroën DS3, Citroën DS4, Citroën DS5 et Citroën C Zéro, sono soggetti a un avviso di \"stop drive\". È possibile identificare i veicoli interessati utilizzando i codici di richiamo \"MK7\"»(C3, DS3), \"NQ3\" (C3, DS3), \"GM3\" (C4, DS4, DS5) e \"GM7\" (C Zéro), che vengono visualizzati dopo aver controllato il VIN. Sono in corso richiami dei dispositivi di gonfiaggio degli airbag dell’azienda Takata, che interessano veicoli di numerosi marchi e produttori automobilistici in tutto il mondo. Le sostanze chimiche contenute in questi dispositivi di gonfiaggio degli airbag Takata potrebbero deteriorarsi nel tempo, soprattutto quando esposte a condizioni climatiche calde e umide. Stellantis sta richiamando tutti i veicoli interessati dei suoi marchi per sostituire gli airbag a tutti i clienti coinvolti, con un approccio scaglionato, per garantire la sicurezza prima di tutto e servire tutti i clienti nel modo più rapido ed efficiente.",
+      "sourceUrl": "https://www.citroen.it/post-vendita/campagne-di-richiamo.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-15T06:58:23.226322+00:00",
+      "make": "Citroen",
+      "model": "C3",
+      "year": 2019,
+      "engine": "1.2 PureTech",
+      "sourceName": "Citroën-Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Citroën-Club e DS Forum • Leggi argomento - Campagna di richiamo GWK",
+      "snippet": "Indice » DISCUSSIONI E AREA TECNICA » Vetture Citroën » C3 III » C3 III | Argomenti a Carattere Tecnico · Tutti gli orari sono UTC + 1 ora [ ora legale ]",
+      "sourceUrl": "https://www.citroen-club.it/forum/viewtopic.php?f=191&t=36176"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-15T03:55:14.834880+00:00",
-    "updatedAt": "2026-08-15T03:55:14.834880+00:00",
-    "addedCount": 1,
-    "summary": "Raccolte 1 nuove fonti per BMW Serie 1, in revisione.",
+    "id": "2026-08-15T06:58:23.226322+00:00",
+    "updatedAt": "2026-08-15T06:58:23.226322+00:00",
+    "addedCount": 2,
+    "summary": "Raccolte 2 nuove fonti per Citroen C3, in revisione.",
     "details": [
-      "BMW Passion Forum: BMW Serie 1 F40 - Richiamo per rischio incendio | BMWpassion forum e blog"
+      "Citroen Italia: Campagna di richiamo Citroën: il tuo veicolo è interessato?",
+      "Citroën-Club Italia: Citroën-Club e DS Forum • Leggi argomento - Campagna di richiamo GWK"
     ],
     "vehicles": [
       {
-        "make": "BMW",
-        "model": "Serie 1"
+        "make": "Citroen",
+        "model": "C3"
       }
     ]
   }
