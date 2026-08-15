@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-15T15:35:23.639171+00:00",
-  "cursor": 10,
+  "updatedAt": "2026-08-15T18:48:06.538011+00:00",
+  "cursor": 11,
   "candidates": [
     {
       "status": "approved",
@@ -1148,20 +1148,34 @@
       "title": "richiamo Panda 1.3 MJT | Il Forum di Quattroruote",
       "snippet": "mi è arrivata la lettera da FCA per un richiamo di aggiornamento centralina sulla Panda del 12/2014. qualcuno lo ha già fatto? in cosa consiste? ... No, è la cross da 80 cv... ... Forse sono le candelette. Vai in concessionaria, poi fammi sapere. ... ritirato la Panda aggiornata... a primo impatto, sembra uguale, ma mi sono scontrato con un muro di omertà... ha detto il capo officina che l?hanno collegata al computer centrale ed ha fatto tutto la Fiat, ma non si sa cosa... mi è arrivata la lettera da FCA per un richiamo di aggiornamento centralina sulla Panda del 12/2014. qualcuno lo ha già fatto? in cosa consiste? ... No, è la cross da 80 cv... ... Forse sono le candelette. Vai in concessionaria, poi fammi sapere. ... ritirato la Panda aggiornata... a primo impatto, sembra uguale, ma mi sono scontrato con un muro di omertà... ha detto il capo officina che l?hanno collegata al computer centrale ed ha fatto tutto la Fiat, ma non si sa cosa...",
       "sourceUrl": "https://forum.quattroruote.it/threads/richiamo-panda-1-3-mjt.101644/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-15T18:48:06.538011+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "1.5diesel euro 6.2 gravi problemi fap | Page 10 | Il Forum di Quattroruote",
+      "snippet": "Nel frattempo, sull&#x27;app Fordpass connessa all&#x27;auto, mi è arrivato un messaggio di richiamo auto per diluizione olio: &quot;campagna 19b19 FIESTA/COURIER 1.5L Diesel - diluizione dell&#x27;olio - aggiornamento software&quot; ma quando ho chiamato il servizio clienti ford mi hanno detto che sulla mia scheda non risulta da nessuna parte questa campagna, quindi ho paura come anticipato da qualcuno di voi, che visto i problemi sulla campagna di richiamo (ironico) la abbiano interrotta. Per quanto ne sappiamo si potrebbe trattare anche di un tentativo di truffa o di furto di dati personali, e il forum (e la Casa Editrice proprietaria) NON possono essere ovviamente coinvolti in reati del genere. Pertanto è indispensabile qualificarsi e richiedere formalmente l'autorizzazione a richiedere questi dati. Sino ad allora NON possono essere ammesse richieste simili. Grazie per la collaborazione. ... ciao a tutti dopo gravi problemi, come da voi segnalati, sulla mia nuova Fiesta acquistata a fine novembre del 2018, ho deciso di rivolgermi ai legali di Altroconsumo. Nel frattempo, sull'app Fordpass connessa all'auto, mi è arrivato un messaggio di richiamo auto per diluizione olio: \"campagna 19b19 FIESTA/COURIER 1.5L Diesel - diluizione dell'olio - aggiornamento software\" ma quando ho chiamato il servizio clienti ford mi hanno detto che sulla mia scheda non risulta da nessuna parte questa campagna, quindi ho paura come anticipato da qualcuno di voi, che visto i problemi sulla campagna di richiamo (ironico) la abbiano interrotta. L'indirizzo email è stato rimosso perchè non è concepibile che un nuovo iscritto che non faccia un minimo di presentazione, nè abbia un nickname ben riconoscibile, possa richiedere dati personali agli utenti del forum in nome di una non ben precisa class action. Per quanto ne sappiamo si potrebbe trattare anche di un tentativo di truffa o di furto di dati personali, e il forum (e la Casa Editrice proprietaria) NON possono essere ovviamente coinvolti in reati del genere. Ci coordiniamo attraverso la pagina Facebook \"Movimento difetto DPF Ford\" e un gruppo Whatsapp, stiamo intraprendendo un'azione legale contro Ford, il consulente legale che ci sta seguendo è Carlotta Pedrali. Se volete unirvi anche voi o per qualsiasi informazione potete scrivermi in privato. ... L'indirizzo email è stato rimosso perchè non è concepibile che un nuovo iscritto che non faccia un minimo di presentazione, nè abbia un nickname ben riconoscibile, possa richiedere dati personali agli utenti del forum in nome di una non ben precisa class action.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/1-5diesel-euro-6-2-gravi-problemi-fap.121984/page-10"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-15T12:59:42.910998+00:00",
-    "updatedAt": "2026-08-15T12:59:42.910998+00:00",
+    "id": "2026-08-15T18:48:06.538011+00:00",
+    "updatedAt": "2026-08-15T18:48:06.538011+00:00",
     "addedCount": 1,
-    "summary": "Raccolte 1 nuove fonti per Fiat Panda, in revisione.",
+    "summary": "Raccolte 1 nuove fonti per Ford Fiesta, in revisione.",
     "details": [
-      "Forum Quattroruote: richiamo Panda 1.3 MJT | Il Forum di Quattroruote"
+      "Forum Quattroruote: 1.5diesel euro 6.2 gravi problemi fap | Page 10 | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
-        "make": "Fiat",
-        "model": "Panda"
+        "make": "Ford",
+        "model": "Fiesta"
       }
     ]
   }
