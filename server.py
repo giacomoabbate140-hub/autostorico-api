@@ -259,6 +259,10 @@ def defect_research_update_status() -> dict[str, Any]:
     safe_details = [
         str(item).strip() for item in details if isinstance(item, str) and str(item).strip()
     ]
+    sources = latest.get("sources") if isinstance(latest.get("sources"), list) else []
+    safe_sources = [
+        str(item).strip() for item in sources if isinstance(item, str) and str(item).strip()
+    ]
     updated_at = str(latest.get("updatedAt") or update_id).strip()
     return {
         "id": update_id,
@@ -268,6 +272,7 @@ def defect_research_update_status() -> dict[str, Any]:
         "summary": str(latest.get("summary") or "").strip(),
         "details": safe_details,
         "vehicles": safe_vehicles,
+        "sources": safe_sources,
     }
 
 
@@ -289,6 +294,12 @@ def catalog_update_status() -> dict[str, Any]:
         for item in details
         if isinstance(item, str) and str(item).strip()
     ] if isinstance(details, list) else []
+    sources = latest.get("sources")
+    safe_sources = [
+        str(item).strip()
+        for item in sources
+        if isinstance(item, str) and str(item).strip()
+    ] if isinstance(sources, list) else []
     return {
         "catalogVersion": catalog_year_value(VEHICLE_DEFECT_CATALOG.get("catalogVersion")),
         "updatedAt": str(VEHICLE_DEFECT_CATALOG.get("updatedAt") or "").strip(),
@@ -297,6 +308,7 @@ def catalog_update_status() -> dict[str, Any]:
             "summary": str(latest.get("summary") or "").strip(),
             "details": safe_details,
             "vehicles": safe_vehicles,
+            "sources": safe_sources,
         },
         "researchUpdate": defect_research_update_status(),
     }
