@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-16T07:00:20.770892+00:00",
-  "cursor": 15,
+  "updatedAt": "2026-08-16T09:43:39.519539+00:00",
+  "cursor": 16,
   "candidates": [
     {
       "status": "approved",
@@ -1344,22 +1344,34 @@
       "title": "Jeep renegade 1.6 multijet | Il Forum di Quattroruote",
       "snippet": "Clicca per allargare... La Jeep è del 2021 valore 27.000 euro , Con la permuta 20.000 mi fanno. Clicca per allargare... La Jeep è del 2021 valore 27.000 euro , Con la permuta 20.000 mi fanno.",
       "sourceUrl": "https://forum.quattroruote.it/threads/jeep-renegade-1-6-multijet.148314/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-16T09:43:39.519539+00:00",
+      "make": "Kia",
+      "model": "Sportage",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Kia Sportage 1.7. turbodiesel problemi motore a temperature rigide ? | Il Forum di Quattroruote",
+      "snippet": "onestamente parlando, come ho specificato nel mio primo post, le concause sono due: 1. <strong>il gasolio da schifo che circola insistentemente in alcune zone specifiche d&#x27;Italia</strong> (leggi al riguardo le ultime considerazioni nel thread del nostro forum) - e ci si domanda: perché solo i motori Kia/Hyundai ... Ergo, se è vero il teorema della meccanica uguale per tutta Europa, trarre le conclusioni è fin troppo facile... fermo restante che se la pompa pescante del gasolio fosse stata inseria (come nel 2.0 CRDi) direttamente nel serbatoio del 1.7 CRDi, adesso non ne staremmo proprio parlando (ma cozza con l'esperienza dell'utente tedesco)... Clicca per allargare... Essendo proprietario dal 2004 di un auto a gasolio , a me fortunatamente non è mai capitato pur abitando a Milano e recandomi spesso in engadina in inverno. sono un utente del forum Sportage2011, nel quale c'è una ampia area (thread) nella quale si parla di questi problemi del motore 1.7 CRDi che interessa Sportage e Hyundai Ix35. Molto probabilmente la spiegazione sta a metà strada (i latini dicevano \"saepe virtus stat in medio\"). onestamente parlando, come ho specificato nel mio primo post, le concause sono due: 1. il gasolio da schifo che circola insistentemente in alcune zone specifiche d'Italia (leggi al riguardo le ultime considerazioni nel thread del nostro forum) - e ci si domanda: perché solo i motori Kia/Hyundai 1.7 CRDi ?",
+      "sourceUrl": "https://forum.quattroruote.it/threads/kia-sportage-1-7-turbodiesel-problemi-motore-a-temperature-rigide.72682/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-16T07:00:20.770892+00:00",
-    "updatedAt": "2026-08-16T07:00:20.770892+00:00",
-    "addedCount": 3,
-    "summary": "Raccolte 3 nuove fonti per Jeep Renegade, in revisione.",
+    "id": "2026-08-16T09:43:39.519539+00:00",
+    "updatedAt": "2026-08-16T09:43:39.519539+00:00",
+    "addedCount": 1,
+    "summary": "Raccolte 1 nuove fonti per Kia Sportage, in revisione.",
     "details": [
-      "Forum Quattroruote: Pessima esperienza Jeep Renegade 1.3 DDCT Limited | Il Forum di Quattroruote",
-      "Forum Quattroruote: jeep Renegade 2.0 Multijet 140 CV 4WD Limited. difetti problematiche?? | Il Forum di Quattroruote",
-      "Forum Quattroruote: Jeep renegade 1.6 multijet | Il Forum di Quattroruote"
+      "Forum Quattroruote: Kia Sportage 1.7. turbodiesel problemi motore a temperature rigide ? | Il Forum di Quattroruote"
     ],
     "vehicles": [
       {
-        "make": "Jeep",
-        "model": "Renegade"
+        "make": "Kia",
+        "model": "Sportage"
       }
     ]
   }
