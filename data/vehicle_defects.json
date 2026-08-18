@@ -1,20 +1,23 @@
 {
-  "catalogVersion": 23,
-  "updatedAt": "2026-08-14",
+  "catalogVersion": 24,
+  "updatedAt": "2026-08-18T06:23:19.606471+00:00",
   "latestUpdate": {
     "id": "catalog-23",
     "summary": "Aggiunta una guida community per Range Rover Evoque sulle verifiche della distribuzione.",
-      "details": [
-        "Le varianti Evoque ed Epoque sono ricondotte allo stesso modello nel catalogo.",
-        "Aggiunta una segnalazione community sui rumori dopo un intervento alla distribuzione.",
-        "La segnalazione community resta distinta dai richiami ufficiali e richiede sempre verifica VIN e motore."
-      ],
-      "sources": [
-        "Evoque Forum",
-        "Segnalazioni community da verificare"
-      ],
-      "vehicles": [
-      {"make": "Land Rover", "model": "Range Rover Evoque"}
+    "details": [
+      "Le varianti Evoque ed Epoque sono ricondotte allo stesso modello nel catalogo.",
+      "Aggiunta una segnalazione community sui rumori dopo un intervento alla distribuzione.",
+      "La segnalazione community resta distinta dai richiami ufficiali e richiede sempre verifica VIN e motore."
+    ],
+    "sources": [
+      "Evoque Forum",
+      "Segnalazioni community da verificare"
+    ],
+    "vehicles": [
+      {
+        "make": "Land Rover",
+        "model": "Range Rover Evoque"
+      }
     ]
   },
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
@@ -661,6 +664,34 @@
           "sourceName": "Comunita Dacia",
           "sourceUrl": "https://communaute.dacia.fr/forum/DACIA/DACIA-DUSTER/DUSTER---PEDALE-EMBRAYAGE-BLOQUEE-EN-BAS/5409387/188999",
           "userText": "Segnalazione di proprietari, non richiamo: se il pedale resta abbassato, fai controllare frizione e comando idraulico."
+        },
+        {
+          "id": "dacia-duster-egr-remap-1_5dci-official",
+          "category": "Motore ed emissioni",
+          "title": "Richiamo per rimappatura software valvola EGR (1.5 dCi Euro 6b)",
+          "sourceType": "manufacturer_recall",
+          "confidence": "official",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "engineScope": "1.5 dCi 110 CV Euro 6b",
+          "mechanism": "Aggiornamento software della centralina motore per la gestione della valvola EGR, comunicato da Dacia ai proprietari interessati.",
+          "sourceName": "Dacia Italia",
+          "sourceUrl": "https://www.dacia.it/campagne-richiamo.html",
+          "userText": "Verifica tramite VIN sul sito Dacia se il tuo esemplare rientra nella campagna; l'intervento e gratuito presso la rete ufficiale."
+        },
+        {
+          "id": "dacia-duster-gpl-anomalous-acceleration-official",
+          "category": "Motore e alimentazione GPL",
+          "title": "Richiamo per accelerazioni anomale su versioni GPL (prodotte 2017-2018)",
+          "sourceType": "manufacturer_recall",
+          "confidence": "official",
+          "severity": "check_promptly",
+          "status": "source-verified",
+          "engineScope": "Versioni con impianto GPL prodotte tra settembre 2017 e settembre 2018",
+          "mechanism": "Segnalato aumento dei giri motore non corrispondente alla pressione sul pedale acceleratore, riscontrato dal costruttore principalmente a cambio in folle. Riguarda anche un richiamo separato per le tubazioni di aria condizionata e alimentazione sullo stesso periodo di produzione.",
+          "sourceName": "Renault-Dacia (comunicazione ufficiale ai clienti)",
+          "sourceUrl": "https://motori.money.it/Dacia-Duster-richiamo-ufficiale",
+          "userText": "Se possiedi una Duster GPL di questo periodo di produzione, verifica con la rete Dacia se il tuo esemplare e incluso nel richiamo."
         }
       ]
     },
@@ -1450,6 +1481,20 @@
           "sourceName": "What Car? Reliability Survey",
           "sourceUrl": "https://www.whatcar.com/renault/clio/hatchback/used-review/n22574/reliability",
           "userText": "La fonte descrive un richiamo per una piccola serie 2019 relativo al servosterzo e feedback proprietari su problemi elettrici, in particolare alcune ibride. Verifica sempre il VIN con Renault: non tutte le Clio sono coinvolte."
+        },
+        {
+          "id": "renault-clio-etech-hybrid-gearbox-community",
+          "category": "Motore ibrido e cambio",
+          "title": "Segnalazioni su guasto grave al motopropulsore E-Tech Hybrid (non TCe)",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo versioni E-Tech Hybrid/Plug-in (non riguarda le motorizzazioni TCe a benzina tradizionali)",
+          "mechanism": "Piu proprietari segnalano un guasto non riparabile via software al gruppo motopropulsore ibrido E-Tech (motore/cambio), con costo di sostituzione riportato tra 12.000 e 18.000 euro. Non risulta un richiamo ufficiale del costruttore al riguardo; alcuni casi sono oggetto di reclami tramite associazioni consumatori.",
+          "sourceName": "Forum Quattroruote / segnalazioni multiple",
+          "sourceUrl": "https://forum.quattroruote.it/threads/difetto-di-fabbrica-noto-causa-guasto-da-18-000-euro-su-auto-renault-e-tech.148074/",
+          "userText": "Riguarda solo le versioni ibride E-Tech (anche su Captur e Arkana con lo stesso gruppo propulsore), non le Clio a benzina TCe. Se hai una E-Tech, presta attenzione a rumori anomali dal cambio e spie motore."
         }
       ]
     },

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-17T17:29:56.899034+00:00",
+  "updatedAt": "2026-08-18T06:23:27.463280+00:00",
   "cursor": 27,
   "candidates": [
     {
@@ -128,7 +128,7 @@
       "sourceUrl": "https://www.citroen-club.it/forum/viewtopic.php?f=169&t=44605"
     },
     {
-      "status": "pending_review",
+      "status": "rejected",
       "collectedAt": "2026-08-10T08:04:56.062679+00:00",
       "make": "Citroen",
       "model": "C3",
@@ -139,10 +139,12 @@
       "researchCategory": "official_or_technical",
       "title": "Estensione Garanzia Citroën sui Motori PureTech 1.0 e 1.2",
       "snippet": "C3. ElettricaBenzinaIbrida. Nuova C3. Nuovo Suv C3 Aircross. Elettrica ... La sicurezza e la soddisfazione dei nostri clienti sono la priorità di Citroen.",
-      "sourceUrl": "https://www.citroen.it/post-vendita/estensione-garanzia-puretech-citroen.html"
+      "sourceUrl": "https://www.citroen.it/post-vendita/estensione-garanzia-puretech-citroen.html",
+      "reviewedAt": "2026-08-18T06:23:27.463280+00:00",
+      "reviewNote": "Duplicato: estensione garanzia PureTech gia presente nel catalogo (citroen-c3-puretech-timing-belt-support)."
     },
     {
-      "status": "pending_review",
+      "status": "approved",
       "collectedAt": "2026-08-10T13:44:16.262123+00:00",
       "make": "Dacia",
       "model": "Duster",
@@ -153,7 +155,9 @@
       "researchCategory": "official_or_technical",
       "title": "Campagne di richiamo: elenchi e controlli",
       "snippet": "DUSTER. anche. full hybrid. DUSTER. prezzo a partire da 19.900 €. DUSTER ... Inserisci il numero del telaio della tua Dacia per verifica. Se il tuo veicolo ...",
-      "sourceUrl": "https://www.dacia.it/campagne-richiamo.html"
+      "sourceUrl": "https://www.dacia.it/campagne-richiamo.html",
+      "reviewedAt": "2026-08-18T06:23:27.463280+00:00",
+      "reviewNote": "Verificati 2 richiami ufficiali (rimappatura EGR 1.5 dCi, accelerazioni anomale GPL) aggiunti a vehicle_defects.json."
     },
     {
       "status": "pending_review",
@@ -632,7 +636,7 @@
       "sourceUrl": "https://forum.quattroruote.it/threads/problema-renault-clio-v-1-0-benzina.145478/"
     },
     {
-      "status": "pending_review",
+      "status": "approved",
       "collectedAt": "2026-08-13T22:04:12.507073+00:00",
       "make": "Renault",
       "model": "Clio",
@@ -643,7 +647,9 @@
       "researchCategory": "community",
       "title": "Difetto di fabbrica noto causa guasto da 18.000 euro su auto Renault E-tech | Page 2 | Il Forum di Quattroruote",
       "snippet": "Sono nella vostra stessa situazione, Clio V E Tech full hybrid del 2020 ferma in officina da un mese, settimana scorsa ci hanno confermato che <strong>il danno è stato provocato dal difetto di fabbrica della guarnizione</strong>. Clicca per allargare... a volte per risparmiare qualche decina di euro si prende il rischio di affidarsi ad officine o circuiti non in grado di rispettare le disposizioni della casa. Una leggerezza che si rischia di pagare molto cara. Da dire anche che questo E tech era da subito un innovazione piuttosto rilevante e complessa per Renault e sarebbe stato saggio evitare di fare da beta test. In altre parole, quando si esaltano gli ibridi Toyota è perchè hanno un esperienza di tanti tanti anni dimostrando estrema affidabilità e competenza Che poi la casa si stia comportando in modo poco etico nei confronti dei clienti proponendo motori di ricambio al prezzo di un intera autovettura non ci piove Clicca per allargare... hai ragione, è possibile solo per la garanzia obbligatoria. Tuttavia io sono sempre stato molto scettico sulle garanzie aggiuntive.. di fatto non comprendono tutto quello che è soggetto ad usura e spesso la copertura scema in modo importante nel tempo. Sono nella vostra stessa situazione, Clio V E Tech full hybrid del 2020 ferma in officina da un mese, settimana scorsa ci hanno confermato che il danno è stato provocato dal difetto di fabbrica della guarnizione.",
-      "sourceUrl": "https://forum.quattroruote.it/threads/difetto-di-fabbrica-noto-causa-guasto-da-18-000-euro-su-auto-renault-e-tech.148074/page-2"
+      "sourceUrl": "https://forum.quattroruote.it/threads/difetto-di-fabbrica-noto-causa-guasto-da-18-000-euro-su-auto-renault-e-tech.148074/page-2",
+      "reviewedAt": "2026-08-18T06:23:27.463280+00:00",
+      "reviewNote": "Verificato: guasto motopropulsore E-Tech Hybrid aggiunto a vehicle_defects.json (scope limitato a E-Tech, non TCe)."
     },
     {
       "status": "pending_review",
