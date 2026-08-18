@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-18T06:23:27.463280+00:00",
-  "cursor": 27,
+  "updatedAt": "2026-08-18T06:24:11.193954+00:00",
+  "cursor": 2,
   "candidates": [
     {
       "status": "approved",
@@ -140,7 +140,7 @@
       "title": "Estensione Garanzia Citroën sui Motori PureTech 1.0 e 1.2",
       "snippet": "C3. ElettricaBenzinaIbrida. Nuova C3. Nuovo Suv C3 Aircross. Elettrica ... La sicurezza e la soddisfazione dei nostri clienti sono la priorità di Citroen.",
       "sourceUrl": "https://www.citroen.it/post-vendita/estensione-garanzia-puretech-citroen.html",
-      "reviewedAt": "2026-08-18T06:23:27.463280+00:00",
+      "reviewedAt": "2026-08-18T06:24:11.193954+00:00",
       "reviewNote": "Duplicato: estensione garanzia PureTech gia presente nel catalogo (citroen-c3-puretech-timing-belt-support)."
     },
     {
@@ -156,7 +156,7 @@
       "title": "Campagne di richiamo: elenchi e controlli",
       "snippet": "DUSTER. anche. full hybrid. DUSTER. prezzo a partire da 19.900 €. DUSTER ... Inserisci il numero del telaio della tua Dacia per verifica. Se il tuo veicolo ...",
       "sourceUrl": "https://www.dacia.it/campagne-richiamo.html",
-      "reviewedAt": "2026-08-18T06:23:27.463280+00:00",
+      "reviewedAt": "2026-08-18T06:24:11.193954+00:00",
       "reviewNote": "Verificati 2 richiami ufficiali (rimappatura EGR 1.5 dCi, accelerazioni anomale GPL) aggiunti a vehicle_defects.json."
     },
     {
@@ -648,7 +648,7 @@
       "title": "Difetto di fabbrica noto causa guasto da 18.000 euro su auto Renault E-tech | Page 2 | Il Forum di Quattroruote",
       "snippet": "Sono nella vostra stessa situazione, Clio V E Tech full hybrid del 2020 ferma in officina da un mese, settimana scorsa ci hanno confermato che <strong>il danno è stato provocato dal difetto di fabbrica della guarnizione</strong>. Clicca per allargare... a volte per risparmiare qualche decina di euro si prende il rischio di affidarsi ad officine o circuiti non in grado di rispettare le disposizioni della casa. Una leggerezza che si rischia di pagare molto cara. Da dire anche che questo E tech era da subito un innovazione piuttosto rilevante e complessa per Renault e sarebbe stato saggio evitare di fare da beta test. In altre parole, quando si esaltano gli ibridi Toyota è perchè hanno un esperienza di tanti tanti anni dimostrando estrema affidabilità e competenza Che poi la casa si stia comportando in modo poco etico nei confronti dei clienti proponendo motori di ricambio al prezzo di un intera autovettura non ci piove Clicca per allargare... hai ragione, è possibile solo per la garanzia obbligatoria. Tuttavia io sono sempre stato molto scettico sulle garanzie aggiuntive.. di fatto non comprendono tutto quello che è soggetto ad usura e spesso la copertura scema in modo importante nel tempo. Sono nella vostra stessa situazione, Clio V E Tech full hybrid del 2020 ferma in officina da un mese, settimana scorsa ci hanno confermato che il danno è stato provocato dal difetto di fabbrica della guarnizione.",
       "sourceUrl": "https://forum.quattroruote.it/threads/difetto-di-fabbrica-noto-causa-guasto-da-18-000-euro-su-auto-renault-e-tech.148074/page-2",
-      "reviewedAt": "2026-08-18T06:23:27.463280+00:00",
+      "reviewedAt": "2026-08-18T06:24:11.193954+00:00",
       "reviewNote": "Verificato: guasto motopropulsore E-Tech Hybrid aggiunto a vehicle_defects.json (scope limitato a E-Tech, non TCe)."
     },
     {
@@ -1378,20 +1378,34 @@
       "title": "Campagna di richiamo MF6 Peugeot modelli vari. - Pagina 3 - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Chi è proprietario di un’auto potenzialmente difettosa riceve una raccomandata con l’invito a presentarsi presso un’officina della rete ufficiale del marchio di riferimento: rispondere a queste campagne di richiamo è molto IMPORTANTE sia per motivi di sicurezza, sia per evitare seccature con le compagnie assicurative che, in caso d’incidente dovuto a un problema tecnico risolvibile con il richiamo, potrebbero rivalersi sul proprietario della vettura, se lo ha ignorato. Vi informiamo inoltre che le campagne di richiamo sono pubbliche e così gli elenchi dei telai coinvolti: accedendo al link del nostro sito in collegamento con il sito UNRAE ... Aspettiamo le notizie da qualcuno chi lo farà il primo...ho appuntamento il 23 agosto. Peugeot 2008 Allure Pack 1.5 BlueHDI 110 cv. Chi è proprietario di un’auto potenzialmente difettosa riceve una raccomandata con l’invito a presentarsi presso un’officina della rete ufficiale del marchio di riferimento: rispondere a queste campagne di richiamo è molto IMPORTANTE sia per motivi di sicurezza, sia per evitare seccature con le compagnie assicurative che, in caso d’incidente dovuto a un problema tecnico risolvibile con il richiamo, potrebbero rivalersi sul proprietario della vettura, se lo ha ignorato. Vi informiamo inoltre che le campagne di richiamo sono pubbliche e così gli elenchi dei telai coinvolti: accedendo al link del nostro sito in collegamento con il sito UNRAE ... Aspettiamo le notizie da qualcuno chi lo farà il primo...ho appuntamento il 23 agosto. Peugeot 2008 Allure Pack 1.5 BlueHDI 110 cv. Peugeot 3008 Allure Pack - 1.5 blueHDi 130 EAT8 - Grigio Platinium Citroen C3 1.2 Puretech \"Monna Lisa\" Precedenti: 3 x Nissan Qashqai - MB Classe A - Citroen Xsara Picasso - Fiat Bravo - Ford Fiesta - Fiat Uno Altre avute in famiglia: Fiat 500 - Peugeot 206 Peugeot 1.5 BlueHDi 130 cv eat8 2018 Cellulare Samsung A52 con Android 14. Dal momento che repetita iuvant, ribadisco ancora una volta che è ovvio che gli aggiornamenti andrebbero fatti. Giova infine sottolineare una volta per tutte, che \"in Italia non esiste un obbligo legale per il produttore di effettuare un richiamo, né per il proprietario di portare il veicolo al centro di richiamo\".",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=124074&start=30"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-18T03:59:33.881159+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Problemi Vari Giulia - ClubAlfa.it Forum",
+      "snippet": "La mia è una Giulia Super 2019 AT8 con 60.000 km, presa a luglio 2023. Ma già sorgono i primi problemi. Il primo è stato il <strong>sensore del filtro anti particolato che faceva accendere la spia del motore</strong>, ed è stato sostituito in garanzia. Buongiorno a tutti, sono sempre stato un appassionato Alfa Romeo, e da pochi mesi ho realizzato il mio sogno, ovvero diventare possessore di una Giulia. La mia è una Giulia Super 2019 AT8 con 60.000 km, presa a luglio 2023. Ma già sorgono i primi problemi. Il primo è stato il sensore del filtro anti particolato che faceva accendere la spia del motore, ed è stato sostituito in garanzia.",
+      "sourceUrl": "https://forum.clubalfa.it/threads/problemi-vari-giulia.144641/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-17T07:17:32.829111+00:00",
-    "updatedAt": "2026-08-17T07:17:32.829111+00:00",
+    "id": "2026-08-18T03:59:33.881159+00:00",
+    "updatedAt": "2026-08-18T03:59:33.881159+00:00",
     "addedCount": 1,
-    "summary": "Raccolte 1 nuove fonti per Peugeot 3008, in revisione.",
+    "summary": "Raccolte 1 nuove fonti per Alfa Romeo Giulia, in revisione.",
     "details": [
-      "Passione Peugeot Auto Club Italia: Campagna di richiamo MF6 Peugeot modelli vari. - Pagina 3 - Passione Peugeot Auto Club Italia - FORUM"
+      "ClubAlfa: Problemi Vari Giulia - ClubAlfa.it Forum"
     ],
     "vehicles": [
       {
-        "make": "Peugeot",
-        "model": "3008"
+        "make": "Alfa Romeo",
+        "model": "Giulia"
       }
     ]
   }
