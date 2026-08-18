@@ -2302,6 +2302,86 @@ def lookup_defects(query: dict[str, list[str]]) -> dict[str, Any]:
     }
 
 
+def normalize_plate_info_plate(value: Any) -> str:
+    return re.sub(r"[^A-Z0-9]", "", str(value or "").upper())
+
+
+def plate_info_format(plate: str) -> str:
+    if re.fullmatch(r"[A-HJ-NPR-TV-Z]{2}[0-9]{3}[A-HJ-NPR-TV-Z]{2}", plate):
+        return "modern"
+    if re.fullmatch(r"[A-Z]{2}[0-9]{5,6}", plate):
+        return "provincial_old"
+    return "unknown"
+
+
+def plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]:
+    plate = normalize_plate_info_plate((query.get("plate") or [""])[0])
+    plate_format = plate_info_format(plate)
+    if not plate or plate_format == "unknown":
+        return 400, {
+            "ok": False,
+            "error": "invalid_plate",
+            "message": "Formato targa non riconosciuto.",
+        }
+
+    diagnostics: dict[str, Any] = {"providers": [], "errors": []}
+    lookup_payload: dict[str, Any] = {"brand": "", "model": ""}
+    listings: list[dict[str, Any]] = []
+    query_text = f'"{plate}" targa auto usata'
+
+    if BRAVE_SEARCH_API_KEY:
+        try:
+            listings = brave_market_search(query_text, lookup_payload, diagnostics)
+        except Exception as exc:
+            diagnostics["errors"].append({"provider": "brave", "error": str(exc)[:160]})
+
+    if not listings and SERPAPI_API_KEY:
+        try:
+            listings = serpapi_market_search(query_text, lookup_payload, diagnostics)
+        except Exception as exc:
+            diagnostics["errors"].append({"provider": "serpapi", "error": str(exc)[:160]})
+
+    safe_listings = [
+        {
+            "source": str(item.get("source") or "Fonte web"),
+            "title": str(item.get("title") or "")[:160],
+            "url": str(item.get("url") or ""),
+            "year": item.get("year"),
+            "km": item.get("km"),
+        }
+        for item in listings[:5]
+    ]
+
+    return 200, {
+        "ok": True,
+        "plate": plate,
+        "plateFormat": plate_format,
+        "status": "public_listing_hints" if safe_listings else "no_public_match",
+        "vehicle": {
+            "vehicleType": "",
+            "make": "",
+            "model": "",
+            "firstRegistration": "",
+            "fuelType": "",
+            "powerKw": None,
+            "powerCv": None,
+            "provisional": True,
+        },
+        "webHints": safe_listings,
+        "configuredProviders": {
+            "brave": bool(BRAVE_SEARCH_API_KEY),
+            "serpapi": bool(SERPAPI_API_KEY),
+        },
+        "officialData": {
+            "revision": None,
+            "insurance": None,
+            "euroClass": None,
+            "newDriverEligible": None,
+        },
+        "note": "Le ricerche web sono solo indizi pubblici. I dati ufficiali saranno mostrati solo quando verificati da una fonte ufficiale o autorizzata.",
+    }
+
+
 class AutoStoricoApi(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed_url = urllib.parse.urlparse(self.path)
@@ -2330,6 +2410,10 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             return
         if request_path in {"/api/defects", "/defects"}:
             self.send_json(lookup_defects(urllib.parse.parse_qs(parsed_url.query)))
+            return
+        if request_path == "/api/plate-info":
+            status_code, payload = plate_info_lookup(urllib.parse.parse_qs(parsed_url.query))
+            self.send_json(payload, status=status_code)
             return
         if request_path == "/api/defect-catalog-status":
             self.send_json(catalog_update_status())
