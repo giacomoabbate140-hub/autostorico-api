@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-18T01:51:19.336836+00:00",
-  "cursor": 1,
+  "updatedAt": "2026-08-18T03:59:33.881159+00:00",
+  "cursor": 2,
   "candidates": [
     {
       "status": "approved",
@@ -1372,20 +1372,34 @@
       "title": "Campagna di richiamo MF6 Peugeot modelli vari. - Pagina 3 - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Chi è proprietario di un’auto potenzialmente difettosa riceve una raccomandata con l’invito a presentarsi presso un’officina della rete ufficiale del marchio di riferimento: rispondere a queste campagne di richiamo è molto IMPORTANTE sia per motivi di sicurezza, sia per evitare seccature con le compagnie assicurative che, in caso d’incidente dovuto a un problema tecnico risolvibile con il richiamo, potrebbero rivalersi sul proprietario della vettura, se lo ha ignorato. Vi informiamo inoltre che le campagne di richiamo sono pubbliche e così gli elenchi dei telai coinvolti: accedendo al link del nostro sito in collegamento con il sito UNRAE ... Aspettiamo le notizie da qualcuno chi lo farà il primo...ho appuntamento il 23 agosto. Peugeot 2008 Allure Pack 1.5 BlueHDI 110 cv. Chi è proprietario di un’auto potenzialmente difettosa riceve una raccomandata con l’invito a presentarsi presso un’officina della rete ufficiale del marchio di riferimento: rispondere a queste campagne di richiamo è molto IMPORTANTE sia per motivi di sicurezza, sia per evitare seccature con le compagnie assicurative che, in caso d’incidente dovuto a un problema tecnico risolvibile con il richiamo, potrebbero rivalersi sul proprietario della vettura, se lo ha ignorato. Vi informiamo inoltre che le campagne di richiamo sono pubbliche e così gli elenchi dei telai coinvolti: accedendo al link del nostro sito in collegamento con il sito UNRAE ... Aspettiamo le notizie da qualcuno chi lo farà il primo...ho appuntamento il 23 agosto. Peugeot 2008 Allure Pack 1.5 BlueHDI 110 cv. Peugeot 3008 Allure Pack - 1.5 blueHDi 130 EAT8 - Grigio Platinium Citroen C3 1.2 Puretech \"Monna Lisa\" Precedenti: 3 x Nissan Qashqai - MB Classe A - Citroen Xsara Picasso - Fiat Bravo - Ford Fiesta - Fiat Uno Altre avute in famiglia: Fiat 500 - Peugeot 206 Peugeot 1.5 BlueHDi 130 cv eat8 2018 Cellulare Samsung A52 con Android 14. Dal momento che repetita iuvant, ribadisco ancora una volta che è ovvio che gli aggiornamenti andrebbero fatti. Giova infine sottolineare una volta per tutte, che \"in Italia non esiste un obbligo legale per il produttore di effettuare un richiamo, né per il proprietario di portare il veicolo al centro di richiamo\".",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=124074&start=30"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-18T03:59:33.881159+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Problemi Vari Giulia - ClubAlfa.it Forum",
+      "snippet": "La mia è una Giulia Super 2019 AT8 con 60.000 km, presa a luglio 2023. Ma già sorgono i primi problemi. Il primo è stato il <strong>sensore del filtro anti particolato che faceva accendere la spia del motore</strong>, ed è stato sostituito in garanzia. Buongiorno a tutti, sono sempre stato un appassionato Alfa Romeo, e da pochi mesi ho realizzato il mio sogno, ovvero diventare possessore di una Giulia. La mia è una Giulia Super 2019 AT8 con 60.000 km, presa a luglio 2023. Ma già sorgono i primi problemi. Il primo è stato il sensore del filtro anti particolato che faceva accendere la spia del motore, ed è stato sostituito in garanzia.",
+      "sourceUrl": "https://forum.clubalfa.it/threads/problemi-vari-giulia.144641/"
     }
   ],
   "latestUpdate": {
-    "id": "2026-08-17T07:17:32.829111+00:00",
-    "updatedAt": "2026-08-17T07:17:32.829111+00:00",
+    "id": "2026-08-18T03:59:33.881159+00:00",
+    "updatedAt": "2026-08-18T03:59:33.881159+00:00",
     "addedCount": 1,
-    "summary": "Raccolte 1 nuove fonti per Peugeot 3008, in revisione.",
+    "summary": "Raccolte 1 nuove fonti per Alfa Romeo Giulia, in revisione.",
     "details": [
-      "Passione Peugeot Auto Club Italia: Campagna di richiamo MF6 Peugeot modelli vari. - Pagina 3 - Passione Peugeot Auto Club Italia - FORUM"
+      "ClubAlfa: Problemi Vari Giulia - ClubAlfa.it Forum"
     ],
     "vehicles": [
       {
-        "make": "Peugeot",
-        "model": "3008"
+        "make": "Alfa Romeo",
+        "model": "Giulia"
       }
     ]
   }
