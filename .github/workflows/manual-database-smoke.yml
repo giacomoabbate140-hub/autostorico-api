@@ -1,0 +1,110 @@
+name: AutoStorico manual database + smoke test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/manual-database-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  database-and-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for Render research service
+        run: |
+          python - <<'PY'
+          import json, time, urllib.request
+          url='https://autostorico-api-1.onrender.com/health'
+          for i in range(12):
+              try:
+                  with urllib.request.urlopen(url, timeout=20) as r:
+                      data=json.loads(r.read().decode())
+                  print(data)
+                  if data.get('defectResearchConfigured'):
+                      print('Defect research ready')
+                      break
+              except Exception as e:
+                  print('health retry', i+1, e)
+              time.sleep(20)
+          else:
+              raise SystemExit('Render research service not ready')
+          PY
+
+      - name: Collect one fresh defect-source batch
+        env:
+          AUTOSTORICO_DEFECT_RESEARCH_API_KEY: ${{ secrets.AUTOSTORICO_DEFECT_RESEARCH_API_KEY }}
+        run: python tools/collect_defect_candidates.py
+
+      - name: Save database research queue
+        run: |
+          if git diff --quiet -- data/defect_research_queue.json; then
+            echo "No new queue changes."
+          else
+            git config user.name "autostorico-research-bot"
+            git config user.email "autostorico-research-bot@users.noreply.github.com"
+            git add data/defect_research_queue.json
+            git commit -m "Run manual defect database update"
+            git push
+          fi
+
+      - name: Verify BMW Serie 1 / 120d catalog matching
+        run: |
+          python - <<'PY'
+          import server
+          r=server.vehicle_defect_reports('BMW','120d',2010,'diesel 1995 cc N47')
+          assert r, 'BMW 120d did not match catalog'
+          print('BMW_MATCH', r['make'], r['model'])
+          for x in r['reports']:
+              print('SOURCE', x.get('sourceName'), x.get('sourceUrl'))
+          assert any(x.get('sourceUrl') for x in r['reports']), 'No BMW source link found'
+          PY
+
+      - name: Check BMW source links
+        run: |
+          python - <<'PY'
+          import json, urllib.request
+          data=json.load(open('data/vehicle_defects.json',encoding='utf-8'))
+          urls=[]
+          for v in data.get('vehicles',[]):
+              if v.get('make')=='BMW' and v.get('model')=='Serie 1':
+                  for r in v.get('reports',[]):
+                      if r.get('sourceUrl'): urls.append(r['sourceUrl'])
+          if not urls: raise SystemExit('No BMW links to test')
+          for u in urls:
+              req=urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0 AutoStoricoLinkCheck/1.0'})
+              try:
+                  with urllib.request.urlopen(req,timeout=20) as resp:
+                      print('LINK_OK',resp.status,u)
+              except Exception as e:
+                  print('LINK_WARNING',u,repr(e))
+          PY
+
+      - name: Test live market value BMW 120d
+        run: |
+          python - <<'PY'
+          import json, urllib.request
+          payload={
+            'vehicleType':'auto','brand':'BMW','model':'Serie 1 120d',
+            'firstRegistrationDate':'2010-01-01','fuelType':'Diesel',
+            'engineDisplacement':'1995','km':180000,'gearbox':'manuale',
+            'condition':'buone'
+          }
+          req=urllib.request.Request(
+            'https://autostorico-api-1.onrender.com/api/vehicle-value',
+            data=json.dumps(payload).encode(),
+            headers={'Content-Type':'application/json','Accept':'application/json'},
+            method='POST')
+          with urllib.request.urlopen(req,timeout=90) as resp:
+              data=json.loads(resp.read().decode())
+          print(json.dumps(data,ensure_ascii=False,indent=2))
+          if data.get('error'): raise SystemExit(data['error'])
+          estimate=data.get('estimate') or {}
+          assert estimate, 'Missing estimate object'
+          print('MARKET_OK')
+          PY
