@@ -32,7 +32,7 @@ def _pretty_brand(value: str) -> str:
 
 
 def _extract_vehicle_from_hints(hints: list[dict[str, Any]]) -> dict[str, Any]:
-    text = " ".join(str(item.get("title") or "") for item in hints[:8])
+    text = " ".join(str(item.get("title") or "") for item in hints[:12])
     compact = re.sub(r"\s+", " ", text).strip()
     upper = compact.upper()
     result: dict[str, Any] = {
@@ -116,6 +116,17 @@ def _extract_vehicle_from_hints(hints: list[dict[str, Any]]) -> dict[str, Any]:
     return result
 
 
+def _merge_results(target: list[dict[str, Any]], found: list[dict[str, Any]], seen: set[str]) -> None:
+    for item in found:
+        url = str(item.get("url") or "")
+        title = str(item.get("title") or "")
+        key = url or title
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        target.append(item)
+
+
 def _more_plate_hints(plate: str, diagnostics: dict[str, Any]) -> list[dict[str, Any]]:
     payload: dict[str, Any] = {"brand": "", "model": ""}
     merged: list[dict[str, Any]] = []
@@ -124,28 +135,30 @@ def _more_plate_hints(plate: str, diagnostics: dict[str, Any]) -> list[dict[str,
         f'"{plate}"',
         f'"{plate}" auto',
         f'"{plate}" veicolo',
+        f'"{plate}" marca modello',
+        f'"{plate}" cilindrata kW',
         f'"{plate}" usato',
     ]
+
     for query in queries:
-        found: list[dict[str, Any]] = []
-        try:
-            if server.BRAVE_SEARCH_API_KEY:
-                found = server.brave_market_search(query, payload, diagnostics)
-            elif server.SERPAPI_API_KEY:
-                found = server.serpapi_market_search(query, payload, diagnostics)
-        except Exception as exc:
-            diagnostics.setdefault("errors", []).append({"provider": "plate-enrichment", "error": str(exc)[:160]})
-        for item in found:
-            url = str(item.get("url") or "")
-            title = str(item.get("title") or "")
-            key = url or title
-            if not key or key in seen:
-                continue
-            seen.add(key)
-            merged.append(item)
-        if len(merged) >= 8:
+        if server.BRAVE_SEARCH_API_KEY:
+            try:
+                brave = server.brave_market_search(query, payload, diagnostics)
+                _merge_results(merged, brave, seen)
+            except Exception as exc:
+                diagnostics.setdefault("errors", []).append({"provider": "brave", "error": str(exc)[:160]})
+
+        if server.SERPAPI_API_KEY:
+            try:
+                serp = server.serpapi_market_search(query, payload, diagnostics)
+                _merge_results(merged, serp, seen)
+            except Exception as exc:
+                diagnostics.setdefault("errors", []).append({"provider": "serpapi", "error": str(exc)[:160]})
+
+        if len(merged) >= 12:
             break
-    return merged[:8]
+
+    return merged[:12]
 
 
 def enhanced_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]:
@@ -154,12 +167,13 @@ def enhanced_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[s
         return status, payload
 
     plate = str(payload.get("plate") or "")
-    hints = payload.get("webHints") if isinstance(payload.get("webHints"), list) else []
+    base_hints = payload.get("webHints") if isinstance(payload.get("webHints"), list) else []
+    hints = [item for item in base_hints if isinstance(item, dict)]
     diagnostics: dict[str, Any] = {"providers": [], "errors": []}
 
-    if len(hints) < 2 and plate:
+    if plate:
         extra = _more_plate_hints(plate, diagnostics)
-        existing = {str(item.get("url") or item.get("title") or "") for item in hints if isinstance(item, dict)}
+        existing = {str(item.get("url") or item.get("title") or "") for item in hints}
         for item in extra:
             key = str(item.get("url") or item.get("title") or "")
             if not key or key in existing:
@@ -173,18 +187,23 @@ def enhanced_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[s
             })
             existing.add(key)
 
-    vehicle = _extract_vehicle_from_hints([item for item in hints if isinstance(item, dict)])
+    vehicle = _extract_vehicle_from_hints(hints)
     useful = any(
         str(vehicle.get(key) or "").strip()
         for key in ("make", "model", "firstRegistration", "fuelType", "engineDisplacement", "powerKw")
     )
 
-    payload["webHints"] = hints[:8]
+    payload["webHints"] = hints[:12]
     payload["vehicle"] = vehicle
     payload["status"] = "provisional_vehicle_data" if useful else payload.get("status", "no_public_match")
+    payload["configuredProviders"] = {
+        "brave": bool(server.BRAVE_SEARCH_API_KEY),
+        "serpapi": bool(server.SERPAPI_API_KEY),
+    }
     payload["note"] = (
-        "I dati preliminari derivano esclusivamente da fonti pubbliche e possono essere incompleti. "
-        "Le verifiche ufficiali (classe Euro, RCA, revisioni e neopatentati) restano separate e richiedono il CAPTCHA del portale quando previsto."
+        "I dati preliminari derivano da Brave Search API e SerpApi quando configurati, "
+        "incrociando risultati pubblici. Le verifiche ufficiali restano separate e richiedono "
+        "il CAPTCHA del portale quando previsto."
     )
     if diagnostics["errors"]:
         payload["diagnostics"] = diagnostics
