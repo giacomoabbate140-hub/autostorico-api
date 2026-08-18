@@ -1,6 +1,6 @@
 {
-  "catalogVersion": 24,
-  "updatedAt": "2026-08-18T06:23:19.606471+00:00",
+  "catalogVersion": 25,
+  "updatedAt": "2026-08-18T06:27:37.243046+00:00",
   "latestUpdate": {
     "id": "catalog-23",
     "summary": "Aggiunta una guida community per Range Rover Evoque sulle verifiche della distribuzione.",
@@ -1573,6 +1573,28 @@
         "AdBlue"
       ],
       "reports": []
+    },
+    {
+      "make": "Hyundai",
+      "model": "Tucson",
+      "generation": "TL",
+      "years": "2015-2020",
+      "reports": [
+        {
+          "id": "hyundai-tucson-tl-hecu-fire-risk-official",
+          "category": "Impianto frenante ed elettrico",
+          "title": "Richiamo per rischio corto circuito/incendio nel gruppo idraulico ABS (HECU)",
+          "sourceType": "manufacturer_recall",
+          "confidence": "official",
+          "severity": "urgent",
+          "status": "source-verified",
+          "affectedProductionScope": "Dal primo telaio prodotto nel 2015 fino al 30 novembre 2020 (campagna 11DC03)",
+          "mechanism": "Possibile infiltrazione di umidita nel modulo idraulico-elettronico ABS (HECU) puo causare un corto circuito interno con rischio di principio di incendio nel vano motore. L'intervento prevede controllo cablaggio, sostituzione fusibile 40A con 25A e aggiornamento software ESC/TCS.",
+          "sourceName": "Hyundai Italia (campagna di richiamo 11DC03)",
+          "sourceUrl": "https://www.hyundai-club.eu/threads/campagna-di-richiamo-11dc03-aprile-2021-problema-hecu.31696/",
+          "userText": "Verifica subito il tuo VIN sul sito UNRAE (richiami.unraeservizi.com) o tramite la rete Hyundai. L'intervento e gratuito."
+        }
+      ]
     }
   ],
   "engineFamilies": [

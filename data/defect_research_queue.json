@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-18T06:24:11.193954+00:00",
+  "updatedAt": "2026-08-18T06:27:41.857406+00:00",
   "cursor": 2,
   "candidates": [
     {
@@ -1226,7 +1226,7 @@
       "sourceUrl": "https://www.hyundai-club.eu/threads/richiami-della-casa-hyundai-per-anomalie-sulla-tucson-del-2017.32835/"
     },
     {
-      "status": "pending_review",
+      "status": "approved",
       "collectedAt": "2026-08-16T04:00:25.367850+00:00",
       "make": "Hyundai",
       "model": "Tucson",
@@ -1237,7 +1237,9 @@
       "researchCategory": "community",
       "title": "Campagna di richiamo 11DC03 aprile 2021 - Problema HECU | Forum Hyundai Club Italia",
       "snippet": "Ciao a tutti, anche a me oggi è arrivata la stessa comunicazione con lo stesso codice di richiamo. Se carico i dati del telaio su UNRAE risulta. Tra oggi e domani sento la Hyundai piu vicina... ... Tucson XP 2017 1.7crdi 115CV Moonrock -Int. Ricevuta oggi la raccomandata di Hyundai in merito alla campagna di richiamo in oggetto per: \"A causa di un possibile malfunzionamento del gruppo idraulico HECU (Hydraulic Electronic Control Unit) può essere generato un corto circuito interno che, in alcuni casi, potrebbe portare ad un principio d'incendio.\" La Divina: i20 1.4 CRDi 90 cv Comfort+Login pack col. Aqua Sparkling int. Azzurri. 2015 ... A titolo informativo, Oscar Barlera è il Service Manager di HMCI. Se non ricordo male è anche un buon amico del Presidente @MasterPc ... ... Tucson 2016 XP 1.7crdi 115CV Moonrock (int. beige) ... Ciao scusate, che voi sappiate, visto che ancora non ho telefonato...ma cosa si intende con \"Il suo autoveicolo era interessato ad una campagna di richiamo ma è stato controllato\"...che è stato controllato e non serve fare questa cosa? Ciao scusate, che voi sappiate, visto che ancora non ho telefonato...ma cosa si intende con \"Il suo autoveicolo era interessato ad una campagna di richiamo ma è stato controllato\"...che è stato controllato e non serve fare questa cosa? Inoltre, ma qualcuno di voi ha avuto notizia in passato di un avvenuto incedio a causa di questo difetto? Grazie · Clicca per espandere... A Roma è accaduto ad una MH diesel 1.6 . incendio tucson Ciao a tutti, anche a me oggi è arrivata la stessa comunicazione con lo stesso codice di richiamo. Se carico i dati del telaio su UNRAE risulta. Tra oggi e domani sento la Hyundai piu vicina... ... Tucson XP 2017 1.7crdi 115CV Moonrock -Int.",
-      "sourceUrl": "https://www.hyundai-club.eu/threads/campagna-di-richiamo-11dc03-aprile-2021-problema-hecu.31696/"
+      "sourceUrl": "https://www.hyundai-club.eu/threads/campagna-di-richiamo-11dc03-aprile-2021-problema-hecu.31696/",
+      "reviewedAt": "2026-08-18T06:27:41.857406+00:00",
+      "reviewNote": "Verificato: richiamo ufficiale HECU (rischio incendio) aggiunto come nuova voce Hyundai Tucson in vehicle_defects.json."
     },
     {
       "status": "pending_review",
