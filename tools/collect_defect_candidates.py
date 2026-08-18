@@ -1,8 +1,9 @@
 """Collect one safe, reviewable batch of AutoStorico defect-source candidates.
 
 This script never alters the public vehicle_defects.json catalog. It only stores
-approved-domain search results in a review queue, keeping official and community
-sources separate until a human promotes a finding into the customer catalog.
+approved-domain search results in a review queue. Official/manufacturer sources
+may generate update metadata for the app; community and independent sources stay
+silent in the review queue until a human promotes a finding into the catalog.
 """
 
 from __future__ import annotations
@@ -26,6 +27,7 @@ API_URL = os.environ.get(
     "https://autostorico-api-1.onrender.com/api/admin/defect-source-candidates",
 ).strip()
 API_KEY = os.environ.get("AUTOSTORICO_DEFECT_RESEARCH_API_KEY", "").strip()
+NOTIFIABLE_SOURCE_TYPES = {"official_candidate", "manufacturer_candidate"}
 
 
 def read_json(path: Path, fallback: dict) -> dict:
@@ -136,32 +138,47 @@ def main() -> int:
     queue["updatedAt"] = now
     queue["cursor"] = (cursor + 1) % len(targets)
     queue["candidates"] = [*queue.get("candidates", []), *accepted][-1000:]
-    # Keep a separate immutable summary for the notification.  The cursor moves
-    # even when a search finds no new URL, but clients must not be notified then.
-    if accepted:
+
+    # All approved-domain results remain available for manual review, but only
+    # official authorities and vehicle manufacturers are allowed to create the
+    # app-facing latestUpdate metadata. Forum/community/independent results are
+    # deliberately silent so users never receive an unverified defect alert.
+    notifiable = [
+        candidate
+        for candidate in accepted
+        if candidate.get("sourceType") in NOTIFIABLE_SOURCE_TYPES
+    ]
+    if notifiable:
         source_labels = []
-        for candidate in accepted:
-            label = str(candidate.get("sourceName") or "Fonte verificabile").strip()
+        source_urls = []
+        for candidate in notifiable:
+            label = str(candidate.get("sourceName") or "Fonte ufficiale").strip()
             title = str(candidate.get("title") or "").strip()
             detail = f"{label}: {title}" if title else label
             if detail not in source_labels:
                 source_labels.append(detail)
+            url = str(candidate.get("sourceUrl") or "").strip()
+            if url and url not in source_urls:
+                source_urls.append(url)
         queue["latestUpdate"] = {
             "id": now,
             "updatedAt": now,
-            "addedCount": len(accepted),
+            "addedCount": len(notifiable),
             "summary": (
-                f"Raccolte {len(accepted)} nuove fonti per "
-                f"{target['make']} {target['model']}, in revisione."
+                f"Trovate {len(notifiable)} nuove fonti ufficiali per "
+                f"{target['make']} {target['model']}, in verifica."
             ),
             "details": source_labels[:4],
+            "sources": source_urls[:4],
             "vehicles": [
                 {"make": target["make"], "model": target["model"]},
             ],
         }
+
     write_json(QUEUE_PATH, queue)
     print(
-        f"Checked {target['make']} {target['model']}; added {len(accepted)} review candidates."
+        f"Checked {target['make']} {target['model']}; added {len(accepted)} review candidates "
+        f"({len(notifiable)} official/manufacturer)."
     )
     return 0
 
