@@ -36,4 +36,4 @@ services:
       - key: AUTOSTORICO_DEFECT_RESEARCH_API_KEY
         sync: false
       - key: AUTOSTORICO_DEFECT_RESEARCH_ENABLED
-        value: "0"
+        value: "1"
