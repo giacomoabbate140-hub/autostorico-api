@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: python server.py
+    startCommand: python patched_server.py
     healthCheckPath: /health
     envVars:
       - key: AUTOSTORICO_API_KEY
