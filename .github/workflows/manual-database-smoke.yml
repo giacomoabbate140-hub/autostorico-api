@@ -85,25 +85,69 @@ jobs:
                   print('LINK_WARNING',u,repr(e))
           PY
 
+      - name: Wait for Render after database push
+        run: |
+          python - <<'PY'
+          import json, time, urllib.request
+          url='https://autostorico-api-1.onrender.com/health'
+          stable=0
+          for i in range(24):
+              try:
+                  with urllib.request.urlopen(url, timeout=20) as r:
+                      data=json.loads(r.read().decode())
+                  print('health', i+1, data)
+                  if data:
+                      stable += 1
+                      if stable >= 2:
+                          print('Render stable after redeploy')
+                          break
+                  else:
+                      stable = 0
+              except Exception as e:
+                  stable = 0
+                  print('health retry', i+1, e)
+              time.sleep(15)
+          else:
+              raise SystemExit('Render did not become stable after database push')
+          PY
+
       - name: Test live market value BMW 120d
         run: |
           python - <<'PY'
-          import json, urllib.request
+          import json, time, urllib.error, urllib.request
           payload={
             'vehicleType':'auto','brand':'BMW','model':'Serie 1 120d',
             'firstRegistrationDate':'2010-01-01','fuelType':'Diesel',
             'engineDisplacement':'1995','km':180000,'gearbox':'manuale',
             'condition':'buone'
           }
-          req=urllib.request.Request(
-            'https://autostorico-api-1.onrender.com/api/vehicle-value',
-            data=json.dumps(payload).encode(),
-            headers={'Content-Type':'application/json','Accept':'application/json'},
-            method='POST')
-          with urllib.request.urlopen(req,timeout=90) as resp:
-              data=json.loads(resp.read().decode())
+          url='https://autostorico-api-1.onrender.com/api/vehicle-value'
+          data=None
+          for attempt in range(1,7):
+              req=urllib.request.Request(
+                url,
+                data=json.dumps(payload).encode(),
+                headers={'Content-Type':'application/json','Accept':'application/json'},
+                method='POST')
+              try:
+                  with urllib.request.urlopen(req,timeout=90) as resp:
+                      data=json.loads(resp.read().decode())
+                  break
+              except urllib.error.HTTPError as e:
+                  body=e.read().decode(errors='ignore')
+                  print('market attempt',attempt,'HTTP',e.code,body[:500])
+                  if e.code not in (429,500,502,503,504) or attempt == 6:
+                      raise
+              except Exception as e:
+                  print('market attempt',attempt,'error',repr(e))
+                  if attempt == 6:
+                      raise
+              time.sleep(20)
           print(json.dumps(data,ensure_ascii=False,indent=2))
-          if data.get('error'): raise SystemExit(data['error'])
+          if not data:
+              raise SystemExit('No market response')
+          if data.get('error'):
+              raise SystemExit(data['error'])
           estimate=data.get('estimate') or {}
           assert estimate, 'Missing estimate object'
           print('MARKET_OK')
