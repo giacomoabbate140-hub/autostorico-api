@@ -5,6 +5,7 @@ from typing import Any
 
 import server
 
+_ORIGINAL_PLATE_INFO_LOOKUP = server.plate_info_lookup
 
 _BRANDS = [
     "ALFA ROMEO", "ASTON MARTIN", "LAND ROVER", "MERCEDES-BENZ",
@@ -148,7 +149,7 @@ def _more_plate_hints(plate: str, diagnostics: dict[str, Any]) -> list[dict[str,
 
 
 def enhanced_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]:
-    status, payload = server.plate_info_lookup(query)
+    status, payload = _ORIGINAL_PLATE_INFO_LOOKUP(query)
     if status != 200 or not payload.get("ok"):
         return status, payload
 
