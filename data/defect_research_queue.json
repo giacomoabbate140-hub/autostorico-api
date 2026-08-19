@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-18T21:39:34.800388+00:00",
-  "cursor": 11,
+  "updatedAt": "2026-08-19T01:54:16.037320+00:00",
+  "cursor": 12,
   "candidates": [
     {
       "status": "approved",
@@ -1394,6 +1394,20 @@
       "title": "Problemi Vari Giulia - ClubAlfa.it Forum",
       "snippet": "La mia è una Giulia Super 2019 AT8 con 60.000 km, presa a luglio 2023. Ma già sorgono i primi problemi. Il primo è stato il <strong>sensore del filtro anti particolato che faceva accendere la spia del motore</strong>, ed è stato sostituito in garanzia. Buongiorno a tutti, sono sempre stato un appassionato Alfa Romeo, e da pochi mesi ho realizzato il mio sogno, ovvero diventare possessore di una Giulia. La mia è una Giulia Super 2019 AT8 con 60.000 km, presa a luglio 2023. Ma già sorgono i primi problemi. Il primo è stato il sensore del filtro anti particolato che faceva accendere la spia del motore, ed è stato sostituito in garanzia.",
       "sourceUrl": "https://forum.clubalfa.it/threads/problemi-vari-giulia.144641/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-19T01:54:16.037320+00:00",
+      "make": "Ford",
+      "model": "Focus",
+      "year": 2020,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "problemi nuova focus | Il Forum di Quattroruote",
+      "snippet": "E questo non certo solo per Focus o Ford in particolare, ci mancherebbe... La sintomatologia da te descritta lascia propendere, in prima battuta, per un <strong>difetto di officiosità del sensore di posizione dell&#x27;albero motore o della ruota fonica ad esso complementare</strong>. E questo non certo solo per Focus o Ford in particolare, ci mancherebbe... La sintomatologia da te descritta lascia propendere, in prima battuta, per un difetto di officiosità del sensore di posizione dell'albero motore o della ruota fonica ad esso complementare. Basta una piccola sfalsatura, anche micrometrica, o un valore anche leggerissimamente alterato della variazione di tensione che il sensore invia alla centralina che nell'arco di pochissimi km tutto si \"sballa\". Nota che tale problema potrebbe ragionevolmente essere provocato anche solo da un cablaggio un po' difettoso, sui connettori, per esempio.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/problemi-nuova-focus.54163/"
     }
   ],
   "latestUpdate": {
