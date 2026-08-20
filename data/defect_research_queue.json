@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-20T07:07:27.826146+00:00",
-  "cursor": 22,
+  "updatedAt": "2026-08-20T09:50:53.142542+00:00",
+  "cursor": 23,
   "candidates": [
     {
       "status": "approved",
@@ -1408,6 +1408,20 @@
       "title": "problemi nuova focus | Il Forum di Quattroruote",
       "snippet": "E questo non certo solo per Focus o Ford in particolare, ci mancherebbe... La sintomatologia da te descritta lascia propendere, in prima battuta, per un <strong>difetto di officiosità del sensore di posizione dell&#x27;albero motore o della ruota fonica ad esso complementare</strong>. E questo non certo solo per Focus o Ford in particolare, ci mancherebbe... La sintomatologia da te descritta lascia propendere, in prima battuta, per un difetto di officiosità del sensore di posizione dell'albero motore o della ruota fonica ad esso complementare. Basta una piccola sfalsatura, anche micrometrica, o un valore anche leggerissimamente alterato della variazione di tensione che il sensore invia alla centralina che nell'arco di pochissimi km tutto si \"sballa\". Nota che tale problema potrebbe ragionevolmente essere provocato anche solo da un cablaggio un po' difettoso, sui connettori, per esempio.",
       "sourceUrl": "https://forum.quattroruote.it/threads/problemi-nuova-focus.54163/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-20T09:50:53.142542+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna Richiamo JBJ Peugeot 308/3008/5008 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "SpikeIlProcione ha scritto:Ciao a tutti ho ricevuto questa lettera di richiamo. Qualcuno l’ha ricevuta ? Inviato dal mio iPhone utilizzando Tapatalk Ciao Spike , ci sono specificati percaso gli intervalli di telaio e/o la tipologia del motore ? Ciao a tutti ho ricevuto questa lettera di richiamo. Qualcuno l’ha ricevuta ? Inviato dal mio iPhone utilizzando Tapatalk ... Peugeottista D.O.C. ... Peugeot 308 allure 1.6 bluehdi 120cv eat6 grigio platino. Vetri oscurati, keyless system, retrocamera, pedaliera alluminio, battitacco in acciaio, ruota di scorta. A me questo richiamo non è arrivato, sebbene il periodo di produzione sia quello... speriamo bene... Precedente: 207 XSi 1.4 70 CV HDi, anno 2008, 195.000 km Attuale: 3008 GtLine 2.0 150 CV BlueHDi, Grigio Platinium, Advanced Grip Control, Radio DAB, antifurto, City Pack Plus Ordine del 26/04/2017, consegna 20/10/2017. ex Nuova 5008 GTLine BlueHDi 120 CV EAT6 S&S - Bianco Madreperla A bordo dal 03/07/2017 al 25/11/2022 - 120.000 Km percorsi Per vederla clicca qui ex 5008 1.6 HDi 16V 110 Cv FAP® Féline - Vapor Grey 183.000 Km percorsi - dal 02/07/2010 al 03/07/2017 Per vederla clicca qui Ora viaggio in elettrico ... Peugeottista D.O.C. ... Se è il richiamo uguale al 2.0 180cv che riprogramma centralina ci penserei un attimo a farlo, visto che poi dicono siano decisamente calate le prestazioni post update Inviato dal mio MI 6 utilizzando Tapatalk SpikeIlProcione ha scritto:Ciao a tutti ho ricevuto questa lettera di richiamo. Qualcuno l’ha ricevuta ? Inviato dal mio iPhone utilizzando Tapatalk Ciao Spike , ci sono specificati percaso gli intervalli di telaio e/o la tipologia del motore ?",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=112682"
     }
   ],
   "latestUpdate": {
