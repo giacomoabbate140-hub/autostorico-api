@@ -468,7 +468,7 @@
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=120584&start=15"
     },
     {
-      "status": "pending_review",
+      "status": "approved",
       "collectedAt": "2026-08-13T16:10:36.480613+00:00",
       "make": "Peugeot",
       "model": "3008",
@@ -479,7 +479,10 @@
       "researchCategory": "community",
       "title": "richiamo per 1.5 BlueHdi, catena albero a camme (MXL) - Pagina 9 - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Quindi: Non è solo “campagna qualità” → <strong>è ufficialmente un richiamo di sicurezza notificato alla Commissione Europea tramite il sistema RAPEX (oggi “Safety Gate”).</strong> Peugeot ha quindi l’obbligo legale di intervenire gratuitamente e informare i clienti. Sono proprietario di una 3008 gt-line del 2019 con all'incirca 100 mila km. Sentito del problema mi sono recato in concessionaria e dopo un check della rumorosità della cinghia risultava anomalia e quindi consigliavano sostituzione a mie spese perchè non dal VIN la macchina non era interessata nella campagna di richiamo. Vista la spesa ingente ho preso tempo ed ho contattato più volte la Peugeot tramite sito ufficiale e dopo varie mie insistenze finalmente anche la mia Leonessa è rientrata nella campagna di richiamo. Finalmente domani devo portare la macchina in Peugeot per la sostituzione della ormai famosissima catena da 7mm, poi vi farò sapere....... premetto che il check l'ho fatto a mie spese, circa 70 euro, perchè all'epoca non rientravo ancora nella campagna di richiamo ( immatricolazione marzo 2019). Peugeot 3008 1.5 BlueHDI 130 cv GT Line (Marzo 2019) Quindi: Non è solo “campagna qualità” → è ufficialmente un richiamo di sicurezza notificato alla Commissione Europea tramite il sistema RAPEX (oggi “Safety Gate”). Peugeot ha quindi l’obbligo legale di intervenire gratuitamente e informare i clienti. Questo spiega perché sulla lettera appare la dicitura “SAFETY RECALL”: è coerente con la classificazione europea. Sapete se ci sono class-action a cui aderire... autorità da coinvolgere per avere un minimo di leva nei confronti di questi mezzucci? grazie a tutti ms Buongiorno, situazione simile alla tua con Peugeot 3008 cambio manuale del 2018, il 30 giugno sento rumore di ferraglia all'accensione a freddo, conoscendo la problematica chiamo il carro attrezzi e la trasporto da un meccanico.",
-      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=126449&start=120"
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=126449&start=120",
+      "reviewedAt": "2026-08-21T00:00:00+00:00",
+      "reviewNote": "Promosso come segnalazione community circoscritta al Peugeot 3008 1.5 BlueHDi; non classificato come richiamo ufficiale.",
+      "catalogReportId": "peugeot-3008-15-bluehdi-camshaft-chain-community"
     },
     {
       "status": "pending_review",

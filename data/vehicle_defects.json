@@ -1,22 +1,21 @@
 {
-  "catalogVersion": 25,
-  "updatedAt": "2026-08-18T06:27:37.243046+00:00",
+  "catalogVersion": 26,
+  "updatedAt": "2026-08-21T00:00:00+00:00",
   "latestUpdate": {
-    "id": "catalog-23",
-    "summary": "Aggiunta una guida community per Range Rover Evoque sulle verifiche della distribuzione.",
+    "id": "catalog-24",
+    "summary": "Aggiunta una segnalazione community sulla distribuzione del Peugeot 3008 1.5 BlueHDi.",
     "details": [
-      "Le varianti Evoque ed Epoque sono ricondotte allo stesso modello nel catalogo.",
-      "Aggiunta una segnalazione community sui rumori dopo un intervento alla distribuzione.",
-      "La segnalazione community resta distinta dai richiami ufficiali e richiede sempre verifica VIN e motore."
+      "La scheda riguarda esclusivamente il 1.5 BlueHDi ed e separata dai richiami ufficiali.",
+      "Le discussioni citano rumorosita della distribuzione e controlli della catena degli alberi a camme.",
+      "Prima di decidere un intervento, verifica sempre VIN, motore esatto e campagne attive presso Peugeot."
     ],
     "sources": [
-      "Evoque Forum",
-      "Segnalazioni community da verificare"
+      "Passione Peugeot Auto Club Italia"
     ],
     "vehicles": [
       {
-        "make": "Land Rover",
-        "model": "Range Rover Evoque"
+        "make": "Peugeot",
+        "model": "3008"
       }
     ]
   },
@@ -415,12 +414,30 @@
       "years": "2009-oggi",
       "researchTopics": [
         "1.2 PureTech",
+        "1.5 BlueHDi",
         "2.0 BlueHDi",
+        "catena alberi a camme",
         "AdBlue",
         "EAT6/EAT8",
         "sospensioni"
       ],
-      "reports": []
+      "reports": [
+        {
+          "id": "peugeot-3008-15-bluehdi-camshaft-chain-community",
+          "category": "Motore e distribuzione",
+          "title": "Segnalazioni sulla catena degli alberi a camme del 1.5 BlueHDi",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo Peugeot 3008 con motore diesel 1.5 BlueHDi (DV5); non applicare la segnalazione a 1.2 PureTech, 1.6 o 2.0 BlueHDi.",
+          "affectedProductionScope": "Segnalazioni riferite soprattutto a esemplari 2018-2020 circa. L'applicabilita dipende dal VIN e dalla configurazione della distribuzione.",
+          "mechanism": "Le discussioni community citano rumorosita metallica all'avviamento e casi di controllo o sostituzione della catena degli alberi a camme. La sola rumorosita non identifica la causa del guasto.",
+          "sourceName": "Passione Peugeot Auto Club Italia",
+          "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=126449&start=120",
+          "userText": "Segnalazione community, non conferma automatica di difetto sul tuo veicolo. Se senti ferraglia o ticchettio dalla distribuzione, evita di rimandare la diagnosi: chiedi a Peugeot la verifica VIN, eventuali campagne attive e il controllo del motore esatto."
+        }
+      ]
     },
     {
       "make": "Peugeot",
