@@ -101,6 +101,33 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(update["addedCount"], 2)
         self.assertEqual(update["vehicles"], [{"make": "Ford", "model": "Puma"}])
 
+    def test_research_update_prefers_newer_pending_candidates_over_stale_metadata(self):
+        queue = {
+            "latestUpdate": {
+                "id": "old",
+                "updatedAt": "2026-08-18T00:00:00+00:00",
+                "summary": "Vecchio aggiornamento",
+            },
+            "candidates": [
+                {
+                    "status": "pending_review",
+                    "collectedAt": "2026-08-20T10:00:00+00:00",
+                    "make": "Peugeot",
+                    "model": "3008",
+                    "sourceUrl": "https://example.test/peugeot-3008",
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            queue_path = Path(directory) / "queue.json"
+            queue_path.write_text(json.dumps(queue), encoding="utf-8")
+            with patch.object(server, "DEFECT_RESEARCH_QUEUE_PATH", queue_path):
+                update = server.defect_research_update_status()
+
+        self.assertEqual(update["id"], "2026-08-20T10:00:00+00:00")
+        self.assertEqual(update["vehicles"], [{"make": "Peugeot", "model": "3008"}])
+        self.assertEqual(update["sources"], ["https://example.test/peugeot-3008"])
+
     def test_gold_subscription_uses_google_play_subscriptions_endpoint(self):
         class FakeCredentials:
             pass

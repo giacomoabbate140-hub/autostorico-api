@@ -251,10 +251,15 @@ def defect_research_update_status() -> dict[str, Any]:
     latest = latest if isinstance(latest, dict) else {}
     update_id = str(latest.get("id") or "").strip()
 
-    # Queues created before latestUpdate existed still expose their newest batch
-    # correctly, rather than returning an empty notification detail screen.
-    if not update_id and pending:
-        newest_at = max(str(item.get("collectedAt") or "") for item in pending)
+    # The scheduled collector can append candidates without rewriting the
+    # legacy latestUpdate field. Always expose the newest pending batch, not a
+    # stale event, so the app can notify about the actual newly found source.
+    latest_updated_at = str(latest.get("updatedAt") or update_id).strip()
+    newest_at = max(
+        (str(item.get("collectedAt") or "") for item in pending),
+        default="",
+    )
+    if pending and (not update_id or newest_at > latest_updated_at):
         newest = [
             item for item in pending if str(item.get("collectedAt") or "") == newest_at
         ]
@@ -270,6 +275,11 @@ def defect_research_update_status() -> dict[str, Any]:
             "vehicles": [
                 {"make": item.get("make"), "model": item.get("model")}
                 for item in newest
+            ],
+            "sources": [
+                str(item.get("sourceUrl") or "").strip()
+                for item in newest
+                if str(item.get("sourceUrl") or "").strip()
             ],
         }
         update_id = newest_at
