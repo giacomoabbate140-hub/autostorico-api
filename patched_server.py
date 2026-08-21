@@ -148,7 +148,7 @@ def _more_plate_hints(plate: str, diagnostics: dict[str, Any]) -> list[dict[str,
             except Exception as exc:
                 diagnostics.setdefault("errors", []).append({"provider": "brave", "error": str(exc)[:160]})
 
-        if server.SERPAPI_API_KEY:
+        if not merged and server.serpapi_market_search_available():
             try:
                 serp = server.serpapi_market_search(query, payload, diagnostics)
                 _merge_results(merged, serp, seen)
@@ -198,7 +198,7 @@ def enhanced_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[s
     payload["status"] = "provisional_vehicle_data" if useful else payload.get("status", "no_public_match")
     payload["configuredProviders"] = {
         "brave": bool(server.BRAVE_SEARCH_API_KEY),
-        "serpapi": bool(server.SERPAPI_API_KEY),
+        "serpapi": server.serpapi_market_search_available(),
     }
     payload["note"] = (
         "I dati preliminari derivano da Brave Search API e SerpApi quando configurati, "

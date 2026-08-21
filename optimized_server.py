@@ -87,7 +87,9 @@ def _targeted_hints(
                     {"provider": "brave", "error": str(exc)[:160]}
                 )
 
-        if server.SERPAPI_API_KEY:
+        # SerpApi is an explicit, capped emergency fallback. Do not consume
+        # paid credits while Brave is available for this enrichment.
+        if not merged and server.serpapi_market_search_available():
             try:
                 serp = server.serpapi_market_search(query, payload, diagnostics)
                 patched_server._merge_results(merged, serp, seen)
@@ -120,7 +122,7 @@ def optimized_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[
         payload["status"] = "complete_from_autostorico_archive"
         payload["configuredProviders"] = {
             "brave": bool(server.BRAVE_SEARCH_API_KEY),
-            "serpapi": bool(server.SERPAPI_API_KEY),
+            "serpapi": server.serpapi_market_search_available(),
         }
         payload["note"] = "Scheda già completa nell'archivio AutoStorico: nessuna chiamata esterna eseguita."
         return 200, payload
@@ -177,7 +179,7 @@ def optimized_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[
     payload["status"] = "provisional_vehicle_data" if useful else payload.get("status", "no_public_match")
     payload["configuredProviders"] = {
         "brave": bool(server.BRAVE_SEARCH_API_KEY),
-        "serpapi": bool(server.SERPAPI_API_KEY),
+        "serpapi": server.serpapi_market_search_available(),
     }
     payload["requestedMissingFields"] = sorted(missing)
     payload["externalSearchCount"] = len(_build_queries(plate, missing, known)) if plate else 0

@@ -27,6 +27,12 @@ services:
         sync: false
       - key: SERPAPI_API_KEY
         sync: false
+      - key: AUTOSTORICO_SERPAPI_ENABLED
+        value: "0"
+      - key: AUTOSTORICO_SERPAPI_DAILY_LIMIT
+        value: "5"
+      - key: AUTOSTORICO_MARKET_MAX_BRAVE_QUERIES
+        value: "2"
       - key: GOOGLE_CSE_API_KEY
         sync: false
       - key: GOOGLE_CSE_ID

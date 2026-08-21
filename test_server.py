@@ -8,6 +8,7 @@ import server
 from server import (
     catalog_update_status,
     defect_research_cache_key,
+    fetch_market_sources,
     market_cache_key,
     market_estimate_from_sources,
     trusted_defect_source,
@@ -19,6 +20,48 @@ from server import (
 
 
 class MarketEvidenceTests(unittest.TestCase):
+    def test_market_search_uses_brave_without_parallel_serpapi_fan_out(self):
+        payload = {"brand": "Audi", "model": "A1", "km": 100000}
+        brave_listing = {
+            "source": "AutoScout24",
+            "url": "https://example.test/a1",
+            "price": 9000,
+            "weight": 1.0,
+        }
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "SERPAPI_API_KEY", "serp-key"
+        ), patch.object(server, "SERPAPI_ENABLED", False), patch.object(
+            server, "brave_market_search", return_value=[brave_listing]
+        ) as brave, patch.object(server, "serpapi_market_search") as serp:
+            listings, diagnostics = fetch_market_sources(payload, 2011)
+
+        self.assertEqual(len(listings), 1)
+        self.assertGreaterEqual(brave.call_count, 1)
+        serp.assert_not_called()
+        self.assertFalse(diagnostics["configuredProviders"]["serpapi"])
+
+    def test_serpapi_is_only_used_as_a_capped_emergency_fallback(self):
+        payload = {"brand": "Audi", "model": "A1", "km": 100000}
+        fallback_listing = {
+            "source": "Fallback",
+            "url": "https://example.test/fallback",
+            "price": 8500,
+            "weight": 1.0,
+        }
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", ""), patch.object(
+            server, "SERPAPI_API_KEY", "serp-key"
+        ), patch.object(server, "SERPAPI_ENABLED", True), patch.object(
+            server, "SERPAPI_DAILY_LIMIT", 5), patch.object(
+            server, "SERPAPI_DAILY_USAGE", {}
+        ), patch.object(server, "serpapi_market_search", return_value=[fallback_listing]) as serp, patch.object(
+            server, "serpapi_shopping_market_search"
+        ) as shopping:
+            listings, _ = fetch_market_sources(payload, 2011)
+
+        self.assertEqual(len(listings), 1)
+        serp.assert_called_once()
+        shopping.assert_not_called()
+
     def test_developer_device_authorization_only_accepts_render_hash(self):
         owner_hash = "a" * 64
         with patch.object(server, "DEVELOPER_DEVICE_ID_HASH", owner_hash):

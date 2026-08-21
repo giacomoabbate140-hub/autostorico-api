@@ -35,6 +35,11 @@ GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID", "").strip()
 GOOGLE_CSE_ENABLED = os.environ.get("AUTOSTORICO_GOOGLE_CSE_ENABLED", "0") == "1"
 BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
 SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
+# SerpApi is a paid emergency fallback. Brave is the normal market source so a
+# single estimate cannot silently fan out across paid providers.
+SERPAPI_ENABLED = os.environ.get("AUTOSTORICO_SERPAPI_ENABLED", "0") == "1"
+SERPAPI_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_SERPAPI_DAILY_LIMIT", "5")))
+MARKET_MAX_BRAVE_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_BRAVE_QUERIES", "2")))
 DEFECT_RESEARCH_API_KEY = os.environ.get(
     "AUTOSTORICO_DEFECT_RESEARCH_API_KEY", ""
 ).strip()
@@ -51,9 +56,32 @@ MARKET_RATE_WINDOW_SECONDS = int(os.environ.get("AUTOSTORICO_RATE_WINDOW_SECONDS
 MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
 MARKET_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_REQUESTS: dict[str, list[float]] = {}
+SEARCH_PROVIDER_USAGE: dict[str, int] = {"brave": 0, "serpapi": 0, "google_cse": 0}
+SERPAPI_DAILY_USAGE: dict[str, int] = {}
 PREMIUM_VERIFY_REQUESTS: dict[str, list[float]] = {}
 DEFECT_ENTITLEMENT_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_GUARD_LOCK = threading.Lock()
+
+
+def _utc_day_key() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+
+def serpapi_market_search_available() -> bool:
+    """Return true only while the explicit, capped fallback is available."""
+    if not (SERPAPI_ENABLED and SERPAPI_API_KEY and SERPAPI_DAILY_LIMIT > 0):
+        return False
+    with MARKET_GUARD_LOCK:
+        return SERPAPI_DAILY_USAGE.get(_utc_day_key(), 0) < SERPAPI_DAILY_LIMIT
+
+
+def record_search_provider_usage(provider: str) -> None:
+    """Keep aggregate operational counters without storing a plate or user id."""
+    with MARKET_GUARD_LOCK:
+        SEARCH_PROVIDER_USAGE[provider] = SEARCH_PROVIDER_USAGE.get(provider, 0) + 1
+        if provider == "serpapi":
+            today = _utc_day_key()
+            SERPAPI_DAILY_USAGE[today] = SERPAPI_DAILY_USAGE.get(today, 0) + 1
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = os.environ.get(
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", ""
 ).strip()
@@ -1026,6 +1054,7 @@ def google_market_search(query: str, payload: dict[str, Any]) -> list[dict[str, 
 def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not BRAVE_SEARCH_API_KEY:
         return []
+    record_search_provider_usage("brave")
     params = urllib.parse.urlencode(
         {
             "q": query,
@@ -1073,8 +1102,9 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
 
 
 def serpapi_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-    if not SERPAPI_API_KEY:
+    if not serpapi_market_search_available():
         return []
+    record_search_provider_usage("serpapi")
     params = urllib.parse.urlencode(
         {
             "engine": "google",
@@ -1130,8 +1160,9 @@ def serpapi_market_search(query: str, payload: dict[str, Any], diagnostics: dict
 
 
 def serpapi_shopping_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-    if not SERPAPI_API_KEY:
+    if not serpapi_market_search_available():
         return []
+    record_search_provider_usage("serpapi")
     params = urllib.parse.urlencode(
         {
             "engine": "google_shopping",
@@ -1183,7 +1214,7 @@ def serpapi_shopping_market_search(query: str, payload: dict[str, Any], diagnost
 def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     configured_providers = {
         "brave": bool(BRAVE_SEARCH_API_KEY),
-        "serpapi": bool(SERPAPI_API_KEY),
+        "serpapi": serpapi_market_search_available(),
         "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
     }
     diagnostics: dict[str, Any] = {
@@ -1195,12 +1226,15 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
         return [], diagnostics
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
-    for query in build_market_queries(payload, year):
+    for query_index, query in enumerate(build_market_queries(payload, year)):
+        # Brave is the primary source. Once one compatible listing exists the
+        # app can show a clearly labelled external estimate, avoiding costly
+        # fan-out for every broad/site-specific query.
+        if query_index >= MARKET_MAX_BRAVE_QUERIES and listings:
+            break
         query_results: list[dict[str, Any]] = []
         providers = [
             ("brave", configured_providers["brave"], lambda: brave_market_search(query, payload, diagnostics)),
-            ("serpapi_google", configured_providers["serpapi"], lambda: serpapi_market_search(query, payload, diagnostics)),
-            ("serpapi_shopping", configured_providers["serpapi"], lambda: serpapi_shopping_market_search(query, payload, diagnostics)),
             ("google_cse", configured_providers["google_cse"], lambda: google_market_search(query, payload)),
         ]
         for provider_name, is_configured, provider in providers:
@@ -1219,8 +1253,6 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
                 continue
             if provider_results:
                 query_results.extend(provider_results)
-            # Keep checking configured sources: broader coverage improves the
-            # result and prevents a single source from deciding the outcome.
         for listing in query_results:
             url = str(listing.get("url") or "")
             if url in seen_urls:
@@ -1229,6 +1261,32 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
             listings.append(listing)
         if len(listings) >= 12:
             break
+
+    # SerpApi is deliberately consulted only if Brave and CSE found no usable
+    # listings. It is capped server-side and never used as a silent parallel
+    # source, preventing a single customer request from consuming many credits.
+    if not listings and configured_providers["serpapi"]:
+        fallback_query = build_market_queries(payload, year)[0]
+        for provider_name, provider in [
+            ("serpapi_google", lambda: serpapi_market_search(fallback_query, payload, diagnostics)),
+            ("serpapi_shopping", lambda: serpapi_shopping_market_search(fallback_query, payload, diagnostics)),
+        ]:
+            try:
+                provider_results = provider()
+            except Exception as exc:
+                diagnostics["errors"].append(
+                    {"provider": provider_name, "query": fallback_query, "error": str(exc)[:180]}
+                )
+                continue
+            for listing in provider_results:
+                url = str(listing.get("url") or "")
+                if url and url in seen_urls:
+                    continue
+                if url:
+                    seen_urls.add(url)
+                listings.append(listing)
+            if listings:
+                break
     diagnostics["pricesFound"] = len(listings)
     return listings[:20], diagnostics
 
@@ -2335,7 +2393,7 @@ def plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]
         except Exception as exc:
             diagnostics["errors"].append({"provider": "brave", "error": str(exc)[:160]})
 
-    if not listings and SERPAPI_API_KEY:
+    if not listings and serpapi_market_search_available():
         try:
             listings = serpapi_market_search(query_text, lookup_payload, diagnostics)
         except Exception as exc:
@@ -2370,7 +2428,7 @@ def plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]
         "webHints": safe_listings,
         "configuredProviders": {
             "brave": bool(BRAVE_SEARCH_API_KEY),
-            "serpapi": bool(SERPAPI_API_KEY),
+            "serpapi": serpapi_market_search_available(),
         },
         "officialData": {
             "revision": None,
@@ -2389,7 +2447,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
         if request_path == "/health":
             configured_providers = {
                 "brave": bool(BRAVE_SEARCH_API_KEY),
-                "serpapi": bool(SERPAPI_API_KEY),
+                "serpapi": serpapi_market_search_available(),
                 "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
             }
             self.send_json(
@@ -2399,6 +2457,13 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
+                    "marketProviderPolicy": {
+                        "primary": "brave",
+                        "serpapiEmergencyFallback": SERPAPI_ENABLED,
+                        "serpapiDailyLimit": SERPAPI_DAILY_LIMIT,
+                        "serpapiUsedToday": SERPAPI_DAILY_USAGE.get(_utc_day_key(), 0),
+                        "aggregateRequests": dict(SEARCH_PROVIDER_USAGE),
+                    },
                     "premiumVerificationConfigured": premium_verification_configured(),
                     "playIntegrityConfigured": play_integrity_configured(),
                     "playIntegrityRequired": PLAY_INTEGRITY_REQUIRED,
