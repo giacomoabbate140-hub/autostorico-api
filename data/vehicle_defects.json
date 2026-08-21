@@ -1542,7 +1542,10 @@
       "make": "Land Rover",
       "model": "Range Rover Evoque",
       "aliases": [
-        "Evoque"
+        "Evoque",
+        "Avoque",
+        "Epoque",
+        "Range Rover Avoque"
       ],
       "generation": "L538 Ingenium",
       "years": "2015-2018",
@@ -1560,7 +1563,10 @@
       "make": "Land Rover",
       "model": "Range Rover Evoque",
       "aliases": [
-        "Evoque"
+        "Evoque",
+        "Avoque",
+        "Epoque",
+        "Range Rover Avoque"
       ],
       "generation": "L551",
       "years": "2019-oggi",
@@ -2413,7 +2419,9 @@
       "models": [
         "Range Rover Evoque",
         "Evoque",
-        "Epoque"
+        "Epoque",
+        "Avoque",
+        "Range Rover Avoque"
       ],
       "fromYear": 2011,
       "toYear": 2015,
@@ -2498,7 +2506,10 @@
       "make": "Land Rover",
       "models": [
         "Range Rover Evoque",
-        "Evoque"
+        "Evoque",
+        "Epoque",
+        "Avoque",
+        "Range Rover Avoque"
       ],
       "fromYear": 2015,
       "toYear": 2018,
@@ -2582,7 +2593,10 @@
       "make": "Land Rover",
       "models": [
         "Range Rover Evoque",
-        "Evoque"
+        "Evoque",
+        "Epoque",
+        "Avoque",
+        "Range Rover Avoque"
       ],
       "fromYear": 2019,
       "engineKeywords": [
@@ -2642,7 +2656,10 @@
       "make": "Land Rover",
       "models": [
         "Range Rover Evoque",
-        "Evoque"
+        "Evoque",
+        "Epoque",
+        "Avoque",
+        "Range Rover Avoque"
       ],
       "fromYear": 2019,
       "engineKeywords": [
