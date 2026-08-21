@@ -3,6 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.parse import urlparse
 
 import server
 from server import (
@@ -77,6 +78,15 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("latestUpdate", status)
         self.assertIsInstance(status["latestUpdate"]["vehicles"], list)
         self.assertIsInstance(status["latestUpdate"]["details"], list)
+
+    def test_catalog_update_sources_are_clickable_public_links(self):
+        sources = catalog_update_status()["latestUpdate"].get("sources", [])
+
+        self.assertTrue(sources)
+        for source in sources:
+            parsed = urlparse(source)
+            self.assertIn(parsed.scheme, {"https", "http"})
+            self.assertTrue(parsed.netloc)
 
     def test_research_update_exposes_the_latest_collected_batch(self):
         queue = {
