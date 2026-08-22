@@ -1001,24 +1001,34 @@ def extract_price_from_listing_page(link: str) -> int | None:
 
 def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
     cleaned = text.lower()
+    compact = re.sub(r"[^a-z0-9]+", "", cleaned)
     brand = str(payload.get("brand") or payload.get("make") or "").strip().lower()
     model = str(payload.get("model") or "").strip().lower()
     target_year = parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
-    target_km = int(parse_float(payload.get("km")))
     if brand and brand not in cleaned:
         return False
     if model:
-        model_tokens = [token for token in re.split(r"\s+", model) if len(token) > 1]
-        if model_tokens and not all(token in cleaned for token in model_tokens):
+        brand_tokens = set(re.findall(r"[a-z0-9]+", brand))
+        model_tokens = [
+            token
+            for token in re.findall(r"[a-z0-9]+", model)
+            if len(token) > 1 and token not in brand_tokens
+        ]
+        generic_tokens = {
+            "auto", "usata", "usato", "serie", "series", "classe",
+            "model", "modello", "versione",
+        }
+        signal_tokens = [token for token in model_tokens if token not in generic_tokens]
+        tokens_to_check = signal_tokens or model_tokens
+        if tokens_to_check and not any(
+            token in cleaned or token in compact for token in tokens_to_check
+        ):
             return False
     listing_year = extract_listing_year(text)
     if target_year and listing_year and abs(listing_year - target_year) > 1:
         return False
-    listing_km = extract_listing_km(text)
-    if target_km > 0 and listing_km:
-        km_tolerance = max(30000, int(target_km * 0.40))
-        if abs(listing_km - target_km) > km_tolerance:
-            return False
+    # Km distant or missing should reduce confidence on the client side, not
+    # discard a real nationwide market listing before price comparison.
     return True
 
 
@@ -1724,6 +1734,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "historicCriteria": historic_kind,
         "vehicleAge": actual_age,
         "matchedListings": matched_count,
+        "totalListingsFound": len(listings),
         "minimumListingsRequired": MINIMUM_EXTERNAL_LISTINGS,
         "sourcesUsed": source_names,
         "marketBased": market_based,
