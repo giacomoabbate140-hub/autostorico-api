@@ -1,6 +1,6 @@
 {
-  "catalogVersion": 27,
-  "updatedAt": "2026-08-22T18:45:00+00:00",
+  "catalogVersion": 28,
+  "updatedAt": "2026-08-22T19:05:00+00:00",
   "latestUpdate": {
     "id": "catalog-24",
     "summary": "Aggiunta una segnalazione community sulla distribuzione del Peugeot 3008 1.5 BlueHDi.",
@@ -944,10 +944,15 @@
         "116d",
         "118d",
         "120d",
+        "120",
         "123d",
         "125d",
         "1 Series",
-        "Serie 1 BMW"
+        "Serie 1 BMW",
+        "Serie 1 120",
+        "BMW Serie 1 120",
+        "Series 1 120",
+        "BMW Series 1 120"
       ],
       "generation": "E8x e F20/F21",
       "years": "2007-2015 circa, secondo motorizzazione",
@@ -960,6 +965,15 @@
           "confidence": "community-repeated",
           "severity": "check_promptly",
           "status": "awaiting-autostorico-reports",
+          "engineKeywords": [
+            "diesel",
+            "n47",
+            "n47d20",
+            "116d",
+            "118d",
+            "120d",
+            "123d"
+          ],
           "engineScope": "Solo diesel BMW N47/N47D20: 16d, 18d, 20d e 23d secondo modello; identifica sempre il codice motore tramite VIN o libretto",
           "affectedProductionScope": "Segnalazioni concentrate sulle prime produzioni circa 2007-2011; non tutte le BMW Serie 1 o tutti i diesel BMW sono interessati",
           "mechanism": "Usura della catena, guide o tendicatena puo produrre rumore metallico e, nei casi gravi, rottura con danni importanti al motore.",

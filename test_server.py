@@ -288,6 +288,25 @@ class MarketEvidenceTests(unittest.TestCase):
             {report["id"] for report in result["reports"]},
         )
 
+    def test_defect_catalog_matches_bmw_series_120_alias_only_for_diesel(self):
+        diesel = vehicle_defect_reports(
+            "BMW", "BMW SERIE 1 SERIE 120", 2010, "diesel 1995 cc"
+        )
+        petrol = vehicle_defect_reports(
+            "BMW", "BMW SERIE 1 SERIE 120", 2010, "benzina 1995 cc"
+        )
+
+        self.assertIsNotNone(diesel)
+        self.assertIn(
+            "bmw-serie-1-n47-timing-chain-community",
+            {report["id"] for report in diesel["reports"]},
+        )
+        self.assertIsNotNone(petrol)
+        self.assertNotIn(
+            "bmw-serie-1-n47-timing-chain-community",
+            {report["id"] for report in petrol["reports"]},
+        )
+
     def test_defect_catalog_filters_audi_a1_reports_by_year_and_engine(self):
         first_series = vehicle_defect_reports("Audi", "A1", 2011, "diesel 1598 cc CAYB")
         second_series = vehicle_defect_reports("Audi", "A1", 2021, "benzina 999 cc")
