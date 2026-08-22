@@ -1,0 +1,117 @@
+name: Apply BMW E87 120d defect catalog fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-bmw-e87-catalog.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Patch BMW E87 120d M47 catalog entry
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = Path('data/vehicle_defects.json')
+          data = json.loads(p.read_text(encoding='utf-8'))
+          entry = {
+            "make": "BMW",
+            "model": "Serie 1",
+            "aliases": [
+              "120d", "120 d", "BMW Serie 1 120D", "BMW SERIE 1 120D",
+              "Serie 1 120d", "1 Series 120d", "E87 120d"
+            ],
+            "generation": "E87 prima serie M47",
+            "years": "2004-2007 circa, prima dell'introduzione diffusa N47",
+            "fromYear": 2004,
+            "toYear": 2007,
+            "reports": [
+              {
+                "id": "bmw-serie-1-e87-m47-swirl-flaps-community",
+                "category": "Motore e aspirazione",
+                "title": "Collettore aspirazione e lamelle swirl su M47",
+                "sourceType": "community_source",
+                "confidence": "community-repeated",
+                "severity": "check_promptly",
+                "status": "awaiting-autostorico-reports",
+                "engineKeywords": ["diesel", "m47", "m47n2", "1995", "120d"],
+                "engineScope": "BMW Serie 1 E87 120d diesel 2.0/M47 circa 2004-2007; verificare sempre codice motore da VIN o libretto.",
+                "affectedProductionScope": "Segnalazioni riferite alle prime Serie 1 120d prima dell'N47; non applicare automaticamente alle N47 2007+.",
+                "mechanism": "Depositi, usura o giochi nel collettore possono bloccare o danneggiare le lamelle swirl, con perdita di potenza, spie motore e rischio danni se parti finiscono in aspirazione.",
+                "sourceName": "BMW Passion Forum",
+                "sourceUrl": "https://www.bmwpassion.com/forum/threads/collettore-aspirazione-120d-e87.386932/",
+                "userText": "Su 120d E87/M47 controlla collettore aspirazione, lamelle swirl, EGR e perdite/depressione se compaiono cali di potenza o irregolarita. Verifica interventi gia eseguiti e stato del collettore prima dell'acquisto."
+              }
+            ]
+          }
+
+          vehicles = data.setdefault('vehicles', [])
+          vehicles[:] = [
+            v for v in vehicles
+            if not (v.get('make') == 'BMW' and v.get('generation') == 'E87 prima serie M47')
+          ]
+          insert_at = len(vehicles)
+          for i, v in enumerate(vehicles):
+            if v.get('make') == 'BMW' and v.get('model') == 'Serie 1':
+              insert_at = i + 1
+              break
+          vehicles.insert(insert_at, entry)
+          data['catalogVersion'] = max(int(data.get('catalogVersion', 0)), 29)
+          data['updatedAt'] = '2026-08-22T22:30:00+00:00'
+          data['latestUpdate'] = {
+            "id": "catalog-25",
+            "summary": "Aggiunta scheda BMW Serie 1 120d E87/M47 2004-2007.",
+            "details": [
+              "La scheda copre la 120d prima serie/M47, separata dalla N47 2007+.",
+              "Il controllo principale riguarda collettore aspirazione, lamelle swirl, EGR e cali di potenza.",
+              "Verifica sempre codice motore, VIN e manutenzione documentata prima di decidere un intervento."
+            ],
+            "sources": ["https://www.bmwpassion.com/forum/threads/collettore-aspirazione-120d-e87.386932/"],
+            "vehicles": [{"make": "BMW", "model": "Serie 1 120d"}]
+          }
+          p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+
+      - name: Add regression test
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('test_server.py')
+          s = p.read_text(encoding='utf-8')
+          test = '''    def test_defect_catalog_matches_bmw_120d_2005_m47_generation(self):\n        result = vehicle_defect_reports("BMW", "BMW SERIE 1 120D", 2005, "diesel 1995 cc")\n\n        self.assertIsNotNone(result)\n        self.assertEqual(result["model"], "Serie 1")\n        self.assertIn(\n            "bmw-serie-1-e87-m47-swirl-flaps-community",\n            {report["id"] for report in result["reports"]},\n        )\n        self.assertNotIn(\n            "bmw-serie-1-n47-timing-chain-community",\n            {report["id"] for report in result["reports"]},\n        )\n\n'''
+          marker = '    def test_defect_catalog_matches_bmw_120d_as_serie_1(self):\n'
+          if test not in s:
+            s = s.replace(marker, test + marker)
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Run backend tests
+        run: python -m unittest test_server.py
+
+      - name: Commit catalog fix
+        run: |
+          if git diff --quiet -- data/vehicle_defects.json test_server.py; then
+            echo "BMW E87 catalog fix already applied."
+            exit 0
+          fi
+          git config user.name "autostorico-research-bot"
+          git config user.email "autostorico-research-bot@users.noreply.github.com"
+          git add data/vehicle_defects.json test_server.py
+          git commit -m "Add BMW 120d E87 defect profile"
+          git push
