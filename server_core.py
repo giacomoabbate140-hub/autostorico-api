@@ -401,6 +401,32 @@ def catalog_engine_matches(entry: dict[str, Any], engine: str) -> bool:
     )
 
 
+def catalog_model_matches(entry: dict[str, Any], model: str) -> bool:
+    """Match a saved model label against the curated model and its aliases.
+
+    Vehicle data can contain a full commercial description, for example
+    ``BMW SERIE 1 120D``.  The catalog deliberately keeps the model (``Serie
+    1``) and the engine trim (``120d``) separate, so exact-only matching would
+    otherwise hide the applicable curated reports.
+    """
+    wanted_model = normalize_catalog_text(model)
+    if not wanted_model:
+        return False
+    candidates = [entry.get("model"), *entry.get("aliases", [])]
+    padded_wanted = f" {wanted_model} "
+    for candidate in candidates:
+        normalized_candidate = normalize_catalog_text(candidate)
+        if not normalized_candidate:
+            continue
+        if normalized_candidate == wanted_model:
+            return True
+        # Phrase boundaries prevent partial matches such as an A1 profile
+        # being selected for a differently named A10 model.
+        if f" {normalized_candidate} " in padded_wanted:
+            return True
+    return False
+
+
 def vehicle_defect_reports(
     make: str,
     model: str,
@@ -408,23 +434,14 @@ def vehicle_defect_reports(
     engine: str = "",
 ) -> dict[str, Any] | None:
     wanted_make = canonical_catalog_make(make)
-    wanted_model = normalize_catalog_text(model)
-    if not wanted_make or not wanted_model:
+    if not wanted_make or not normalize_catalog_text(model):
         return None
 
     matching_vehicles = [
         vehicle
         for vehicle in VEHICLE_DEFECT_CATALOG.get("vehicles", [])
         if canonical_catalog_make(vehicle.get("make")) == wanted_make
-        and (
-            normalize_catalog_text(vehicle.get("model")) == wanted_model
-            or wanted_model
-            in {
-                normalize_catalog_text(alias)
-                for alias in vehicle.get("aliases", [])
-                if isinstance(alias, str)
-            }
-        )
+        and catalog_model_matches(vehicle, model)
         and catalog_year_matches(vehicle, year)
     ]
     matching_engine_families = [
@@ -432,12 +449,10 @@ def vehicle_defect_reports(
         for family in VEHICLE_DEFECT_CATALOG.get("engineFamilies", [])
         if isinstance(family, dict)
         and canonical_catalog_make(family.get("make")) == wanted_make
-        and wanted_model
-        in {
-            normalize_catalog_text(item)
-            for item in family.get("models", [])
-            if isinstance(item, str)
-        }
+        and catalog_model_matches(
+            {"model": "", "aliases": family.get("models", [])},
+            model,
+        )
         and catalog_year_matches(family, year)
         and catalog_engine_matches(family, engine)
     ]
