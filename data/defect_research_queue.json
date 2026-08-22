@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-22T18:50:03.194449+00:00",
-  "cursor": 13,
+  "updatedAt": "2026-08-22T21:36:39.511364+00:00",
+  "cursor": 14,
   "candidates": [
     {
       "status": "approved",
@@ -1425,6 +1425,20 @@
       "title": "Campagna Richiamo JBJ Peugeot 308/3008/5008 - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "SpikeIlProcione ha scritto:Ciao a tutti ho ricevuto questa lettera di richiamo. Qualcuno l’ha ricevuta ? Inviato dal mio iPhone utilizzando Tapatalk Ciao Spike , ci sono specificati percaso gli intervalli di telaio e/o la tipologia del motore ? Ciao a tutti ho ricevuto questa lettera di richiamo. Qualcuno l’ha ricevuta ? Inviato dal mio iPhone utilizzando Tapatalk ... Peugeottista D.O.C. ... Peugeot 308 allure 1.6 bluehdi 120cv eat6 grigio platino. Vetri oscurati, keyless system, retrocamera, pedaliera alluminio, battitacco in acciaio, ruota di scorta. A me questo richiamo non è arrivato, sebbene il periodo di produzione sia quello... speriamo bene... Precedente: 207 XSi 1.4 70 CV HDi, anno 2008, 195.000 km Attuale: 3008 GtLine 2.0 150 CV BlueHDi, Grigio Platinium, Advanced Grip Control, Radio DAB, antifurto, City Pack Plus Ordine del 26/04/2017, consegna 20/10/2017. ex Nuova 5008 GTLine BlueHDi 120 CV EAT6 S&S - Bianco Madreperla A bordo dal 03/07/2017 al 25/11/2022 - 120.000 Km percorsi Per vederla clicca qui ex 5008 1.6 HDi 16V 110 Cv FAP® Féline - Vapor Grey 183.000 Km percorsi - dal 02/07/2010 al 03/07/2017 Per vederla clicca qui Ora viaggio in elettrico ... Peugeottista D.O.C. ... Se è il richiamo uguale al 2.0 180cv che riprogramma centralina ci penserei un attimo a farlo, visto che poi dicono siano decisamente calate le prestazioni post update Inviato dal mio MI 6 utilizzando Tapatalk SpikeIlProcione ha scritto:Ciao a tutti ho ricevuto questa lettera di richiamo. Qualcuno l’ha ricevuta ? Inviato dal mio iPhone utilizzando Tapatalk Ciao Spike , ci sono specificati percaso gli intervalli di telaio e/o la tipologia del motore ?",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=112682"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-22T21:36:39.511364+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "manutenzione - Campagne di Richiamo o Assistenza | Pagina 2 | Forum Hyundai Club Italia",
+      "snippet": "CAMPAGNA 10DC23 Aggiornamento Blind Spot Assistant (BCW), TUCSON (NX4e) CAMPAGNA 10DC31 Aggiornamento unità di controllo ICU (Unità di controllo integrata) CAMPAGNA 11DC30 Campagna di richiamo per una possibile non conformità alle norme europee in caso di malfunzionamento della Smart key Non sono presenti richiami per la mia auto che consegneranno a giorni, ho chiesto al concessionario di aggiornare tutto prima della consegna. ... I questi mesi di attesa della mia nuova Tucson, ho spulciato frequentemente i vari Forum, sia nazionali che stranieri. I questi mesi di attesa della mia nuova Tucson, ho spulciato frequentemente i vari Forum, sia nazionali che stranieri. Così facendo ho collezionato informazioni in merito alle Campagne di richiamo e modifica che volevo condividere. Ci potranno essere certamente delle inesattezze o carenze; per questo volevo chiedere a tutti coloro che hanno informazioni, di scriverle su questo thread. Nei giorni scorsi ho ricevuto una lettera per questa campagna di richiamo relativa alla Smart Key. La mia Tucson è equipaggiata con una chiave a 4 tasti. CAMPAGNA 10DC23 Aggiornamento Blind Spot Assistant (BCW), TUCSON (NX4e) CAMPAGNA 10DC31 Aggiornamento unità di controllo ICU (Unità di controllo integrata) CAMPAGNA 11DC30 Campagna di richiamo per una possibile non conformità alle norme europee in caso di malfunzionamento della Smart key",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/campagne-di-richiamo-o-assistenza.31657/page-2"
     }
   ],
   "latestUpdate": {
