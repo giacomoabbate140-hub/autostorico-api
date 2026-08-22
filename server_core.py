@@ -40,6 +40,10 @@ SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
 SERPAPI_ENABLED = os.environ.get("AUTOSTORICO_SERPAPI_ENABLED", "0") == "1"
 SERPAPI_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_SERPAPI_DAILY_LIMIT", "5")))
 MARKET_MAX_BRAVE_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_BRAVE_QUERIES", "2")))
+# Market comparisons are nationwide.  Keep the locale Italian without
+# sending a city/region, otherwise scarce local inventory skews the sample.
+MARKET_SEARCH_COUNTRY = "it"
+MARKET_BRAVE_RESULT_COUNT = 20
 DEFECT_RESEARCH_API_KEY = os.environ.get(
     "AUTOSTORICO_DEFECT_RESEARCH_API_KEY", ""
 ).strip()
@@ -780,9 +784,15 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         query_core = f"{query_core} {rounded_km} km"
     if not query_core.strip():
         return []
+    national_portals_query = (
+        f"{base_core} usata prezzo "
+        "(site:autoscout24.it OR site:subito.it OR site:automobile.it "
+        "OR site:autohero.com OR site:autosupermarket.it)"
+    )
     broad_queries = [
-        f"{query_core} auto usata prezzo",
-        f"{base_core} usata prezzo vendita privati",
+        f"{query_core} auto usata prezzo Italia",
+        national_portals_query,
+        f"{base_core} usata prezzo vendita privati Italia",
         f"{base_core} AutoScout24 Subito Automobile prezzo",
     ]
     if year:
@@ -1083,8 +1093,8 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
     params = urllib.parse.urlencode(
         {
             "q": query,
-            "count": 8,
-            "country": "it",
+            "count": MARKET_BRAVE_RESULT_COUNT,
+            "country": MARKET_SEARCH_COUNTRY,
             "search_lang": "it",
             "safesearch": "moderate",
         }

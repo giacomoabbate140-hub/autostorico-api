@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 
 import server
 from server import (
+    build_market_queries,
     catalog_update_status,
     defect_research_cache_key,
     fetch_market_sources,
@@ -21,6 +22,22 @@ from server import (
 
 
 class MarketEvidenceTests(unittest.TestCase):
+    def test_market_queries_are_nationwide_and_prioritize_national_portals(self):
+        queries = build_market_queries(
+            {
+                "brand": "BMW",
+                "model": "Serie 1 120d",
+                "fuelType": "Diesel",
+                "km": 120000,
+            },
+            2010,
+        )
+
+        self.assertGreaterEqual(len(queries), 2)
+        self.assertIn("Italia", queries[0])
+        self.assertIn("site:autoscout24.it", queries[1])
+        self.assertNotIn("Palermo", " ".join(queries))
+
     def test_market_search_uses_brave_without_parallel_serpapi_fan_out(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         brave_listing = {
