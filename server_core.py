@@ -1262,10 +1262,10 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     for query_index, query in enumerate(build_market_queries(payload, year)):
-        # Brave is the primary source. Once one compatible listing exists the
-        # app can show a clearly labelled external estimate, avoiding costly
-        # fan-out for every broad/site-specific query.
-        if query_index >= MARKET_MAX_BRAVE_QUERIES and listings:
+        # Brave is the primary source. Two nationwide, high-result queries are
+        # enough for one request; do not fan out through every portal query
+        # when the first results are sparse or unavailable.
+        if query_index >= MARKET_MAX_BRAVE_QUERIES:
             break
         query_results: list[dict[str, Any]] = []
         providers = [

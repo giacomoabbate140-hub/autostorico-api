@@ -58,6 +58,15 @@ class MarketEvidenceTests(unittest.TestCase):
         serp.assert_not_called()
         self.assertFalse(diagnostics["configuredProviders"]["serpapi"])
 
+    def test_market_search_stops_after_the_configured_nationwide_queries(self):
+        payload = {"brand": "Audi", "model": "A1", "km": 100000}
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "MARKET_MAX_BRAVE_QUERIES", 2
+        ), patch.object(server, "brave_market_search", return_value=[]) as brave:
+            fetch_market_sources(payload, 2011)
+
+        self.assertEqual(brave.call_count, 2)
+
     def test_serpapi_is_only_used_as_a_capped_emergency_fallback(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         fallback_listing = {
