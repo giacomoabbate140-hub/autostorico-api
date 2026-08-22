@@ -1,21 +1,21 @@
 {
-  "catalogVersion": 28,
-  "updatedAt": "2026-08-22T19:05:00+00:00",
+  "catalogVersion": 29,
+  "updatedAt": "2026-08-22T22:30:00+00:00",
   "latestUpdate": {
-    "id": "catalog-24",
-    "summary": "Aggiunta una segnalazione community sulla distribuzione del Peugeot 3008 1.5 BlueHDi.",
+    "id": "catalog-25",
+    "summary": "Aggiunta scheda BMW Serie 1 120d E87/M47 2004-2007.",
     "details": [
-      "La scheda riguarda esclusivamente il 1.5 BlueHDi ed e separata dai richiami ufficiali.",
-      "Le discussioni citano rumorosita della distribuzione e controlli della catena degli alberi a camme.",
-      "Prima di decidere un intervento, verifica sempre VIN, motore esatto e campagne attive presso Peugeot."
+      "La scheda copre la 120d prima serie/M47, separata dalla N47 2007+.",
+      "Il controllo principale riguarda collettore aspirazione, lamelle swirl, EGR e cali di potenza.",
+      "Verifica sempre codice motore, VIN e manutenzione documentata prima di decidere un intervento."
     ],
     "sources": [
-      "https://www.forumpassionepeugeot.it/viewtopic.php?t=126449&start=120"
+      "https://www.bmwpassion.com/forum/threads/collettore-aspirazione-120d-e87.386932/"
     ],
     "vehicles": [
       {
-        "make": "Peugeot",
-        "model": "3008"
+        "make": "BMW",
+        "model": "Serie 1 120d"
       }
     ]
   },
@@ -980,6 +980,47 @@
           "sourceName": "BMW Passion Forum",
           "sourceUrl": "https://www.bmwpassion.com/forum/threads/rottura-sostituzione-catena-distribuzione-n47.323752/",
           "userText": "Segnalazione riferita al motore N47, non a tutte le Serie 1. Rumori metallici dalla distribuzione richiedono un controllo tempestivo: non attendere che compaiano spie o cali di prestazione."
+        }
+      ]
+    },
+    {
+      "make": "BMW",
+      "model": "Serie 1",
+      "aliases": [
+        "120d",
+        "120 d",
+        "BMW Serie 1 120D",
+        "BMW SERIE 1 120D",
+        "Serie 1 120d",
+        "1 Series 120d",
+        "E87 120d"
+      ],
+      "generation": "E87 prima serie M47",
+      "years": "2004-2007 circa, prima dell'introduzione diffusa N47",
+      "fromYear": 2004,
+      "toYear": 2007,
+      "reports": [
+        {
+          "id": "bmw-serie-1-e87-m47-swirl-flaps-community",
+          "category": "Motore e aspirazione",
+          "title": "Collettore aspirazione e lamelle swirl su M47",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineKeywords": [
+            "diesel",
+            "m47",
+            "m47n2",
+            "1995",
+            "120d"
+          ],
+          "engineScope": "BMW Serie 1 E87 120d diesel 2.0/M47 circa 2004-2007; verificare sempre codice motore da VIN o libretto.",
+          "affectedProductionScope": "Segnalazioni riferite alle prime Serie 1 120d prima dell'N47; non applicare automaticamente alle N47 2007+.",
+          "mechanism": "Depositi, usura o giochi nel collettore possono bloccare o danneggiare le lamelle swirl, con perdita di potenza, spie motore e rischio danni se parti finiscono in aspirazione.",
+          "sourceName": "BMW Passion Forum",
+          "sourceUrl": "https://www.bmwpassion.com/forum/threads/collettore-aspirazione-120d-e87.386932/",
+          "userText": "Su 120d E87/M47 controlla collettore aspirazione, lamelle swirl, EGR e perdite/depressione se compaiono cali di potenza o irregolarita. Verifica interventi gia eseguiti e stato del collettore prima dell'acquisto."
         }
       ]
     },

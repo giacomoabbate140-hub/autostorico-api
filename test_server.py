@@ -320,6 +320,20 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertIn("Grande Punto", {vehicle["model"] for vehicle in result["vehicles"]})
 
+    def test_defect_catalog_matches_bmw_120d_2005_m47_generation(self):
+        result = vehicle_defect_reports("BMW", "BMW SERIE 1 120D", 2005, "diesel 1995 cc")
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["model"], "Serie 1")
+        self.assertIn(
+            "bmw-serie-1-e87-m47-swirl-flaps-community",
+            {report["id"] for report in result["reports"]},
+        )
+        self.assertNotIn(
+            "bmw-serie-1-n47-timing-chain-community",
+            {report["id"] for report in result["reports"]},
+        )
+
     def test_defect_catalog_matches_bmw_120d_as_serie_1(self):
         result = vehicle_defect_reports("BMW", "120d", 2010, "diesel 1995 cc")
 
