@@ -239,6 +239,34 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertFalse(entitlement["ok"])
         self.assertEqual(entitlement["status"], 402)
 
+    def test_market_relevance_keeps_nationwide_listings_with_different_km(self):
+        payload = {
+            "brand": "BMW",
+            "model": "BMW SERIE 1 120D",
+            "year": 2005,
+            "km": 120000,
+        }
+        listing_text = (
+            "BMW 120d usata 2005 - 330000 km - 3500 EUR "
+            "https://www.autoscout24.it/annunci/bmw-120d"
+        )
+
+        self.assertTrue(server.is_relevant_listing_text(listing_text, payload))
+
+    def test_market_relevance_still_rejects_wrong_year_when_present(self):
+        payload = {
+            "brand": "BMW",
+            "model": "BMW SERIE 1 120D",
+            "year": 2005,
+            "km": 120000,
+        }
+        listing_text = (
+            "BMW 120d usata 2008 - 210000 km - 3500 EUR "
+            "https://www.autoscout24.it/annunci/bmw-120d"
+        )
+
+        self.assertFalse(server.is_relevant_listing_text(listing_text, payload))
+
     def test_market_estimate_returns_prudent_estimate_with_two_comparable_listings(self):
         two_listings = [
             {"price": 8000, "weight": 1.0},
