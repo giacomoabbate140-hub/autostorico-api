@@ -144,6 +144,8 @@ MARKET_SITES = [
 DIRECT_MARKET_DOMAINS = [
     "autoscout24.it",
     "subito.it",
+    "auto.trovit.it",
+    "trovit.it",
     "automobile.it",
     "autohero.com",
     "spoticar.it",
@@ -787,13 +789,14 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
     national_portals_query = (
         f"{base_core} usata prezzo "
         "(site:autoscout24.it OR site:subito.it OR site:automobile.it "
-        "OR site:autohero.com OR site:autosupermarket.it)"
+        "OR site:auto.trovit.it OR site:trovit.it OR site:autohero.com "
+        "OR site:autosupermarket.it)"
     )
     broad_queries = [
         f"{query_core} auto usata prezzo Italia",
         national_portals_query,
         f"{base_core} usata prezzo vendita privati Italia",
-        f"{base_core} AutoScout24 Subito Automobile prezzo",
+        f"{base_core} AutoScout24 Subito Trovit Automobile prezzo Italia",
     ]
     if year:
         age = max(0, min(40, 2026 - year))
@@ -1155,7 +1158,7 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
         {
             "query": query,
             "search_depth": "basic",
-            "max_results": 10,
+            "max_results": 20,
             "country": "italy",
             "include_domains": DIRECT_MARKET_DOMAINS,
         }
