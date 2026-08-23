@@ -35,11 +35,12 @@ GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID", "").strip()
 GOOGLE_CSE_ENABLED = os.environ.get("AUTOSTORICO_GOOGLE_CSE_ENABLED", "0") == "1"
 BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
 TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "").strip()
-# Tavily is a bounded fallback for market lookups. Brave remains the normal
-# provider, so one estimate never fans out across search providers.
+# Tavily is dedicated to market estimates. Brave is reserved for defect
+# research and public plate hints, so the two provider budgets stay separate.
 TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
-MARKET_MAX_BRAVE_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_BRAVE_QUERIES", "2")))
+BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "40")))
+MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "1")))
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -62,6 +63,7 @@ MARKET_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_REQUESTS: dict[str, list[float]] = {}
 SEARCH_PROVIDER_USAGE: dict[str, int] = {"brave": 0, "tavily": 0, "google_cse": 0}
 TAVILY_DAILY_USAGE: dict[str, int] = {}
+BRAVE_DAILY_USAGE: dict[str, int] = {}
 PREMIUM_VERIFY_REQUESTS: dict[str, list[float]] = {}
 DEFECT_ENTITLEMENT_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_GUARD_LOCK = threading.Lock()
@@ -72,11 +74,19 @@ def _utc_day_key() -> str:
 
 
 def tavily_market_search_available() -> bool:
-    """Return true only while the explicit, capped fallback is available."""
+    """Return true only while the dedicated market budget is available."""
     if not (TAVILY_ENABLED and TAVILY_API_KEY and TAVILY_DAILY_LIMIT > 0):
         return False
     with MARKET_GUARD_LOCK:
         return TAVILY_DAILY_USAGE.get(_utc_day_key(), 0) < TAVILY_DAILY_LIMIT
+
+
+def brave_search_available() -> bool:
+    """Return true while the separate defects and plate-hints budget is available."""
+    if not (BRAVE_SEARCH_API_KEY and BRAVE_DAILY_LIMIT > 0):
+        return False
+    with MARKET_GUARD_LOCK:
+        return BRAVE_DAILY_USAGE.get(_utc_day_key(), 0) < BRAVE_DAILY_LIMIT
 
 
 def record_search_provider_usage(provider: str) -> None:
@@ -86,6 +96,9 @@ def record_search_provider_usage(provider: str) -> None:
         if provider == "tavily":
             today = _utc_day_key()
             TAVILY_DAILY_USAGE[today] = TAVILY_DAILY_USAGE.get(today, 0) + 1
+        if provider == "brave":
+            today = _utc_day_key()
+            BRAVE_DAILY_USAGE[today] = BRAVE_DAILY_USAGE.get(today, 0) + 1
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = os.environ.get(
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", ""
 ).strip()
@@ -497,7 +510,7 @@ def vehicle_defect_reports(
 
 def defect_research_configured() -> bool:
     return bool(
-        DEFECT_RESEARCH_ENABLED and DEFECT_RESEARCH_API_KEY and BRAVE_SEARCH_API_KEY
+        DEFECT_RESEARCH_ENABLED and DEFECT_RESEARCH_API_KEY and brave_search_available()
     )
 
 
@@ -566,6 +579,7 @@ def search_defect_source_candidates(
             "X-Subscription-Token": BRAVE_SEARCH_API_KEY,
         },
     )
+    record_search_provider_usage("brave")
     with urllib.request.urlopen(request, timeout=15) as response:
         data = json.loads(response.read().decode("utf-8"))
     if data.get("type") == "ErrorResponse":
@@ -1100,7 +1114,7 @@ def google_market_search(query: str, payload: dict[str, Any]) -> list[dict[str, 
 
 
 def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-    if not BRAVE_SEARCH_API_KEY:
+    if not brave_search_available():
         return []
     record_search_provider_usage("brave")
     params = urllib.parse.urlencode(
@@ -1150,7 +1164,7 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
 
 
 def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-    """Search Tavily only after the primary providers found no usable listings."""
+    """Search Tavily for nationwide compatible market listings only."""
     if not tavily_market_search_available():
         return []
     record_search_provider_usage("tavily")
@@ -1203,7 +1217,10 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
 
 def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     configured_providers = {
-        "brave": bool(BRAVE_SEARCH_API_KEY),
+        # Brave is intentionally not a market provider. Keep its status out
+        # of this response so callers cannot mistake public plate hints for a
+        # comparable-price source.
+        "brave": False,
         "tavily": tavily_market_search_available(),
         "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
     }
@@ -1217,32 +1234,19 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     for query_index, query in enumerate(build_market_queries(payload, year)):
-        # Brave is the primary source. Two nationwide, high-result queries are
-        # enough for one request; do not fan out through every portal query
-        # when the first results are sparse or unavailable.
-        if query_index >= MARKET_MAX_BRAVE_QUERIES:
+        # Market estimates are deliberately isolated on Tavily. One nationwide
+        # query searches the configured automotive portals without consuming
+        # the Brave budget reserved for defects and public plate hints.
+        if query_index >= MARKET_MAX_TAVILY_QUERIES:
             break
         query_results: list[dict[str, Any]] = []
-        providers = [
-            ("brave", configured_providers["brave"], lambda: brave_market_search(query, payload, diagnostics)),
-            ("google_cse", configured_providers["google_cse"], lambda: google_market_search(query, payload)),
-        ]
-        for provider_name, is_configured, provider in providers:
-            if not is_configured:
-                continue
+        if configured_providers["tavily"]:
             try:
-                provider_results = provider()
+                query_results.extend(tavily_market_search(query, payload, diagnostics))
             except Exception as exc:
                 diagnostics["errors"].append(
-                    {
-                        "provider": provider_name,
-                        "query": query,
-                        "error": str(exc)[:180],
-                    }
+                    {"provider": "tavily", "query": query, "error": str(exc)[:180]}
                 )
-                continue
-            if provider_results:
-                query_results.extend(provider_results)
         for listing in query_results:
             url = str(listing.get("url") or "")
             if url in seen_urls:
@@ -1252,25 +1256,6 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
         if len(listings) >= 12:
             break
 
-    # Tavily is deliberately consulted only if Brave and CSE found no usable
-    # listings. It is capped server-side and never used in parallel, keeping
-    # usage predictable for each customer estimate.
-    if not listings and configured_providers["tavily"]:
-        fallback_query = build_market_queries(payload, year)[0]
-        try:
-            provider_results = tavily_market_search(fallback_query, payload, diagnostics)
-        except Exception as exc:
-            diagnostics["errors"].append(
-                {"provider": "tavily", "query": fallback_query, "error": str(exc)[:180]}
-            )
-        else:
-            for listing in provider_results:
-                url = str(listing.get("url") or "")
-                if url and url in seen_urls:
-                    continue
-                if url:
-                    seen_urls.add(url)
-                listings.append(listing)
     diagnostics["pricesFound"] = len(listings)
     return listings[:20], diagnostics
 
@@ -2372,17 +2357,11 @@ def plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]
     listings: list[dict[str, Any]] = []
     query_text = f'"{plate}" targa auto usata'
 
-    if BRAVE_SEARCH_API_KEY:
+    if brave_search_available():
         try:
             listings = brave_market_search(query_text, lookup_payload, diagnostics)
         except Exception as exc:
             diagnostics["errors"].append({"provider": "brave", "error": str(exc)[:160]})
-
-    if not listings and tavily_market_search_available():
-        try:
-            listings = tavily_market_search(query_text, lookup_payload, diagnostics)
-        except Exception as exc:
-            diagnostics["errors"].append({"provider": "tavily", "error": str(exc)[:160]})
 
     safe_listings = [
         {
@@ -2412,8 +2391,8 @@ def plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]
         },
         "webHints": safe_listings,
         "configuredProviders": {
-            "brave": bool(BRAVE_SEARCH_API_KEY),
-            "tavily": tavily_market_search_available(),
+            "brave": brave_search_available(),
+            "tavily": False,
         },
         "officialData": {
             "revision": None,
@@ -2431,7 +2410,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
         request_path = parsed_url.path.rstrip("/") or "/"
         if request_path == "/health":
             configured_providers = {
-                "brave": bool(BRAVE_SEARCH_API_KEY),
+                "brave": brave_search_available(),
                 "tavily": tavily_market_search_available(),
                 "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
             }
@@ -2440,13 +2419,15 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "ok": True,
                     "service": "autostorico-value-api",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
-                    "marketSearchConfigured": any(configured_providers.values()),
+                    "marketSearchConfigured": configured_providers["tavily"],
                     "configuredProviders": configured_providers,
                     "marketProviderPolicy": {
-                        "primary": "brave",
-                        "tavilyFallback": TAVILY_ENABLED,
+                        "primary": "tavily",
+                        "braveReservedFor": ["defects", "plate_hints"],
                         "tavilyDailyLimit": TAVILY_DAILY_LIMIT,
                         "tavilyUsedToday": TAVILY_DAILY_USAGE.get(_utc_day_key(), 0),
+                        "braveDailyLimit": BRAVE_DAILY_LIMIT,
+                        "braveUsedToday": BRAVE_DAILY_USAGE.get(_utc_day_key(), 0),
                         "aggregateRequests": dict(SEARCH_PROVIDER_USAGE),
                     },
                     "premiumVerificationConfigured": premium_verification_configured(),

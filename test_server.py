@@ -13,6 +13,7 @@ from server import (
     fetch_market_sources,
     market_cache_key,
     market_estimate_from_sources,
+    plate_info_lookup,
     trusted_defect_source,
     verify_defect_online_entitlement,
     verify_google_play_subscription,
@@ -41,9 +42,9 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("Subito Auto", queries[3])
         self.assertNotIn("Palermo", " ".join(queries))
 
-    def test_market_search_uses_brave_without_parallel_tavily_fan_out(self):
+    def test_market_search_uses_tavily_without_consuming_brave_budget(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
-        brave_listing = {
+        tavily_listing = {
             "source": "AutoScout24",
             "url": "https://example.test/a1",
             "price": 9000,
@@ -52,25 +53,25 @@ class MarketEvidenceTests(unittest.TestCase):
         with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
             server, "TAVILY_API_KEY", "tavily-key"
         ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
-            server, "brave_market_search", return_value=[brave_listing]
-        ) as brave, patch.object(server, "tavily_market_search") as tavily:
+            server, "tavily_market_search", return_value=[tavily_listing]
+        ) as tavily, patch.object(server, "brave_market_search") as brave:
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        self.assertGreaterEqual(brave.call_count, 1)
-        tavily.assert_not_called()
+        tavily.assert_called_once()
+        brave.assert_not_called()
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
 
     def test_market_search_stops_after_the_configured_nationwide_queries(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
-        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
-            server, "MARKET_MAX_BRAVE_QUERIES", 2
-        ), patch.object(server, "brave_market_search", return_value=[]) as brave:
+        with patch.object(server, "TAVILY_API_KEY", "tavily-key"), patch.object(
+            server, "MARKET_MAX_TAVILY_QUERIES", 2
+        ), patch.object(server, "tavily_market_search", return_value=[]) as tavily:
             fetch_market_sources(payload, 2011)
 
-        self.assertEqual(brave.call_count, 2)
+        self.assertEqual(tavily.call_count, 2)
 
-    def test_tavily_is_only_used_as_a_capped_emergency_fallback(self):
+    def test_tavily_is_the_capped_market_provider(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         fallback_listing = {
             "source": "Fallback",
@@ -88,6 +89,16 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(len(listings), 1)
         tavily.assert_called_once()
+
+    def test_plate_info_never_consumes_tavily_market_credits(self):
+        with patch.object(server, "brave_search_available", return_value=False), patch.object(
+            server, "tavily_market_search_available", return_value=True
+        ), patch.object(server, "tavily_market_search") as tavily:
+            status, payload = plate_info_lookup({"plate": ["AB123CD"]})
+
+        self.assertEqual(status, 200)
+        self.assertFalse(payload["configuredProviders"]["tavily"])
+        tavily.assert_not_called()
 
     def test_developer_device_authorization_only_accepts_render_hash(self):
         owner_hash = "a" * 64
