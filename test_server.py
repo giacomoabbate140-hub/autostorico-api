@@ -35,10 +35,10 @@ class MarketEvidenceTests(unittest.TestCase):
         )
 
         self.assertGreaterEqual(len(queries), 2)
-        self.assertIn("site:autoscout24.it", queries[0])
-        self.assertIn("site:subito.it", queries[0])
-        self.assertIn("site:auto.trovit.it", queries[0])
-        self.assertIn("Italia", queries[1])
+        self.assertIn("Italia", queries[0])
+        self.assertIn("AutoScout24", queries[1])
+        self.assertIn("Subito", queries[1])
+        self.assertIn("Trovit", queries[1])
         self.assertIn("Subito Auto", queries[4])
         self.assertNotIn("Palermo", " ".join(queries))
 
@@ -97,6 +97,40 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(tavily.call_count, 2)
 
+    def test_tavily_market_search_does_not_overconstrain_results_with_domains(self):
+        class FakeResponse:
+            headers = {"Content-Type": "application/json"}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return b'{"results": []}'
+
+        request_bodies = []
+
+        def fake_urlopen(request, timeout):
+            request_bodies.append(request.data.decode("utf-8"))
+            return FakeResponse()
+
+        with patch.object(server, "TAVILY_API_KEY", "tavily-key"), patch.object(
+            server, "urllib"
+        ) as urllib_mock:
+            urllib_mock.request.Request.side_effect = lambda *args, **kwargs: type(
+                "Request", (), {"data": kwargs.get("data")}
+            )()
+            urllib_mock.request.urlopen.side_effect = fake_urlopen
+            server.tavily_market_search(
+                "Alfa Romeo Giulietta auto usata prezzo Italia",
+                {"brand": "Alfa Romeo", "model": "Giulietta"},
+            )
+
+        self.assertEqual(len(request_bodies), 1)
+        self.assertNotIn("include_domains", request_bodies[0])
+
     def test_tavily_is_the_capped_market_provider(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         fallback_listing = {
@@ -114,7 +148,9 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, _ = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        tavily.assert_called_once()
+        # With a single listing the focused nationwide fallback is allowed,
+        # while the daily Tavily cap still remains in force.
+        self.assertEqual(tavily.call_count, 2)
 
     def test_plate_info_never_consumes_tavily_market_credits(self):
         with patch.object(server, "brave_search_available", return_value=False), patch.object(

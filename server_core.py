@@ -802,15 +802,19 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         return []
     # Gli annunci raramente espongono i km nei risultati dei motori di
     # ricerca: la prima ricerca nazionale non deve quindi vincolarli.
+    # Tavily ha mostrato risultati vuoti quando venivano combinati una lista
+    # molto lunga di domini e operatori ``site:``. La ricerca resta sicura
+    # perché gli URL vengono filtrati in ``listing_from_search_item`` prima
+    # di usare un prezzo, ma non si impedisce al motore di trovare Subito,
+    # AutoScout e gli altri portali italiani.
+    national_market_query = f"{base_core} auto usata prezzo Italia"
     national_portals_query = (
-        f"{base_core} usata prezzo "
-        "(site:autoscout24.it OR site:subito.it OR site:automobile.it "
-        "OR site:auto.trovit.it OR site:trovit.it OR site:autohero.com "
-        "OR site:autosupermarket.it)"
+        f"{base_core} auto usata prezzo "
+        "AutoScout24 Subito Trovit Automobile Italia"
     )
     broad_queries = [
+        national_market_query,
         national_portals_query,
-        f"{base_core} auto usata prezzo Italia",
         f"{query_core} auto usata prezzo Italia",
         f"{base_core} usata prezzo vendita privati Italia",
         f"{base_core} AutoScout24 Subito Auto Trovit Automobile prezzo Italia",
@@ -1177,7 +1181,6 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
             "search_depth": "basic",
             "max_results": 20,
             "country": "italy",
-            "include_domains": DIRECT_MARKET_DOMAINS,
         }
     ).encode("utf-8")
     request = urllib.request.Request(
