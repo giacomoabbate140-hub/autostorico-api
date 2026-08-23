@@ -38,7 +38,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("site:autoscout24.it", queries[1])
         self.assertNotIn("Palermo", " ".join(queries))
 
-    def test_market_search_uses_brave_without_parallel_serpapi_fan_out(self):
+    def test_market_search_uses_brave_without_parallel_tavily_fan_out(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         brave_listing = {
             "source": "AutoScout24",
@@ -47,16 +47,16 @@ class MarketEvidenceTests(unittest.TestCase):
             "weight": 1.0,
         }
         with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
-            server, "SERPAPI_API_KEY", "serp-key"
-        ), patch.object(server, "SERPAPI_ENABLED", False), patch.object(
+            server, "TAVILY_API_KEY", "tavily-key"
+        ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
             server, "brave_market_search", return_value=[brave_listing]
-        ) as brave, patch.object(server, "serpapi_market_search") as serp:
+        ) as brave, patch.object(server, "tavily_market_search") as tavily:
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
         self.assertGreaterEqual(brave.call_count, 1)
-        serp.assert_not_called()
-        self.assertFalse(diagnostics["configuredProviders"]["serpapi"])
+        tavily.assert_not_called()
+        self.assertTrue(diagnostics["configuredProviders"]["tavily"])
 
     def test_market_search_stops_after_the_configured_nationwide_queries(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
@@ -67,7 +67,7 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(brave.call_count, 2)
 
-    def test_serpapi_is_only_used_as_a_capped_emergency_fallback(self):
+    def test_tavily_is_only_used_as_a_capped_emergency_fallback(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         fallback_listing = {
             "source": "Fallback",
@@ -76,18 +76,15 @@ class MarketEvidenceTests(unittest.TestCase):
             "weight": 1.0,
         }
         with patch.object(server, "BRAVE_SEARCH_API_KEY", ""), patch.object(
-            server, "SERPAPI_API_KEY", "serp-key"
-        ), patch.object(server, "SERPAPI_ENABLED", True), patch.object(
-            server, "SERPAPI_DAILY_LIMIT", 5), patch.object(
-            server, "SERPAPI_DAILY_USAGE", {}
-        ), patch.object(server, "serpapi_market_search", return_value=[fallback_listing]) as serp, patch.object(
-            server, "serpapi_shopping_market_search"
-        ) as shopping:
+            server, "TAVILY_API_KEY", "tavily-key"
+        ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
+            server, "TAVILY_DAILY_LIMIT", 30), patch.object(
+            server, "TAVILY_DAILY_USAGE", {}
+        ), patch.object(server, "tavily_market_search", return_value=[fallback_listing]) as tavily:
             listings, _ = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        serp.assert_called_once()
-        shopping.assert_not_called()
+        tavily.assert_called_once()
 
     def test_developer_device_authorization_only_accepts_render_hash(self):
         owner_hash = "a" * 64

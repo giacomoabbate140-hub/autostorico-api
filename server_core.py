@@ -34,11 +34,11 @@ GOOGLE_CSE_API_KEY = os.environ.get("GOOGLE_CSE_API_KEY", "").strip()
 GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID", "").strip()
 GOOGLE_CSE_ENABLED = os.environ.get("AUTOSTORICO_GOOGLE_CSE_ENABLED", "0") == "1"
 BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
-SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
-# SerpApi is a paid emergency fallback. Brave is the normal market source so a
-# single estimate cannot silently fan out across paid providers.
-SERPAPI_ENABLED = os.environ.get("AUTOSTORICO_SERPAPI_ENABLED", "0") == "1"
-SERPAPI_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_SERPAPI_DAILY_LIMIT", "5")))
+TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "").strip()
+# Tavily is a bounded fallback for market lookups. Brave remains the normal
+# provider, so one estimate never fans out across search providers.
+TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
+TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
 MARKET_MAX_BRAVE_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_BRAVE_QUERIES", "2")))
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
@@ -60,8 +60,8 @@ MARKET_RATE_WINDOW_SECONDS = int(os.environ.get("AUTOSTORICO_RATE_WINDOW_SECONDS
 MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
 MARKET_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_REQUESTS: dict[str, list[float]] = {}
-SEARCH_PROVIDER_USAGE: dict[str, int] = {"brave": 0, "serpapi": 0, "google_cse": 0}
-SERPAPI_DAILY_USAGE: dict[str, int] = {}
+SEARCH_PROVIDER_USAGE: dict[str, int] = {"brave": 0, "tavily": 0, "google_cse": 0}
+TAVILY_DAILY_USAGE: dict[str, int] = {}
 PREMIUM_VERIFY_REQUESTS: dict[str, list[float]] = {}
 DEFECT_ENTITLEMENT_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_GUARD_LOCK = threading.Lock()
@@ -71,21 +71,21 @@ def _utc_day_key() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
-def serpapi_market_search_available() -> bool:
+def tavily_market_search_available() -> bool:
     """Return true only while the explicit, capped fallback is available."""
-    if not (SERPAPI_ENABLED and SERPAPI_API_KEY and SERPAPI_DAILY_LIMIT > 0):
+    if not (TAVILY_ENABLED and TAVILY_API_KEY and TAVILY_DAILY_LIMIT > 0):
         return False
     with MARKET_GUARD_LOCK:
-        return SERPAPI_DAILY_USAGE.get(_utc_day_key(), 0) < SERPAPI_DAILY_LIMIT
+        return TAVILY_DAILY_USAGE.get(_utc_day_key(), 0) < TAVILY_DAILY_LIMIT
 
 
 def record_search_provider_usage(provider: str) -> None:
     """Keep aggregate operational counters without storing a plate or user id."""
     with MARKET_GUARD_LOCK:
         SEARCH_PROVIDER_USAGE[provider] = SEARCH_PROVIDER_USAGE.get(provider, 0) + 1
-        if provider == "serpapi":
+        if provider == "tavily":
             today = _utc_day_key()
-            SERPAPI_DAILY_USAGE[today] = SERPAPI_DAILY_USAGE.get(today, 0) + 1
+            TAVILY_DAILY_USAGE[today] = TAVILY_DAILY_USAGE.get(today, 0) + 1
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = os.environ.get(
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", ""
 ).strip()
@@ -1146,111 +1146,53 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
     return results
 
 
-def serpapi_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-    if not serpapi_market_search_available():
+def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    """Search Tavily only after the primary providers found no usable listings."""
+    if not tavily_market_search_available():
         return []
-    record_search_provider_usage("serpapi")
-    params = urllib.parse.urlencode(
+    record_search_provider_usage("tavily")
+    request_body = json.dumps(
         {
-            "engine": "google",
-            "q": query,
-            "api_key": SERPAPI_API_KEY,
-            "google_domain": "google.it",
-            "gl": "it",
-            "hl": "it",
-            "num": 10,
+            "query": query,
+            "search_depth": "basic",
+            "max_results": 10,
+            "country": "italy",
+            "include_domains": DIRECT_MARKET_DOMAINS,
         }
-    )
-    url = f"https://serpapi.com/search.json?{params}"
+    ).encode("utf-8")
     request = urllib.request.Request(
-        url,
+        "https://api.tavily.com/search",
+        data=request_body,
+        method="POST",
         headers={
             "Accept": "application/json",
-            "Accept-Encoding": "identity",
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {TAVILY_API_KEY}",
             "User-Agent": "AutoStoricoValueBot/1.0",
         },
     )
     with urllib.request.urlopen(request, timeout=10) as response:
         data = json.loads(response.read().decode("utf-8"))
-    if data.get("error"):
-        raise RuntimeError(str(data.get("error")))
+    search_items = list(data.get("results") or [])
     results = []
-    search_items = []
-    for section_name in [
-        "organic_results",
-        "ads",
-        "inline_shopping_results",
-        "shopping_results",
-        "top_shopping_results",
-    ]:
-        search_items.extend(data.get(section_name) or [])
     for item in search_items:
-        listing = listing_from_search_item(item, payload=payload)
+        normalized = {
+            "title": item.get("title"),
+            "url": item.get("url"),
+            "snippet": item.get("content"),
+            "source": "Tavily",
+        }
+        listing = listing_from_search_item(normalized, fallback_source="Tavily", payload=payload)
         if listing is not None:
             results.append(listing)
     if diagnostics is not None:
         diagnostics["providers"].append(
             {
-                "provider": "serpapi_google",
+                "provider": "tavily",
                 "query": query,
                 "items": len(search_items),
                 "priced": len(results),
-                "sampleUrls": [
-                    str(item.get("link") or item.get("product_link") or "")
-                    for item in search_items[:3]
-                ],
-            }
-        )
-    return results
-
-
-def serpapi_shopping_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-    if not serpapi_market_search_available():
-        return []
-    record_search_provider_usage("serpapi")
-    params = urllib.parse.urlencode(
-        {
-            "engine": "google_shopping",
-            "q": query.replace(" site:", " "),
-            "api_key": SERPAPI_API_KEY,
-            "google_domain": "google.it",
-            "gl": "it",
-            "hl": "it",
-            "location": "Italy",
-        }
-    )
-    url = f"https://serpapi.com/search.json?{params}"
-    request = urllib.request.Request(
-        url,
-        headers={
-            "Accept": "application/json",
-            "Accept-Encoding": "identity",
-            "User-Agent": "AutoStoricoValueBot/1.0",
-        },
-    )
-    with urllib.request.urlopen(request, timeout=10) as response:
-        data = json.loads(response.read().decode("utf-8"))
-    if data.get("error"):
-        raise RuntimeError(str(data.get("error")))
-    results = []
-    shopping_groups = list(data.get("shopping_results") or [])
-    for category in data.get("categorized_shopping_results") or []:
-        shopping_groups.extend(category.get("shopping_results") or [])
-    for item in shopping_groups:
-        listing = listing_from_search_item(item, fallback_source="Google Shopping", payload=payload)
-        if listing is not None:
-            results.append(listing)
-    if diagnostics is not None:
-        diagnostics["providers"].append(
-            {
-                "provider": "serpapi_shopping",
-                "query": query,
-                "items": len(shopping_groups),
-                "priced": len(results),
-                "sampleUrls": [
-                    str(item.get("link") or item.get("product_link") or "")
-                    for item in shopping_groups[:3]
-                ],
+                "sampleUrls": [str(item.get("url") or "") for item in search_items[:3]],
             }
         )
     return results
@@ -1259,7 +1201,7 @@ def serpapi_shopping_market_search(query: str, payload: dict[str, Any], diagnost
 def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     configured_providers = {
         "brave": bool(BRAVE_SEARCH_API_KEY),
-        "serpapi": serpapi_market_search_available(),
+        "tavily": tavily_market_search_available(),
         "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
     }
     diagnostics: dict[str, Any] = {
@@ -1307,22 +1249,18 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
         if len(listings) >= 12:
             break
 
-    # SerpApi is deliberately consulted only if Brave and CSE found no usable
-    # listings. It is capped server-side and never used as a silent parallel
-    # source, preventing a single customer request from consuming many credits.
-    if not listings and configured_providers["serpapi"]:
+    # Tavily is deliberately consulted only if Brave and CSE found no usable
+    # listings. It is capped server-side and never used in parallel, keeping
+    # usage predictable for each customer estimate.
+    if not listings and configured_providers["tavily"]:
         fallback_query = build_market_queries(payload, year)[0]
-        for provider_name, provider in [
-            ("serpapi_google", lambda: serpapi_market_search(fallback_query, payload, diagnostics)),
-            ("serpapi_shopping", lambda: serpapi_shopping_market_search(fallback_query, payload, diagnostics)),
-        ]:
-            try:
-                provider_results = provider()
-            except Exception as exc:
-                diagnostics["errors"].append(
-                    {"provider": provider_name, "query": fallback_query, "error": str(exc)[:180]}
-                )
-                continue
+        try:
+            provider_results = tavily_market_search(fallback_query, payload, diagnostics)
+        except Exception as exc:
+            diagnostics["errors"].append(
+                {"provider": "tavily", "query": fallback_query, "error": str(exc)[:180]}
+            )
+        else:
             for listing in provider_results:
                 url = str(listing.get("url") or "")
                 if url and url in seen_urls:
@@ -1330,8 +1268,6 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
                 if url:
                     seen_urls.add(url)
                 listings.append(listing)
-            if listings:
-                break
     diagnostics["pricesFound"] = len(listings)
     return listings[:20], diagnostics
 
@@ -1708,7 +1644,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if matched_count >= 8
         else f"Dati limitati: valore confrontato con {matched_count} annuncio/fonte web compatibile."
         if market_based
-        else "Server online, ma fonti mercato non configurate. Aggiungi SerpApi o Brave su Render per usare prezzi web reali."
+        else "Server online, ma fonti mercato non configurate. Aggiungi Brave o Tavily su Render per usare prezzi web reali."
         if not market_configured
         else "Server online: fonti mercato interrogate, ma non ci sono abbastanza prezzi confrontabili. Stima interna usata solo come fallback."
         if year is not None and km > 0 and has_details
@@ -1719,7 +1655,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if matched_count >= MINIMUM_MARKET_LISTINGS
         else "Stima esterna prudente: confronto web limitato, integrato con i dati del veicolo."
         if market_based
-        else "API online ma fonti mercato assenti: configura SERPAPI_API_KEY o BRAVE_SEARCH_API_KEY su Render."
+        else "API online ma fonti mercato assenti: configura BRAVE_SEARCH_API_KEY o TAVILY_API_KEY su Render."
         if not market_configured
         else "Server online ma confronto mercato insufficiente: AutoStorico non considera questo valore come prezzo web definitivo."
     )
@@ -2439,11 +2375,11 @@ def plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]
         except Exception as exc:
             diagnostics["errors"].append({"provider": "brave", "error": str(exc)[:160]})
 
-    if not listings and serpapi_market_search_available():
+    if not listings and tavily_market_search_available():
         try:
-            listings = serpapi_market_search(query_text, lookup_payload, diagnostics)
+            listings = tavily_market_search(query_text, lookup_payload, diagnostics)
         except Exception as exc:
-            diagnostics["errors"].append({"provider": "serpapi", "error": str(exc)[:160]})
+            diagnostics["errors"].append({"provider": "tavily", "error": str(exc)[:160]})
 
     safe_listings = [
         {
@@ -2474,7 +2410,7 @@ def plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]
         "webHints": safe_listings,
         "configuredProviders": {
             "brave": bool(BRAVE_SEARCH_API_KEY),
-            "serpapi": serpapi_market_search_available(),
+            "tavily": tavily_market_search_available(),
         },
         "officialData": {
             "revision": None,
@@ -2493,7 +2429,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
         if request_path == "/health":
             configured_providers = {
                 "brave": bool(BRAVE_SEARCH_API_KEY),
-                "serpapi": serpapi_market_search_available(),
+                "tavily": tavily_market_search_available(),
                 "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
             }
             self.send_json(
@@ -2505,9 +2441,9 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "configuredProviders": configured_providers,
                     "marketProviderPolicy": {
                         "primary": "brave",
-                        "serpapiEmergencyFallback": SERPAPI_ENABLED,
-                        "serpapiDailyLimit": SERPAPI_DAILY_LIMIT,
-                        "serpapiUsedToday": SERPAPI_DAILY_USAGE.get(_utc_day_key(), 0),
+                        "tavilyFallback": TAVILY_ENABLED,
+                        "tavilyDailyLimit": TAVILY_DAILY_LIMIT,
+                        "tavilyUsedToday": TAVILY_DAILY_USAGE.get(_utc_day_key(), 0),
                         "aggregateRequests": dict(SEARCH_PROVIDER_USAGE),
                     },
                     "premiumVerificationConfigured": premium_verification_configured(),

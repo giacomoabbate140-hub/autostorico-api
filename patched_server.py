@@ -148,12 +148,12 @@ def _more_plate_hints(plate: str, diagnostics: dict[str, Any]) -> list[dict[str,
             except Exception as exc:
                 diagnostics.setdefault("errors", []).append({"provider": "brave", "error": str(exc)[:160]})
 
-        if not merged and server.serpapi_market_search_available():
+        if not merged and server.tavily_market_search_available():
             try:
-                serp = server.serpapi_market_search(query, payload, diagnostics)
-                _merge_results(merged, serp, seen)
+                tavily = server.tavily_market_search(query, payload, diagnostics)
+                _merge_results(merged, tavily, seen)
             except Exception as exc:
-                diagnostics.setdefault("errors", []).append({"provider": "serpapi", "error": str(exc)[:160]})
+                diagnostics.setdefault("errors", []).append({"provider": "tavily", "error": str(exc)[:160]})
 
         if len(merged) >= 12:
             break
@@ -198,10 +198,10 @@ def enhanced_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[s
     payload["status"] = "provisional_vehicle_data" if useful else payload.get("status", "no_public_match")
     payload["configuredProviders"] = {
         "brave": bool(server.BRAVE_SEARCH_API_KEY),
-        "serpapi": server.serpapi_market_search_available(),
+        "tavily": server.tavily_market_search_available(),
     }
     payload["note"] = (
-        "I dati preliminari derivano da Brave Search API e SerpApi quando configurati, "
+        "I dati preliminari derivano da Brave Search API e Tavily quando configurati, "
         "incrociando risultati pubblici. Le verifiche ufficiali restano separate e richiedono "
         "il CAPTCHA del portale quando previsto."
     )

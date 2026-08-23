@@ -20,7 +20,7 @@ L'endpoint difetti restituisce sempre la fonte e distingue i richiami/supporto d
 
 ## Chiavi di ricerca su Render
 
-Le chiavi non vanno inserite nell'APK o in Git. In Render, apri il servizio, vai in **Environment** e aggiungi almeno una tra `BRAVE_SEARCH_API_KEY` e `SERPAPI_API_KEY`. Per Google Custom Search servono anche `GOOGLE_CSE_API_KEY`, `GOOGLE_CSE_ID` e `AUTOSTORICO_GOOGLE_CSE_ENABLED=1`.
+Le chiavi non vanno inserite nell'APK o in Git. In Render, apri il servizio, vai in **Environment** e aggiungi almeno una tra `BRAVE_SEARCH_API_KEY` e `TAVILY_API_KEY`. Brave e la fonte primaria; Tavily e il fallback con limite giornaliero. Per Google Custom Search servono anche `GOOGLE_CSE_API_KEY`, `GOOGLE_CSE_ID` e `AUTOSTORICO_GOOGLE_CSE_ENABLED=1`.
 
 ## Ricerca automatica delle fonti difetti
 

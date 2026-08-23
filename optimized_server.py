@@ -87,15 +87,15 @@ def _targeted_hints(
                     {"provider": "brave", "error": str(exc)[:160]}
                 )
 
-        # SerpApi is an explicit, capped emergency fallback. Do not consume
-        # paid credits while Brave is available for this enrichment.
-        if not merged and server.serpapi_market_search_available():
+        # Tavily is an explicit, capped fallback. Do not consume its credits
+        # while Brave already produced usable public results.
+        if not merged and server.tavily_market_search_available():
             try:
-                serp = server.serpapi_market_search(query, payload, diagnostics)
-                patched_server._merge_results(merged, serp, seen)
+                tavily = server.tavily_market_search(query, payload, diagnostics)
+                patched_server._merge_results(merged, tavily, seen)
             except Exception as exc:
                 diagnostics.setdefault("errors", []).append(
-                    {"provider": "serpapi", "error": str(exc)[:160]}
+                    {"provider": "tavily", "error": str(exc)[:160]}
                 )
 
         if len(merged) >= 8:
@@ -115,14 +115,14 @@ def optimized_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[
     saved_vehicle_request = any(known.values())
 
     # If the client says the saved vehicle has no missing fields, do not call
-    # Brave or SerpApi at all.
+    # Brave or Tavily at all.
     if saved_vehicle_request and not missing:
         payload["vehicle"] = {**known, "provisional": False}
         payload["webHints"] = []
         payload["status"] = "complete_from_autostorico_archive"
         payload["configuredProviders"] = {
             "brave": bool(server.BRAVE_SEARCH_API_KEY),
-            "serpapi": server.serpapi_market_search_available(),
+            "tavily": server.tavily_market_search_available(),
         }
         payload["note"] = "Scheda già completa nell'archivio AutoStorico: nessuna chiamata esterna eseguita."
         return 200, payload
@@ -179,7 +179,7 @@ def optimized_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[
     payload["status"] = "provisional_vehicle_data" if useful else payload.get("status", "no_public_match")
     payload["configuredProviders"] = {
         "brave": bool(server.BRAVE_SEARCH_API_KEY),
-        "serpapi": server.serpapi_market_search_available(),
+        "tavily": server.tavily_market_search_available(),
     }
     payload["requestedMissingFields"] = sorted(missing)
     payload["externalSearchCount"] = len(_build_queries(plate, missing, known)) if plate else 0
