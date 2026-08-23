@@ -36,10 +36,10 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertGreaterEqual(len(queries), 2)
         self.assertIn("Italia", queries[0])
-        self.assertIn("AutoScout24", queries[1])
-        self.assertIn("Subito", queries[1])
-        self.assertIn("Trovit", queries[1])
-        self.assertIn("Subito Auto", queries[4])
+        self.assertIn("site:subito.it", queries[1])
+        self.assertIn("site:autoscout24.it", queries[1])
+        self.assertIn("Trovit", queries[2])
+        self.assertTrue(any("Subito Auto" in query for query in queries))
         self.assertNotIn("Palermo", " ".join(queries))
 
     def test_market_fallback_runs_only_when_first_search_is_insufficient(self):
@@ -360,6 +360,23 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertIsNotNone(estimate)
         self.assertEqual(len(filtered), 3)
+
+    def test_market_estimate_corrects_for_higher_target_mileage(self):
+        listings = [
+            {"price": 8000, "km": 130000, "weight": 1.0},
+            {"price": 8200, "km": 140000, "weight": 1.0},
+            {"price": 8400, "km": 150000, "weight": 1.0},
+        ]
+
+        estimate, filtered = market_estimate_from_sources(
+            listings,
+            8000,
+            target_km=200000,
+        )
+
+        self.assertEqual(len(filtered), 3)
+        self.assertIsNotNone(estimate)
+        self.assertLess(estimate, 8000)
 
     def test_market_cache_key_does_not_include_plate_and_buckets_kilometres(self):
         first = {

@@ -812,8 +812,16 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         f"{base_core} auto usata prezzo "
         "AutoScout24 Subito Trovit Automobile Italia"
     )
+    # Tavily runs only one focused fallback after the broad nationwide query.
+    # Ask explicitly for the two primary classified portals, instead of using
+    # the old generic portal wording that often surfaced only aggregators.
+    preferred_portals_query = (
+        f"{base_core} auto usata prezzo "
+        "site:subito.it OR site:autoscout24.it Italia"
+    )
     broad_queries = [
         national_market_query,
+        preferred_portals_query,
         national_portals_query,
         f"{query_core} auto usata prezzo Italia",
         f"{base_core} usata prezzo vendita privati Italia",
@@ -1271,6 +1279,7 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
 def market_estimate_from_sources(
     listings: list[dict[str, Any]],
     internal_average: float,
+    target_km: float = 0,
 ) -> tuple[float | None, list[dict[str, Any]]]:
     if not listings:
         return None, []
@@ -1300,11 +1309,29 @@ def market_estimate_from_sources(
         filtered_prices = [float(item["price"]) for item in filtered]
     if len(filtered_prices) < MINIMUM_EXTERNAL_LISTINGS:
         return None, filtered
+
+    # Search snippets frequently contain comparable vehicles with less
+    # mileage. Keep their asking price visible to the user, but correct the
+    # calculation toward the kilometre reading of the selected vehicle.
+    known_listing_km = [
+        float(item["km"])
+        for item in filtered
+        if parse_float(item.get("km")) > 0
+    ]
+    mileage_adjustment = 1.0
+    if target_km > 0 and known_listing_km:
+        reference_km = median(known_listing_km)
+        difference = target_km - reference_km
+        if difference > 0:
+            mileage_adjustment = max(0.72, 1 - ((difference / 1000) * 0.002))
+        elif difference < 0:
+            mileage_adjustment = min(1.08, 1 - ((difference / 1000) * 0.001))
     if len(filtered_prices) < MINIMUM_MARKET_LISTINGS:
         source_average = weighted_median(filtered)
         if internal_average > 0:
-            return (source_average * 0.35) + (internal_average * 0.65), filtered
-        return source_average, filtered
+            blended = (source_average * 0.35) + (internal_average * 0.65)
+            return blended * mileage_adjustment, filtered
+        return source_average * mileage_adjustment, filtered
     ordered_prices = sorted(filtered_prices)
     q1 = quartile(ordered_prices, 0.25)
     q3 = quartile(ordered_prices, 0.75)
@@ -1328,7 +1355,7 @@ def market_estimate_from_sources(
             blended = (source_average * 0.75) + (internal_average * 0.25)
     else:
         blended = source_average
-    return blended, filtered
+    return blended * mileage_adjustment, filtered
 
 
 def asking_to_private_sale_factor(
@@ -1593,7 +1620,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     age_factor = private_sale_age_factor(age, is_moto)
     expected_km = max(1, age) * (6000 if is_moto else 13000)
     mileage_ratio = km / expected_km if expected_km else 1
-    mileage_factor = max(0.62, min(1.18, 1.10 - ((mileage_ratio - 1) * 0.18)))
+    mileage_factor = max(0.52, min(1.08, 1.0 - ((mileage_ratio - 1) * 0.25)))
 
     history_factor = 1.0
     if int(payload.get("revisionHistoryCount") or 0) > 0:
@@ -1615,6 +1642,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     market_average, filtered_listings = market_estimate_from_sources(
         listings,
         internal_average,
+        km,
     )
     if market_average is not None:
         market_average *= asking_to_private_sale_factor(
