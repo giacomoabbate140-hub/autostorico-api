@@ -34,7 +34,7 @@ services:
       - key: AUTOSTORICO_BRAVE_DAILY_LIMIT
         value: "40"
       - key: AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES
-        value: "1"
+        value: "2"
       - key: GOOGLE_CSE_API_KEY
         sync: false
       - key: GOOGLE_CSE_ID

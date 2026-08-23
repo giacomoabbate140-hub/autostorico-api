@@ -2,7 +2,8 @@ name: Collect AutoStorico defect sources
 
 on:
   schedule:
-    - cron: "17 */3 * * *"
+    # Una raccolta completa al giorno: evita consumo ripetuto di Brave.
+    - cron: "17 5 * * *"
   workflow_dispatch:
 
 permissions:

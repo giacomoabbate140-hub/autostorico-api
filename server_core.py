@@ -40,7 +40,7 @@ TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "").strip()
 TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
 BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "40")))
-MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "1")))
+MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "2")))
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -615,7 +615,7 @@ def search_defect_source_candidates(
                 "status": "pending_review",
             }
         )
-        if len(candidates) >= 10:
+        if len(candidates) >= 20:
             break
 
     result = {
@@ -800,6 +800,8 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         query_core = f"{query_core} {rounded_km} km"
     if not query_core.strip():
         return []
+    # Gli annunci raramente espongono i km nei risultati dei motori di
+    # ricerca: la prima ricerca nazionale non deve quindi vincolarli.
     national_portals_query = (
         f"{base_core} usata prezzo "
         "(site:autoscout24.it OR site:subito.it OR site:automobile.it "
@@ -807,8 +809,9 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         "OR site:autosupermarket.it)"
     )
     broad_queries = [
-        f"{query_core} auto usata prezzo Italia",
         national_portals_query,
+        f"{base_core} auto usata prezzo Italia",
+        f"{query_core} auto usata prezzo Italia",
         f"{base_core} usata prezzo vendita privati Italia",
         f"{base_core} AutoScout24 Subito Auto Trovit Automobile prezzo Italia",
     ]
@@ -1234,10 +1237,12 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     for query_index, query in enumerate(build_market_queries(payload, year)):
-        # Market estimates are deliberately isolated on Tavily. One nationwide
-        # query searches the configured automotive portals without consuming
-        # the Brave budget reserved for defects and public plate hints.
+        # La prima query e nazionale e non vincola i km. Una seconda query e
+        # consentita solo quando la prima non ha prodotto due confronti utili.
+        # Tavily resta separato da Brave e i crediti restano sotto controllo.
         if query_index >= MARKET_MAX_TAVILY_QUERIES:
+            break
+        if query_index > 0 and len(listings) >= 2:
             break
         query_results: list[dict[str, Any]] = []
         if configured_providers["tavily"]:

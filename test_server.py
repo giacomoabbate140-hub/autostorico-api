@@ -35,12 +35,36 @@ class MarketEvidenceTests(unittest.TestCase):
         )
 
         self.assertGreaterEqual(len(queries), 2)
-        self.assertIn("Italia", queries[0])
-        self.assertIn("site:autoscout24.it", queries[1])
-        self.assertIn("site:subito.it", queries[1])
-        self.assertIn("site:auto.trovit.it", queries[1])
-        self.assertIn("Subito Auto", queries[3])
+        self.assertIn("site:autoscout24.it", queries[0])
+        self.assertIn("site:subito.it", queries[0])
+        self.assertIn("site:auto.trovit.it", queries[0])
+        self.assertIn("Italia", queries[1])
+        self.assertIn("Subito Auto", queries[4])
         self.assertNotIn("Palermo", " ".join(queries))
+
+    def test_market_fallback_runs_only_when_first_search_is_insufficient(self):
+        payload = {"brand": "Audi", "model": "A1", "km": 100000}
+        first = {
+            "source": "AutoScout24",
+            "url": "https://autoscout24.it/a1-one",
+            "price": 9000,
+            "weight": 1.0,
+        }
+        second = {
+            "source": "Subito Auto",
+            "url": "https://subito.it/a1-two",
+            "price": 8800,
+            "weight": 1.0,
+        }
+        with patch.object(server, "TAVILY_API_KEY", "tavily-key"), patch.object(
+            server, "MARKET_MAX_TAVILY_QUERIES", 2
+        ), patch.object(
+            server, "tavily_market_search", side_effect=[[first], [second]]
+        ) as tavily:
+            listings, _ = fetch_market_sources(payload, 2011)
+
+        self.assertEqual(len(listings), 2)
+        self.assertEqual(tavily.call_count, 2)
 
     def test_market_search_uses_tavily_without_consuming_brave_budget(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
@@ -58,7 +82,9 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        tavily.assert_called_once()
+        # Un singolo annuncio non basta: deve partire la query nazionale di
+        # fallback, senza coinvolgere Brave.
+        self.assertEqual(tavily.call_count, 2)
         brave.assert_not_called()
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
 
