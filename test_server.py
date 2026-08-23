@@ -38,6 +38,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("site:autoscout24.it", queries[1])
         self.assertIn("site:subito.it", queries[1])
         self.assertIn("site:auto.trovit.it", queries[1])
+        self.assertIn("Subito Auto", queries[3])
         self.assertNotIn("Palermo", " ".join(queries))
 
     def test_market_search_uses_brave_without_parallel_tavily_fan_out(self):

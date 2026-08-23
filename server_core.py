@@ -127,7 +127,7 @@ DEFECT_RESEARCH_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 DEFECT_RESEARCH_LOCK = threading.Lock()
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
-    ("Subito Motori", "subito.it"),
+    ("Subito Auto", "subito.it"),
     ("Automobile.it", "automobile.it"),
     ("Quattroruote", "quattroruote.it"),
     ("AutoUncle", "autouncle.it"),
@@ -796,7 +796,7 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         f"{query_core} auto usata prezzo Italia",
         national_portals_query,
         f"{base_core} usata prezzo vendita privati Italia",
-        f"{base_core} AutoScout24 Subito Trovit Automobile prezzo Italia",
+        f"{base_core} AutoScout24 Subito Auto Trovit Automobile prezzo Italia",
     ]
     if year:
         age = max(0, min(40, 2026 - year))
