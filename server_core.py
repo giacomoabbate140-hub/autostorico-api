@@ -1231,10 +1231,7 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
 
 def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     configured_providers = {
-        # Brave is intentionally not a market provider. Keep its status out
-        # of this response so callers cannot mistake public plate hints for a
-        # comparable-price source.
-        "brave": False,
+        "brave": brave_search_available(),
         "tavily": tavily_market_search_available(),
         "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
     }
@@ -1250,7 +1247,8 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     for query_index, query in enumerate(build_market_queries(payload, year)):
         # La prima query e nazionale e non vincola i km. Una seconda query e
         # consentita solo quando la prima non ha prodotto due confronti utili.
-        # Tavily resta separato da Brave e i crediti restano sotto controllo.
+        # Tavily resta primario; Brave e Google CSE coprono il fallback mercato
+        # quando Tavily non e configurato o restituisce pochi prezzi utili.
         if query_index >= MARKET_MAX_TAVILY_QUERIES:
             break
         if query_index > 0 and len(listings) >= 2:
@@ -1262,6 +1260,30 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
             except Exception as exc:
                 diagnostics["errors"].append(
                     {"provider": "tavily", "query": query, "error": str(exc)[:180]}
+                )
+        if configured_providers["brave"] and len(query_results) < 2:
+            try:
+                query_results.extend(brave_market_search(query, payload, diagnostics))
+            except Exception as exc:
+                diagnostics["errors"].append(
+                    {"provider": "brave", "query": query, "error": str(exc)[:180]}
+                )
+        if configured_providers["google_cse"] and len(query_results) < 2:
+            try:
+                google_results = google_market_search(query, payload)
+                query_results.extend(google_results)
+                diagnostics["providers"].append(
+                    {
+                        "provider": "google_cse",
+                        "query": query,
+                        "items": len(google_results),
+                        "priced": len(google_results),
+                        "sampleUrls": [str(item.get("url") or "") for item in google_results[:3]],
+                    }
+                )
+            except Exception as exc:
+                diagnostics["errors"].append(
+                    {"provider": "google_cse", "query": query, "error": str(exc)[:180]}
                 )
         for listing in query_results:
             url = str(listing.get("url") or "")
@@ -1668,7 +1690,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if matched_count >= 8
         else f"Dati limitati: valore confrontato con {matched_count} annuncio/fonte web compatibile."
         if market_based
-        else "Server online, ma fonti mercato non configurate. Aggiungi Brave o Tavily su Render per usare prezzi web reali."
+        else "Server online, ma fonti mercato non configurate. Aggiungi TAVILY_API_KEY o BRAVE_SEARCH_API_KEY su Render per usare prezzi web reali."
         if not market_configured
         else "Server online: fonti mercato interrogate, ma non ci sono abbastanza prezzi confrontabili. Stima interna usata solo come fallback."
         if year is not None and km > 0 and has_details
@@ -1679,7 +1701,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if matched_count >= MINIMUM_MARKET_LISTINGS
         else "Stima esterna prudente: confronto web limitato, integrato con i dati del veicolo."
         if market_based
-        else "API online ma fonti mercato assenti: configura BRAVE_SEARCH_API_KEY o TAVILY_API_KEY su Render."
+        else "API online ma fonti mercato assenti: configura TAVILY_API_KEY o BRAVE_SEARCH_API_KEY su Render."
         if not market_configured
         else "Server online ma confronto mercato insufficiente: AutoStorico non considera questo valore come prezzo web definitivo."
     )
@@ -2455,11 +2477,12 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "ok": True,
                     "service": "autostorico-value-api",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
-                    "marketSearchConfigured": configured_providers["tavily"],
+                    "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
                     "marketProviderPolicy": {
                         "primary": "tavily",
-                        "braveReservedFor": ["defects", "plate_hints"],
+                        "fallbacks": ["brave", "google_cse"],
+                        "braveUsedFor": ["market_fallback", "defects", "plate_hints"],
                         "tavilyDailyLimit": TAVILY_DAILY_LIMIT,
                         "tavilyUsedToday": TAVILY_DAILY_USAGE.get(_utc_day_key(), 0),
                         "braveDailyLimit": BRAVE_DAILY_LIMIT,
