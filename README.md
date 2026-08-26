@@ -20,7 +20,7 @@ L'endpoint difetti restituisce sempre la fonte e distingue i richiami/supporto d
 
 ## Chiavi di ricerca su Render
 
-Le chiavi non vanno inserite nell'APK o in Git. In Render, `TAVILY_API_KEY` e usata solo per valore auto e valore di mercato; `BRAVE_SEARCH_API_KEY` e riservata a fonti difetti e indizi pubblici Info Targa. I due provider hanno limiti giornalieri indipendenti. Per Google Custom Search servono anche `GOOGLE_CSE_API_KEY`, `GOOGLE_CSE_ID` e `AUTOSTORICO_GOOGLE_CSE_ENABLED=1`.
+Le chiavi non vanno inserite nell'APK o in Git. In Render, `TAVILY_API_KEY` e il provider primario per valore auto e valore di mercato; `BRAVE_SEARCH_API_KEY` e anche fallback mercato quando Tavily non e configurato o trova pochi prezzi, oltre a fonti difetti e indizi pubblici Info Targa. I provider hanno limiti giornalieri indipendenti. Per Google Custom Search servono anche `GOOGLE_CSE_API_KEY`, `GOOGLE_CSE_ID` e `AUTOSTORICO_GOOGLE_CSE_ENABLED=1`.
 
 ## Ricerca automatica delle fonti difetti
 
