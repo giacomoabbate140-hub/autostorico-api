@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-25T05:45:53.432212+00:00",
-  "cursor": 22,
+  "updatedAt": "2026-08-26T05:48:15.466422+00:00",
+  "cursor": 23,
   "candidates": [
     {
       "status": "approved",
@@ -1439,6 +1439,20 @@
       "title": "manutenzione - Campagne di Richiamo o Assistenza | Pagina 2 | Forum Hyundai Club Italia",
       "snippet": "CAMPAGNA 10DC23 Aggiornamento Blind Spot Assistant (BCW), TUCSON (NX4e) CAMPAGNA 10DC31 Aggiornamento unità di controllo ICU (Unità di controllo integrata) CAMPAGNA 11DC30 Campagna di richiamo per una possibile non conformità alle norme europee in caso di malfunzionamento della Smart key Non sono presenti richiami per la mia auto che consegneranno a giorni, ho chiesto al concessionario di aggiornare tutto prima della consegna. ... I questi mesi di attesa della mia nuova Tucson, ho spulciato frequentemente i vari Forum, sia nazionali che stranieri. I questi mesi di attesa della mia nuova Tucson, ho spulciato frequentemente i vari Forum, sia nazionali che stranieri. Così facendo ho collezionato informazioni in merito alle Campagne di richiamo e modifica che volevo condividere. Ci potranno essere certamente delle inesattezze o carenze; per questo volevo chiedere a tutti coloro che hanno informazioni, di scriverle su questo thread. Nei giorni scorsi ho ricevuto una lettera per questa campagna di richiamo relativa alla Smart Key. La mia Tucson è equipaggiata con una chiave a 4 tasti. CAMPAGNA 10DC23 Aggiornamento Blind Spot Assistant (BCW), TUCSON (NX4e) CAMPAGNA 10DC31 Aggiornamento unità di controllo ICU (Unità di controllo integrata) CAMPAGNA 11DC30 Campagna di richiamo per una possibile non conformità alle norme europee in caso di malfunzionamento della Smart key",
       "sourceUrl": "https://www.hyundai-club.eu/threads/campagne-di-richiamo-o-assistenza.31657/page-2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-08-26T05:48:15.466422+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "richiamo per 1.5 BlueHdi, catena albero a camme (MXL) - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Peugeottista D.O.C. ... Premesso che al momento non mi è arrivata alcuna lettera e sul portale web non mostra alcuna campagna di richiamo per il mio VIN. Buongiorno a tutti, qualcuno ha già avuto modo di verificare, se questa campagna di richiamo è attiva anche in Italia ? ( vedere file allegato ) Ho letto l'articolo qualche giorno fa e ho provato ad andare sul sito della Peugeot Italia, inserendo il VIN della mia auto, è un 3008 II serie del 2018, ed effettivamente mi risponde che sul mio veicolo è presente una campagna di richiamo. Al momento non ho idea se si tratta della stessa campagna, perciò chiedo se qualcuno di Voi è già andato in officina a verificare di che cosa si tratta. Grazie · Non hai i permessi necessari per visualizzare i file allegati in questo messaggio. Ultima modifica di Squalo il 09/07/2025, 0:22, modificato 1 volta in totale. ... Ciao, un mio amico con 2008 è stato già contattato.. Peugeot 3008 Restyling Mod.GT con GT PACK - 1.5 BlueHDi 130 EAT8 S&S - Grigio Artense Metallizzato - Tetto panoramico apribile - Advanced Grip Control Martina Franca (TA) Peugeottista D.O.C. ... Premesso che al momento non mi è arrivata alcuna lettera e sul portale web non mostra alcuna campagna di richiamo per il mio VIN. Cercando meglio ho trovato anche questa schermata che da anche il codice della campagna di richiamo e cosa prevede, Screenshot_2025-07-09-22-44-02-052~2.jpeg ho contattato l'officina dove ho effettuato un altro richiamo ed ho appuntamento per giorno 21. Non hai i permessi necessari per visualizzare i file allegati in questo messaggio. Peugeot 2008 1.5 bluehdi 100cv Allure 06/2018 da 06/2020 Modifiche effettuate: luci anabbaglianti e abbaglianti h7 a led, luci targa a led, installazione luci di cortesia zona piedi con plafoniere originali, installazione luce cassetto con plafoniera originale, montaggio luce a led usb nel vano portabicchieri.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=126449"
     }
   ],
   "latestUpdate": {
