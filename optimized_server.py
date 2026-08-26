@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import hashlib
 from typing import Any
 
 import patched_server
 import server
+
+
+_ORIGINAL_MARKET_CACHE_KEY = server.market_cache_key
 
 
 def _first(query: dict[str, list[str]], key: str) -> str:
@@ -91,6 +95,23 @@ def _targeted_hints(
             break
 
     return merged[:8]
+
+
+def diagnostic_market_cache_key(payload: dict[str, Any]) -> str:
+    """Bypass the shared market cache only for the authorised developer build.
+
+    Production requests keep the normal cache key. A private full-access build
+    can send a fresh diagnosticNonce together with its authorised device hash;
+    that request gets a one-off cache key and therefore performs a new market
+    search without invalidating or changing cached results for real users.
+    """
+    base_key = _ORIGINAL_MARKET_CACHE_KEY(payload)
+    nonce = str(payload.get("diagnosticNonce") or "").strip()
+    developer_hash = str(payload.get("developerDeviceIdHash") or "").strip().lower()
+    if not nonce or not server.developer_device_is_authorized(developer_hash):
+        return base_key
+    raw = f"{base_key}|developer-market-diagnostic|{nonce}"
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def optimized_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]:
@@ -181,6 +202,7 @@ def optimized_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[
     return 200, payload
 
 
+server.market_cache_key = diagnostic_market_cache_key
 server.plate_info_lookup = optimized_plate_info_lookup
 
 if __name__ == "__main__":
