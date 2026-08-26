@@ -66,7 +66,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(len(listings), 2)
         self.assertEqual(tavily.call_count, 2)
 
-    def test_market_search_uses_tavily_without_consuming_brave_budget(self):
+    def test_market_search_uses_brave_as_market_fallback_after_tavily(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         tavily_listing = {
             "source": "AutoScout24",
@@ -74,19 +74,26 @@ class MarketEvidenceTests(unittest.TestCase):
             "price": 9000,
             "weight": 1.0,
         }
+        brave_listing = {
+            "source": "Subito Auto",
+            "url": "https://example.test/a1-brave",
+            "price": 8800,
+            "weight": 1.0,
+        }
         with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
             server, "TAVILY_API_KEY", "tavily-key"
         ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
             server, "tavily_market_search", return_value=[tavily_listing]
-        ) as tavily, patch.object(server, "brave_market_search") as brave:
+        ) as tavily, patch.object(
+            server, "brave_market_search", return_value=[brave_listing]
+        ) as brave:
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
-        self.assertEqual(len(listings), 1)
-        # Un singolo annuncio non basta: deve partire la query nazionale di
-        # fallback, senza coinvolgere Brave.
-        self.assertEqual(tavily.call_count, 2)
-        brave.assert_not_called()
+        self.assertEqual(len(listings), 2)
+        self.assertEqual(tavily.call_count, 1)
+        self.assertEqual(brave.call_count, 1)
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
+        self.assertTrue(diagnostics["configuredProviders"]["brave"])
 
     def test_market_search_stops_after_the_configured_nationwide_queries(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
@@ -130,6 +137,27 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(len(request_bodies), 1)
         self.assertNotIn("include_domains", request_bodies[0])
+
+    def test_brave_runs_market_search_when_tavily_is_missing(self):
+        payload = {"brand": "Audi", "model": "A1", "km": 100000}
+        brave_listing = {
+            "source": "Subito Auto",
+            "url": "https://example.test/brave-only",
+            "price": 8700,
+            "weight": 1.0,
+        }
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "TAVILY_API_KEY", ""
+        ), patch.object(
+            server, "brave_market_search", return_value=[brave_listing]
+        ) as brave, patch.object(server, "tavily_market_search") as tavily:
+            listings, diagnostics = fetch_market_sources(payload, 2011)
+
+        self.assertEqual(len(listings), 1)
+        self.assertEqual(brave.call_count, 2)
+        tavily.assert_not_called()
+        self.assertTrue(diagnostics["configuredProviders"]["brave"])
+        self.assertFalse(diagnostics["configuredProviders"]["tavily"])
 
     def test_tavily_is_the_capped_market_provider(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
