@@ -1,11 +1,38 @@
 from __future__ import annotations
 
 import re
+import threading
+import time
+from datetime import datetime, timezone
 from typing import Any
 
 import server
 
 _ORIGINAL_PLATE_INFO_LOOKUP = server.plate_info_lookup
+_ORIGINAL_BRAVE_MARKET_SEARCH = server.brave_market_search
+_ORIGINAL_TAVILY_MARKET_SEARCH = server.tavily_market_search
+_ORIGINAL_SEARCH_DEFECT_SOURCE_CANDIDATES = server.search_defect_source_candidates
+_ORIGINAL_DO_GET = server.AutoStoricoApi.do_GET
+
+_PROVIDER_DIAGNOSTICS_LOCK = threading.Lock()
+_PROVIDER_DIAGNOSTICS: dict[str, dict[str, Any]] = {
+    "tavily": {
+        "lastStatus": None,
+        "lastResults": None,
+        "lastSuccessAt": "",
+        "lastError": "",
+        "lastOperation": "",
+        "elapsedMs": None,
+    },
+    "brave": {
+        "lastStatus": None,
+        "lastResults": None,
+        "lastSuccessAt": "",
+        "lastError": "",
+        "lastOperation": "",
+        "elapsedMs": None,
+    },
+}
 
 _BRANDS = [
     "ALFA ROMEO", "ASTON MARTIN", "LAND ROVER", "MERCEDES-BENZ",
@@ -21,6 +48,209 @@ _STOP_WORDS = {
     "AUTO", "USATA", "USATO", "VENDITA", "TARGA", "KM", "CHILOMETRI",
     "PREZZO", "EURO", "ANNUNCIO", "AUTOVETTURA", "VEICOLO", "CAR",
 }
+
+
+def _utc_now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _record_provider_result(
+    provider: str,
+    *,
+    status: int,
+    result_count: int | None,
+    operation: str,
+    elapsed_ms: int,
+    error: str = "",
+) -> None:
+    if provider not in _PROVIDER_DIAGNOSTICS:
+        return
+    with _PROVIDER_DIAGNOSTICS_LOCK:
+        item = _PROVIDER_DIAGNOSTICS[provider]
+        item["lastStatus"] = status
+        item["lastResults"] = result_count
+        item["lastOperation"] = operation
+        item["elapsedMs"] = elapsed_ms
+        item["lastError"] = error[:180]
+        if 200 <= status < 300:
+            item["lastSuccessAt"] = _utc_now_iso()
+
+
+def _provider_message(
+    label: str,
+    *,
+    configured: bool,
+    available: bool,
+    last_status: int | None,
+    last_results: int | None,
+) -> str:
+    if not configured:
+        return f"{label}: NON CONFIGURATO"
+    if last_status is not None and 200 <= last_status < 300:
+        count = max(0, int(last_results or 0))
+        return f"{label}: OK — {count} risultati trovati"
+    if last_status is not None and last_status >= 400:
+        return f"{label}: ERRORE — ultima richiesta non riuscita"
+    if not available:
+        return f"{label}: LIMITE RAGGIUNTO O TEMPORANEAMENTE NON DISPONIBILE"
+    return f"{label}: PRONTO — nessuna ricerca registrata"
+
+
+def provider_diagnostics_payload() -> dict[str, Any]:
+    today = server._utc_day_key()
+    tavily_configured = bool(server.TAVILY_ENABLED and server.TAVILY_API_KEY)
+    brave_configured = bool(server.BRAVE_SEARCH_API_KEY)
+    tavily_available = server.tavily_market_search_available()
+    brave_available = server.brave_search_available()
+
+    with _PROVIDER_DIAGNOSTICS_LOCK:
+        tavily_last = dict(_PROVIDER_DIAGNOSTICS["tavily"])
+        brave_last = dict(_PROVIDER_DIAGNOSTICS["brave"])
+
+    tavily = {
+        "configured": tavily_configured,
+        "available": tavily_available,
+        "usedToday": server.TAVILY_DAILY_USAGE.get(today, 0),
+        "dailyLimit": server.TAVILY_DAILY_LIMIT,
+        **tavily_last,
+    }
+    brave = {
+        "configured": brave_configured,
+        "available": brave_available,
+        "usedToday": server.BRAVE_DAILY_USAGE.get(today, 0),
+        "dailyLimit": server.BRAVE_DAILY_LIMIT,
+        **brave_last,
+    }
+    tavily["message"] = _provider_message(
+        "Tavily",
+        configured=tavily_configured,
+        available=tavily_available,
+        last_status=tavily_last.get("lastStatus"),
+        last_results=tavily_last.get("lastResults"),
+    )
+    brave["message"] = _provider_message(
+        "Brave",
+        configured=brave_configured,
+        available=brave_available,
+        last_status=brave_last.get("lastStatus"),
+        last_results=brave_last.get("lastResults"),
+    )
+    return {
+        "ok": True,
+        "providers": {
+            "tavily": tavily,
+            "brave": brave,
+        },
+        "summary": [tavily["message"], brave["message"]],
+        "note": (
+            "Diagnostica passiva: non consuma crediti. I dati si aggiornano "
+            "quando AutoStorico usa realmente Brave o Tavily."
+        ),
+    }
+
+
+def _diagnostic_tavily_market_search(
+    query: str,
+    payload: dict[str, Any],
+    diagnostics: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    started = time.perf_counter()
+    try:
+        results = _ORIGINAL_TAVILY_MARKET_SEARCH(query, payload, diagnostics)
+        elapsed = int((time.perf_counter() - started) * 1000)
+        _record_provider_result(
+            "tavily",
+            status=200,
+            result_count=len(results),
+            operation="market_search",
+            elapsed_ms=elapsed,
+        )
+        return results
+    except Exception as exc:
+        elapsed = int((time.perf_counter() - started) * 1000)
+        status = int(getattr(exc, "code", 500) or 500)
+        _record_provider_result(
+            "tavily",
+            status=status,
+            result_count=0,
+            operation="market_search",
+            elapsed_ms=elapsed,
+            error=str(exc),
+        )
+        raise
+
+
+def _diagnostic_brave_market_search(
+    query: str,
+    payload: dict[str, Any],
+    diagnostics: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    started = time.perf_counter()
+    try:
+        results = _ORIGINAL_BRAVE_MARKET_SEARCH(query, payload, diagnostics)
+        elapsed = int((time.perf_counter() - started) * 1000)
+        _record_provider_result(
+            "brave",
+            status=200,
+            result_count=len(results),
+            operation="market_or_plate_search",
+            elapsed_ms=elapsed,
+        )
+        return results
+    except Exception as exc:
+        elapsed = int((time.perf_counter() - started) * 1000)
+        status = int(getattr(exc, "code", 500) or 500)
+        _record_provider_result(
+            "brave",
+            status=status,
+            result_count=0,
+            operation="market_or_plate_search",
+            elapsed_ms=elapsed,
+            error=str(exc),
+        )
+        raise
+
+
+def _diagnostic_search_defect_source_candidates(
+    make: str,
+    model: str,
+    year: int | None = None,
+    engine: str = "",
+) -> dict[str, Any]:
+    started = time.perf_counter()
+    try:
+        result = _ORIGINAL_SEARCH_DEFECT_SOURCE_CANDIDATES(make, model, year, engine)
+        elapsed = int((time.perf_counter() - started) * 1000)
+        candidates = result.get("candidates") if isinstance(result, dict) else []
+        count = len(candidates) if isinstance(candidates, list) else int(result.get("count") or 0)
+        _record_provider_result(
+            "brave",
+            status=200,
+            result_count=count,
+            operation="defect_research",
+            elapsed_ms=elapsed,
+        )
+        return result
+    except Exception as exc:
+        elapsed = int((time.perf_counter() - started) * 1000)
+        status = int(getattr(exc, "code", 500) or 500)
+        _record_provider_result(
+            "brave",
+            status=status,
+            result_count=0,
+            operation="defect_research",
+            elapsed_ms=elapsed,
+            error=str(exc),
+        )
+        raise
+
+
+def _diagnostic_do_get(self: server.AutoStoricoApi) -> None:
+    request_path = server.urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
+    if request_path == "/api/diagnostics/providers":
+        self.send_json(provider_diagnostics_payload())
+        return
+    _ORIGINAL_DO_GET(self)
 
 
 def _pretty_brand(value: str) -> str:
@@ -202,6 +432,10 @@ def enhanced_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[s
     return 200, payload
 
 
+server.tavily_market_search = _diagnostic_tavily_market_search
+server.brave_market_search = _diagnostic_brave_market_search
+server.search_defect_source_candidates = _diagnostic_search_defect_source_candidates
+server.AutoStoricoApi.do_GET = _diagnostic_do_get
 server.plate_info_lookup = enhanced_plate_info_lookup
 
 if __name__ == "__main__":
