@@ -2138,8 +2138,67 @@ def developer_device_is_authorized(device_id_hash: Any) -> bool:
     )
 
 
+def normalize_vehicle_vin(value: Any) -> str:
+    """Normalize a VIN received for an on-demand check without persisting it."""
+    return re.sub(r"[^A-HJ-NPR-Z0-9]", "", str(value or "").upper())
+
+
+def masked_vehicle_vin(vin: str) -> str:
+    if len(vin) != 17:
+        return ""
+    return f"{vin[:3]}**********{vin[-4:]}"
+
+
+def vin_recall_check(vin_value: Any, reports: list[dict[str, Any]]) -> dict[str, Any]:
+    vin = normalize_vehicle_vin(vin_value)
+    if not vin:
+        return {
+            "present": False,
+            "valid": False,
+            "status": "missing",
+            "maskedVin": "",
+            "possibleRecallCount": 0,
+            "message": "Telaio non disponibile: aggiungilo ai dati del veicolo per controllare i richiami.",
+        }
+    if len(vin) != 17:
+        return {
+            "present": True,
+            "valid": False,
+            "status": "invalid",
+            "maskedVin": "",
+            "possibleRecallCount": 0,
+            "message": "Il VIN deve contenere 17 caratteri validi.",
+        }
+    recall_reports = [
+        report
+        for report in reports
+        if str(report.get("sourceType") or "")
+        in {"official_recall", "manufacturer_recall"}
+    ]
+    possible_count = len(recall_reports)
+    return {
+        "present": True,
+        "valid": True,
+        "status": "possible_match" if possible_count else "official_check_required",
+        "maskedVin": masked_vehicle_vin(vin),
+        "possibleRecallCount": possible_count,
+        "message": (
+            f"Trovate {possible_count} campagne compatibili con modello, anno o motore. "
+            "La conferma finale deve arrivare dal portale VIN del costruttore."
+            if possible_count
+            else "Nessuna campagna compatibile nel catalogo AutoStorico. "
+            "Il controllo VIN ufficiale del costruttore resta necessario."
+        ),
+    }
+
+
 def vehicle_defects_response(
-    make: str, model: str, year: int | None, engine: str, search_online: bool
+    make: str,
+    model: str,
+    year: int | None,
+    engine: str,
+    search_online: bool,
+    vin: str = "",
 ) -> dict[str, Any]:
     result = vehicle_defect_reports(make, model, year, engine)
     if result is None:
@@ -2173,6 +2232,10 @@ def vehicle_defects_response(
                 "onlineCandidates": [],
                 "onlineResearchUnavailable": True,
             }
+    result = {
+        **result,
+        "vinCheck": vin_recall_check(vin, list(result.get("reports") or [])),
+    }
     return result
 
 
@@ -2667,9 +2730,15 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 model = str(payload.get("model") or "").strip()
                 year = catalog_year_value(payload.get("year")) or None
                 engine = str(payload.get("engine") or "").strip()
+                vin = str(payload.get("vin") or "").strip()
                 self.send_json(
                     vehicle_defects_response(
-                        make, model, year, engine, search_online=True
+                        make,
+                        model,
+                        year,
+                        engine,
+                        search_online=True,
+                        vin=vin,
                     )
                 )
                 return
