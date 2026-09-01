@@ -136,10 +136,11 @@ class MarketEvidenceTests(unittest.TestCase):
             )
 
         self.assertEqual(len(request_bodies), 1)
-        self.assertNotIn("include_domains", request_bodies[0])
-        self.assertFalse(request_bodies[0]["include_answer"])
-        self.assertFalse(request_bodies[0]["include_raw_content"])
-        self.assertFalse(request_bodies[0]["include_images"])
+        request_payload = json.loads(request_bodies[0])
+        self.assertNotIn("include_domains", request_payload)
+        self.assertFalse(request_payload["include_answer"])
+        self.assertFalse(request_payload["include_raw_content"])
+        self.assertFalse(request_payload["include_images"])
 
     def test_tavily_retries_once_after_a_transient_network_error(self):
         class FakeResponse:
