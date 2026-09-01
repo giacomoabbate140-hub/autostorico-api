@@ -1,24 +1,7 @@
 {
-  "catalogVersion": 29,
-  "updatedAt": "2026-08-22T22:30:00+00:00",
-  "latestUpdate": {
-    "id": "catalog-25",
-    "summary": "Aggiunta scheda BMW Serie 1 120d E87/M47 2004-2007.",
-    "details": [
-      "La scheda copre la 120d prima serie/M47, separata dalla N47 2007+.",
-      "Il controllo principale riguarda collettore aspirazione, lamelle swirl, EGR e cali di potenza.",
-      "Verifica sempre codice motore, VIN e manutenzione documentata prima di decidere un intervento."
-    ],
-    "sources": [
-      "https://www.bmwpassion.com/forum/threads/collettore-aspirazione-120d-e87.386932/"
-    ],
-    "vehicles": [
-      {
-        "make": "BMW",
-        "model": "Serie 1 120d"
-      }
-    ]
-  },
+  "catalogVersion": 30,
+  "updatedAt": "2026-09-01",
+  "latestUpdate": "Aggiunto richiamo ufficiale EU Safety Gate A12/0377/17 per Alfa Romeo Giulietta 940 prodotte dal 2010 al 2015.",
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
     {
@@ -212,6 +195,23 @@
       "generation": "940",
       "years": "2010-2020",
       "reports": [
+        {
+          "id": "alfa-giulietta-940-airbag-propellant-a12-0377-17",
+          "category": "Airbag e sicurezza",
+          "title": "Possibile mancato funzionamento del secondo stadio dell’airbag",
+          "sourceType": "official_recall",
+          "confidence": "official",
+          "severity": "urgent",
+          "status": "source-verified",
+          "fromYear": 2010,
+          "toYear": 2015,
+          "productionPeriod": "settembre 2010 - dicembre 2015",
+          "officialReference": "EU Safety Gate A12/0377/17",
+          "sourceName": "Commissione europea Safety Gate — A12/0377/17",
+          "sourceUrl": "https://ec.europa.eu/safety-gate-alerts/screen/search?resetSearch=true",
+          "userText": "Richiamo europeo per alcuni veicoli tipo 940: il secondo stadio dell’airbag potrebbe non attivarsi correttamente. Verifica subito il VIN presso la rete Alfa Romeo; anno e modello da soli non confermano che il singolo veicolo sia coinvolto.",
+          "mechanism": "Possibile anomalia del sistema propellente dell’airbag."
+        },
         {
           "id": "alfa-giulietta-940-interior-door-handle-community",
           "category": "Interni e carrozzeria",
