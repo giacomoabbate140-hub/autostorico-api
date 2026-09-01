@@ -137,6 +137,37 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(len(request_bodies), 1)
         self.assertNotIn("include_domains", request_bodies[0])
+        self.assertFalse(request_bodies[0]["include_answer"])
+        self.assertFalse(request_bodies[0]["include_raw_content"])
+        self.assertFalse(request_bodies[0]["include_images"])
+
+    def test_tavily_retries_once_after_a_transient_network_error(self):
+        class FakeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return None
+
+            def read(self):
+                return b'{"results": []}'
+
+        with patch.object(server, "TAVILY_ENABLED", True), patch.object(
+            server, "TAVILY_API_KEY", "tavily-key"
+        ), patch.object(server, "TAVILY_DAILY_LIMIT", 30), patch.object(
+            server, "TAVILY_DAILY_USAGE", {}
+        ), patch.object(server.time, "sleep"), patch.object(
+            server.urllib.request,
+            "urlopen",
+            side_effect=[server.urllib.error.URLError("temporary"), FakeResponse()],
+        ) as urlopen:
+            results = server.tavily_market_search(
+                "Audi A1 2011 auto usata prezzo Italia",
+                {"brand": "Audi", "model": "A1"},
+            )
+
+        self.assertEqual(results, [])
+        self.assertEqual(urlopen.call_count, 2)
 
     def test_brave_runs_market_search_when_tavily_is_missing(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
@@ -196,6 +227,32 @@ class MarketEvidenceTests(unittest.TestCase):
             self.assertTrue(developer_device_is_authorized(owner_hash))
             self.assertFalse(developer_device_is_authorized("b" * 64))
             self.assertFalse(developer_device_is_authorized("not-a-hash"))
+
+    def test_gold_research_does_not_depend_on_optional_admin_token(self):
+        with patch.object(server, "DEFECT_RESEARCH_ENABLED", True), patch.object(
+            server, "DEFECT_RESEARCH_API_KEY", ""
+        ), patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "BRAVE_DAILY_LIMIT", 40
+        ), patch.object(server, "BRAVE_DAILY_USAGE", {}):
+            self.assertTrue(server.defect_research_configured())
+
+    def test_gold_response_explicitly_reports_missing_online_provider(self):
+        with patch.object(server, "defect_research_configured", return_value=False):
+            result = server.vehicle_defects_response(
+                "Alfa Romeo", "Giulietta", 2014, "2.0 Diesel", True
+            )
+
+        self.assertTrue(result["onlineResearchUnavailable"])
+        self.assertEqual(result["onlineCandidates"], [])
+        self.assertIn("Render", result["onlineResearchMessage"])
+
+    def test_public_source_url_rejects_non_clickable_or_local_values(self):
+        self.assertEqual(
+            server.safe_public_source_url("https://www.alfaromeo.it/richiami"),
+            "https://www.alfaromeo.it/richiami",
+        )
+        self.assertEqual(server.safe_public_source_url("javascript:alert(1)"), "")
+        self.assertEqual(server.safe_public_source_url("http://localhost/source"), "")
 
     def test_catalog_update_status_exposes_safe_update_metadata(self):
         status = catalog_update_status()
