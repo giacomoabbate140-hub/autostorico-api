@@ -11,6 +11,7 @@ import html
 import hashlib
 import threading
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -99,6 +100,72 @@ def record_search_provider_usage(provider: str) -> None:
         if provider == "brave":
             today = _utc_day_key()
             BRAVE_DAILY_USAGE[today] = BRAVE_DAILY_USAGE.get(today, 0) + 1
+
+
+_RETRYABLE_PROVIDER_STATUS = {429, 500, 502, 503, 504}
+
+
+def safe_public_source_url(value: Any) -> str:
+    """Return a clickable public HTTP(S) URL, or an empty string."""
+    candidate = str(value or "").strip()
+    try:
+        parsed = urllib.parse.urlparse(candidate)
+    except ValueError:
+        return ""
+    if (
+        parsed.scheme not in {"http", "https"}
+        or not parsed.hostname
+        or parsed.username
+        or parsed.password
+        or parsed.hostname in {"localhost", "127.0.0.1", "::1"}
+    ):
+        return ""
+    return candidate
+
+
+def read_provider_json(
+    request: urllib.request.Request,
+    *,
+    provider: str,
+    timeout: int = 18,
+    attempts: int = 2,
+) -> dict[str, Any]:
+    """Read provider JSON with one short retry for transient Render/API errors."""
+    attempts = max(1, min(3, attempts))
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        if attempt > 0:
+            if provider == "brave" and not brave_search_available():
+                break
+            if provider == "tavily" and not tavily_market_search_available():
+                break
+        record_search_provider_usage(provider)
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            if not isinstance(payload, dict):
+                raise RuntimeError(f"{provider}: risposta JSON non valida")
+            return payload
+        except urllib.error.HTTPError as exc:
+            last_error = exc
+            if exc.code not in _RETRYABLE_PROVIDER_STATUS or attempt + 1 >= attempts:
+                raise
+            retry_after = 0.0
+            try:
+                retry_after = float(exc.headers.get("Retry-After", "0") or 0)
+            except (TypeError, ValueError):
+                retry_after = 0.0
+            time.sleep(min(2.0, max(0.35, retry_after)))
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            last_error = exc
+            if attempt + 1 >= attempts:
+                raise
+            time.sleep(0.35 * (attempt + 1))
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError(f"{provider}: limite giornaliero raggiunto")
+
+
 GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = os.environ.get(
     "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON", ""
 ).strip()
@@ -318,7 +385,11 @@ def defect_research_update_status() -> dict[str, Any]:
     ]
     sources = latest.get("sources") if isinstance(latest.get("sources"), list) else []
     safe_sources = [
-        str(item).strip() for item in sources if isinstance(item, str) and str(item).strip()
+        safe_url
+        for item in sources
+        if isinstance(item, str)
+        for safe_url in [safe_public_source_url(item)]
+        if safe_url
     ]
     updated_at = str(latest.get("updatedAt") or update_id).strip()
     return {
@@ -353,9 +424,11 @@ def catalog_update_status() -> dict[str, Any]:
     ] if isinstance(details, list) else []
     sources = latest.get("sources")
     safe_sources = [
-        str(item).strip()
+        safe_url
         for item in sources
-        if isinstance(item, str) and str(item).strip()
+        if isinstance(item, str)
+        for safe_url in [safe_public_source_url(item)]
+        if safe_url
     ] if isinstance(sources, list) else []
     return {
         "catalogVersion": catalog_year_value(VEHICLE_DEFECT_CATALOG.get("catalogVersion")),
@@ -509,9 +582,10 @@ def vehicle_defect_reports(
 
 
 def defect_research_configured() -> bool:
-    return bool(
-        DEFECT_RESEARCH_ENABLED and DEFECT_RESEARCH_API_KEY and brave_search_available()
-    )
+    # The admin bearer token protects only the collector endpoint. Gold live
+    # research depends on Brave and must keep working even when that optional
+    # admin token is not configured.
+    return bool(DEFECT_RESEARCH_ENABLED and brave_search_available())
 
 
 def defect_research_cache_key(make: str, model: str, year: int | None = None, engine: str = "") -> str:
@@ -579,16 +653,19 @@ def search_defect_source_candidates(
             "X-Subscription-Token": BRAVE_SEARCH_API_KEY,
         },
     )
-    record_search_provider_usage("brave")
-    with urllib.request.urlopen(request, timeout=15) as response:
-        data = json.loads(response.read().decode("utf-8"))
+    data = read_provider_json(
+        request,
+        provider="brave",
+        timeout=18,
+        attempts=2,
+    )
     if data.get("type") == "ErrorResponse":
         raise RuntimeError(str(data.get("message") or "Brave Search error"))
 
     candidates: list[dict[str, str]] = []
     seen_urls: set[str] = set()
     for item in data.get("web", {}).get("results", []) or []:
-        url = str(item.get("url") or "").strip()
+        url = safe_public_source_url(item.get("url"))
         trusted = trusted_defect_source(url)
         if not trusted or not url or url in seen_urls:
             continue
@@ -1131,7 +1208,6 @@ def google_market_search(query: str, payload: dict[str, Any]) -> list[dict[str, 
 def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not brave_search_available():
         return []
-    record_search_provider_usage("brave")
     params = urllib.parse.urlencode(
         {
             "q": query,
@@ -1151,8 +1227,14 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
             "X-Subscription-Token": BRAVE_SEARCH_API_KEY,
         },
     )
-    with urllib.request.urlopen(request, timeout=8) as response:
-        data = json.loads(response.read().decode("utf-8"))
+    data = read_provider_json(
+        request,
+        provider="brave",
+        timeout=18,
+        attempts=2,
+    )
+    if data.get("type") == "ErrorResponse":
+        raise RuntimeError(str(data.get("message") or "Brave Search error"))
     results = []
     search_items = list(data.get("web", {}).get("results", []) or [])
     for item in search_items:
@@ -1182,13 +1264,16 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
     """Search Tavily for nationwide compatible market listings only."""
     if not tavily_market_search_available():
         return []
-    record_search_provider_usage("tavily")
     request_body = json.dumps(
         {
             "query": query,
+            "topic": "general",
             "search_depth": "basic",
             "max_results": 20,
             "country": "italy",
+            "include_answer": False,
+            "include_raw_content": False,
+            "include_images": False,
         }
     ).encode("utf-8")
     request = urllib.request.Request(
@@ -1202,8 +1287,14 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
             "User-Agent": "AutoStoricoValueBot/1.0",
         },
     )
-    with urllib.request.urlopen(request, timeout=10) as response:
-        data = json.loads(response.read().decode("utf-8"))
+    data = read_provider_json(
+        request,
+        provider="tavily",
+        timeout=20,
+        attempts=2,
+    )
+    if data.get("error"):
+        raise RuntimeError(str(data.get("error")))
     search_items = list(data.get("results") or [])
     results = []
     for item in search_items:
@@ -2157,7 +2248,16 @@ def vehicle_defects_response(
                 "Le fonti online restano da leggere e verificare."
             ),
         }
-    if search_online and defect_research_configured():
+    if search_online:
+        if not defect_research_configured():
+            return {
+                **result,
+                "onlineCandidates": [],
+                "onlineResearchUnavailable": True,
+                "onlineResearchMessage": (
+                    "Ricerca online temporaneamente non configurata su Render."
+                ),
+            }
         try:
             online_research = search_defect_source_candidates(
                 make, model, year, engine
@@ -2166,12 +2266,24 @@ def vehicle_defects_response(
                 **result,
                 "onlineCandidates": online_research.get("candidates", []),
                 "onlineResearchFromCache": online_research.get("fromCache", False),
+                "onlineResearchProvider": "brave",
             }
-        except (RuntimeError, ValueError, OSError, urllib.error.URLError):
+        except (
+            RuntimeError,
+            ValueError,
+            OSError,
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+            TimeoutError,
+            json.JSONDecodeError,
+        ):
             result = {
                 **result,
                 "onlineCandidates": [],
                 "onlineResearchUnavailable": True,
+                "onlineResearchMessage": (
+                    "Brave non ha risposto; i dati curati restano disponibili."
+                ),
             }
     return result
 
