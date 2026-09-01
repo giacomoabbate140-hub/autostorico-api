@@ -1,7 +1,26 @@
 {
-  "catalogVersion": 30,
+  "catalogVersion": 31,
   "updatedAt": "2026-09-01",
-  "latestUpdate": "Aggiunto richiamo ufficiale EU Safety Gate A12/0377/17 per Alfa Romeo Giulietta 940 prodotte dal 2010 al 2015.",
+  "latestUpdate": {
+    "id": "2026-09-01-giulietta-richiamo-fonti",
+    "summary": "Aggiunto il richiamo A12/0377/17 per Alfa Romeo Giulietta e le fonti consultabili dell’aggiornamento.",
+    "details": [
+      "Richiamo europeo A12/0377/17: possibile mancato funzionamento del secondo stadio dell’airbag.",
+      "Veicoli interessati: Alfa Romeo Giulietta tipo 940 prodotte da settembre 2010 a dicembre 2015.",
+      "La conferma definitiva deve essere effettuata tramite VIN presso Alfa Romeo o la rete ufficiale."
+    ],
+    "vehicles": [
+      {
+        "make": "Alfa Romeo",
+        "model": "Giulietta"
+      }
+    ],
+    "sources": [
+      "https://ec.europa.eu/safety-gate-alerts/screen/webReport",
+      "https://www.alfaromeo.it/acquisto/servizi/manutenzione",
+      "https://car-recalls.eu/recall/alfa-romeo-giulietta-2010-2015/"
+    ]
+  },
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
   "vehicles": [
     {
