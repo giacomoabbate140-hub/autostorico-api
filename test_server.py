@@ -15,6 +15,7 @@ from server import (
     market_cache_key,
     market_estimate_from_sources,
     plate_info_lookup,
+    should_bypass_market_cache,
     trusted_defect_source,
     verify_defect_online_entitlement,
     verify_google_play_subscription,
@@ -24,6 +25,13 @@ from server import (
 
 
 class MarketEvidenceTests(unittest.TestCase):
+    def test_only_private_developer_v2_flag_bypasses_market_cache(self):
+        self.assertTrue(
+            should_bypass_market_cache({"developerFreshMarketCheck": True})
+        )
+        self.assertFalse(should_bypass_market_cache({"forceMarketSearch": True}))
+        self.assertFalse(should_bypass_market_cache({}))
+
     def test_market_queries_are_nationwide_and_prioritize_national_portals(self):
         queries = build_market_queries(
             {
