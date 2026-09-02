@@ -838,6 +838,16 @@ def cache_market_estimate(cache_key: str, estimate: dict[str, Any]) -> None:
         MARKET_CACHE[cache_key] = (time.time(), estimate)
 
 
+def should_bypass_market_cache(payload: dict[str, Any]) -> bool:
+    """Allow the private developer build to perform a real provider check.
+
+    This uses a dedicated v2 flag so already-published app versions cannot
+    accidentally turn their normal value requests into uncached searches.
+    Provider daily limits and per-client rate limits still apply.
+    """
+    return payload.get("developerFreshMarketCheck") is True
+
+
 def can_run_market_search(client_id: str) -> bool:
     return can_run_limited_request(MARKET_REQUESTS, client_id, MARKET_RATE_LIMIT)
 
@@ -3035,7 +3045,11 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 )
                 return
             cache_key = market_cache_key(payload)
-            estimate = cached_market_estimate(cache_key)
+            estimate = (
+                None
+                if should_bypass_market_cache(payload)
+                else cached_market_estimate(cache_key)
+            )
             if estimate is None:
                 client_id = (
                     self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
