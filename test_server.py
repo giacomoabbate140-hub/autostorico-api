@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 import server
 from server import (
     build_market_queries,
+    build_vin_recall_check,
     catalog_update_status,
     defect_research_cache_key,
     fetch_market_sources,
@@ -728,6 +729,45 @@ class MarketEvidenceTests(unittest.TestCase):
             defect_research_cache_key("Audi", "A1", 2011, "benzina 1390 cc"),
             defect_research_cache_key("Audi", "A1", 2021, "benzina 999 cc"),
         )
+
+
+class VinRecallCheckTests(unittest.TestCase):
+    def test_land_rover_vin_is_masked_and_linked_to_compatible_recalls(self):
+        reports = [
+            {"sourceType": "official_recall"},
+            {"sourceType": "community"},
+        ]
+
+        result = build_vin_recall_check(
+            "SALVA2BG1DH715356",
+            "Land Rover",
+            reports,
+        )
+
+        self.assertTrue(result["valid"])
+        self.assertEqual("possible_match", result["status"])
+        self.assertEqual(1, result["possibleRecallCount"])
+        self.assertEqual("SAL••••••••715356", result["maskedVin"])
+        self.assertNotIn("SALVA2BG1DH715356", json.dumps(result))
+        self.assertTrue(result["verificationUrl"].startswith("https://"))
+
+    def test_vin_make_mismatch_is_reported(self):
+        result = build_vin_recall_check(
+            "SALVA2BG1DH715356",
+            "Audi",
+            [],
+        )
+
+        self.assertTrue(result["valid"])
+        self.assertEqual("vehicle_mismatch", result["status"])
+        self.assertEqual(0, result["possibleRecallCount"])
+
+    def test_invalid_vin_is_not_accepted(self):
+        result = build_vin_recall_check("SAL123", "Land Rover", [])
+
+        self.assertFalse(result["valid"])
+        self.assertEqual("invalid", result["status"])
+        self.assertEqual("", result["maskedVin"])
 
 
 if __name__ == "__main__":
