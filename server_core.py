@@ -2332,8 +2332,8 @@ VIN_WMI_MAKES: dict[str, tuple[str, ...]] = {
     "W0L": ("opel",),
 }
 VIN_VERIFICATION_SOURCES: dict[str, tuple[str, str]] = {
-    "land rover": ("Land Rover Italia", "https://www.landrover.it/ownership/index.html"),
-    "range rover": ("Land Rover Italia", "https://www.landrover.it/ownership/index.html"),
+    "land rover": ("Land Rover Italia", "https://www.landrover.it/ownership/campagne-di-richiamo.html"),
+    "range rover": ("Land Rover Italia", "https://www.landrover.it/ownership/campagne-di-richiamo.html"),
     "audi": ("Audi Italia", "https://www.audi.it/it/servizi-e-accessori/servizi-e-manutenzione/azioni-di-richiamo/"),
     "volkswagen": ("Volkswagen Italia", "https://www.volkswagen.it/it/area-clienti/richiami.html"),
     "bmw": ("BMW Italia", "https://www.bmw.it/it/topics/offers-and-services/personal-services/richiami-tecnici.html"),
