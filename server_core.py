@@ -2229,8 +2229,160 @@ def developer_device_is_authorized(device_id_hash: Any) -> bool:
     )
 
 
+VIN_FORMAT = re.compile(r"^[A-HJ-NPR-Z0-9]{17}$")
+VIN_WMI_MAKES: dict[str, tuple[str, ...]] = {
+    "SAL": ("land rover", "range rover"),
+    "WAU": ("audi",),
+    "TRU": ("audi",),
+    "WVW": ("volkswagen",),
+    "WVG": ("volkswagen",),
+    "WBA": ("bmw",),
+    "WBS": ("bmw",),
+    "WBY": ("bmw",),
+    "ZAR": ("alfa romeo",),
+    "ZFA": ("fiat",),
+    "VF3": ("peugeot",),
+    "VF7": ("citroen",),
+    "W0L": ("opel",),
+}
+VIN_VERIFICATION_SOURCES: dict[str, tuple[str, str]] = {
+    "land rover": ("Land Rover Italia", "https://www.landrover.it/ownership/index.html"),
+    "range rover": ("Land Rover Italia", "https://www.landrover.it/ownership/index.html"),
+    "audi": ("Audi Italia", "https://www.audi.it/it/servizi-e-accessori/servizi-e-manutenzione/azioni-di-richiamo/"),
+    "volkswagen": ("Volkswagen Italia", "https://www.volkswagen.it/it/area-clienti/richiami.html"),
+    "bmw": ("BMW Italia", "https://www.bmw.it/it/topics/offers-and-services/personal-services/richiami-tecnici.html"),
+    "alfa romeo": ("Alfa Romeo Italia", "https://www.alfaromeo.it/mopar/manutenzione-auto/campagne-di-richiamo"),
+    "fiat": ("Fiat Italia", "https://www.fiat.it/mopar/manutenzione-auto/campagne-di-richiamo"),
+    "peugeot": ("Peugeot Italia", "https://www.peugeot.it/post-vendita/campagne-di-richiamo.html"),
+    "citroen": ("Citroen Italia", "https://www.citroen.it/maintain/recall-campaigns.html"),
+    "opel": ("Opel Italia", "https://www.opel.it/manutenzione-servizi/campagne-di-richiamo.html"),
+}
+
+
+def normalize_vehicle_vin(value: Any) -> str:
+    """Normalize a VIN for one request only; callers must never cache or log it."""
+    return re.sub(r"[^A-Z0-9]", "", str(value or "").upper())
+
+
+def mask_vehicle_vin(value: Any) -> str:
+    vin = normalize_vehicle_vin(value)
+    if len(vin) < 9:
+        return ""
+    return f"{vin[:3]}{'•' * 8}{vin[-6:]}"
+
+
+def vin_make_candidates(vin: str) -> tuple[str, ...]:
+    return VIN_WMI_MAKES.get(vin[:3], ())
+
+
+def vin_verification_source(make: str) -> tuple[str, str]:
+    normalized_make = normalize_catalog_text(make)
+    for key, source in VIN_VERIFICATION_SOURCES.items():
+        if key in normalized_make or normalized_make in key:
+            return source
+    return ("Portale ufficiale del costruttore", "")
+
+
+def build_vin_recall_check(
+    vin: Any,
+    make: str,
+    reports: list[dict[str, Any]],
+) -> dict[str, Any]:
+    normalized_vin = normalize_vehicle_vin(vin)
+    if not normalized_vin:
+        return {
+            "present": False,
+            "valid": False,
+            "status": "missing",
+            "maskedVin": "",
+            "possibleRecallCount": 0,
+            "message": (
+                "Aggiungi il telaio alla scheda del veicolo per confrontarlo "
+                "con marca e richiami compatibili."
+            ),
+            "verificationSourceName": "",
+            "verificationUrl": "",
+        }
+
+    source_name, verification_url = vin_verification_source(make)
+    masked_vin = mask_vehicle_vin(normalized_vin)
+    if not VIN_FORMAT.fullmatch(normalized_vin):
+        return {
+            "present": True,
+            "valid": False,
+            "status": "invalid",
+            "maskedVin": masked_vin,
+            "possibleRecallCount": 0,
+            "message": (
+                "Il telaio deve contenere 17 caratteri validi e non può usare "
+                "le lettere I, O o Q. Correggilo nella scheda del veicolo."
+            ),
+            "verificationSourceName": source_name,
+            "verificationUrl": verification_url,
+        }
+
+    expected_makes = vin_make_candidates(normalized_vin)
+    requested_make = normalize_catalog_text(make)
+    if expected_makes and not any(
+        expected in requested_make or requested_make in expected
+        for expected in expected_makes
+    ):
+        return {
+            "present": True,
+            "valid": True,
+            "status": "vehicle_mismatch",
+            "maskedVin": masked_vin,
+            "possibleRecallCount": 0,
+            "message": (
+                "Il prefisso del telaio non coincide con la marca selezionata. "
+                "Controlla la scheda del veicolo prima di usare i risultati."
+            ),
+            "verificationSourceName": source_name,
+            "verificationUrl": verification_url,
+        }
+
+    official_reports = [
+        report
+        for report in reports
+        if str(report.get("sourceType") or "") in {
+            "official_recall",
+            "manufacturer_recall",
+        }
+    ]
+    count = len(official_reports)
+    if count:
+        status = "possible_match"
+        message = (
+            "Il telaio è formalmente valido e coerente con la marca. "
+            "Il catalogo contiene campagne compatibili con modello, anno e "
+            "motore: l'appartenenza del singolo VIN va confermata sul portale ufficiale."
+        )
+    else:
+        status = "checked_no_catalog_match"
+        message = (
+            "Il telaio è formalmente valido e coerente con la marca, ma il "
+            "catalogo AutoStorico non contiene campagne compatibili per questa "
+            "configurazione. Non equivale a escludere richiami attivi."
+        )
+    return {
+        "present": True,
+        "valid": True,
+        "status": status,
+        "maskedVin": masked_vin,
+        "possibleRecallCount": count,
+        "message": message,
+        "verificationSourceName": source_name,
+        "verificationUrl": verification_url,
+    }
+
+
 def vehicle_defects_response(
-    make: str, model: str, year: int | None, engine: str, search_online: bool
+    make: str,
+    model: str,
+    year: int | None,
+    engine: str,
+    search_online: bool,
+    vin: Any = "",
 ) -> dict[str, Any]:
     result = vehicle_defect_reports(make, model, year, engine)
     if result is None:
@@ -2285,7 +2437,14 @@ def vehicle_defects_response(
                     "Brave non ha risposto; i dati curati restano disponibili."
                 ),
             }
-    return result
+    return {
+        **result,
+        "vinCheck": build_vin_recall_check(
+            vin,
+            make,
+            list(result.get("reports") or []),
+        ),
+    }
 
 
 DEFECT_SOURCE_OFFICIAL = "NHTSA richiami/reclami ufficiali"
@@ -2626,6 +2785,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             model = query.get("model", [""])[0]
             year = catalog_year_value(query.get("year", [""])[0]) or None
             engine = query.get("engine", [""])[0]
+            vin = query.get("vin", [""])[0]
             search_online = query.get("searchOnline", ["0"])[0] == "1"
             if search_online:
                 self.send_json(
@@ -2637,7 +2797,9 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 )
                 return
             self.send_json(
-                vehicle_defects_response(make, model, year, engine, search_online=False)
+                vehicle_defects_response(
+                    make, model, year, engine, search_online=False, vin=vin
+                )
             )
             return
         if request_path == "/api/admin/defect-source-candidates":
@@ -2779,9 +2941,10 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 model = str(payload.get("model") or "").strip()
                 year = catalog_year_value(payload.get("year")) or None
                 engine = str(payload.get("engine") or "").strip()
+                vin = str(payload.get("vin") or "").strip()
                 self.send_json(
                     vehicle_defects_response(
-                        make, model, year, engine, search_online=True
+                        make, model, year, engine, search_online=True, vin=vin
                     )
                 )
                 return
