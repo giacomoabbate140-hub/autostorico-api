@@ -583,9 +583,11 @@ def vehicle_defect_reports(
 
 def defect_research_configured() -> bool:
     # The admin bearer token protects only the collector endpoint. Gold live
-    # research depends on Brave and must keep working even when that optional
-    # admin token is not configured.
-    return bool(DEFECT_RESEARCH_ENABLED and brave_search_available())
+    # research works when either free provider still has an available budget.
+    return bool(
+        DEFECT_RESEARCH_ENABLED
+        and (tavily_market_search_available() or brave_search_available())
+    )
 
 
 def defect_research_cache_key(make: str, model: str, year: int | None = None, engine: str = "") -> str:
@@ -635,36 +637,111 @@ def search_defect_source_candidates(
         "(richiamo OR recall OR campagna OR bollettino OR forum OR community "
         "OR proprietari OR difetto OR problema)"
     )
-    params = urllib.parse.urlencode(
-        {
-            "q": query,
-            "count": 20,
-            "country": "it",
-            "search_lang": "it",
-            "safesearch": "moderate",
-        }
-    )
-    request = urllib.request.Request(
-        f"https://api.search.brave.com/res/v1/web/search?{params}",
-        headers={
-            "Accept": "application/json",
-            "Accept-Encoding": "identity",
-            "User-Agent": "AutoStoricoDefectResearch/1.0",
-            "X-Subscription-Token": BRAVE_SEARCH_API_KEY,
-        },
-    )
-    data = read_provider_json(
-        request,
-        provider="brave",
-        timeout=18,
-        attempts=2,
-    )
-    if data.get("type") == "ErrorResponse":
-        raise RuntimeError(str(data.get("message") or "Brave Search error"))
+    provider_items: list[tuple[str, dict[str, Any]]] = []
+    providers_used: list[str] = []
+    provider_errors: list[str] = []
+
+    if tavily_market_search_available():
+        try:
+            request_body = json.dumps(
+                {
+                    "query": query,
+                    "topic": "general",
+                    "search_depth": "basic",
+                    "max_results": 20,
+                    "country": "italy",
+                    "include_answer": False,
+                    "include_raw_content": False,
+                    "include_images": False,
+                }
+            ).encode("utf-8")
+            tavily_request = urllib.request.Request(
+                "https://api.tavily.com/search",
+                data=request_body,
+                method="POST",
+                headers={
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {TAVILY_API_KEY}",
+                    "User-Agent": "AutoStoricoDefectResearch/1.0",
+                },
+            )
+            tavily_data = read_provider_json(
+                tavily_request,
+                provider="tavily",
+                timeout=20,
+                attempts=2,
+            )
+            if tavily_data.get("error"):
+                raise RuntimeError(str(tavily_data.get("error")))
+            provider_items.extend(
+                ("tavily", item)
+                for item in (tavily_data.get("results") or [])
+                if isinstance(item, dict)
+            )
+            providers_used.append("tavily")
+        except (
+            RuntimeError,
+            OSError,
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+            TimeoutError,
+            json.JSONDecodeError,
+        ) as exc:
+            provider_errors.append(f"tavily: {str(exc)[:160]}")
+
+    if brave_search_available():
+        try:
+            params = urllib.parse.urlencode(
+                {
+                    "q": query,
+                    "count": 20,
+                    "country": "it",
+                    "search_lang": "it",
+                    "safesearch": "moderate",
+                }
+            )
+            brave_request = urllib.request.Request(
+                f"https://api.search.brave.com/res/v1/web/search?{params}",
+                headers={
+                    "Accept": "application/json",
+                    "Accept-Encoding": "identity",
+                    "User-Agent": "AutoStoricoDefectResearch/1.0",
+                    "X-Subscription-Token": BRAVE_SEARCH_API_KEY,
+                },
+            )
+            brave_data = read_provider_json(
+                brave_request,
+                provider="brave",
+                timeout=18,
+                attempts=2,
+            )
+            if brave_data.get("type") == "ErrorResponse":
+                raise RuntimeError(
+                    str(brave_data.get("message") or "Brave Search error")
+                )
+            provider_items.extend(
+                ("brave", item)
+                for item in (brave_data.get("web", {}).get("results", []) or [])
+                if isinstance(item, dict)
+            )
+            providers_used.append("brave")
+        except (
+            RuntimeError,
+            OSError,
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+            TimeoutError,
+            json.JSONDecodeError,
+        ) as exc:
+            provider_errors.append(f"brave: {str(exc)[:160]}")
+
+    if not providers_used and provider_errors:
+        raise RuntimeError("; ".join(provider_errors))
 
     candidates: list[dict[str, str]] = []
     seen_urls: set[str] = set()
-    for item in data.get("web", {}).get("results", []) or []:
+    for provider, item in provider_items:
         url = safe_public_source_url(item.get("url"))
         trusted = trusted_defect_source(url)
         if not trusted or not url or url in seen_urls:
@@ -676,16 +753,24 @@ def search_defect_source_candidates(
             if source_type == "community_candidate"
             else "official_or_technical"
         )
+        snippet = (
+            item.get("content")
+            if provider == "tavily"
+            else " ".join(
+                [
+                    str(item.get("description") or ""),
+                    *[
+                        str(value)
+                        for value in item.get("extra_snippets") or []
+                    ],
+                ]
+            )
+        )
         candidates.append(
             {
                 "title": str(item.get("title") or "Fonte da verificare"),
                 "url": url,
-                "snippet": " ".join(
-                    [
-                        str(item.get("description") or ""),
-                        *[str(value) for value in item.get("extra_snippets") or []],
-                    ]
-                ).strip(),
+                "snippet": str(snippet or "").strip(),
                 "sourceName": source_name,
                 "sourceType": source_type,
                 "researchCategory": research_category,
@@ -705,6 +790,8 @@ def search_defect_source_candidates(
         "candidates": candidates,
         "count": len(candidates),
         "fromCache": False,
+        "providers": providers_used,
+        "providerErrors": provider_errors,
         "disclaimer": (
             "Candidati automatici: devono essere verificati e approvati prima "
             "di entrare nel catalogo visibile agli utenti."
@@ -713,7 +800,6 @@ def search_defect_source_candidates(
     with DEFECT_RESEARCH_LOCK:
         DEFECT_RESEARCH_CACHE[cache_key] = (now, result)
     return result
-
 
 def market_cache_key(payload: dict[str, Any]) -> str:
     """Keep estimates reusable without retaining a vehicle plate in memory."""
@@ -2418,7 +2504,7 @@ def vehicle_defects_response(
                 **result,
                 "onlineCandidates": online_research.get("candidates", []),
                 "onlineResearchFromCache": online_research.get("fromCache", False),
-                "onlineResearchProvider": "brave",
+                "onlineResearchProviders": online_research.get("providers", []),
             }
         except (
             RuntimeError,
@@ -2434,7 +2520,7 @@ def vehicle_defects_response(
                 "onlineCandidates": [],
                 "onlineResearchUnavailable": True,
                 "onlineResearchMessage": (
-                    "Brave non ha risposto; i dati curati restano disponibili."
+                    "Tavily e Brave non hanno risposto; i dati curati restano disponibili."
                 ),
             }
     return {
