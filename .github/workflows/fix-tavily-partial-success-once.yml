@@ -1,0 +1,53 @@
+name: Fix Tavily partial success once
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/fix-tavily-partial-success-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-tavily-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch Tavily diagnostics only
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('patched_server.py')
+          text = path.read_text(encoding='utf-8')
+          old = '''    with _PROVIDER_DIAGNOSTICS_LOCK:\n        item = _PROVIDER_DIAGNOSTICS[provider]\n        item["lastStatus"] = status\n        item["lastResults"] = result_count\n        item["lastOperation"] = operation\n        item["elapsedMs"] = elapsed_ms\n        item["lastError"] = error[:180]\n        if 200 <= status < 300:\n            item["lastSuccessAt"] = _utc_now_iso()\n'''
+          new = '''    with _PROVIDER_DIAGNOSTICS_LOCK:\n        item = _PROVIDER_DIAGNOSTICS[provider]\n        # Tavily can run two consecutive market queries for the same valuation.\n        # If the first query succeeded and a second query fails immediately after,\n        # preserve the valid Tavily result already obtained instead of turning the\n        # provider red. The technical error is still retained in lastError.\n        if provider == "tavily" and status >= 400:\n            previous_status = item.get("lastStatus")\n            previous_success = str(item.get("lastSuccessAt") or "").strip()\n            recent_success = False\n            if previous_status is not None and 200 <= int(previous_status) < 300 and previous_success:\n                try:\n                    parsed = datetime.fromisoformat(previous_success.replace("Z", "+00:00"))\n                    recent_success = (datetime.now(timezone.utc) - parsed).total_seconds() <= 90\n                except (TypeError, ValueError):\n                    recent_success = False\n            if recent_success:\n                item["lastOperation"] = operation\n                item["elapsedMs"] = elapsed_ms\n                item["lastError"] = error[:180]\n                item["lastPartialErrorStatus"] = status\n                return\n\n        item["lastStatus"] = status\n        item["lastResults"] = result_count\n        item["lastOperation"] = operation\n        item["elapsedMs"] = elapsed_ms\n        item["lastError"] = error[:180]\n        if 200 <= status < 300:\n            item["lastSuccessAt"] = _utc_now_iso()\n            if provider == "tavily":\n                item.pop("lastPartialErrorStatus", None)\n'''
+          if old not in text:
+              raise SystemExit('Expected provider diagnostic block not found; aborting without changes')
+          text = text.replace(old, new, 1)
+          path.write_text(text, encoding='utf-8')
+
+      - name: Verify Tavily-only change
+        run: |
+          set -euo pipefail
+          python -m py_compile patched_server.py server_core.py server.py
+          grep -F 'provider == "tavily" and status >= 400' patched_server.py
+          git diff --exit-code -- server_core.py server.py
+          git diff -- patched_server.py
+
+      - name: Run provider diagnostics tests
+        run: |
+          python -m unittest -v test_provider_diagnostics.py
+
+      - name: Commit Tavily fix
+        run: |
+          git config user.name "autostorico-server-fix"
+          git config user.email "autostorico-server-fix@users.noreply.github.com"
+          git add patched_server.py
+          git commit -m "Keep valid Tavily results when second market query fails"
+          git push origin HEAD:main
