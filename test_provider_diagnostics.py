@@ -86,6 +86,19 @@ class ProviderDiagnosticsTests(unittest.TestCase):
         self.assertGreaterEqual(payload["providers"]["brave"]["lastStatus"], 400)
         self.assertIn("ERRORE", payload["providers"]["brave"]["message"])
 
+    def test_tavily_unauthorized_message_points_to_render_key(self):
+        with patched_server._PROVIDER_DIAGNOSTICS_LOCK:
+            patched_server._PROVIDER_DIAGNOSTICS["tavily"].update(
+                {"lastStatus": 401, "lastResults": 0, "lastError": "Unauthorized"}
+            )
+        with patch.object(server, "TAVILY_ENABLED", True), patch.object(
+            server, "TAVILY_API_KEY", "configured-but-invalid"
+        ):
+            payload = patched_server.provider_diagnostics_payload()
+
+        self.assertIn("CHIAVE API RIFIUTATA", payload["providers"]["tavily"]["message"])
+        self.assertIn("Render", payload["providers"]["tavily"]["message"])
+
 
 if __name__ == "__main__":
     unittest.main()

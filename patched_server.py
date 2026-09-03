@@ -112,6 +112,10 @@ def _provider_message(
     if last_status is not None and 200 <= last_status < 300:
         count = max(0, int(last_results or 0))
         return f"{label}: OK — {count} risultati trovati"
+    if last_status == 401:
+        return f"{label}: CHIAVE API RIFIUTATA — aggiorna la chiave su Render"
+    if last_status in {432, 433}:
+        return f"{label}: LIMITE DEL PIANO RAGGIUNTO"
     if last_status is not None and last_status >= 400:
         return f"{label}: ERRORE — ultima richiesta non riuscita"
     if not available:
