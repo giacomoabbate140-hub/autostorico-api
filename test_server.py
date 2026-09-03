@@ -25,6 +25,18 @@ from server import (
 
 
 class MarketEvidenceTests(unittest.TestCase):
+    def test_provider_secret_normalizes_render_paste_formats(self):
+        self.assertEqual(
+            server.normalize_provider_secret(
+                "TAVILY_API_KEY='Bearer tvly-test'", "TAVILY_API_KEY"
+            ),
+            "tvly-test",
+        )
+        self.assertEqual(
+            server.normalize_provider_secret('  "tvly-test"  ', "TAVILY_API_KEY"),
+            "tvly-test",
+        )
+
     def test_only_private_developer_v2_flag_bypasses_market_cache(self):
         self.assertTrue(
             should_bypass_market_cache({"developerFreshMarketCheck": True})
@@ -150,6 +162,37 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertFalse(request_payload["include_answer"])
         self.assertFalse(request_payload["include_raw_content"])
         self.assertFalse(request_payload["include_images"])
+        self.assertEqual(request_payload["language"], "it")
+
+    def test_tavily_request_normalizes_bearer_prefix_from_render(self):
+        captured_headers = []
+
+        class FakeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return b'{"results": []}'
+
+        original_request = server.urllib.request.Request
+
+        def capture_request(*args, **kwargs):
+            request = original_request(*args, **kwargs)
+            captured_headers.append(dict(request.header_items()))
+            return request
+
+        with patch.object(server, "TAVILY_API_KEY", "Bearer tvly-test"), patch.object(
+            server.urllib.request, "Request", side_effect=capture_request
+        ), patch.object(server.urllib.request, "urlopen", return_value=FakeResponse()):
+            server.tavily_market_search(
+                "Audi A1 2011 auto usata prezzo Italia",
+                {"brand": "Audi", "model": "A1"},
+            )
+
+        self.assertEqual(captured_headers[0]["Authorization"], "Bearer tvly-test")
 
     def test_tavily_retries_once_after_a_transient_network_error(self):
         class FakeResponse:

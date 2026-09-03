@@ -26,6 +26,18 @@ except ImportError:
     service_account = None
 
 
+def normalize_provider_secret(value: Any, variable_name: str = "") -> str:
+    """Accept a raw key even when Render contains a copied label or Bearer prefix."""
+    cleaned = str(value or "").strip()
+    if variable_name and cleaned.upper().startswith(f"{variable_name.upper()}="):
+        cleaned = cleaned.split("=", 1)[1].strip()
+    if len(cleaned) >= 2 and cleaned[0] == cleaned[-1] and cleaned[0] in {'"', "'"}:
+        cleaned = cleaned[1:-1].strip()
+    if cleaned.lower().startswith("bearer "):
+        cleaned = cleaned[7:].strip()
+    return cleaned
+
+
 # A mobile app cannot keep a shared API secret confidential. Requests are
 # therefore protected by server-side limits and cache instead of a key in APKs.
 API_KEY = os.environ.get("AUTOSTORICO_API_KEY", "").strip()
@@ -34,8 +46,12 @@ PORT = int(os.environ.get("PORT") or os.environ.get("AUTOSTORICO_API_PORT", "808
 GOOGLE_CSE_API_KEY = os.environ.get("GOOGLE_CSE_API_KEY", "").strip()
 GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID", "").strip()
 GOOGLE_CSE_ENABLED = os.environ.get("AUTOSTORICO_GOOGLE_CSE_ENABLED", "0") == "1"
-BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
-TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "").strip()
+BRAVE_SEARCH_API_KEY = normalize_provider_secret(
+    os.environ.get("BRAVE_SEARCH_API_KEY", ""), "BRAVE_SEARCH_API_KEY"
+)
+TAVILY_API_KEY = normalize_provider_secret(
+    os.environ.get("TAVILY_API_KEY", ""), "TAVILY_API_KEY"
+)
 # Tavily is dedicated to market estimates. Brave is reserved for defect
 # research and public plate hints, so the two provider budgets stay separate.
 TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
@@ -1360,6 +1376,7 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
     """Search Tavily for nationwide compatible market listings only."""
     if not tavily_market_search_available():
         return []
+    api_key = normalize_provider_secret(TAVILY_API_KEY, "TAVILY_API_KEY")
     request_body = json.dumps(
         {
             "query": query,
@@ -1370,6 +1387,7 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
             "include_answer": False,
             "include_raw_content": False,
             "include_images": False,
+            "language": "it",
         }
     ).encode("utf-8")
     request = urllib.request.Request(
@@ -1379,7 +1397,7 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
         headers={
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {TAVILY_API_KEY}",
+            "Authorization": f"Bearer {api_key}",
             "User-Agent": "AutoStoricoValueBot/1.0",
         },
     )
@@ -3089,4 +3107,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
