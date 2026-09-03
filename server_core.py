@@ -1237,7 +1237,7 @@ def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
         ]
         generic_tokens = {
             "auto", "usata", "usato", "serie", "series", "classe",
-            "model", "modello", "versione",
+            "model", "modello", "versione", "range",
         }
         signal_tokens = [token for token in model_tokens if token not in generic_tokens]
         tokens_to_check = signal_tokens or model_tokens
@@ -1253,6 +1253,35 @@ def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
     return True
 
 
+def is_compatible_fuel_text(text: str, payload: dict[str, Any]) -> bool:
+    """Reject an explicitly conflicting engine type, while keeping generic pages."""
+    target = str(payload.get("fuelType") or payload.get("fuel") or "").strip().lower()
+    if not target:
+        return True
+    cleaned = f" {re.sub(r'[^a-z0-9]+', ' ', text.lower())} "
+    groups = {
+        "diesel": (" diesel ", " tdi ", " jtd ", " jtdm ", " dci ", " hdi ", " multijet ", " crdi "),
+        "benzina": (" benzina ", " petrol ", " tfsi ", " tsi ", " mpi ", " gdi "),
+        "ibrida": (" ibrida ", " ibrido ", " hybrid ", " phev ", " mhev "),
+        "elettrica": (" elettrica ", " elettrico ", " electric ", " bev "),
+    }
+    aliases = {
+        "gasolio": "diesel",
+        "petrol": "benzina",
+        "hybrid": "ibrida",
+        "ibrido": "ibrida",
+        "elettrico": "elettrica",
+        "electric": "elettrica",
+    }
+    target_group = aliases.get(target, target)
+    if target_group not in groups:
+        return True
+    present = {
+        name for name, markers in groups.items() if any(marker in cleaned for marker in markers)
+    }
+    return not present or target_group in present
+
+
 def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte web", payload: dict[str, Any] | None = None) -> dict[str, Any] | None:
     title = str(item.get("title") or "")
     snippet = str(item.get("snippet") or item.get("description") or "")
@@ -1264,6 +1293,8 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
     if not is_market_url(link):
         return None
     if payload is not None and not is_relevant_listing_text(combined_text, payload):
+        return None
+    if payload is not None and not is_compatible_fuel_text(combined_text, payload):
         return None
     extracted_price = item.get("extracted_price")
     price = (

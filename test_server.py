@@ -478,6 +478,42 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertFalse(server.is_relevant_listing_text(listing_text, payload))
 
+    def test_market_filter_rejects_explicit_wrong_fuel(self):
+        item = {
+            "title": "Audi A1 1.4 TFSI benzina 2011 - 6.900 EUR",
+            "url": "https://www.autoscout24.it/annunci/audi-a1-benzina",
+            "snippet": "Audi A1 benzina usata",
+        }
+        self.assertIsNone(
+            server.listing_from_search_item(
+                item,
+                payload={
+                    "brand": "Audi",
+                    "model": "A1",
+                    "fuelType": "Diesel",
+                    "firstRegistrationDate": "2011-01-01",
+                },
+            )
+        )
+
+    def test_market_filter_keeps_matching_or_unspecified_fuel(self):
+        diesel = {
+            "title": "Audi A1 1.6 TDI diesel 2011 - 6.900 EUR",
+            "url": "https://www.autoscout24.it/annunci/audi-a1-diesel",
+        }
+        generic = {
+            "title": "Audi A1 usata 2011 - 6.900 EUR",
+            "url": "https://www.autoscout24.it/annunci/audi-a1",
+        }
+        payload = {
+            "brand": "Audi",
+            "model": "A1",
+            "fuelType": "Diesel",
+            "firstRegistrationDate": "2011-01-01",
+        }
+        self.assertIsNotNone(server.listing_from_search_item(diesel, payload=payload))
+        self.assertIsNotNone(server.listing_from_search_item(generic, payload=payload))
+
     def test_market_estimate_returns_prudent_estimate_with_two_comparable_listings(self):
         two_listings = [
             {"price": 8000, "weight": 1.0},
