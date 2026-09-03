@@ -67,6 +67,27 @@ def _record_provider_result(
         return
     with _PROVIDER_DIAGNOSTICS_LOCK:
         item = _PROVIDER_DIAGNOSTICS[provider]
+        # Tavily can run two consecutive market queries for the same valuation.
+        # If the first query succeeded and a second query fails immediately after,
+        # preserve the valid Tavily result already obtained instead of turning the
+        # provider red. The technical error is still retained in lastError.
+        if provider == "tavily" and status >= 400:
+            previous_status = item.get("lastStatus")
+            previous_success = str(item.get("lastSuccessAt") or "").strip()
+            recent_success = False
+            if previous_status is not None and 200 <= int(previous_status) < 300 and previous_success:
+                try:
+                    parsed = datetime.fromisoformat(previous_success.replace("Z", "+00:00"))
+                    recent_success = (datetime.now(timezone.utc) - parsed).total_seconds() <= 90
+                except (TypeError, ValueError):
+                    recent_success = False
+            if recent_success:
+                item["lastOperation"] = operation
+                item["elapsedMs"] = elapsed_ms
+                item["lastError"] = error[:180]
+                item["lastPartialErrorStatus"] = status
+                return
+
         item["lastStatus"] = status
         item["lastResults"] = result_count
         item["lastOperation"] = operation
@@ -74,6 +95,8 @@ def _record_provider_result(
         item["lastError"] = error[:180]
         if 200 <= status < 300:
             item["lastSuccessAt"] = _utc_now_iso()
+            if provider == "tavily":
+                item.pop("lastPartialErrorStatus", None)
 
 
 def _provider_message(
