@@ -267,6 +267,53 @@ def delete_closed_consultation(
     return {"ok": True, "deleted": True}
 
 
+def delete_resolved_forum_post(
+    user: dict[str, Any], post_id: Any
+) -> dict[str, Any]:
+    """Delete an owner's resolved community post and its replies/reports."""
+    candidate = str(post_id or "").strip().lower()
+    try:
+        normalized_id = str(uuid.UUID(candidate))
+    except (ValueError, AttributeError) as exc:
+        raise ValueError("Conversazione Community non valida") from exc
+    encoded_id = urllib.parse.quote(normalized_id, safe="")
+    rows = _supabase_json_request(
+        "GET",
+        f"/rest/v1/forum_posts?id=eq.{encoded_id}&select=id,author_id,status,image_path",
+    )
+    if not isinstance(rows, list) or not rows:
+        return {"ok": True, "deleted": True, "imagePath": ""}
+    row = rows[0]
+    if not hmac.compare_digest(
+        str(row.get("author_id") or ""), str(user.get("id") or "")
+    ):
+        raise PermissionError("Puoi eliminare soltanto le tue conversazioni Community")
+    if str(row.get("status") or "") != "resolved":
+        raise ValueError("Segna la conversazione come risolta prima di eliminarla")
+
+    # Remove dependent rows explicitly so deletion also works without cascades.
+    _supabase_json_request(
+        "DELETE",
+        f"/rest/v1/forum_comments?post_id=eq.{encoded_id}",
+        prefer="return=minimal",
+    )
+    _supabase_json_request(
+        "DELETE",
+        f"/rest/v1/forum_reports?post_id=eq.{encoded_id}",
+        prefer="return=minimal",
+    )
+    _supabase_json_request(
+        "DELETE",
+        f"/rest/v1/forum_posts?id=eq.{encoded_id}",
+        prefer="return=minimal",
+    )
+    return {
+        "ok": True,
+        "deleted": True,
+        "imagePath": str(row.get("image_path") or "").strip(),
+    }
+
+
 def finalize_consultation_draft(
     draft_id: str,
     checkout_session_id: str,
@@ -3275,6 +3322,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "developerAuthorization": "device_or_verified_github",
                     "developerAuthorizationRevision": "github_identity_v2",
                     "consultationDeleteRevision": "closed_owner_delete_v1",
+                    "forumDeleteRevision": "resolved_owner_delete_v1",
                     "marketSearchRevision": "brave_primary_tavily_fallback_v3",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
@@ -3420,6 +3468,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             "/api/vehicle-defects",
             "/api/consultations/checkout",
             "/api/consultations/delete",
+            "/api/forum/posts/delete",
         }:
             self.send_json({"error": "not_found"}, status=404)
             return
@@ -3428,6 +3477,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
         if request_path in {
             "/api/consultations/checkout",
             "/api/consultations/delete",
+            "/api/forum/posts/delete",
         }:
             pass
         elif request_path == "/api/premium/verify":
@@ -3447,6 +3497,33 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             payload = json.loads(raw_body or "{}")
             if not isinstance(payload, dict):
                 raise ValueError("Payload must be an object")
+            if request_path == "/api/forum/posts/delete":
+                try:
+                    user = verify_supabase_user(auth)
+                    self.send_json(
+                        delete_resolved_forum_post(user, payload.get("postId"))
+                    )
+                except PermissionError as exc:
+                    self.send_json(
+                        {"error": "forbidden", "message": str(exc)}, status=403
+                    )
+                except ValueError as exc:
+                    self.send_json(
+                        {"error": "invalid_state", "message": str(exc)}, status=409
+                    )
+                except RuntimeError as exc:
+                    print(
+                        f"forum_delete_unavailable={type(exc).__name__}",
+                        flush=True,
+                    )
+                    self.send_json(
+                        {
+                            "error": "delete_unavailable",
+                            "message": "Eliminazione Community temporaneamente non disponibile.",
+                        },
+                        status=503,
+                    )
+                return
             if request_path == "/api/consultations/delete":
                 try:
                     user = verify_supabase_user(auth)
