@@ -21,8 +21,8 @@ jobs:
             response="$(curl --fail --silent --show-error --max-time 45               https://autostorico-api-1.onrender.com/health || true)"
             echo "$response"
             if grep -q '"developerAuthorization": "device_or_verified_github"' <<<"$response" \
-              && grep -q '"marketSearchRevision": "tavily_v2_domain_boost_advanced"' <<<"$response"; then
-              echo "Render is serving the current developer authorization and Tavily strategy."
+              && grep -q '"marketSearchRevision": "brave_primary_tavily_fallback_v3"' <<<"$response"; then
+              echo "Render is serving the current developer authorization and provider strategy."
               exit 0
             fi
             echo "Attempt $attempt: Render has not activated the new revision yet."
