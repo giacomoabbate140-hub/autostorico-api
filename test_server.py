@@ -21,6 +21,7 @@ from server import (
     verify_defect_online_entitlement,
     verify_google_play_subscription,
     developer_device_is_authorized,
+    developer_user_is_authorized,
     vehicle_defect_reports,
 )
 
@@ -79,6 +80,39 @@ class ConsultationPaymentTests(unittest.TestCase):
             with self.assertRaises(PermissionError):
                 server.create_consultation_checkout({"id": "user-1"}, payload)
         create_draft.assert_not_called()
+
+    def test_developer_bypass_accepts_verified_owner_github_identity(self):
+        payload = {
+            "vehicleMake": "Fiat",
+            "vehicleModel": "Panda",
+            "vehicleEngine": "1.2",
+            "subject": "Rumore motore",
+            "body": "Il motore fa un rumore metallico a freddo.",
+            "developerFree": True,
+            "deviceIdHash": "",
+        }
+        user = {
+            "id": "user-1",
+            "identities": [
+                {
+                    "provider": "github",
+                    "identity_data": {"sub": "286668860"},
+                }
+            ],
+        }
+        with patch.object(
+            server, "DEVELOPER_GITHUB_ID", "286668860"
+        ), patch.object(
+            server, "developer_device_is_authorized", return_value=False
+        ), patch.object(
+            server, "create_consultation_draft", return_value="draft-1"
+        ), patch.object(
+            server, "finalize_consultation_draft", return_value="consultation-1"
+        ):
+            result = server.create_consultation_checkout(user, payload)
+
+        self.assertTrue(result["developerFree"])
+        self.assertEqual(result["consultationId"], "consultation-1")
 
     def test_paid_webhook_finalizes_once_through_database_rpc(self):
         event = {
@@ -384,6 +418,31 @@ class MarketEvidenceTests(unittest.TestCase):
             self.assertTrue(developer_device_is_authorized(owner_hash))
             self.assertFalse(developer_device_is_authorized("b" * 64))
             self.assertFalse(developer_device_is_authorized("not-a-hash"))
+
+    def test_developer_user_authorization_requires_verified_github_identity(self):
+        owner = {
+            "identities": [
+                {
+                    "provider": "github",
+                    "identity_data": {"sub": "286668860"},
+                }
+            ]
+        }
+        spoofed_metadata = {
+            "user_metadata": {"sub": "286668860", "user_name": "giacomoabbate140-hub"}
+        }
+        other_github_user = {
+            "identities": [
+                {
+                    "provider": "github",
+                    "identity_data": {"sub": "123456789"},
+                }
+            ]
+        }
+        with patch.object(server, "DEVELOPER_GITHUB_ID", "286668860"):
+            self.assertTrue(developer_user_is_authorized(owner))
+            self.assertFalse(developer_user_is_authorized(spoofed_metadata))
+            self.assertFalse(developer_user_is_authorized(other_github_user))
 
     def test_gold_research_does_not_depend_on_optional_admin_token(self):
         with patch.object(server, "DEFECT_RESEARCH_ENABLED", True), patch.object(
