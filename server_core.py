@@ -14,6 +14,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
@@ -24,6 +25,11 @@ try:
 except ImportError:
     AuthorizedSession = None
     service_account = None
+
+try:
+    import stripe
+except ImportError:
+    stripe = None
 
 
 def normalize_provider_secret(value: Any, variable_name: str = "") -> str:
@@ -82,8 +88,264 @@ SEARCH_PROVIDER_USAGE: dict[str, int] = {"brave": 0, "tavily": 0, "google_cse": 
 TAVILY_DAILY_USAGE: dict[str, int] = {}
 BRAVE_DAILY_USAGE: dict[str, int] = {}
 PREMIUM_VERIFY_REQUESTS: dict[str, list[float]] = {}
+CONSULTATION_CHECKOUT_REQUESTS: dict[str, list[float]] = {}
 DEFECT_ENTITLEMENT_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 MARKET_GUARD_LOCK = threading.Lock()
+
+# The consultation price is deliberately fixed server-side.  The Android app
+# never sends an amount that could be modified by a client.
+CONSULTATION_PRICE_CENTS = 500
+CONSULTATION_CURRENCY = "eur"
+STRIPE_SECRET_KEY = normalize_provider_secret(
+    os.environ.get("STRIPE_SECRET_KEY", ""), "STRIPE_SECRET_KEY"
+)
+STRIPE_WEBHOOK_SECRET = normalize_provider_secret(
+    os.environ.get("STRIPE_WEBHOOK_SECRET", ""), "STRIPE_WEBHOOK_SECRET"
+)
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "").strip().rstrip("/")
+SUPABASE_SERVICE_ROLE_KEY = normalize_provider_secret(
+    os.environ.get("SUPABASE_SERVICE_ROLE_KEY", ""),
+    "SUPABASE_SERVICE_ROLE_KEY",
+)
+AUTOSTORICO_PUBLIC_URL = os.environ.get(
+    "AUTOSTORICO_PUBLIC_URL", "https://autostorico-api-1.onrender.com"
+).strip().rstrip("/")
+
+
+def consultation_payments_configured() -> bool:
+    return bool(
+        stripe is not None
+        and STRIPE_SECRET_KEY
+        and STRIPE_WEBHOOK_SECRET
+        and SUPABASE_URL
+        and SUPABASE_SERVICE_ROLE_KEY
+        and AUTOSTORICO_PUBLIC_URL.startswith("https://")
+    )
+
+
+def _supabase_json_request(
+    method: str,
+    path: str,
+    *,
+    payload: dict[str, Any] | None = None,
+    access_token: str = "",
+    prefer: str = "",
+) -> Any:
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        raise RuntimeError("Supabase server non configurato")
+    body = None if payload is None else json.dumps(payload).encode("utf-8")
+    headers = {
+        "apikey": SUPABASE_SERVICE_ROLE_KEY,
+        "Authorization": f"Bearer {access_token or SUPABASE_SERVICE_ROLE_KEY}",
+        "Accept": "application/json",
+    }
+    if body is not None:
+        headers["Content-Type"] = "application/json"
+    if prefer:
+        headers["Prefer"] = prefer
+    request = urllib.request.Request(
+        f"{SUPABASE_URL}{path}", data=body, headers=headers, method=method
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            raw = response.read().decode("utf-8")
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")[:400]
+        raise RuntimeError(f"Supabase HTTP {exc.code}: {detail}") from exc
+    return json.loads(raw) if raw else None
+
+
+def verify_supabase_user(authorization: str) -> dict[str, Any]:
+    prefix = "Bearer "
+    if not authorization.startswith(prefix):
+        raise PermissionError("Accesso richiesto")
+    token = authorization[len(prefix) :].strip()
+    if not token:
+        raise PermissionError("Accesso richiesto")
+    try:
+        user = _supabase_json_request(
+            "GET", "/auth/v1/user", access_token=token
+        )
+    except RuntimeError as exc:
+        raise PermissionError("Sessione non valida o scaduta") from exc
+    if not isinstance(user, dict) or not str(user.get("id") or "").strip():
+        raise PermissionError("Sessione non valida o scaduta")
+    return user
+
+
+def _consultation_payload(payload: dict[str, Any]) -> dict[str, str]:
+    fields = {
+        "vehicle_make": str(payload.get("vehicleMake") or "").strip(),
+        "vehicle_model": str(payload.get("vehicleModel") or "").strip(),
+        "vehicle_engine": str(payload.get("vehicleEngine") or "").strip(),
+        "subject": str(payload.get("subject") or "").strip(),
+        "body": str(payload.get("body") or "").strip(),
+    }
+    if not 2 <= len(fields["vehicle_make"]) <= 80:
+        raise ValueError("Marca non valida")
+    if not 1 <= len(fields["vehicle_model"]) <= 120:
+        raise ValueError("Modello non valido")
+    if len(fields["vehicle_engine"]) > 120:
+        raise ValueError("Motore non valido")
+    if not 5 <= len(fields["subject"]) <= 160:
+        raise ValueError("Il titolo deve contenere da 5 a 160 caratteri")
+    if not 10 <= len(fields["body"]) <= 4000:
+        raise ValueError("La descrizione deve contenere da 10 a 4000 caratteri")
+    return fields
+
+
+def create_consultation_draft(user_id: str, fields: dict[str, str]) -> str:
+    rows = _supabase_json_request(
+        "POST",
+        "/rest/v1/consultation_checkout_drafts?select=id",
+        payload={
+            "client_id": user_id,
+            **fields,
+            "price_cents": CONSULTATION_PRICE_CENTS,
+            "currency": CONSULTATION_CURRENCY,
+        },
+        prefer="return=representation",
+    )
+    if not isinstance(rows, list) or not rows or not rows[0].get("id"):
+        raise RuntimeError("Bozza consulenza non creata")
+    return str(rows[0]["id"])
+
+
+def update_consultation_draft(draft_id: str, values: dict[str, Any]) -> None:
+    encoded_id = urllib.parse.quote(draft_id, safe="")
+    _supabase_json_request(
+        "PATCH",
+        f"/rest/v1/consultation_checkout_drafts?id=eq.{encoded_id}",
+        payload=values,
+        prefer="return=minimal",
+    )
+
+
+def finalize_consultation_draft(
+    draft_id: str,
+    checkout_session_id: str,
+    payment_intent_id: str,
+) -> str:
+    result = _supabase_json_request(
+        "POST",
+        "/rest/v1/rpc/finalize_paid_consultation",
+        payload={
+            "p_draft_id": draft_id,
+            "p_checkout_session_id": checkout_session_id,
+            "p_payment_intent_id": payment_intent_id,
+        },
+    )
+    consultation_id = str(result or "").strip().strip('"')
+    if not consultation_id:
+        raise RuntimeError("Consulenza pagata non finalizzata")
+    return consultation_id
+
+
+def create_consultation_checkout(
+    user: dict[str, Any], payload: dict[str, Any]
+) -> dict[str, Any]:
+    fields = _consultation_payload(payload)
+    user_id = str(user["id"])
+    developer_free = payload.get("developerFree") is True
+    if developer_free:
+        device_hash = str(payload.get("deviceIdHash") or "").strip().lower()
+        if not developer_device_is_authorized(device_hash):
+            raise PermissionError("Dispositivo sviluppatore non autorizzato")
+    elif not consultation_payments_configured():
+        raise RuntimeError("Pagamento consulenze non configurato")
+
+    draft_id = create_consultation_draft(user_id, fields)
+    if developer_free:
+        consultation_id = finalize_consultation_draft(
+            draft_id, f"developer_{uuid.uuid4().hex}", ""
+        )
+        return {
+            "ok": True,
+            "developerFree": True,
+            "consultationId": consultation_id,
+        }
+
+    stripe.api_key = STRIPE_SECRET_KEY
+    session = stripe.checkout.Session.create(
+        mode="payment",
+        payment_method_types=["card"],
+        line_items=[
+            {
+                "price_data": {
+                    "currency": CONSULTATION_CURRENCY,
+                    "unit_amount": CONSULTATION_PRICE_CENTS,
+                    "product_data": {
+                        "name": "Consulenza privata AutoStorico",
+                        "description": "Consulenza individuale con un esperto sul veicolo indicato",
+                    },
+                },
+                "quantity": 1,
+            }
+        ],
+        customer_email=str(user.get("email") or "").strip() or None,
+        client_reference_id=draft_id,
+        metadata={"draft_id": draft_id, "client_id": user_id},
+        payment_intent_data={
+            "metadata": {"draft_id": draft_id, "client_id": user_id}
+        },
+        success_url=(
+            f"{AUTOSTORICO_PUBLIC_URL}/api/consultations/payment-return"
+            "?status=success&session_id={CHECKOUT_SESSION_ID}"
+        ),
+        cancel_url=(
+            f"{AUTOSTORICO_PUBLIC_URL}/api/consultations/payment-return"
+            f"?status=cancelled&draft_id={urllib.parse.quote(draft_id, safe='')}"
+        ),
+        expires_at=int(time.time()) + (31 * 60),
+        idempotency_key=f"consultation-{draft_id}",
+    )
+    session_id = str(session.get("id") or "")
+    checkout_url = str(session.get("url") or "")
+    if not session_id or not checkout_url.startswith("https://"):
+        update_consultation_draft(draft_id, {"payment_status": "cancelled"})
+        raise RuntimeError("Checkout Stripe non creato")
+    update_consultation_draft(
+        draft_id, {"stripe_checkout_session_id": session_id}
+    )
+    return {
+        "ok": True,
+        "developerFree": False,
+        "checkoutUrl": checkout_url,
+        "sessionId": session_id,
+        "amount": CONSULTATION_PRICE_CENTS,
+        "currency": CONSULTATION_CURRENCY,
+    }
+
+
+def process_stripe_webhook(raw_body: bytes, signature: str) -> dict[str, Any]:
+    if stripe is None or not STRIPE_WEBHOOK_SECRET:
+        raise RuntimeError("Webhook Stripe non configurato")
+    event = stripe.Webhook.construct_event(
+        raw_body, signature, STRIPE_WEBHOOK_SECRET
+    )
+    event_type = str(event.get("type") or "")
+    session = event.get("data", {}).get("object", {})
+    metadata = session.get("metadata") or {}
+    draft_id = str(metadata.get("draft_id") or "").strip()
+    if not draft_id:
+        return {"received": True, "ignored": True}
+
+    if event_type in {
+        "checkout.session.completed",
+        "checkout.session.async_payment_succeeded",
+    } and str(session.get("payment_status") or "") == "paid":
+        consultation_id = finalize_consultation_draft(
+            draft_id,
+            str(session.get("id") or ""),
+            str(session.get("payment_intent") or ""),
+        )
+        return {"received": True, "consultationId": consultation_id}
+    if event_type in {
+        "checkout.session.expired",
+        "checkout.session.async_payment_failed",
+    }:
+        update_consultation_draft(draft_id, {"payment_status": "cancelled"})
+    return {"received": True}
 
 
 def _utc_day_key() -> str:
@@ -872,6 +1134,10 @@ def can_run_premium_verification(client_id: str) -> bool:
     return can_run_limited_request(
         PREMIUM_VERIFY_REQUESTS, client_id, PREMIUM_VERIFY_RATE_LIMIT
     )
+
+
+def can_start_consultation_checkout(user_id: str) -> bool:
+    return can_run_limited_request(CONSULTATION_CHECKOUT_REQUESTS, user_id, 8)
 
 
 def can_run_limited_request(
@@ -2911,7 +3177,37 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "playIntegrityMinVersionCode": PLAY_INTEGRITY_MIN_VERSION_CODE,
                     "vehicleDefectCatalogReady": bool(VEHICLE_DEFECT_CATALOG.get("vehicles")),
                     "defectResearchConfigured": defect_research_configured(),
+                    "consultationPaymentsConfigured": consultation_payments_configured(),
+                    "consultationPriceCents": CONSULTATION_PRICE_CENTS,
+                    "consultationCurrency": CONSULTATION_CURRENCY,
                 }
+            )
+            return
+        if request_path == "/api/consultations/payment-return":
+            query = urllib.parse.parse_qs(parsed_url.query)
+            status = query.get("status", ["cancelled"])[0]
+            paid = status == "success"
+            title = "Pagamento ricevuto" if paid else "Pagamento annullato"
+            detail = (
+                "Stiamo confermando il pagamento. Torna in AutoStorico e aggiorna: "
+                "la consulenza comparirà appena Stripe avrà inviato la conferma."
+                if paid
+                else "Non è stato effettuato alcun addebito. Puoi tornare in AutoStorico."
+            )
+            deep_link = "autostorico://stripe-return?status=" + (
+                "success" if paid else "cancelled"
+            )
+            self.send_html(
+                "<!doctype html><html lang=\"it\"><head><meta charset=\"utf-8\">"
+                "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
+                f"<title>{title}</title><style>body{{font-family:system-ui;margin:0;"
+                "background:#f4f7fb;color:#14212b}main{max-width:560px;margin:12vh auto;"
+                "padding:32px}a{display:inline-block;margin-top:20px;padding:14px 20px;"
+                "border-radius:28px;background:#126d86;color:white;text-decoration:none;"
+                "font-weight:700}</style></head><body><main>"
+                f"<h1>{title}</h1><p>{detail}</p>"
+                f"<a href=\"{deep_link}\">Torna ad AutoStorico</a>"
+                f"<script>location.href='{deep_link}'</script></main></body></html>"
             )
             return
         if request_path in {"/api/defects", "/defects"}:
@@ -2972,17 +3268,36 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         request_path = urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
+        if request_path == "/api/stripe/webhook":
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                if length <= 0 or length > 1048576:
+                    self.send_json({"error": "invalid_request"}, status=400)
+                    return
+                raw_body = self.rfile.read(length)
+                self.send_json(
+                    process_stripe_webhook(
+                        raw_body, self.headers.get("Stripe-Signature", "")
+                    )
+                )
+            except Exception as exc:
+                print(f"stripe_webhook_rejected={type(exc).__name__}", flush=True)
+                self.send_json({"error": "invalid_webhook"}, status=400)
+            return
         if request_path not in {
             "/api/vehicle-value",
             "/api/premium/verify",
             "/api/developer/entitlement",
             "/api/vehicle-defects",
+            "/api/consultations/checkout",
         }:
             self.send_json({"error": "not_found"}, status=404)
             return
 
         auth = self.headers.get("Authorization", "")
-        if request_path == "/api/premium/verify":
+        if request_path == "/api/consultations/checkout":
+            pass
+        elif request_path == "/api/premium/verify":
             if auth and PREMIUM_API_KEY and auth != f"Bearer {PREMIUM_API_KEY}":
                 self.send_json({"error": "unauthorized"}, status=401)
                 return
@@ -2999,6 +3314,36 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             payload = json.loads(raw_body or "{}")
             if not isinstance(payload, dict):
                 raise ValueError("Payload must be an object")
+            if request_path == "/api/consultations/checkout":
+                try:
+                    user = verify_supabase_user(auth)
+                    if not can_start_consultation_checkout(str(user["id"])):
+                        self.send_json(
+                            {
+                                "error": "rate_limited",
+                                "message": "Troppi tentativi. Riprova tra un'ora.",
+                            },
+                            status=429,
+                        )
+                        return
+                    self.send_json(create_consultation_checkout(user, payload))
+                except PermissionError as exc:
+                    self.send_json(
+                        {"error": "unauthorized", "message": str(exc)}, status=401
+                    )
+                except RuntimeError as exc:
+                    print(
+                        f"consultation_checkout_unavailable={type(exc).__name__}",
+                        flush=True,
+                    )
+                    self.send_json(
+                        {
+                            "error": "payment_unavailable",
+                            "message": "Pagamento temporaneamente non disponibile. Riprova tra poco.",
+                        },
+                        status=503,
+                    )
+                return
             if request_path == "/api/premium/verify":
                 client_id = (
                     self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
@@ -3125,6 +3470,15 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def send_html(self, value: str, status: int = 200) -> None:
+        body = value.encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
     def log_message(self, format: str, *args: Any) -> None:
         print(f"{self.address_string()} - {format % args}")
 
@@ -3133,6 +3487,8 @@ def main() -> None:
     server = ThreadingHTTPServer((HOST, PORT), AutoStoricoApi)
     print(f"AutoStorico API avviata su http://{HOST}:{PORT}")
     print("Endpoint: POST /api/vehicle-value")
+    print("Endpoint: POST /api/consultations/checkout")
+    print("Endpoint: POST /api/stripe/webhook")
     server.serve_forever()
 
 

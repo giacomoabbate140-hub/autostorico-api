@@ -45,3 +45,15 @@ services:
         sync: false
       - key: AUTOSTORICO_DEFECT_RESEARCH_ENABLED
         value: "1"
+      # Pagamento una tantum della consulenza privata (5,00 EUR).
+      # I tre valori segreti vanno inseriti soltanto nel pannello Render.
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: AUTOSTORICO_PUBLIC_URL
+        value: https://autostorico-api-1.onrender.com

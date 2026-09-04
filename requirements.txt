@@ -1,3 +1,4 @@
 # Used only by the secure Google Play subscription verification endpoint.
 google-auth>=2.0.0
 requests>=2.31.0
+stripe>=14.0.0,<15.0.0

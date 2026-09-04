@@ -2,6 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 from urllib.parse import urlparse
 
@@ -22,6 +23,109 @@ from server import (
     developer_device_is_authorized,
     vehicle_defect_reports,
 )
+
+
+class ConsultationPaymentTests(unittest.TestCase):
+    def test_checkout_price_is_fixed_server_side_at_five_euro(self):
+        captured = {}
+
+        def create_session(**kwargs):
+            captured.update(kwargs)
+            return {"id": "cs_test_123", "url": "https://checkout.stripe.test/123"}
+
+        fake_stripe = SimpleNamespace(
+            api_key="",
+            checkout=SimpleNamespace(Session=SimpleNamespace(create=create_session)),
+        )
+        payload = {
+            "vehicleMake": "Fiat",
+            "vehicleModel": "Panda",
+            "vehicleEngine": "1.2 benzina",
+            "subject": "Rumore motore",
+            "body": "Il motore fa un rumore metallico a freddo.",
+            "amount": 1,
+        }
+        with patch.object(server, "stripe", fake_stripe), patch.object(
+            server, "STRIPE_SECRET_KEY", "sk_test"
+        ), patch.object(server, "STRIPE_WEBHOOK_SECRET", "whsec_test"), patch.object(
+            server, "SUPABASE_URL", "https://example.supabase.co"
+        ), patch.object(server, "SUPABASE_SERVICE_ROLE_KEY", "service-role"), patch.object(
+            server, "create_consultation_draft", return_value="draft-1"
+        ), patch.object(server, "update_consultation_draft"):
+            result = server.create_consultation_checkout(
+                {"id": "user-1", "email": "user@example.test"}, payload
+            )
+
+        self.assertEqual(result["amount"], 500)
+        self.assertEqual(captured["line_items"][0]["price_data"]["unit_amount"], 500)
+        self.assertEqual(captured["line_items"][0]["price_data"]["currency"], "eur")
+        self.assertEqual(captured["metadata"]["draft_id"], "draft-1")
+
+    def test_developer_bypass_requires_authorized_device(self):
+        payload = {
+            "vehicleMake": "Fiat",
+            "vehicleModel": "Panda",
+            "vehicleEngine": "1.2",
+            "subject": "Rumore motore",
+            "body": "Il motore fa un rumore metallico a freddo.",
+            "developerFree": True,
+            "deviceIdHash": "a" * 64,
+        }
+        with patch.object(
+            server, "create_consultation_draft"
+        ) as create_draft, patch.object(
+            server, "developer_device_is_authorized", return_value=False
+        ):
+            with self.assertRaises(PermissionError):
+                server.create_consultation_checkout({"id": "user-1"}, payload)
+        create_draft.assert_not_called()
+
+    def test_paid_webhook_finalizes_once_through_database_rpc(self):
+        event = {
+            "type": "checkout.session.completed",
+            "data": {
+                "object": {
+                    "id": "cs_test_123",
+                    "payment_status": "paid",
+                    "payment_intent": "pi_test_123",
+                    "metadata": {"draft_id": "draft-1"},
+                }
+            },
+        }
+        fake_stripe = SimpleNamespace(
+            Webhook=SimpleNamespace(construct_event=lambda *_: event)
+        )
+        with patch.object(server, "stripe", fake_stripe), patch.object(
+            server, "STRIPE_WEBHOOK_SECRET", "whsec_test"
+        ), patch.object(
+            server, "finalize_consultation_draft", return_value="consultation-1"
+        ) as finalize:
+            result = server.process_stripe_webhook(b"{}", "signature")
+
+        self.assertEqual(result["consultationId"], "consultation-1")
+        finalize.assert_called_once_with("draft-1", "cs_test_123", "pi_test_123")
+
+    def test_unpaid_completed_webhook_does_not_open_consultation(self):
+        event = {
+            "type": "checkout.session.completed",
+            "data": {
+                "object": {
+                    "id": "cs_test_123",
+                    "payment_status": "unpaid",
+                    "metadata": {"draft_id": "draft-1"},
+                }
+            },
+        }
+        fake_stripe = SimpleNamespace(
+            Webhook=SimpleNamespace(construct_event=lambda *_: event)
+        )
+        with patch.object(server, "stripe", fake_stripe), patch.object(
+            server, "STRIPE_WEBHOOK_SECRET", "whsec_test"
+        ), patch.object(server, "finalize_consultation_draft") as finalize:
+            result = server.process_stripe_webhook(b"{}", "signature")
+
+        self.assertTrue(result["received"])
+        finalize.assert_not_called()
 
 
 class MarketEvidenceTests(unittest.TestCase):
