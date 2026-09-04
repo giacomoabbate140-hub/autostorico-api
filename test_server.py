@@ -225,34 +225,56 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(len(listings), 2)
         self.assertEqual(tavily.call_count, 2)
 
-    def test_market_search_uses_brave_as_market_fallback_after_tavily(self):
+    def test_market_search_uses_tavily_only_as_fallback_after_brave(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
-        tavily_listing = {
-            "source": "AutoScout24",
-            "url": "https://example.test/a1",
-            "price": 9000,
-            "weight": 1.0,
-        }
         brave_listing = {
             "source": "Subito Auto",
             "url": "https://example.test/a1-brave",
             "price": 8800,
             "weight": 1.0,
         }
+        tavily_listing = {
+            "source": "AutoScout24",
+            "url": "https://example.test/a1-tavily",
+            "price": 9000,
+            "weight": 1.0,
+        }
         with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
             server, "TAVILY_API_KEY", "tavily-key"
         ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
-            server, "tavily_market_search", return_value=[tavily_listing]
-        ) as tavily, patch.object(
             server, "brave_market_search", return_value=[brave_listing]
-        ) as brave:
+        ) as brave, patch.object(
+            server, "tavily_market_search", return_value=[tavily_listing]
+        ) as tavily:
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 2)
-        self.assertEqual(tavily.call_count, 1)
         self.assertEqual(brave.call_count, 1)
+        self.assertEqual(tavily.call_count, 1)
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
+
+    def test_market_search_skips_tavily_when_brave_is_sufficient(self):
+        payload = {"brand": "Audi", "model": "A1", "km": 100000}
+        brave_results = [
+            {
+                "source": "Subito Auto",
+                "url": f"https://example.test/a1-brave-{index}",
+                "price": 8800 + index,
+                "weight": 1.0,
+            }
+            for index in range(2)
+        ]
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "TAVILY_API_KEY", "tavily-key"
+        ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
+            server, "brave_market_search", return_value=brave_results
+        ) as brave, patch.object(server, "tavily_market_search") as tavily:
+            listings, _ = fetch_market_sources(payload, 2011)
+
+        self.assertEqual(len(listings), 2)
+        self.assertEqual(brave.call_count, 1)
+        tavily.assert_not_called()
 
     def test_market_search_stops_after_the_configured_nationwide_queries(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
