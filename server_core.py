@@ -255,8 +255,11 @@ def create_consultation_checkout(
     developer_free = payload.get("developerFree") is True
     if developer_free:
         device_hash = str(payload.get("deviceIdHash") or "").strip().lower()
-        if not developer_device_is_authorized(device_hash):
-            raise PermissionError("Dispositivo sviluppatore non autorizzato")
+        if not (
+            developer_device_is_authorized(device_hash)
+            or developer_user_is_authorized(user)
+        ):
+            raise PermissionError("Profilo sviluppatore non autorizzato")
     elif not consultation_payments_configured():
         raise RuntimeError("Pagamento consulenze non configurato")
 
@@ -469,6 +472,12 @@ PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 DEVELOPER_DEVICE_ID_HASH = os.environ.get(
     "AUTOSTORICO_DEVELOPER_DEVICE_ID_HASH", ""
 ).strip().lower()
+# Stable owner identity used only after Supabase has verified the access token.
+# Unlike ANDROID_ID, the GitHub provider identity survives app reinstalls and
+# signing-key changes. The numeric GitHub account id is public and not a secret.
+DEVELOPER_GITHUB_ID = os.environ.get(
+    "AUTOSTORICO_DEVELOPER_GITHUB_ID", "286668860"
+).strip()
 PREMIUM_VERIFY_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_PREMIUM_VERIFY_RATE_LIMIT", "12"))
 PLAY_INTEGRITY_REQUIRED = os.environ.get("AUTOSTORICO_PLAY_INTEGRITY_REQUIRED", "0") == "1"
 PLAY_INTEGRITY_MIN_VERSION_CODE = int(
@@ -2644,6 +2653,25 @@ def developer_device_is_authorized(device_id_hash: Any) -> bool:
         and re.fullmatch(r"[a-f0-9]{64}", DEVELOPER_DEVICE_ID_HASH)
         and hmac.compare_digest(candidate, DEVELOPER_DEVICE_ID_HASH)
     )
+
+
+def developer_user_is_authorized(user: Any) -> bool:
+    """Authorize the verified owner GitHub identity across app reinstalls."""
+    if not isinstance(user, dict) or not DEVELOPER_GITHUB_ID:
+        return False
+    identities = user.get("identities")
+    if not isinstance(identities, list):
+        return False
+    for identity in identities:
+        if not isinstance(identity, dict) or identity.get("provider") != "github":
+            continue
+        identity_data = identity.get("identity_data")
+        if not isinstance(identity_data, dict):
+            continue
+        provider_id = str(identity_data.get("sub") or "").strip()
+        if provider_id and hmac.compare_digest(provider_id, DEVELOPER_GITHUB_ID):
+            return True
+    return False
 
 
 VIN_FORMAT = re.compile(r"^[A-HJ-NPR-Z0-9]{17}$")
