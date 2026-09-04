@@ -49,7 +49,7 @@ class ConsultationPaymentTests(unittest.TestCase):
             server, "STRIPE_SECRET_KEY", "sk_test"
         ), patch.object(server, "STRIPE_WEBHOOK_SECRET", "whsec_test"), patch.object(
             server, "SUPABASE_URL", "https://example.supabase.co"
-        ), patch.object(server, "SUPABASE_SERVICE_ROLE_KEY", "service-role"), patch.object(
+        ), patch.object(server, "SUPABASE_SECRET_KEY", "sb_secret_test"), patch.object(
             server, "create_consultation_draft", return_value="draft-1"
         ), patch.object(server, "update_consultation_draft"):
             result = server.create_consultation_checkout(

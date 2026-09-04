@@ -103,7 +103,9 @@ STRIPE_WEBHOOK_SECRET = normalize_provider_secret(
     os.environ.get("STRIPE_WEBHOOK_SECRET", ""), "STRIPE_WEBHOOK_SECRET"
 )
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "").strip().rstrip("/")
-SUPABASE_SERVICE_ROLE_KEY = normalize_provider_secret(
+SUPABASE_SECRET_KEY = normalize_provider_secret(
+    os.environ.get("SUPABASE_SECRET_KEY", ""), "SUPABASE_SECRET_KEY"
+) or normalize_provider_secret(
     os.environ.get("SUPABASE_SERVICE_ROLE_KEY", ""),
     "SUPABASE_SERVICE_ROLE_KEY",
 )
@@ -118,7 +120,7 @@ def consultation_payments_configured() -> bool:
         and STRIPE_SECRET_KEY
         and STRIPE_WEBHOOK_SECRET
         and SUPABASE_URL
-        and SUPABASE_SERVICE_ROLE_KEY
+        and SUPABASE_SECRET_KEY
         and AUTOSTORICO_PUBLIC_URL.startswith("https://")
     )
 
@@ -131,14 +133,18 @@ def _supabase_json_request(
     access_token: str = "",
     prefer: str = "",
 ) -> Any:
-    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+    if not SUPABASE_URL or not SUPABASE_SECRET_KEY:
         raise RuntimeError("Supabase server non configurato")
     body = None if payload is None else json.dumps(payload).encode("utf-8")
     headers = {
-        "apikey": SUPABASE_SERVICE_ROLE_KEY,
-        "Authorization": f"Bearer {access_token or SUPABASE_SERVICE_ROLE_KEY}",
+        "apikey": SUPABASE_SECRET_KEY,
         "Accept": "application/json",
     }
+    if access_token:
+        headers["Authorization"] = f"Bearer {access_token}"
+    elif not SUPABASE_SECRET_KEY.startswith("sb_secret_"):
+        # Compatibilità temporanea con la vecchia chiave JWT service_role.
+        headers["Authorization"] = f"Bearer {SUPABASE_SECRET_KEY}"
     if body is not None:
         headers["Content-Type"] = "application/json"
     if prefer:
@@ -3180,6 +3186,14 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationPaymentsConfigured": consultation_payments_configured(),
                     "consultationPriceCents": CONSULTATION_PRICE_CENTS,
                     "consultationCurrency": CONSULTATION_CURRENCY,
+                    "consultationPaymentConfiguration": {
+                        "stripeSdk": stripe is not None,
+                        "stripeSecret": bool(STRIPE_SECRET_KEY),
+                        "stripeWebhookSecret": bool(STRIPE_WEBHOOK_SECRET),
+                        "supabaseUrl": bool(SUPABASE_URL),
+                        "supabaseSecret": bool(SUPABASE_SECRET_KEY),
+                        "publicUrlHttps": AUTOSTORICO_PUBLIC_URL.startswith("https://"),
+                    },
                 }
             )
             return
