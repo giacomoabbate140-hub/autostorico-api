@@ -195,8 +195,8 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertGreaterEqual(len(queries), 2)
         self.assertIn("Italia", queries[0])
-        self.assertIn("site:subito.it", queries[1])
-        self.assertIn("site:autoscout24.it", queries[1])
+        self.assertNotIn("site:", queries[1])
+        self.assertIn("annuncio auto usata prezzo", queries[1])
         self.assertIn("Trovit", queries[2])
         self.assertTrue(any("Subito Auto" in query for query in queries))
         self.assertNotIn("Palermo", " ".join(queries))
@@ -263,7 +263,7 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(tavily.call_count, 2)
 
-    def test_tavily_market_search_does_not_overconstrain_results_with_domains(self):
+    def test_tavily_market_search_boosts_domains_without_filtering_the_web(self):
         class FakeResponse:
             headers = {"Content-Type": "application/json"}
 
@@ -296,11 +296,57 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(len(request_bodies), 1)
         request_payload = json.loads(request_bodies[0])
-        self.assertNotIn("include_domains", request_payload)
+        self.assertIn("autoscout24.it", request_payload["include_domains"])
+        self.assertIn("subito.it", request_payload["include_domains"])
+        self.assertEqual(request_payload["include_domains_mode"], "boost")
+        self.assertEqual(request_payload["search_depth"], "advanced")
+        self.assertEqual(request_payload["chunks_per_source"], 3)
+        self.assertTrue(request_payload["include_usage"])
         self.assertFalse(request_payload["include_answer"])
         self.assertFalse(request_payload["include_raw_content"])
         self.assertFalse(request_payload["include_images"])
         self.assertEqual(request_payload["language"], "it")
+
+    def test_tavily_advanced_chunks_produce_a_priced_listing(self):
+        class FakeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return json.dumps(
+                    {
+                        "results": [
+                            {
+                                "title": "Alfa Romeo Giulietta 2.0 JTDm usata",
+                                "url": "https://www.autoscout24.it/annunci/giulietta-test",
+                                "content": "Anno 2012 [...] 146.000 km [...] Prezzo 7.900 euro",
+                            }
+                        ],
+                        "usage": {"credits": 2},
+                    }
+                ).encode("utf-8")
+
+        diagnostics = {"providers": []}
+        with patch.object(server, "TAVILY_API_KEY", "tavily-key"), patch.object(
+            server.urllib.request, "urlopen", return_value=FakeResponse()
+        ):
+            results = server.tavily_market_search(
+                "Alfa Romeo Giulietta 2.0 Diesel 2012 auto usata prezzo Italia",
+                {
+                    "brand": "Alfa Romeo",
+                    "model": "Giulietta",
+                    "fuelType": "Diesel",
+                },
+                diagnostics,
+            )
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]["price"], 7900)
+        self.assertEqual(diagnostics["providers"][0]["searchDepth"], "advanced")
+        self.assertEqual(diagnostics["providers"][0]["credits"], 2)
 
     def test_tavily_request_normalizes_bearer_prefix_from_render(self):
         captured_headers = []
