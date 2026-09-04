@@ -73,13 +73,13 @@ class ConsultationPaymentTests(unittest.TestCase):
             "deviceIdHash": "a" * 64,
         }
         with patch.object(
-            server, "create_consultation_draft"
-        ) as create_draft, patch.object(
+            server, "create_developer_consultation"
+        ) as create_consultation, patch.object(
             server, "developer_device_is_authorized", return_value=False
         ):
             with self.assertRaises(PermissionError):
                 server.create_consultation_checkout({"id": "user-1"}, payload)
-        create_draft.assert_not_called()
+        create_consultation.assert_not_called()
 
     def test_developer_bypass_accepts_verified_owner_github_identity(self):
         payload = {
@@ -105,14 +105,40 @@ class ConsultationPaymentTests(unittest.TestCase):
         ), patch.object(
             server, "developer_device_is_authorized", return_value=False
         ), patch.object(
-            server, "create_consultation_draft", return_value="draft-1"
-        ), patch.object(
-            server, "finalize_consultation_draft", return_value="consultation-1"
-        ):
+            server,
+            "create_developer_consultation",
+            return_value="consultation-1",
+        ) as create_consultation:
             result = server.create_consultation_checkout(user, payload)
 
         self.assertTrue(result["developerFree"])
         self.assertEqual(result["consultationId"], "consultation-1")
+        create_consultation.assert_called_once()
+
+    def test_developer_consultation_is_created_without_checkout_draft(self):
+        calls = []
+
+        def request(method, path, **kwargs):
+            calls.append((method, path, kwargs))
+            if method == "POST" and "consultations?select=id" in path:
+                return [{"id": "consultation-1"}]
+            return None
+
+        fields = {
+            "vehicle_make": "Fiat",
+            "vehicle_model": "Panda",
+            "vehicle_engine": "1.2",
+            "subject": "Rumore motore",
+            "body": "Il motore fa un rumore metallico a freddo.",
+        }
+        with patch.object(server, "_supabase_json_request", side_effect=request):
+            result = server.create_developer_consultation("user-1", fields)
+
+        self.assertEqual(result, "consultation-1")
+        self.assertEqual([call[0] for call in calls], ["POST", "POST"])
+        self.assertIn("/rest/v1/consultations?select=id", calls[0][1])
+        self.assertIn("/rest/v1/consultation_messages", calls[1][1])
+        self.assertEqual(calls[0][2]["payload"]["payment_status"], "paid")
 
     def test_closed_consultation_can_be_deleted_only_by_its_owner(self):
         consultation_id = "11111111-1111-4111-8111-111111111111"
