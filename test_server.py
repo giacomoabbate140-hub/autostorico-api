@@ -178,6 +178,74 @@ class ConsultationPaymentTests(unittest.TestCase):
                     {"id": "user-1"}, consultation_id
                 )
 
+    def test_resolved_forum_post_can_be_deleted_only_by_its_owner(self):
+        post_id = "22222222-2222-4222-8222-222222222222"
+        calls = []
+
+        def request(method, path, **kwargs):
+            calls.append((method, path))
+            if method == "GET":
+                return [
+                    {
+                        "id": post_id,
+                        "author_id": "user-1",
+                        "status": "resolved",
+                        "image_path": "user-1/photo.jpg",
+                    }
+                ]
+            return None
+
+        with patch.object(server, "_supabase_json_request", side_effect=request):
+            result = server.delete_resolved_forum_post(
+                {"id": "user-1"}, post_id
+            )
+
+        self.assertTrue(result["deleted"])
+        self.assertEqual(result["imagePath"], "user-1/photo.jpg")
+        self.assertEqual(
+            [method for method, _ in calls],
+            ["GET", "DELETE", "DELETE", "DELETE"],
+        )
+        self.assertIn("forum_comments", calls[1][1])
+        self.assertIn("forum_reports", calls[2][1])
+        self.assertIn("forum_posts", calls[3][1])
+
+    def test_open_forum_post_cannot_be_deleted(self):
+        post_id = "22222222-2222-4222-8222-222222222222"
+        with patch.object(
+            server,
+            "_supabase_json_request",
+            return_value=[
+                {
+                    "id": post_id,
+                    "author_id": "user-1",
+                    "status": "open",
+                    "image_path": "",
+                }
+            ],
+        ) as request:
+            with self.assertRaises(ValueError):
+                server.delete_resolved_forum_post({"id": "user-1"}, post_id)
+
+        self.assertEqual(request.call_count, 1)
+
+    def test_forum_delete_rejects_a_different_owner(self):
+        post_id = "22222222-2222-4222-8222-222222222222"
+        with patch.object(
+            server,
+            "_supabase_json_request",
+            return_value=[
+                {
+                    "id": post_id,
+                    "author_id": "user-2",
+                    "status": "resolved",
+                    "image_path": "",
+                }
+            ],
+        ):
+            with self.assertRaises(PermissionError):
+                server.delete_resolved_forum_post({"id": "user-1"}, post_id)
+
     def test_paid_webhook_finalizes_once_through_database_rpc(self):
         event = {
             "type": "checkout.session.completed",
