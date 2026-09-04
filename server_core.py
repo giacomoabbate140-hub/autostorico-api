@@ -3192,6 +3192,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                 {
                     "ok": True,
                     "service": "autostorico-value-api",
+                    "developerAuthorization": "device_or_verified_github",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
