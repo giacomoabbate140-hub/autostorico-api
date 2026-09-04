@@ -53,7 +53,7 @@ services:
         sync: false
       - key: SUPABASE_URL
         sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
+      - key: SUPABASE_SECRET_KEY
         sync: false
       - key: AUTOSTORICO_PUBLIC_URL
         value: https://autostorico-api-1.onrender.com
