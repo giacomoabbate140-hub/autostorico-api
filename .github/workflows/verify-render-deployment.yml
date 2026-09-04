@@ -14,14 +14,15 @@ jobs:
   verify-render:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for verified developer authorization on Render
+      - name: Wait for current AutoStorico backend on Render
         run: |
           set -euo pipefail
           for attempt in $(seq 1 16); do
             response="$(curl --fail --silent --show-error --max-time 45               https://autostorico-api-1.onrender.com/health || true)"
             echo "$response"
-            if grep -q '"developerAuthorization": "device_or_verified_github"' <<<"$response"; then
-              echo "Render is serving the verified GitHub developer authorization."
+            if grep -q '"developerAuthorization": "device_or_verified_github"' <<<"$response" \
+              && grep -q '"marketSearchRevision": "tavily_v2_domain_boost_advanced"' <<<"$response"; then
+              echo "Render is serving the current developer authorization and Tavily strategy."
               exit 0
             fi
             echo "Attempt $attempt: Render has not activated the new revision yet."
