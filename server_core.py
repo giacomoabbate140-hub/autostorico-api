@@ -334,6 +334,55 @@ def finalize_consultation_draft(
     return consultation_id
 
 
+def create_developer_consultation(
+    user_id: str, fields: dict[str, str]
+) -> str:
+    """Open the owner's free developer consultation without Stripe checkout."""
+    rows = _supabase_json_request(
+        "POST",
+        "/rest/v1/consultations?select=id",
+        payload={
+            "client_id": user_id,
+            "vehicle_make": fields["vehicle_make"],
+            "vehicle_model": fields["vehicle_model"],
+            "vehicle_engine": fields["vehicle_engine"],
+            "subject": fields["subject"],
+            "status": "open",
+            "price_cents": CONSULTATION_PRICE_CENTS,
+            "payment_status": "paid",
+        },
+        prefer="return=representation",
+    )
+    if not isinstance(rows, list) or not rows:
+        raise RuntimeError("Consulenza sviluppatore non creata")
+    consultation_id = str(rows[0].get("id") or "").strip()
+    if not consultation_id:
+        raise RuntimeError("Identificativo consulenza sviluppatore mancante")
+    try:
+        _supabase_json_request(
+            "POST",
+            "/rest/v1/consultation_messages",
+            payload={
+                "consultation_id": consultation_id,
+                "sender_id": user_id,
+                "body": fields["body"],
+            },
+            prefer="return=minimal",
+        )
+    except RuntimeError:
+        encoded_id = urllib.parse.quote(consultation_id, safe="")
+        try:
+            _supabase_json_request(
+                "DELETE",
+                f"/rest/v1/consultations?id=eq.{encoded_id}",
+                prefer="return=minimal",
+            )
+        except RuntimeError:
+            pass
+        raise
+    return consultation_id
+
+
 def create_consultation_checkout(
     user: dict[str, Any], payload: dict[str, Any]
 ) -> dict[str, Any]:
@@ -350,17 +399,15 @@ def create_consultation_checkout(
     elif not consultation_payments_configured():
         raise RuntimeError("Pagamento consulenze non configurato")
 
-    draft_id = create_consultation_draft(user_id, fields)
     if developer_free:
-        consultation_id = finalize_consultation_draft(
-            draft_id, f"developer_{uuid.uuid4().hex}", ""
-        )
+        consultation_id = create_developer_consultation(user_id, fields)
         return {
             "ok": True,
             "developerFree": True,
             "consultationId": consultation_id,
         }
 
+    draft_id = create_consultation_draft(user_id, fields)
     stripe.api_key = STRIPE_SECRET_KEY
     session = stripe.checkout.Session.create(
         mode="payment",
@@ -3323,6 +3370,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "developerAuthorizationRevision": "github_identity_v2",
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
+                    "developerConsultationRevision": "direct_paid_record_v1",
                     "marketSearchRevision": "brave_primary_tavily_fallback_v3",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
@@ -3567,14 +3615,27 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                         {"error": "unauthorized", "message": str(exc)}, status=401
                     )
                 except RuntimeError as exc:
+                    detail = re.sub(r"\\s+", " ", str(exc)).strip()[:240]
                     print(
-                        f"consultation_checkout_unavailable={type(exc).__name__}",
+                        "consultation_checkout_unavailable="
+                        f"{type(exc).__name__} detail={detail}",
                         flush=True,
                     )
+                    developer_free = payload.get("developerFree") is True
                     self.send_json(
                         {
-                            "error": "payment_unavailable",
-                            "message": "Pagamento temporaneamente non disponibile. Riprova tra poco.",
+                            "error": (
+                                "developer_consultation_unavailable"
+                                if developer_free
+                                else "payment_unavailable"
+                            ),
+                            "message": (
+                                "Apertura gratuita sviluppatore temporaneamente "
+                                "non disponibile. Riprova tra poco."
+                                if developer_free
+                                else "Pagamento temporaneamente non disponibile. "
+                                "Riprova tra poco."
+                            ),
                         },
                         status=503,
                     )
