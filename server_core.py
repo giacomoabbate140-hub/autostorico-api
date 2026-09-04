@@ -58,11 +58,12 @@ BRAVE_SEARCH_API_KEY = normalize_provider_secret(
 TAVILY_API_KEY = normalize_provider_secret(
     os.environ.get("TAVILY_API_KEY", ""), "TAVILY_API_KEY"
 )
-# Tavily is dedicated to market estimates. Brave is reserved for defect
-# research and public plate hints, so the two provider budgets stay separate.
+# Brave is the primary search provider for market estimates, defect research
+# and public plate hints. Tavily is retained as a market-only fallback when
+# Brave returns fewer than two usable priced listings.
 TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
-BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "40")))
+BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "30")))
 MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "2")))
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
@@ -1774,26 +1775,26 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     for query_index, query in enumerate(build_market_queries(payload, year)):
         # La prima query e nazionale e non vincola i km. Una seconda query e
         # consentita solo quando la prima non ha prodotto due confronti utili.
-        # Tavily resta primario; Brave e Google CSE coprono il fallback mercato
-        # quando Tavily non e configurato o restituisce pochi prezzi utili.
+        # Brave resta primario. Tavily e Google CSE coprono il fallback mercato
+        # quando Brave non e configurato o restituisce pochi prezzi utili.
         if query_index >= MARKET_MAX_TAVILY_QUERIES:
             break
         if query_index > 0 and len(listings) >= 2:
             break
         query_results: list[dict[str, Any]] = []
-        if configured_providers["tavily"]:
-            try:
-                query_results.extend(tavily_market_search(query, payload, diagnostics))
-            except Exception as exc:
-                diagnostics["errors"].append(
-                    {"provider": "tavily", "query": query, "error": str(exc)[:180]}
-                )
-        if configured_providers["brave"] and len(query_results) < 2:
+        if configured_providers["brave"]:
             try:
                 query_results.extend(brave_market_search(query, payload, diagnostics))
             except Exception as exc:
                 diagnostics["errors"].append(
                     {"provider": "brave", "query": query, "error": str(exc)[:180]}
+                )
+        if configured_providers["tavily"] and len(query_results) < 2:
+            try:
+                query_results.extend(tavily_market_search(query, payload, diagnostics))
+            except Exception as exc:
+                diagnostics["errors"].append(
+                    {"provider": "tavily", "query": query, "error": str(exc)[:180]}
                 )
         if configured_providers["google_cse"] and len(query_results) < 2:
             try:
@@ -3203,15 +3204,17 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "ok": True,
                     "service": "autostorico-value-api",
                     "developerAuthorization": "device_or_verified_github",
-                    "marketSearchRevision": "tavily_v2_domain_boost_advanced",
+                    "marketSearchRevision": "brave_primary_tavily_fallback_v3",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
                     "marketProviderPolicy": {
-                        "primary": "tavily",
-                        "tavilyStrategy": "advanced_domain_boost",
-                        "fallbacks": ["brave", "google_cse"],
-                        "braveUsedFor": ["market_fallback", "defects", "plate_hints"],
+                        "primary": "brave",
+                        "braveStrategy": "market_defects_plate_primary",
+                        "fallbacks": ["tavily", "google_cse"],
+                        "tavilyStrategy": "advanced_domain_boost_market_fallback",
+                        "braveUsedFor": ["market_primary", "defects", "plate_hints"],
+                        "tavilyUsedFor": ["market_fallback"],
                         "tavilyDailyLimit": TAVILY_DAILY_LIMIT,
                         "tavilyUsedToday": TAVILY_DAILY_USAGE.get(_utc_day_key(), 0),
                         "braveDailyLimit": BRAVE_DAILY_LIMIT,
