@@ -3186,6 +3186,14 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationPaymentsConfigured": consultation_payments_configured(),
                     "consultationPriceCents": CONSULTATION_PRICE_CENTS,
                     "consultationCurrency": CONSULTATION_CURRENCY,
+                    "consultationPaymentConfiguration": {
+                        "stripeSdk": stripe is not None,
+                        "stripeSecret": bool(STRIPE_SECRET_KEY),
+                        "stripeWebhookSecret": bool(STRIPE_WEBHOOK_SECRET),
+                        "supabaseUrl": bool(SUPABASE_URL),
+                        "supabaseSecret": bool(SUPABASE_SECRET_KEY),
+                        "publicUrlHttps": AUTOSTORICO_PUBLIC_URL.startswith("https://"),
+                    },
                 }
             )
             return
