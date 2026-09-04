@@ -1282,12 +1282,11 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         f"{base_core} auto usata prezzo "
         "AutoScout24 Subito Trovit Automobile Italia"
     )
-    # Tavily runs only one focused fallback after the broad nationwide query.
-    # Ask explicitly for the two primary classified portals, instead of using
-    # the old generic portal wording that often surfaced only aggregators.
+    # Tavily receives the preferred portals through its native domain-boost
+    # parameter. Google-style ``site:`` / ``OR`` operators can reduce Tavily
+    # recall, so the fallback query stays natural-language and broad.
     preferred_portals_query = (
-        f"{base_core} auto usata prezzo "
-        "site:subito.it OR site:autoscout24.it Italia"
+        f"{base_core} annuncio auto usata prezzo chilometri Italia"
     )
     broad_queries = [
         national_market_query,
@@ -1689,17 +1688,26 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
     if not tavily_market_search_available():
         return []
     api_key = normalize_provider_secret(TAVILY_API_KEY, "TAVILY_API_KEY")
+    # Tavily's native domain boost improves the ranking of Italian classified
+    # portals without excluding other sources. Advanced search returns the
+    # most relevant source chunks, which are much more likely to include the
+    # advertised price than the short basic-search summary.
+    market_domains = list(dict.fromkeys(domain for _, domain in MARKET_SITES))
     request_body = json.dumps(
         {
             "query": query,
             "topic": "general",
-            "search_depth": "basic",
+            "search_depth": "advanced",
+            "chunks_per_source": 3,
             "max_results": 20,
             "country": "italy",
+            "language": "it",
+            "include_domains": market_domains,
+            "include_domains_mode": "boost",
             "include_answer": False,
             "include_raw_content": False,
             "include_images": False,
-            "language": "it",
+            "include_usage": True,
         }
     ).encode("utf-8")
     request = urllib.request.Request(
@@ -1741,6 +1749,8 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
                 "items": len(search_items),
                 "priced": len(results),
                 "sampleUrls": [str(item.get("url") or "") for item in search_items[:3]],
+                "searchDepth": "advanced",
+                "credits": int((data.get("usage") or {}).get("credits") or 0),
             }
         )
     return results
@@ -3193,11 +3203,13 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "ok": True,
                     "service": "autostorico-value-api",
                     "developerAuthorization": "device_or_verified_github",
+                    "marketSearchRevision": "tavily_v2_domain_boost_advanced",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
                     "marketProviderPolicy": {
                         "primary": "tavily",
+                        "tavilyStrategy": "advanced_domain_boost",
                         "fallbacks": ["brave", "google_cse"],
                         "braveUsedFor": ["market_fallback", "defects", "plate_hints"],
                         "tavilyDailyLimit": TAVILY_DAILY_LIMIT,
