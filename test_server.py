@@ -114,6 +114,70 @@ class ConsultationPaymentTests(unittest.TestCase):
         self.assertTrue(result["developerFree"])
         self.assertEqual(result["consultationId"], "consultation-1")
 
+    def test_closed_consultation_can_be_deleted_only_by_its_owner(self):
+        consultation_id = "11111111-1111-4111-8111-111111111111"
+        calls = []
+
+        def request(method, path, **kwargs):
+            calls.append((method, path))
+            if method == "GET":
+                return [
+                    {
+                        "id": consultation_id,
+                        "client_id": "user-1",
+                        "status": "closed",
+                    }
+                ]
+            return None
+
+        with patch.object(server, "_supabase_json_request", side_effect=request):
+            result = server.delete_closed_consultation(
+                {"id": "user-1"}, consultation_id
+            )
+
+        self.assertTrue(result["deleted"])
+        self.assertEqual([method for method, _ in calls], ["GET", "DELETE", "DELETE"])
+        self.assertIn("consultation_messages", calls[1][1])
+        self.assertIn("consultations", calls[2][1])
+
+    def test_open_consultation_cannot_be_deleted(self):
+        consultation_id = "11111111-1111-4111-8111-111111111111"
+        with patch.object(
+            server,
+            "_supabase_json_request",
+            return_value=[
+                {
+                    "id": consultation_id,
+                    "client_id": "user-1",
+                    "status": "open",
+                }
+            ],
+        ) as request:
+            with self.assertRaises(ValueError):
+                server.delete_closed_consultation(
+                    {"id": "user-1"}, consultation_id
+                )
+
+        self.assertEqual(request.call_count, 1)
+
+    def test_consultation_delete_rejects_a_different_owner(self):
+        consultation_id = "11111111-1111-4111-8111-111111111111"
+        with patch.object(
+            server,
+            "_supabase_json_request",
+            return_value=[
+                {
+                    "id": consultation_id,
+                    "client_id": "user-2",
+                    "status": "closed",
+                }
+            ],
+        ):
+            with self.assertRaises(PermissionError):
+                server.delete_closed_consultation(
+                    {"id": "user-1"}, consultation_id
+                )
+
     def test_paid_webhook_finalizes_once_through_database_rpc(self):
         event = {
             "type": "checkout.session.completed",
@@ -499,16 +563,39 @@ class MarketEvidenceTests(unittest.TestCase):
         spoofed_metadata = {
             "user_metadata": {"sub": "286668860", "user_name": "giacomoabbate140-hub"}
         }
+        owner_provider_id = {
+            "identities": [
+                {
+                    "provider": "github",
+                    "identity_data": {"provider_id": "286668860"},
+                }
+            ]
+        }
+        owner_login = {
+            "identities": [
+                {
+                    "provider": "github",
+                    "identity_data": {"user_name": "GiacomoAbbate140-Hub"},
+                }
+            ]
+        }
         other_github_user = {
             "identities": [
                 {
                     "provider": "github",
-                    "identity_data": {"sub": "123456789"},
+                    "identity_data": {
+                        "sub": "123456789",
+                        "user_name": "another-user",
+                    },
                 }
             ]
         }
-        with patch.object(server, "DEVELOPER_GITHUB_ID", "286668860"):
+        with patch.object(server, "DEVELOPER_GITHUB_ID", "286668860"), patch.object(
+            server, "DEVELOPER_GITHUB_LOGIN", "giacomoabbate140-hub"
+        ):
             self.assertTrue(developer_user_is_authorized(owner))
+            self.assertTrue(developer_user_is_authorized(owner_provider_id))
+            self.assertTrue(developer_user_is_authorized(owner_login))
             self.assertFalse(developer_user_is_authorized(spoofed_metadata))
             self.assertFalse(developer_user_is_authorized(other_github_user))
 
