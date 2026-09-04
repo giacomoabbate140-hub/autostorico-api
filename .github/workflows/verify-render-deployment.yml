@@ -21,8 +21,10 @@ jobs:
             response="$(curl --fail --silent --show-error --max-time 45               https://autostorico-api-1.onrender.com/health || true)"
             echo "$response"
             if grep -q '"developerAuthorization": "device_or_verified_github"' <<<"$response" \
+              && grep -q '"developerAuthorizationRevision": "github_identity_v2"' <<<"$response" \
+              && grep -q '"consultationDeleteRevision": "closed_owner_delete_v1"' <<<"$response" \
               && grep -q '"marketSearchRevision": "brave_primary_tavily_fallback_v3"' <<<"$response"; then
-              echo "Render is serving the current developer authorization and provider strategy."
+              echo "Render is serving the current authorization, consultation and provider revisions."
               exit 0
             fi
             echo "Attempt $attempt: Render has not activated the new revision yet."
