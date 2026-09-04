@@ -1,0 +1,31 @@
+name: Verify Render deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - server_core.py
+      - test_server.py
+      - .github/workflows/verify-render-deployment.yml
+  workflow_dispatch:
+
+jobs:
+  verify-render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for verified developer authorization on Render
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 16); do
+            response="$(curl --fail --silent --show-error --max-time 45               https://autostorico-api-1.onrender.com/health || true)"
+            echo "$response"
+            if grep -q '"developerAuthorization": "device_or_verified_github"' <<<"$response"; then
+              echo "Render is serving the verified GitHub developer authorization."
+              exit 0
+            fi
+            echo "Attempt $attempt: Render has not activated the new revision yet."
+            sleep 15
+          done
+          echo "Render did not expose the new revision in time." >&2
+          exit 1
