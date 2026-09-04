@@ -228,6 +228,45 @@ def update_consultation_draft(draft_id: str, values: dict[str, Any]) -> None:
     )
 
 
+def delete_closed_consultation(
+    user: dict[str, Any], consultation_id: Any
+) -> dict[str, Any]:
+    """Delete an owner's closed consultation and its private messages."""
+    candidate = str(consultation_id or "").strip().lower()
+    try:
+        normalized_id = str(uuid.UUID(candidate))
+    except (ValueError, AttributeError) as exc:
+        raise ValueError("Consulenza non valida") from exc
+    encoded_id = urllib.parse.quote(normalized_id, safe="")
+    rows = _supabase_json_request(
+        "GET",
+        f"/rest/v1/consultations?id=eq.{encoded_id}&select=id,client_id,status",
+    )
+    if not isinstance(rows, list) or not rows:
+        return {"ok": True, "deleted": True}
+    row = rows[0]
+    if not hmac.compare_digest(
+        str(row.get("client_id") or ""), str(user.get("id") or "")
+    ):
+        raise PermissionError("Puoi eliminare soltanto le tue consulenze")
+    if str(row.get("status") or "") not in {"closed", "cancelled"}:
+        raise ValueError("Concludi la consulenza prima di eliminarla")
+
+    # Messages are removed first so the operation also works with databases
+    # where the foreign key is not configured with ON DELETE CASCADE.
+    _supabase_json_request(
+        "DELETE",
+        f"/rest/v1/consultation_messages?consultation_id=eq.{encoded_id}",
+        prefer="return=minimal",
+    )
+    _supabase_json_request(
+        "DELETE",
+        f"/rest/v1/consultations?id=eq.{encoded_id}",
+        prefer="return=minimal",
+    )
+    return {"ok": True, "deleted": True}
+
+
 def finalize_consultation_draft(
     draft_id: str,
     checkout_session_id: str,
@@ -479,6 +518,9 @@ DEVELOPER_DEVICE_ID_HASH = os.environ.get(
 DEVELOPER_GITHUB_ID = os.environ.get(
     "AUTOSTORICO_DEVELOPER_GITHUB_ID", "286668860"
 ).strip()
+DEVELOPER_GITHUB_LOGIN = os.environ.get(
+    "AUTOSTORICO_DEVELOPER_GITHUB_LOGIN", "giacomoabbate140-hub"
+).strip().lower()
 PREMIUM_VERIFY_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_PREMIUM_VERIFY_RATE_LIMIT", "12"))
 PLAY_INTEGRITY_REQUIRED = os.environ.get("AUTOSTORICO_PLAY_INTEGRITY_REQUIRED", "0") == "1"
 PLAY_INTEGRITY_MIN_VERSION_CODE = int(
@@ -2667,20 +2709,47 @@ def developer_device_is_authorized(device_id_hash: Any) -> bool:
 
 
 def developer_user_is_authorized(user: Any) -> bool:
-    """Authorize the verified owner GitHub identity across app reinstalls."""
-    if not isinstance(user, dict) or not DEVELOPER_GITHUB_ID:
+    """Authorize the verified owner GitHub identity across app reinstalls.
+
+    Supabase can expose the GitHub account number as either sub or provider_id
+    depending on the Auth response version. The provider username is accepted
+    only inside a verified GitHub identity, never from editable top-level user
+    metadata.
+    """
+    if not isinstance(user, dict):
         return False
     identities = user.get("identities")
     if not isinstance(identities, list):
         return False
     for identity in identities:
-        if not isinstance(identity, dict) or identity.get("provider") != "github":
+        if (
+            not isinstance(identity, dict)
+            or str(identity.get("provider") or "").strip().lower() != "github"
+        ):
             continue
         identity_data = identity.get("identity_data")
         if not isinstance(identity_data, dict):
             continue
-        provider_id = str(identity_data.get("sub") or "").strip()
-        if provider_id and hmac.compare_digest(provider_id, DEVELOPER_GITHUB_ID):
+        provider_ids = {
+            str(identity_data.get("sub") or "").strip(),
+            str(identity_data.get("provider_id") or "").strip(),
+        }
+        if DEVELOPER_GITHUB_ID and any(
+            candidate
+            and hmac.compare_digest(candidate, DEVELOPER_GITHUB_ID)
+            for candidate in provider_ids
+        ):
+            return True
+        provider_logins = {
+            str(identity_data.get("user_name") or "").strip().lower(),
+            str(identity_data.get("preferred_username") or "").strip().lower(),
+            str(identity_data.get("login") or "").strip().lower(),
+        }
+        if DEVELOPER_GITHUB_LOGIN and any(
+            candidate
+            and hmac.compare_digest(candidate, DEVELOPER_GITHUB_LOGIN)
+            for candidate in provider_logins
+        ):
             return True
     return False
 
@@ -3204,6 +3273,8 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "ok": True,
                     "service": "autostorico-value-api",
                     "developerAuthorization": "device_or_verified_github",
+                    "developerAuthorizationRevision": "github_identity_v2",
+                    "consultationDeleteRevision": "closed_owner_delete_v1",
                     "marketSearchRevision": "brave_primary_tavily_fallback_v3",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
@@ -3348,12 +3419,16 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             "/api/developer/entitlement",
             "/api/vehicle-defects",
             "/api/consultations/checkout",
+            "/api/consultations/delete",
         }:
             self.send_json({"error": "not_found"}, status=404)
             return
 
         auth = self.headers.get("Authorization", "")
-        if request_path == "/api/consultations/checkout":
+        if request_path in {
+            "/api/consultations/checkout",
+            "/api/consultations/delete",
+        }:
             pass
         elif request_path == "/api/premium/verify":
             if auth and PREMIUM_API_KEY and auth != f"Bearer {PREMIUM_API_KEY}":
@@ -3372,6 +3447,31 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             payload = json.loads(raw_body or "{}")
             if not isinstance(payload, dict):
                 raise ValueError("Payload must be an object")
+            if request_path == "/api/consultations/delete":
+                try:
+                    user = verify_supabase_user(auth)
+                    self.send_json(
+                        delete_closed_consultation(
+                            user, payload.get("consultationId")
+                        )
+                    )
+                except PermissionError as exc:
+                    self.send_json(
+                        {"error": "forbidden", "message": str(exc)}, status=403
+                    )
+                except ValueError as exc:
+                    self.send_json(
+                        {"error": "invalid_state", "message": str(exc)}, status=409
+                    )
+                except RuntimeError:
+                    self.send_json(
+                        {
+                            "error": "delete_unavailable",
+                            "message": "Eliminazione temporaneamente non disponibile.",
+                        },
+                        status=503,
+                    )
+                return
             if request_path == "/api/consultations/checkout":
                 try:
                     user = verify_supabase_user(auth)
