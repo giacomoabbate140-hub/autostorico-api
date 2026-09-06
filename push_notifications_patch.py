@@ -9,6 +9,7 @@ permissions. Push delivery is always best-effort and never blocks a paid
 consultation.
 """
 
+import base64
 import json
 import os
 import urllib.parse
@@ -48,9 +49,6 @@ def _firebase_service_account_json() -> tuple[str, str]:
     if dedicated:
         return dedicated, "firebase"
 
-    # AutoStorico already has a Google service account on Render for Play
-    # subscriptions/Integrity. The same OAuth credential can call FCM when its
-    # project/IAM permissions allow firebase.messaging.
     try:
         play = server.google_play_service_account_json()
     except Exception:
@@ -150,16 +148,22 @@ def _deactivate_push_token(token: str) -> None:
         pass
 
 
-def _authorized_fcm_session() -> tuple[Any, str] | None:
+def _authorized_google_session(scopes: list[str]) -> tuple[Any, str] | None:
     config = _firebase_config()
     if config is None:
         return None
     info, project_id, _source = config
     credentials = server.service_account.Credentials.from_service_account_info(
         info,
-        scopes=["https://www.googleapis.com/auth/firebase.messaging"],
+        scopes=scopes,
     )
     return server.AuthorizedSession(credentials), project_id
+
+
+def _authorized_fcm_session() -> tuple[Any, str] | None:
+    return _authorized_google_session(
+        ["https://www.googleapis.com/auth/firebase.messaging"]
+    )
 
 
 def _send_fcm(token: str, consultation_id: str, context: dict[str, str]) -> bool:
@@ -222,7 +226,6 @@ def _send_fcm(token: str, consultation_id: str, context: dict[str, str]) -> bool
 
 
 def _probe_fcm_authorization() -> dict[str, Any]:
-    """Probe auth/API with a deliberately invalid token; sends no real push."""
     config = _firebase_config()
     if config is None:
         return {"attempted": False, "ready": False, "status": 0, "reason": "no_credentials"}
@@ -245,9 +248,6 @@ def _probe_fcm_authorization() -> dict[str, Any]:
             },
             timeout=12,
         )
-        # 400 means OAuth/project/API permission passed and FCM rejected only
-        # the intentionally invalid registration token. 401/403 means auth/IAM
-        # is not ready; 404 commonly means wrong project/API configuration.
         ready = response.status_code == 400
         detail = response.text[:300]
         try:
@@ -272,8 +272,118 @@ def _probe_fcm_authorization() -> dict[str, Any]:
         }
 
 
+def _probe_firebase_management() -> dict[str, Any]:
+    """Read Firebase project/app metadata using existing Google credentials."""
+    try:
+        session_config = _authorized_google_session(
+            ["https://www.googleapis.com/auth/cloud-platform"]
+        )
+        if session_config is None:
+            return {"attempted": False, "status": 0, "reason": "no_session", "apps": []}
+        session, project_id = session_config
+        project_url = (
+            "https://firebase.googleapis.com/v1beta1/projects/"
+            f"{urllib.parse.quote(project_id, safe='')}"
+        )
+        project_response = session.get(project_url, timeout=12)
+        if project_response.status_code != 200:
+            detail = project_response.text[:300]
+            try:
+                payload = project_response.json()
+                error = payload.get("error") if isinstance(payload, dict) else None
+                if isinstance(error, dict):
+                    detail = str(error.get("status") or error.get("message") or detail)
+            except Exception:
+                pass
+            return {
+                "attempted": True,
+                "status": int(project_response.status_code),
+                "reason": detail[:160],
+                "apps": [],
+            }
+
+        apps_url = project_url + "/androidApps?pageSize=100"
+        apps_response = session.get(apps_url, timeout=12)
+        if apps_response.status_code != 200:
+            return {
+                "attempted": True,
+                "status": int(apps_response.status_code),
+                "reason": "android_apps_unavailable",
+                "apps": [],
+            }
+        apps_payload = apps_response.json()
+        apps = apps_payload.get("apps") if isinstance(apps_payload, dict) else []
+        public_apps: list[dict[str, Any]] = []
+        for app in apps if isinstance(apps, list) else []:
+            if not isinstance(app, dict):
+                continue
+            name = str(app.get("name") or "").strip()
+            public_app: dict[str, Any] = {
+                "name": name,
+                "appId": str(app.get("appId") or "").strip(),
+                "packageName": str(app.get("packageName") or "").strip(),
+                "displayName": str(app.get("displayName") or "").strip(),
+            }
+            if name:
+                config_response = session.get(
+                    f"https://firebase.googleapis.com/v1beta1/{name}/config",
+                    timeout=12,
+                )
+                if config_response.status_code == 200:
+                    config_payload = config_response.json()
+                    encoded = (
+                        str(config_payload.get("configFileContents") or "")
+                        if isinstance(config_payload, dict)
+                        else ""
+                    )
+                    if encoded:
+                        try:
+                            decoded = base64.b64decode(encoded).decode("utf-8")
+                            google_config = json.loads(decoded)
+                            project_info = google_config.get("project_info") or {}
+                            clients = google_config.get("client") or []
+                            public_app["projectNumber"] = str(
+                                project_info.get("project_number") or ""
+                            )
+                            public_app["projectId"] = str(
+                                project_info.get("project_id") or project_id
+                            )
+                            for client in clients if isinstance(clients, list) else []:
+                                if not isinstance(client, dict):
+                                    continue
+                                client_info = client.get("client_info") or {}
+                                android_info = client_info.get("android_client_info") or {}
+                                if str(android_info.get("package_name") or "") != public_app["packageName"]:
+                                    continue
+                                public_app["mobilesdkAppId"] = str(
+                                    client_info.get("mobilesdk_app_id") or public_app["appId"]
+                                )
+                                api_keys = client.get("api_key") or []
+                                if isinstance(api_keys, list) and api_keys:
+                                    first_key = api_keys[0] if isinstance(api_keys[0], dict) else {}
+                                    public_app["apiKey"] = str(
+                                        first_key.get("current_key") or ""
+                                    )
+                                break
+                        except Exception:
+                            public_app["configParse"] = "failed"
+            public_apps.append(public_app)
+        return {
+            "attempted": True,
+            "status": 200,
+            "reason": "ok",
+            "apps": public_apps,
+        }
+    except Exception as exc:
+        return {
+            "attempted": True,
+            "status": 0,
+            "reason": type(exc).__name__,
+            "apps": [],
+        }
+
+
 def notify_developer_consultation(consultation_id: str) -> int:
-    """Best-effort H24 push; never make a paid consultation fail because of FCM."""
     if not consultation_id or not consultation_push_configured():
         return 0
     try:
@@ -329,6 +439,9 @@ def _push_diagnostic_do_get(self: server.AutoStoricoApi) -> None:
         source = config[2] if config is not None else "none"
         query = server.urllib.parse.parse_qs(parsed.query)
         probe = _probe_fcm_authorization() if query.get("probe") == ["1"] else None
+        management = (
+            _probe_firebase_management() if query.get("manage") == ["1"] else None
+        )
         payload: dict[str, Any] = {
             "ok": True,
             "service": "expert_online_h24",
@@ -340,6 +453,8 @@ def _push_diagnostic_do_get(self: server.AutoStoricoApi) -> None:
         }
         if probe is not None:
             payload["fcmProbe"] = probe
+        if management is not None:
+            payload["firebaseManagement"] = management
         self.send_json(payload)
         return
     _ORIGINAL_DO_GET(self)
