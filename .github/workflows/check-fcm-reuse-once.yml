@@ -1,0 +1,28 @@
+name: Check FCM reuse once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/check-fcm-reuse-once.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Render and probe FCM
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 24); do
+            response="$(curl --silent --show-error --max-time 40 'https://autostorico-api-1.onrender.com/api/diagnostics/push?probe=1' || true)"
+            echo "attempt=$attempt response=$response"
+            if grep -q '"fcmProbe"' <<<"$response" && grep -q '"credentialSource"' <<<"$response"; then
+              exit 0
+            fi
+            sleep 15
+          done
+          echo 'FCM diagnostics not available in time' >&2
+          exit 1
