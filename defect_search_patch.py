@@ -16,6 +16,7 @@ from typing import Any
 
 import server_core as server
 
+_ORIGINAL_DEFECT_RESEARCH_UPDATE_STATUS = server.defect_research_update_status
 
 # A 30-day search cache prevented the scheduled collector from seeing new
 # sources even when the workflow ran more often. Keep an explicit environment
@@ -267,7 +268,10 @@ def improved_search_defect_source_candidates(
 
 
 def official_only_defect_research_update_status() -> dict[str, Any]:
-    """Expose only official/manufacturer research as app notification metadata."""
+    """Keep fresh metadata, but notify only for official/manufacturer candidates."""
+    base = _ORIGINAL_DEFECT_RESEARCH_UPDATE_STATUS()
+    if not isinstance(base, dict):
+        base = {}
     try:
         queue = json.loads(server.DEFECT_RESEARCH_QUEUE_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
@@ -276,49 +280,19 @@ def official_only_defect_research_update_status() -> dict[str, Any]:
         queue = {}
 
     candidates = queue.get("candidates") if isinstance(queue.get("candidates"), list) else []
-    pending = [
+    notifiable_pending = [
         item
         for item in candidates
         if isinstance(item, dict)
         and item.get("status") == "pending_review"
         and item.get("sourceType") in _NOTIFIABLE_SOURCE_TYPES
     ]
-    latest = queue.get("latestUpdate") if isinstance(queue.get("latestUpdate"), dict) else {}
 
-    vehicles = latest.get("vehicles") if isinstance(latest.get("vehicles"), list) else []
-    safe_vehicles = [
-        {
-            "make": str(item.get("make") or "").strip(),
-            "model": str(item.get("model") or "").strip(),
-        }
-        for item in vehicles
-        if isinstance(item, dict)
-    ]
-    details = latest.get("details") if isinstance(latest.get("details"), list) else []
-    safe_details = [
-        str(item).strip()
-        for item in details
-        if isinstance(item, str) and str(item).strip()
-    ]
-    sources = latest.get("sources") if isinstance(latest.get("sources"), list) else []
-    safe_sources = [
-        safe_url
-        for item in sources
-        if isinstance(item, str)
-        for safe_url in [server.safe_public_source_url(item)]
-        if safe_url
-    ]
-    update_id = str(latest.get("id") or "").strip()
-    return {
-        "id": update_id,
-        "updatedAt": str(latest.get("updatedAt") or update_id).strip(),
-        "pendingCount": len(pending),
-        "addedCount": server.catalog_year_value(latest.get("addedCount")),
-        "summary": str(latest.get("summary") or "").strip(),
-        "details": safe_details,
-        "vehicles": safe_vehicles,
-        "sources": safe_sources,
-    }
+    # Preserve the original newest-batch logic (id, vehicles, details, sources)
+    # so stale metadata is still replaced. Only pendingCount is filtered: the
+    # Android app uses that field to decide whether a research notification is
+    # emitted, so community-only batches remain silent.
+    return {**base, "pendingCount": len(notifiable_pending)}
 
 
 server.search_defect_source_candidates = improved_search_defect_source_candidates
