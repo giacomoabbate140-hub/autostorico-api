@@ -1,0 +1,28 @@
+name: Check H24 push on Render
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/check-push-render-once.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for push diagnostics deployment
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 20); do
+            response="$(curl --silent --show-error --max-time 35 https://autostorico-api-1.onrender.com/api/diagnostics/push || true)"
+            echo "attempt=$attempt response=$response"
+            if grep -q '"service"' <<<"$response" && grep -q 'expert_online_h24' <<<"$response"; then
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "Push diagnostics endpoint not available on Render in time" >&2
+          exit 1
