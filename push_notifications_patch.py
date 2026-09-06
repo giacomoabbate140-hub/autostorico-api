@@ -17,6 +17,7 @@ import server_core as server
 
 _ORIGINAL_FINALIZE_CONSULTATION_DRAFT = server.finalize_consultation_draft
 _ORIGINAL_CREATE_DEVELOPER_CONSULTATION = server.create_developer_consultation
+_ORIGINAL_DO_GET = server.AutoStoricoApi.do_GET
 
 _FIREBASE_SERVICE_ACCOUNT_JSON = os.environ.get(
     "AUTOSTORICO_FIREBASE_SERVICE_ACCOUNT_JSON", ""
@@ -238,5 +239,26 @@ def create_developer_consultation_with_push(
     return consultation_id
 
 
+def _push_diagnostic_do_get(self: server.AutoStoricoApi) -> None:
+    request_path = server.urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
+    if request_path == "/api/diagnostics/push":
+        try:
+            active_devices = len(_developer_push_tokens())
+        except Exception:
+            active_devices = 0
+        self.send_json(
+            {
+                "ok": True,
+                "service": "expert_online_h24",
+                "firebaseConfigured": _firebase_config() is not None,
+                "pushConfigured": consultation_push_configured(),
+                "activeDeveloperDevices": active_devices,
+            }
+        )
+        return
+    _ORIGINAL_DO_GET(self)
+
+
 server.finalize_consultation_draft = finalize_consultation_draft_with_push
 server.create_developer_consultation = create_developer_consultation_with_push
+server.AutoStoricoApi.do_GET = _push_diagnostic_do_get
