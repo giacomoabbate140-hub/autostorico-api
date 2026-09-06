@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-"""Optional FCM push delivery for AutoStorico H24 expert consultations.
+"""FCM push delivery for AutoStorico H24 expert consultations.
 
-The patch is safe when Firebase is not configured: consultation creation keeps
-working and push delivery is simply skipped. When a Firebase service account is
-present on Render, paid H24 consultations notify every active developer device.
+Firebase-specific credentials are preferred when configured. Otherwise the
+existing Google Play service account is reused. This avoids creating a second
+private key when the same Google Cloud project/service account already has FCM
+permissions. Push delivery is always best-effort and never blocks a paid
+consultation.
 """
 
 import json
@@ -28,7 +30,7 @@ _FIREBASE_SERVICE_ACCOUNT_FILE = os.environ.get(
 _FIREBASE_PROJECT_ID = os.environ.get("AUTOSTORICO_FIREBASE_PROJECT_ID", "").strip()
 
 
-def _firebase_service_account_json() -> str:
+def _dedicated_firebase_service_account_json() -> str:
     if _FIREBASE_SERVICE_ACCOUNT_JSON:
         return _FIREBASE_SERVICE_ACCOUNT_JSON
     if _FIREBASE_SERVICE_ACCOUNT_FILE:
@@ -41,8 +43,25 @@ def _firebase_service_account_json() -> str:
     return ""
 
 
-def _firebase_config() -> tuple[dict[str, Any], str] | None:
-    raw = _firebase_service_account_json()
+def _firebase_service_account_json() -> tuple[str, str]:
+    dedicated = _dedicated_firebase_service_account_json()
+    if dedicated:
+        return dedicated, "firebase"
+
+    # AutoStorico already has a Google service account on Render for Play
+    # subscriptions/Integrity. The same OAuth credential can call FCM when its
+    # project/IAM permissions allow firebase.messaging.
+    try:
+        play = server.google_play_service_account_json()
+    except Exception:
+        play = ""
+    if play:
+        return play, "google_play"
+    return "", "none"
+
+
+def _firebase_config() -> tuple[dict[str, Any], str, str] | None:
+    raw, source = _firebase_service_account_json()
     if not raw or server.service_account is None or server.AuthorizedSession is None:
         return None
     try:
@@ -54,7 +73,7 @@ def _firebase_config() -> tuple[dict[str, Any], str] | None:
     project_id = _FIREBASE_PROJECT_ID or str(info.get("project_id") or "").strip()
     if not project_id:
         return None
-    return info, project_id
+    return info, project_id, source
 
 
 def consultation_push_configured() -> bool:
@@ -131,16 +150,23 @@ def _deactivate_push_token(token: str) -> None:
         pass
 
 
-def _send_fcm(token: str, consultation_id: str, context: dict[str, str]) -> bool:
+def _authorized_fcm_session() -> tuple[Any, str] | None:
     config = _firebase_config()
     if config is None:
-        return False
-    info, project_id = config
+        return None
+    info, project_id, _source = config
     credentials = server.service_account.Credentials.from_service_account_info(
         info,
         scopes=["https://www.googleapis.com/auth/firebase.messaging"],
     )
-    session = server.AuthorizedSession(credentials)
+    return server.AuthorizedSession(credentials), project_id
+
+
+def _send_fcm(token: str, consultation_id: str, context: dict[str, str]) -> bool:
+    session_config = _authorized_fcm_session()
+    if session_config is None:
+        return False
+    session, project_id = session_config
     vehicle = " ".join(
         value
         for value in [context.get("vehicleMake", ""), context.get("vehicleModel", "")]
@@ -195,6 +221,57 @@ def _send_fcm(token: str, consultation_id: str, context: dict[str, str]) -> bool
     return False
 
 
+def _probe_fcm_authorization() -> dict[str, Any]:
+    """Probe auth/API with a deliberately invalid token; sends no real push."""
+    config = _firebase_config()
+    if config is None:
+        return {"attempted": False, "ready": False, "status": 0, "reason": "no_credentials"}
+    try:
+        session_config = _authorized_fcm_session()
+        if session_config is None:
+            return {"attempted": False, "ready": False, "status": 0, "reason": "no_session"}
+        session, project_id = session_config
+        endpoint = (
+            "https://fcm.googleapis.com/v1/projects/"
+            f"{urllib.parse.quote(project_id, safe='')}/messages:send"
+        )
+        response = session.post(
+            endpoint,
+            json={
+                "message": {
+                    "token": "autostorico-diagnostic-invalid-token",
+                    "data": {"type": "diagnostic"},
+                }
+            },
+            timeout=12,
+        )
+        # 400 means OAuth/project/API permission passed and FCM rejected only
+        # the intentionally invalid registration token. 401/403 means auth/IAM
+        # is not ready; 404 commonly means wrong project/API configuration.
+        ready = response.status_code == 400
+        detail = response.text[:300]
+        try:
+            payload = response.json()
+            error = payload.get("error") if isinstance(payload, dict) else None
+            if isinstance(error, dict):
+                detail = str(error.get("status") or error.get("message") or detail)
+        except Exception:
+            pass
+        return {
+            "attempted": True,
+            "ready": ready,
+            "status": int(response.status_code),
+            "reason": detail[:160],
+        }
+    except Exception as exc:
+        return {
+            "attempted": True,
+            "ready": False,
+            "status": 0,
+            "reason": type(exc).__name__,
+        }
+
+
 def notify_developer_consultation(consultation_id: str) -> int:
     """Best-effort H24 push; never make a paid consultation fail because of FCM."""
     if not consultation_id or not consultation_push_configured():
@@ -240,21 +317,30 @@ def create_developer_consultation_with_push(
 
 
 def _push_diagnostic_do_get(self: server.AutoStoricoApi) -> None:
-    request_path = server.urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
+    parsed = server.urllib.parse.urlparse(self.path)
+    request_path = parsed.path.rstrip("/") or "/"
     if request_path == "/api/diagnostics/push":
         try:
             active_devices = len(_developer_push_tokens())
         except Exception:
             active_devices = 0
-        self.send_json(
-            {
-                "ok": True,
-                "service": "expert_online_h24",
-                "firebaseConfigured": _firebase_config() is not None,
-                "pushConfigured": consultation_push_configured(),
-                "activeDeveloperDevices": active_devices,
-            }
-        )
+        config = _firebase_config()
+        project_id = config[1] if config is not None else ""
+        source = config[2] if config is not None else "none"
+        query = server.urllib.parse.parse_qs(parsed.query)
+        probe = _probe_fcm_authorization() if query.get("probe") == ["1"] else None
+        payload: dict[str, Any] = {
+            "ok": True,
+            "service": "expert_online_h24",
+            "firebaseConfigured": config is not None,
+            "pushConfigured": consultation_push_configured(),
+            "credentialSource": source,
+            "firebaseProjectId": project_id,
+            "activeDeveloperDevices": active_devices,
+        }
+        if probe is not None:
+            payload["fcmProbe"] = probe
+        self.send_json(payload)
         return
     _ORIGINAL_DO_GET(self)
 
