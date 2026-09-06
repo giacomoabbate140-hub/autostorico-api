@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import sys
 import server_core as _server_core
+import gold_consultation_patch as _gold_consultation_patch
+
+_gold_consultation_patch.install(_server_core)
 
 # Compatibility entrypoint for Render.
 # When imported as `server`, expose the original API module unchanged so tests
