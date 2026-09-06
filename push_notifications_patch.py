@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-"""Optional FCM push delivery for AutoStorico expert consultations.
+"""Optional FCM push delivery for AutoStorico H24 expert consultations.
 
 The patch is safe when Firebase is not configured: consultation creation keeps
 working and push delivery is simply skipped. When a Firebase service account is
-present on Render, paid/Gold consultations notify every active developer device.
+present on Render, paid H24 consultations notify every active developer device.
 """
 
 import json
@@ -17,7 +17,6 @@ import server_core as server
 
 _ORIGINAL_FINALIZE_CONSULTATION_DRAFT = server.finalize_consultation_draft
 _ORIGINAL_CREATE_DEVELOPER_CONSULTATION = server.create_developer_consultation
-_ORIGINAL_CREATE_GOLD_CONSULTATION = server.create_gold_consultation
 
 _FIREBASE_SERVICE_ACCOUNT_JSON = os.environ.get(
     "AUTOSTORICO_FIREBASE_SERVICE_ACCOUNT_JSON", ""
@@ -104,7 +103,7 @@ def _consultation_context(consultation_id: str) -> dict[str, str]:
     rows = server._supabase_json_request(
         "GET",
         "/rest/v1/consultations"
-        f"?id=eq.{encoded}&select=id,client_id,vehicle_make,vehicle_model,subject",
+        f"?id=eq.{encoded}&select=id,client_id,vehicle_make,vehicle_model,subject,service_type",
     )
     if not isinstance(rows, list) or not rows or not isinstance(rows[0], dict):
         return {}
@@ -114,6 +113,7 @@ def _consultation_context(consultation_id: str) -> dict[str, str]:
         "vehicleMake": str(row.get("vehicle_make") or "").strip(),
         "vehicleModel": str(row.get("vehicle_model") or "").strip(),
         "subject": str(row.get("subject") or "").strip(),
+        "serviceType": str(row.get("service_type") or "h24").strip(),
     }
 
 
@@ -186,8 +186,6 @@ def _send_fcm(token: str, consultation_id: str, context: dict[str, str]) -> bool
     )
     if response.status_code in {200, 201}:
         return True
-    # FCM reports dead/unregistered tokens as a client error. Disable only when
-    # the response clearly says the registration no longer exists.
     detail = response.text[:500].casefold()
     if response.status_code in {400, 404} and (
         "unregistered" in detail or "registration-token-not-registered" in detail
@@ -197,11 +195,13 @@ def _send_fcm(token: str, consultation_id: str, context: dict[str, str]) -> bool
 
 
 def notify_developer_consultation(consultation_id: str) -> int:
-    """Best-effort push; never make a paid consultation fail because of FCM."""
+    """Best-effort H24 push; never make a paid consultation fail because of FCM."""
     if not consultation_id or not consultation_push_configured():
         return 0
     try:
         context = _consultation_context(consultation_id)
+        if context.get("serviceType", "h24") != "h24":
+            return 0
         tokens = _developer_push_tokens()
     except Exception:
         return 0
@@ -238,17 +238,5 @@ def create_developer_consultation_with_push(
     return consultation_id
 
 
-def create_gold_consultation_with_push(
-    user: dict[str, Any],
-    payload: dict[str, Any],
-) -> dict[str, Any]:
-    result = _ORIGINAL_CREATE_GOLD_CONSULTATION(user, payload)
-    consultation_id = str(result.get("consultationId") or "").strip()
-    if consultation_id:
-        notify_developer_consultation(consultation_id)
-    return result
-
-
 server.finalize_consultation_draft = finalize_consultation_draft_with_push
 server.create_developer_consultation = create_developer_consultation_with_push
-server.create_gold_consultation = create_gold_consultation_with_push
