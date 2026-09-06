@@ -14,5 +14,6 @@ if __name__ == "__main__":
     patched_server.server.main()
 else:
     import defect_search_patch  # noqa: F401 - applies safe server_core overrides
+    import push_notifications_patch  # noqa: F401 - optional H24 FCM delivery
 
     sys.modules[__name__] = _server_core
