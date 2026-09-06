@@ -2,21 +2,28 @@ name: Collect AutoStorico defect sources
 
 on:
   schedule:
-    # Una raccolta completa al giorno: evita consumo ripetuto di Brave.
-    - cron: "17 5 * * *"
+    # Quattro controlli al giorno. Ogni esecuzione analizza un piccolo batch
+    # e Brave resta primario, con Tavily usato solo quando serve come fallback.
+    - cron: "17 */6 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: autostorico-defect-research
+  cancel-in-progress: false
+
 jobs:
   collect:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Collect one source batch for review
+      - name: Collect source batch for review
         env:
           AUTOSTORICO_DEFECT_RESEARCH_API_KEY: ${{ secrets.AUTOSTORICO_DEFECT_RESEARCH_API_KEY }}
+          AUTOSTORICO_DEFECT_BATCH_SIZE: "3"
         run: python tools/collect_defect_candidates.py
       - name: Save review queue
         run: |
