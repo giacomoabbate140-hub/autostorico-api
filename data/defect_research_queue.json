@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-07T12:31:46.641598+00:00",
-  "cursor": 17,
+  "updatedAt": "2026-09-07T21:30:56.648050+00:00",
+  "cursor": 20,
   "candidates": [
     {
       "status": "approved",
@@ -1537,6 +1537,48 @@
       "title": "richiamo | Forum Hyundai Club Italia",
       "snippet": "Ciao a tutti, sto per comprare un auto usata da autotorino. controllando il telaio della tucson risulta quanto segue: Telaio : xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Marca : HYUNDAI Difetto : Alcuni veicoli potrebbero essere dotati di pinza freno posteriore destra che può presentare difetti di... ... Buonasera, a voi risulta in corso un richiamo per il modello plugin riguardante la ricarica della batteria? Ciao a tutti, sto per comprare un auto usata da autotorino. controllando il telaio della tucson risulta quanto segue: Telaio : xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Marca : HYUNDAI Difetto : Alcuni veicoli potrebbero essere dotati di pinza freno posteriore destra che può presentare difetti di... ... Buonasera, a voi risulta in corso un richiamo per il modello plugin riguardante la ricarica della batteria? Buongiorno a tutti, sono nuovo sul forum e sono un neo possessore di una Hyundai Tucson 1.7 Comfort. Ho letto già tante vostre discussioni in merito al richiamo per il gancio cofano e contestualmente anche cablaggio e aggiornamento ECM; proprio in merito a questo ho letto di qualcuno che dopo... C'è una nuova azione richiamo riguardante la nostra Tucson. Riguarda il terzo stop, in alcuni casi hanno riscontrato l'ugello del lunotto posteriore privo di tenuta. Hyundai richiama oltre 25 mila auto elettriche Kona elettrica per rischio di incendio alle batterie Fonte: Sole24ore L'iniziativa del brand coreano è venuta dopo una precisa richiesta del ministero dei trasporti della Corea del Sud.",
       "sourceUrl": "https://www.hyundai-club.eu/tags/richiamo/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-07T21:30:56.648050+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo vettura - Mercedes-Benz Club Italia",
+      "snippet": "&quot;&quot;&quot;&quot;&quot;La nuova Mercedes Classe A, invece, ha un problema che riguarda l’airbag anteriore lato passeggero. In questo caso, l’azione di richiamo coinvolge 6.174 esemplari prodotti tra giugno e dicembre dell’anno scorso. Il difetto consiste nel malfunzionamento dell’airbag, il cui gonfiaggio potrebbe non essere totale in caso di incidente. \"\"\"\"\"La nuova Mercedes Classe A, invece, ha un problema che riguarda l’airbag anteriore lato passeggero. In questo caso, l’azione di richiamo coinvolge 6.174 esemplari prodotti tra giugno e dicembre dell’anno scorso. Il difetto consiste nel malfunzionamento dell’airbag, il cui gonfiaggio potrebbe non essere totale in caso di incidente.",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=70426"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-07T21:30:56.648050+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Affidabilità: A 180 diesel o benzina? - Mercedes-Benz Club Italia",
+      "snippet": "Buonasera! Sono intenzionato a togliermi uno sfizio...e la classe a fa proprio al caso mio :D Ora so che diesel o benzina è una storia infinita...ognuna ha i su",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=84407"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-07T21:30:56.648050+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "DIFETTI A 180 - Mercedes-Benz Club Italia",
+      "snippet": "Eh, si vede che non avete visto gli altri........ MB ha corretto egregiamente questi tre noti inconvenienti, consiglio una visita presso un Conce &quot;sicuro&quot; (di quelli storici e affidabili), non sono interventi costosi.... Ciao e benvenuto nel forum a nome dello Staff del Mercedes-Benz Club Italia Prima di rispondere alla tua richiesta ti chiedo per cortesia di: - passare in area Presentazioni - completare il tuo profilo inserendo la località di residenza dal \"Pannello di Controllo Utente\" Regolamento sintetico per i nuovi arrivati Regolamento integrale del Forum Se vorrai diventare socio del nostro Club potrai partecipare ai Raduni, usufruire del nostro mercatino, accedere alla sezione riservata del sito per consultare schede e informazioni tecniche, beneficiare delle convenzioni per i soci contribuendo inoltre alle spese di mantenimento di questo forum. Eh, si vede che non avete visto gli altri........ MB ha corretto egregiamente questi tre noti inconvenienti, consiglio una visita presso un Conce \"sicuro\" (di quelli storici e affidabili), non sono interventi costosi.... Ho sollevato il problema anche a Mercedes Italia allargandomi le braccia (sono rimasto anche a piedi al centro di una strada in curva con una bambina di soli 3 mesi e la macchiana era appena uscita dall'officina mercedes, mia mogli per una settimana non ha potuto allattare per la paura non le è uscito il latte....deve è finita l'affidabilità del mitico marchio Mercedes?",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=46283"
     }
   ],
   "latestUpdate": {
