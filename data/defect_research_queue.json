@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-06T20:24:02.569395+00:00",
-  "cursor": 11,
+  "updatedAt": "2026-09-07T04:40:39.420501+00:00",
+  "cursor": 14,
   "candidates": [
     {
       "status": "approved",
@@ -1523,6 +1523,20 @@
       "title": "Panda......solo problemi | Il Forum di Quattroruote",
       "snippet": "Io in ogni caso farò controllare la catena dal meccanico di fiducia...ma comunque sia io non so da dove venite e che prezzi hanno i meccanici da qui andate normalmente....ma 600 euro per un kit distribuzione mi sembrano davvero tanti...qui con 400 euro la fai tranquillamente...e poi il vecchio proprietario l&#x27;ha fatta perché iniziava a far rumori strani e quindi prima di ritrovarsi con una macchina con diversi euro di danni e inutilizzabile per scrupolo l&#x27;ha fatta a 80.000 km Buona sera a tutti voi. Sono nuovo e innanzitutto mi presento. Posseggo una fiat Panda 1.3 mtj 75 cv del 2010 da otto mesi. L'auto l'ho acquistata usata con 87.000 km con unico proprietario e tenuta bene sia a livello di carrozzeria che di motore. Inizialmente pensavo di aver acquistato un auto stupenda a livello di qualità prezzo, ma ahimé...l'auto fin ora mi ha dato solo problemi. Posseggo una fiat Panda 1.3 mtj 75 cv del 2010 da otto mesi. L'auto l'ho acquistata usata con 87.000 km con unico proprietario e tenuta bene sia a livello di carrozzeria che di motore. Clicca per allargare... I Km sono \"virtuali\" o certificati? Ben tenuta a livello di motore forse era la tua impressione prima di comprarla, o forse no: mi pare che i modesti difetti che lamenti si siano risolti con spese modeste, compatibili con gli anni e i Km dell'auto, non penso si possa aspettare da una vecchia utilitaria l'assenza di fastidi, come sarebbe da spettarsi in una vettura nuova ( e talvolta non capita) Maucio mi associo a chi ti ha scritto che le spese da te fino ad adesso affrontate sono moderate e fanno parte della ordinaria manutenzione, io ho molti dubbi invece sulla catena scrivi fatta prima dei 100K ma se hai acquistato l'auto con 87 K vuol dire che il proprietario ha speso 600 euro per fare la distribuzione poi ha venduto l'auto ?Qualcosa andrebbe chiarito di solito quando si esegue una distribuzione il meccanico scrive i Km sopra il carterino della distribuzione con pennello indelebile. Io in ogni caso farò controllare la catena dal meccanico di fiducia...ma comunque sia io non so da dove venite e che prezzi hanno i meccanici da qui andate normalmente....ma 600 euro per un kit distribuzione mi sembrano davvero tanti...qui con 400 euro la fai tranquillamente...e poi il vecchio proprietario l'ha fatta perché iniziava a far rumori strani e quindi prima di ritrovarsi con una macchina con diversi euro di danni e inutilizzabile per scrupolo l'ha fatta a 80.000 km",
       "sourceUrl": "https://forum.quattroruote.it/threads/panda-solo-problemi.132735/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-07T04:40:39.420501+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "richiamo | Forum Hyundai Club Italia",
+      "snippet": "Ciao a tutti, sto per comprare un auto usata da autotorino. controllando il telaio della tucson risulta quanto segue: Telaio : xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Marca : HYUNDAI Difetto : Alcuni veicoli potrebbero essere dotati di pinza freno posteriore destra che può presentare difetti di... ... Buonasera, a voi risulta in corso un richiamo per il modello plugin riguardante la ricarica della batteria? Ciao a tutti, sto per comprare un auto usata da autotorino. controllando il telaio della tucson risulta quanto segue: Telaio : xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Marca : HYUNDAI Difetto : Alcuni veicoli potrebbero essere dotati di pinza freno posteriore destra che può presentare difetti di... ... Buonasera, a voi risulta in corso un richiamo per il modello plugin riguardante la ricarica della batteria? Buongiorno a tutti, sono nuovo sul forum e sono un neo possessore di una Hyundai Tucson 1.7 Comfort. Ho letto già tante vostre discussioni in merito al richiamo per il gancio cofano e contestualmente anche cablaggio e aggiornamento ECM; proprio in merito a questo ho letto di qualcuno che dopo... C'è una nuova azione richiamo riguardante la nostra Tucson. Riguarda il terzo stop, in alcuni casi hanno riscontrato l'ugello del lunotto posteriore privo di tenuta. Hyundai richiama oltre 25 mila auto elettriche Kona elettrica per rischio di incendio alle batterie Fonte: Sole24ore L'iniziativa del brand coreano è venuta dopo una precisa richiesta del ministero dei trasporti della Corea del Sud.",
+      "sourceUrl": "https://www.hyundai-club.eu/tags/richiamo/"
     }
   ],
   "latestUpdate": {
