@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-07T21:30:56.648050+00:00",
-  "cursor": 20,
+  "updatedAt": "2026-09-08T04:35:13.191614+00:00",
+  "cursor": 23,
   "candidates": [
     {
       "status": "approved",
@@ -1579,6 +1579,34 @@
       "title": "DIFETTI A 180 - Mercedes-Benz Club Italia",
       "snippet": "Eh, si vede che non avete visto gli altri........ MB ha corretto egregiamente questi tre noti inconvenienti, consiglio una visita presso un Conce &quot;sicuro&quot; (di quelli storici e affidabili), non sono interventi costosi.... Ciao e benvenuto nel forum a nome dello Staff del Mercedes-Benz Club Italia Prima di rispondere alla tua richiesta ti chiedo per cortesia di: - passare in area Presentazioni - completare il tuo profilo inserendo la località di residenza dal \"Pannello di Controllo Utente\" Regolamento sintetico per i nuovi arrivati Regolamento integrale del Forum Se vorrai diventare socio del nostro Club potrai partecipare ai Raduni, usufruire del nostro mercatino, accedere alla sezione riservata del sito per consultare schede e informazioni tecniche, beneficiare delle convenzioni per i soci contribuendo inoltre alle spese di mantenimento di questo forum. Eh, si vede che non avete visto gli altri........ MB ha corretto egregiamente questi tre noti inconvenienti, consiglio una visita presso un Conce \"sicuro\" (di quelli storici e affidabili), non sono interventi costosi.... Ho sollevato il problema anche a Mercedes Italia allargandomi le braccia (sono rimasto anche a piedi al centro di una strada in curva con una bambina di soli 3 mesi e la macchiana era appena uscita dall'officina mercedes, mia mogli per una settimana non ha potuto allattare per la paura non le è uscito il latte....deve è finita l'affidabilità del mitico marchio Mercedes?",
       "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=46283"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T04:35:13.191614+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Peugeot 208 1.2 PureTech GPL che non va - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Sono andato al concessionario ma la mattina, mettendo in moto la macchina, il problema non si presentava. Sono andato ugualmente ed hanno aggiornato la centralina del gpl. Oggi, dopo circa un mese, il problema si ripresenta, più accentuato di prima. Oggi richiamo e vediamo cosa dicono. Sono andato al concessionario ma la mattina, mettendo in moto la macchina, il problema non si presentava. Sono andato ugualmente ed hanno aggiornato la centralina del gpl. Oggi, dopo circa un mese, il problema si ripresenta, più accentuato di prima. Oggi richiamo e vediamo cosa dicono. Stesso atteggiamento che hanno da me, con la telecamera guasta, nonostante foto, video e interventi già effettuati: quando il difetto si manifesta a singhiozzi, se ne lavano le mani. Guasti, difetti, problemi e cose che non ci piacciono; costi dei tagliandi e delle riparazioni",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=114101"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T04:35:13.191614+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "richiamo per 1.5 BlueHdi, catena albero a camme (MXL) - Pagina 2 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Peugeottista D.O.C. ... 10/07/2025, 13:57 Buongiorno, leggendo in giro che stellantis ha avviato una campagna di richiamo sul noto difetto della catena che muove gli alberi a camme ho controllato sull&#x27;app myPeugeot e anche la mia 2008 risulta interessata da questo richiamo. Peugeottista D.O.C. ... 10/07/2025, 13:57 Buongiorno, leggendo in giro che stellantis ha avviato una campagna di richiamo sul noto difetto della catena che muove gli alberi a camme ho controllato sull'app myPeugeot e anche la mia 2008 risulta interessata da questo richiamo. Salve io ho un 3008 anno 2018. Mi interesserebbe sapere se il richiamo riguardo la catena alberi a camme è a se stante oppure si tira dietro anche ila sostituzione della cinghia di distribuzione....e in caso affermativo è compreso nell'intervento di richiamo o ci viene chiesto di pagare? Grazie. ... Peugeottista D.O.C. Ciao, Scusa dove vedi nell'app la campagna di richiamo? Riesci ad allegare uno screenshot? Grazie · [03/2021-now] Peugeot 2008 GT - 110cv BlueHDI - Orange Fusion - Keyless entry, Park Assist, Advanced Grip Control, Wireless charge [10/2008-03/2021] Seat Ibiza 6L1 - 60cv - Black - R.I.P. Peugeottista D.O.C. ... Nell'app MyPeugeot (io uso MyCitroen, ma presumo sia abbastanza simile)per smartphone, in alto a dx ,dalla pagina principale, c'è il simbolino \"omino\", clicchi sopra e poi sulla scritta \"Le mie campagne di richiamo\" e poi ,scegliendo il veicolo memorizzato se ce ne fosse più d'uno, su Verifica.",
+      "sourceUrl": "https://forumpassionepeugeot.it/viewtopic.php?t=126449&start=15"
     }
   ],
   "latestUpdate": {
