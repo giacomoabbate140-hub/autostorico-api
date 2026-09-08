@@ -1705,15 +1705,27 @@ def is_aggregate_market_url(link: str) -> bool:
         parsed = urllib.parse.urlparse(link.lower())
     except ValueError:
         return True
+    host = parsed.netloc
     path = parsed.path.rstrip("/")
     query = urllib.parse.parse_qs(parsed.query)
     if any(key in query for key in ("q", "query", "search", "keyword")):
         return True
+    direct_path_rules = {
+        "autoscout24.it": "/annunci/",
+        "automobile.it": "/annunci/",
+        "quattroruote.it": "/auto-usate/annuncio/",
+        "autosupermarket.it": "/annunci/",
+    }
+    for domain, required_path in direct_path_rules.items():
+        if domain in host:
+            return required_path not in f"{path}/"
+    if "subito.it" in host:
+        return not ("/auto/" in f"{path}/" and path.endswith(".htm"))
+    if "trovit.it" in host or "autouncle.it" in host:
+        return True
     aggregate_markers = (
         "/lst/",
         "/annunci-italia/",
-        "/auto-usate/",
-        "/auto-usate",
         "/ricerca/",
         "/search/",
         "/catalogo/",
@@ -2267,6 +2279,7 @@ def market_estimate_from_sources(
     internal_average: float,
     target_km: float = 0,
     target_year: int | None = None,
+    asking_price_factor: float = 1.0,
 ) -> tuple[float | None, list[dict[str, Any]]]:
     # Pages with neither year nor kilometres remain useful diagnostics, but
     # cannot determine the price. Search results produced by tests/legacy
@@ -2282,12 +2295,13 @@ def market_estimate_from_sources(
     if not comparable:
         return None, []
 
+    asking_price_factor = max(0.50, min(1.0, asking_price_factor))
     for item in comparable:
         item["normalizedPrice"] = normalize_comparable_price(
             item,
             target_km=target_km,
             target_year=target_year,
-        )
+        ) * asking_price_factor
 
     prices = [
         float(item["normalizedPrice"])
@@ -2303,7 +2317,8 @@ def market_estimate_from_sources(
     if internal_average > 0:
         # The internal model is a safety rail, not a replacement for verified
         # market evidence.
-        lower_limit = max(lower_limit, internal_average * 0.55)
+        internal_lower_ratio = 0.40 if asking_price_factor < 1.0 else 0.55
+        lower_limit = max(lower_limit, internal_average * internal_lower_ratio)
         upper_limit = min(upper_limit, internal_average * 1.50)
 
     filtered = [
@@ -2654,21 +2669,21 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     )
     internal_average = max(floor_value, raw_value)
     listings, market_diagnostics = fetch_market_sources(payload, year)
+    asking_factor = asking_to_private_sale_factor(
+        age,
+        km,
+        is_moto,
+        brand,
+        model,
+        trim,
+    )
     market_average, filtered_listings = market_estimate_from_sources(
         listings,
         internal_average,
         km,
         year,
+        asking_factor,
     )
-    if market_average is not None:
-        market_average *= asking_to_private_sale_factor(
-            age,
-            km,
-            is_moto,
-            brand,
-            model,
-            trim,
-        )
     average = market_average if market_average is not None else internal_average
     spread = 0.26 if year is None else 0.28 if age >= 20 else 0.16
     min_value = max(floor_value * 0.75, average * (1 - spread))
