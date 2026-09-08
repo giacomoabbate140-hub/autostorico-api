@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-08T16:37:52.396773+00:00",
-  "cursor": 0,
+  "updatedAt": "2026-09-08T21:09:07.516492+00:00",
+  "cursor": 3,
   "candidates": [
     {
       "status": "approved",
@@ -1663,6 +1663,62 @@
       "title": "Campagna di richiamo per 56 mila Golf 8 ! - The VW Golf Community",
       "snippet": "Che hanno scritto il software con i piedi, non è affidabile, non fa comunicare bene centraline e sensori a mio avviso. Comunque io ieri ho fatto il test drive con una serie 1. ... Precedente 1 2 3 4 5 6 7 template Succ. ... VW GOLF COMMUNITY Tutto il materiale presente nel Sito (immagini, loghi, articoli, messaggi, etc) appartiene ai legittimi proprietari. Parlano di aggiornamenti pesanti su centralina infotainement e gestione telecamera posteriore. Per modelli prodotti sino a Luglio 2020 si parla appunto di sostituzione in toto di una delle centraline che gestiscono il sistema informatico della Golf 8, per quelle prodotte successivamente pare sevirà solo un aggiornamento che Quando la ritiro gli chiedo di questo famoso richiamo, se la mia è interessata, già l'ho accennato al momento della consegna dell'auto ma eravamo di fretta. Ultima modifica di Segar; 11/02/2021, 08:57. ... Buongiorno, son proprietario golf 8 r line 1.5 tsi, ritirataa fine novembre tre settimane fa mi sono uscite 13 spie di malfunzionamento di sistema. Che hanno scritto il software con i piedi, non è affidabile, non fa comunicare bene centraline e sensori a mio avviso. Comunque io ieri ho fatto il test drive con una serie 1. ... Precedente 1 2 3 4 5 6 7 template Succ. ... VW GOLF COMMUNITY Tutto il materiale presente nel Sito (immagini, loghi, articoli, messaggi, etc) appartiene ai legittimi proprietari. Barzelletta di oggi...vado a ritirarla post richiamo....versione dalla 1664 al 1668 e lasciamo stare perché mi sarei aspettato la 1788. Accendo la macchina per uscire dal concessionario subito spie travel assist ed Emergency assist. L'ho lasciata lì di nuovo... ovviamente ho chiesto l'auto sostitutiva gratis mi hanno risposto di no perché Volkswagen non gliela paga...",
       "sourceUrl": "https://www.vwgolfcommunity.com/vb/forum/vw-golf-world/vw-golf-8/guasti-problemi-richiami-ad/richiami-ufficiali-ac/1329832-campagna-di-richiamo-per-56-mila-golf-8/page5"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T21:09:07.516492+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "year": 2016,
+      "engine": "1.6 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Acquisto Alfa: domanda scomoda | Il Forum di Quattroruote",
+      "snippet": "Ora mentre secondo me su Giulia qualche rischio ci può essere, non essendo passato abbastanza tempo per individuare eventuali guasti ricorrenti che necessitino della sostituzione o della modifica del pezzo, Giulietta e Mito dovrebbero essere auto abbastanza mature, quindi, a meno di non incappare in un esemplare sfortunato, non penso ci siano particolari rischi di inaffidabilità. ... Acccccc.... non un candidato alla Giulia ... Acccccc.... non un candidato alla Giulia · Clicca per allargare... Aspetta che la legga angelo.... ... Clicca per allargare... Nel senso che la ritieni affidabile da subito o che non rientra nella tua sfera di interessi? Non mi sento di dire che l'auto abbia problemi di affidabilità e, risolti i problemi che ho avuto, in genere vado in officina solo per i tagliandi. I difetti sono ancora nei concessionari e nella rete di assistenza, ma credo che le cose stiano migliorando. In definitiva, non ti sconsiglio affatto Alfa Romeo per ragioni di affidabilità e te la consiglio per quanto riguarda il piacere di guida. La Giulietta non è un'evoluzione della 147. La Giulia non è un'evoluzione della 159. Sono macchine nuove. Possono testare quanto vogliono i prototipi, ma sono sempre un numero limitato. I problemi emergono nel tempo e su un numero di auto significativo. Quindi io nel complesso sono soddisfatto di Alfa Romeo, sostituirò la mia 159 con la Giulia o con lo Stelvio, ma voglio aspettare almeno un anno, forse qualcosa di più, dall'uscita sul mercato della Giulia. Ora mentre secondo me su Giulia qualche rischio ci può essere, non essendo passato abbastanza tempo per individuare eventuali guasti ricorrenti che necessitino della sostituzione o della modifica del pezzo, Giulietta e Mito dovrebbero essere auto abbastanza mature, quindi, a meno di non incappare in un esemplare sfortunato, non penso ci siano particolari rischi di inaffidabilità. ... Acccccc.... non un candidato alla Giulia ... Acccccc.... non un candidato alla Giulia · Clicca per allargare... Aspetta che la legga angelo.... ... Clicca per allargare... Nel senso che la ritieni affidabile da subito o che non rientra nella tua sfera di interessi? La Giulietta, pur mantenendo una certa impostazione sportiva come da tradizione Alfa, è più alta da terra, assorbe meglio buche e sconnessioni e probabilmente è anche più silenziosa. Tornando all'affidabilità, la Giulietta di oggi non è più quella del 2010-2011, proprio perché i pezzi più a rischio sono stati individuati e sostituiti.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/acquisto-alfa-domanda-scomoda.108141/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T21:09:07.516492+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Affidabilità e robustezza - ClubAlfa.it Forum",
+      "snippet": "Guarda ho ritirato la mia il 4 maggio, sono arrivato a 15000 km senza nessun problema e lunedì è finita sul carro attrezzi presumibilmente per un problema riconducibile a un richiamo uscito proprio lunedì scorso (relativo alla possibile perdita di carburante). ... La mia Alfa Romeo Giulia, come tutte le Alfa avute prima, perfetta al 100%. Non altrettanto potrei dire delle BMW dei miei famigliari o delle VAG degli amici. buongiorno, sono anche io un alfista , ma il sogno nel cassetto è di possedere un alfa giulia veloce q4 2.2 diesel 210 cv , volevo porre una domanda specialmente ai già possessori della giulia ( qualunque versione ) , sulla affidabilità, anomalie verificate, richiami, problematiche di qualunque genere che si siano presentate nell' uso di queste vetture. Guarda ho ritirato la mia il 4 maggio, sono arrivato a 15000 km senza nessun problema e lunedì è finita sul carro attrezzi presumibilmente per un problema riconducibile a un richiamo uscito proprio lunedì scorso (relativo alla possibile perdita di carburante). ... La mia Alfa Romeo Giulia, come tutte le Alfa avute prima, perfetta al 100%. Non altrettanto potrei dire delle BMW dei miei famigliari o delle VAG degli amici. Giulia di aprile 2016 150cv cambio manuale, nessun problema sino ad oggi tranne questo : Problema cruise control non adattivo. Confermo l'handling eccellente, motore 210 cv mjet...coppioso, trazione integrale efficace Elettronica problematica qui i difetti riscontrati sulla mia Q4 AWD NON DISPONIBILE - ESC NON DISPONIBILE Assistenza affetta da bug come l'elettronica (tutte le macchine sono soggette a guasti, l'importante è ripararli.",
+      "sourceUrl": "https://forum.clubalfa.it/threads/alfa-romeo-giulia-affidabilita-robustezza.120096/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T21:09:07.516492+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Affidabilità e robustezza - Club Alfa Forum - ClubAlfa.it",
+      "snippet": "Guarda ho ritirato la mia il 4 maggio, sono arrivato a 15000 km senza nessun problema e lunedì è finita sul carro attrezzi presumibilmente per un problema riconducibile a un richiamo uscito proprio lunedì scorso (relativo alla possibile perdita di carburante). ... La mia Alfa Romeo Giulia, come tutte le Alfa avute prima, perfetta al 100%. Non altrettanto potrei dire delle BMW dei miei famigliari o delle VAG degli amici. buongiorno, sono anche io un alfista , ma il sogno nel cassetto è di possedere un alfa giulia veloce q4 2.2 diesel 210 cv , volevo porre una domanda specialmente ai già possessori della giulia ( qualunque versione ) , sulla affidabilità, anomalie verificate, richiami, problematiche di qualunque genere che si siano presentate nell' uso di queste vetture. Guarda ho ritirato la mia il 4 maggio, sono arrivato a 15000 km senza nessun problema e lunedì è finita sul carro attrezzi presumibilmente per un problema riconducibile a un richiamo uscito proprio lunedì scorso (relativo alla possibile perdita di carburante). ... La mia Alfa Romeo Giulia, come tutte le Alfa avute prima, perfetta al 100%. Non altrettanto potrei dire delle BMW dei miei famigliari o delle VAG degli amici. Giulia di aprile 2016 150cv cambio manuale, nessun problema sino ad oggi tranne questo : Problema cruise control non adattivo. Confermo l'handling eccellente, motore 210 cv mjet...coppioso, trazione integrale efficace Elettronica problematica qui i difetti riscontrati sulla mia Q4 AWD NON DISPONIBILE - ESC NON DISPONIBILE Assistenza affetta da bug come l'elettronica (tutte le macchine sono soggette a guasti, l'importante è ripararli.",
+      "sourceUrl": "https://forum.clubalfa.it/threads/affidabilita-e-robustezza.120096/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T21:09:07.516492+00:00",
+      "make": "Audi",
+      "model": "A1",
+      "year": 2011,
+      "engine": "1.6 TDI CAYB",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo C3 per airbag difettoso | Il Forum di Quattroruote",
+      "snippet": "Anche io ieri ho avuto un problema con un ADAS e Toyota mi ha dato il primo appuntamento utile che era il 6 giugno....credo che funzioni così con tutti i marchi.....un mio collega con un rumore strano al piantone dello sterzo su un Audi A1 ha atteso 15 gg per poter portare l&#x27;auto in officina.....dove dorme al sicuro da una settimana. Buongiorno,ieri tramite raccomandata è arrivata una lettera di richiamo urgente per la mia vettura Citroen C3,dove mi viene detto di fermare assolutamente la macchina perché ci sono dei problemi da risolvere con gli air bag.Chiamo la concessionaria per chiedere spiegazioni e mi dicono di fare la... Anche io ieri ho avuto un problema con un ADAS e Toyota mi ha dato il primo appuntamento utile che era il 6 giugno....credo che funzioni così con tutti i marchi.....un mio collega con un rumore strano al piantone dello sterzo su un Audi A1 ha atteso 15 gg per poter portare l'auto in officina.....dove dorme al sicuro da una settimana.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/richiamo-c3-per-airbag-difettoso.147058/"
     }
   ],
   "latestUpdate": {
