@@ -423,7 +423,7 @@ class MarketEvidenceTests(unittest.TestCase):
                 "price": 8800 + index,
                 "weight": 1.0,
             }
-            for index in range(MINIMUM_MARKET_LISTINGS)
+            for index in range(server.MINIMUM_MARKET_LISTINGS)
         ]
         with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
             server, "TAVILY_API_KEY", "tavily-key"
@@ -432,7 +432,7 @@ class MarketEvidenceTests(unittest.TestCase):
         ) as brave, patch.object(server, "tavily_market_search") as tavily:
             listings, _ = fetch_market_sources(payload, 2011)
 
-        self.assertEqual(len(listings), MINIMUM_MARKET_LISTINGS)
+        self.assertEqual(len(listings), server.MINIMUM_MARKET_LISTINGS)
         self.assertEqual(brave.call_count, 1)
         tavily.assert_not_called()
 
@@ -873,7 +873,7 @@ class MarketEvidenceTests(unittest.TestCase):
         }
         listing_text = (
             "BMW 120d usata 2005 - 330000 km - 3500 EUR "
-            "https contested"
+            "https://www.autoscout24.it/annunci/bmw-120d"
         )
 
         self.assertFalse(server.is_relevant_listing_text(listing_text, payload))
