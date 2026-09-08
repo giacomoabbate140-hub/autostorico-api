@@ -409,8 +409,10 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 2)
-        self.assertEqual(brave.call_count, 1)
-        self.assertEqual(tavily.call_count, 1)
+        # Two results are useful but not yet consolidated: the second focused
+        # query is intentionally attempted before accepting the estimate.
+        self.assertEqual(brave.call_count, 2)
+        self.assertEqual(tavily.call_count, 2)
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
 
