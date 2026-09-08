@@ -2133,13 +2133,13 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     for query_index, query in enumerate(build_market_queries(payload, year)):
-        # La prima query e nazionale e non vincola i km. Una seconda query e
-        # consentita solo quando la prima non ha prodotto due confronti utili.
-        # Brave resta primario. Tavily e Google CSE coprono il fallback mercato
+        # La prima query richiede km e anno; la seconda allenta solo i km.
+        # Tre confronti compatibili consolidano la stima. Brave resta primario;
+        # Tavily e Google CSE coprono il fallback mercato
         # quando Brave non e configurato o restituisce pochi prezzi utili.
         if query_index >= MARKET_MAX_TAVILY_QUERIES:
             break
-        if query_index > 0 and len(listings) >= 2:
+        if query_index > 0 and len(listings) >= MINIMUM_MARKET_LISTINGS:
             break
         query_results: list[dict[str, Any]] = []
         if configured_providers["brave"]:
