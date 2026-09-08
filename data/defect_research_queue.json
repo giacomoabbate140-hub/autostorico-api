@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-08T04:35:13.191614+00:00",
-  "cursor": 23,
+  "updatedAt": "2026-09-08T11:18:23.483277+00:00",
+  "cursor": 26,
   "candidates": [
     {
       "status": "approved",
@@ -1607,6 +1607,34 @@
       "title": "richiamo per 1.5 BlueHdi, catena albero a camme (MXL) - Pagina 2 - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Peugeottista D.O.C. ... 10/07/2025, 13:57 Buongiorno, leggendo in giro che stellantis ha avviato una campagna di richiamo sul noto difetto della catena che muove gli alberi a camme ho controllato sull&#x27;app myPeugeot e anche la mia 2008 risulta interessata da questo richiamo. Peugeottista D.O.C. ... 10/07/2025, 13:57 Buongiorno, leggendo in giro che stellantis ha avviato una campagna di richiamo sul noto difetto della catena che muove gli alberi a camme ho controllato sull'app myPeugeot e anche la mia 2008 risulta interessata da questo richiamo. Salve io ho un 3008 anno 2018. Mi interesserebbe sapere se il richiamo riguardo la catena alberi a camme è a se stante oppure si tira dietro anche ila sostituzione della cinghia di distribuzione....e in caso affermativo è compreso nell'intervento di richiamo o ci viene chiesto di pagare? Grazie. ... Peugeottista D.O.C. Ciao, Scusa dove vedi nell'app la campagna di richiamo? Riesci ad allegare uno screenshot? Grazie · [03/2021-now] Peugeot 2008 GT - 110cv BlueHDI - Orange Fusion - Keyless entry, Park Assist, Advanced Grip Control, Wireless charge [10/2008-03/2021] Seat Ibiza 6L1 - 60cv - Black - R.I.P. Peugeottista D.O.C. ... Nell'app MyPeugeot (io uso MyCitroen, ma presumo sia abbastanza simile)per smartphone, in alto a dx ,dalla pagina principale, c'è il simbolino \"omino\", clicchi sopra e poi sulla scritta \"Le mie campagne di richiamo\" e poi ,scegliendo il veicolo memorizzato se ce ne fosse più d'uno, su Verifica.",
       "sourceUrl": "https://forumpassionepeugeot.it/viewtopic.php?t=126449&start=15"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T11:18:23.483277+00:00",
+      "make": "SEAT",
+      "model": "Leon",
+      "year": 2017,
+      "engine": "1.4 TSI",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Problemi avviamento - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "ALEX308 ha scritto:Ciao,una cosa molto simile era successa a mio cugino nella sua Seat León ... era il cavo che va a massa sul telaio che si stava allentando e non faceva contatto bene. PORTALE - WEB TV - GRUPPO FACEBOOK - PAGINA FACEBOOK - INSTAGRAM Benvenuti nel forum di PASSIONE PEUGEOT AUTO CLUB ITALIA, dal 2002 il punto di riferimento degli appassionati italiani del Marchio del Leone! NON SOLO FORUM! SCOPRITE I VANTAGGI DI ESSERE UN PEUGEOTTISTA UFFICIALE: ISCRIVETEVI ANCHE AL CLUB! IN CASO DI PROBLEMI CON LA REGISTRAZIONE AL FORUM LEGGERE QUI - RIORDINO THREAD SPARSI CAUSA DISSERVIZIO: LEGGERE L'AVVISO · Guasti, difetti, problemi e cose che non ci piacciono; costi dei tagliandi e delle riparazioni Salve a tutti,sono nuovo del gruppo,io sono possessore di una 508 se 2000 140 CV,e mio padre di una 307 sw 2000 136cv acquistata da poco e che proprio lei ci sta dando non pochi problemi.vi spiego subito,in pratica la macchina va una meraviglia solo che non appena raggiunge gli 85/90 gradi e si attacca la ventola l'auto si spegne di botto anche se e in marcia,e poi se non passano 20 muniti non vuol sapere di ripartire.il mecc facendo la diagnosi quando la macchina e calda e quindi non parte,gli da bassa pressione gasolio non arriva neanche a 40 bar.lui pensa sia la pompa,la smontiamo la porto dal pompista la prova sul banco e mi dice che la pompa era solo sporca,Vanno bene pure i due sensori bassa alta pressione devo sostituire il sensore giri dell' albero a camme,fatto anche questa il difetto resta. ALEX308 ha scritto:Ciao,una cosa molto simile era successa a mio cugino nella sua Seat León ... era il cavo che va a massa sul telaio che si stava allentando e non faceva contatto bene.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=115631"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T11:18:23.483277+00:00",
+      "make": "SEAT",
+      "model": "Leon",
+      "year": 2017,
+      "engine": "1.4 TSI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "73.000km Seat Leon 1.6 tdi 105cv pregi e difetti | Il Forum di Quattroruote",
+      "snippet": "Oggi ho toccato quota 73.000km con il mio Leoncino. La bestiolina rispetto a 2 anni fà è ancora come nuova il motore è ancora molto silenzioso, prestante quando lo chiami e finalmente con consumi moolto buoni, il rumore interno di vento e cigolii vari ancora non pervenuti ( e speriamo che non...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/73-000km-seat-leon-1-6-tdi-105cv-pregi-e-difetti.72654/"
     }
   ],
   "latestUpdate": {
