@@ -947,6 +947,52 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIsNone(estimate)
         self.assertEqual(filtered, [])
 
+    def test_market_filter_rejects_aggregate_result_pages(self):
+        item = {
+            "title": "BMW 120d 2005 - 300.000 km - 2.900 EUR",
+            "url": "https://www.autoscout24.it/lst/bmw/120/re_2005",
+        }
+        self.assertIsNone(
+            server.listing_from_search_item(
+                item,
+                payload={"brand": "BMW", "model": "120d", "year": 2005, "km": 300000},
+            )
+        )
+
+    def test_market_filter_rejects_parts_results(self):
+        item = {
+            "title": "Turbine BMW usate 2005 - 300.000 km - 4.000 EUR",
+            "url": "https://www.subito.it/auto/turbine-bmw-123.htm",
+        }
+        self.assertIsNone(
+            server.listing_from_search_item(
+                item,
+                payload={"brand": "BMW", "model": "120d", "year": 2005, "km": 300000},
+            )
+        )
+
+    def test_market_estimate_requires_year_and_km_when_target_has_them(self):
+        listings = [
+            {"price": 4000, "year": 2005, "km": None, "weight": 1.0, "matchScore": 0.55},
+            {"price": 2600, "year": 2005, "km": 300000, "weight": 1.0, "matchScore": 1.0},
+        ]
+        estimate, filtered = market_estimate_from_sources(
+            listings, 2600, target_km=300000, target_year=2005
+        )
+        self.assertIsNotNone(estimate)
+        self.assertEqual(len(filtered), 1)
+        self.assertEqual(filtered[0]["price"], 2600)
+
+    def test_old_high_mileage_premium_floor_is_reduced(self):
+        regular = server.market_floor_value(
+            "Auto", "BMW", "Serie 1 120d", "", "Buono", 21, 150000
+        )
+        high_mileage = server.market_floor_value(
+            "Auto", "BMW", "Serie 1 120d", "", "Buono", 21, 300000
+        )
+        self.assertEqual(regular, 3000)
+        self.assertEqual(high_mileage, 2100)
+
     def test_market_relevance_still_rejects_wrong_year_when_present(self):
         payload = {
             "brand": "BMW",
