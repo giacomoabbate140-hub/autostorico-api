@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-08T11:18:23.483277+00:00",
-  "cursor": 26,
+  "updatedAt": "2026-09-08T16:37:52.396773+00:00",
+  "cursor": 0,
   "candidates": [
     {
       "status": "approved",
@@ -1635,6 +1635,34 @@
       "title": "73.000km Seat Leon 1.6 tdi 105cv pregi e difetti | Il Forum di Quattroruote",
       "snippet": "Oggi ho toccato quota 73.000km con il mio Leoncino. La bestiolina rispetto a 2 anni fà è ancora come nuova il motore è ancora molto silenzioso, prestante quando lo chiami e finalmente con consumi moolto buoni, il rumore interno di vento e cigolii vari ancora non pervenuti ( e speriamo che non...",
       "sourceUrl": "https://forum.quattroruote.it/threads/73-000km-seat-leon-1-6-tdi-105cv-pregi-e-difetti.72654/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T16:37:52.396773+00:00",
+      "make": "Toyota",
+      "model": "Yaris",
+      "year": 2021,
+      "engine": "1.5 Hybrid",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Garanzia Toyota Yaris - delusione | Il Forum di Quattroruote",
+      "snippet": "Sui CH-R prodotti in giappone pare il difetto non ci fosse, nei forum australiani non ne sapevano nulla del problema. Queste Toyota fatte in giro per il mondo hanno componentistica che bisogna vedere se è della stessa qualità di quella giapponese. Comunque qui non è Toyota a deludere, perchè Toyota fà richiami gratuiti anche su auto di oltre 10 anni. Sui CH-R prodotti in giappone pare il difetto non ci fosse, nei forum australiani non ne sapevano nulla del problema. Queste Toyota fatte in giro per il mondo hanno componentistica che bisogna vedere se è della stessa qualità di quella giapponese. Comunque qui non è Toyota a deludere, perchè Toyota fà richiami gratuiti anche su auto di oltre 10 anni. Comunque, per quanto sia partecipe alla delusione dell'autore del post, aspetterei prima di iniziare a fasciarsi la testa per un possibile difetto generale del modello. Al momento fortunatamente il suo è il primo caso che sento.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/garanzia-toyota-yaris-delusione.138211/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-08T16:37:52.396773+00:00",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year": 2018,
+      "engine": "1.5 TSI Evo",
+      "sourceName": "VW Golf Community",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo per 56 mila Golf 8 ! - The VW Golf Community",
+      "snippet": "Che hanno scritto il software con i piedi, non è affidabile, non fa comunicare bene centraline e sensori a mio avviso. Comunque io ieri ho fatto il test drive con una serie 1. ... Precedente 1 2 3 4 5 6 7 template Succ. ... VW GOLF COMMUNITY Tutto il materiale presente nel Sito (immagini, loghi, articoli, messaggi, etc) appartiene ai legittimi proprietari. Parlano di aggiornamenti pesanti su centralina infotainement e gestione telecamera posteriore. Per modelli prodotti sino a Luglio 2020 si parla appunto di sostituzione in toto di una delle centraline che gestiscono il sistema informatico della Golf 8, per quelle prodotte successivamente pare sevirà solo un aggiornamento che Quando la ritiro gli chiedo di questo famoso richiamo, se la mia è interessata, già l'ho accennato al momento della consegna dell'auto ma eravamo di fretta. Ultima modifica di Segar; 11/02/2021, 08:57. ... Buongiorno, son proprietario golf 8 r line 1.5 tsi, ritirataa fine novembre tre settimane fa mi sono uscite 13 spie di malfunzionamento di sistema. Che hanno scritto il software con i piedi, non è affidabile, non fa comunicare bene centraline e sensori a mio avviso. Comunque io ieri ho fatto il test drive con una serie 1. ... Precedente 1 2 3 4 5 6 7 template Succ. ... VW GOLF COMMUNITY Tutto il materiale presente nel Sito (immagini, loghi, articoli, messaggi, etc) appartiene ai legittimi proprietari. Barzelletta di oggi...vado a ritirarla post richiamo....versione dalla 1664 al 1668 e lasciamo stare perché mi sarei aspettato la 1788. Accendo la macchina per uscire dal concessionario subito spie travel assist ed Emergency assist. L'ho lasciata lì di nuovo... ovviamente ho chiesto l'auto sostitutiva gratis mi hanno risposto di no perché Volkswagen non gliela paga...",
+      "sourceUrl": "https://www.vwgolfcommunity.com/vb/forum/vw-golf-world/vw-golf-8/guasti-problemi-richiami-ad/richiami-ufficiali-ac/1329832-campagna-di-richiamo-per-56-mila-golf-8/page5"
     }
   ],
   "latestUpdate": {
