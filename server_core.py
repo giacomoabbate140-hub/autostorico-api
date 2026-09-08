@@ -1567,7 +1567,7 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         f'"{exact_vehicle}"',
         details,
         year_label,
-        "AutoScout24 Subito Trovit Automobile prezzo Italia",
+        "AutoScout24 Subito Auto Trovit Automobile prezzo Italia",
     ]
     broad_queries = [
         " ".join(part for part in exact_parts if part),
@@ -1816,8 +1816,8 @@ def extract_listing_engine_cc(text: str) -> int:
         if 600 <= value <= 8000:
             return value
     liter_match = re.search(
-        r"\b([0-5])[\.,]([0-9])\s*(?:tdi|jtdm?|dci|hdi|diesel|benzina|petrol|tsi|tfsi|gpl|metano|hybrid|ibrid)",
-        str(text).lower(),
+        r"\b([0-5])\s+([0-9])\s+(?:tdi|jtdm?|dci|hdi|diesel|benzina|petrol|tsi|tfsi|gpl|metano|hybrid|ibrid)",
+        cleaned,
     )
     if liter_match:
         value = (int(liter_match.group(1)) * 1000) + (int(liter_match.group(2)) * 100)
