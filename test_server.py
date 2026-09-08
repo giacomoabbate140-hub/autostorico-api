@@ -353,6 +353,8 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertGreaterEqual(len(queries), 2)
         self.assertIn("Italia", queries[0])
+        self.assertIn('"BMW Serie 1 120d"', queries[0])
+        self.assertIn("120000 km", queries[0])
         self.assertNotIn("site:", queries[1])
         self.assertIn("annuncio auto usata prezzo", queries[1])
         self.assertIn("Trovit", queries[2])
@@ -407,8 +409,10 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 2)
-        self.assertEqual(brave.call_count, 1)
-        self.assertEqual(tavily.call_count, 1)
+        # Two results are useful but not yet consolidated: the second focused
+        # query is intentionally attempted before accepting the estimate.
+        self.assertEqual(brave.call_count, 2)
+        self.assertEqual(tavily.call_count, 2)
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
 
@@ -421,7 +425,7 @@ class MarketEvidenceTests(unittest.TestCase):
                 "price": 8800 + index,
                 "weight": 1.0,
             }
-            for index in range(2)
+            for index in range(server.MINIMUM_MARKET_LISTINGS)
         ]
         with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
             server, "TAVILY_API_KEY", "tavily-key"
@@ -430,7 +434,7 @@ class MarketEvidenceTests(unittest.TestCase):
         ) as brave, patch.object(server, "tavily_market_search") as tavily:
             listings, _ = fetch_market_sources(payload, 2011)
 
-        self.assertEqual(len(listings), 2)
+        self.assertEqual(len(listings), server.MINIMUM_MARKET_LISTINGS)
         self.assertEqual(brave.call_count, 1)
         tavily.assert_not_called()
 
@@ -862,7 +866,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertFalse(entitlement["ok"])
         self.assertEqual(entitlement["status"], 402)
 
-    def test_market_relevance_keeps_nationwide_listings_with_different_km(self):
+    def test_market_relevance_rejects_incompatible_mileage(self):
         payload = {
             "brand": "BMW",
             "model": "BMW SERIE 1 120D",
@@ -874,7 +878,74 @@ class MarketEvidenceTests(unittest.TestCase):
             "https://www.autoscout24.it/annunci/bmw-120d"
         )
 
+        self.assertFalse(server.is_relevant_listing_text(listing_text, payload))
+
+    def test_market_relevance_keeps_comparable_high_mileage(self):
+        payload = {
+            "brand": "BMW",
+            "model": "BMW SERIE 1 120D",
+            "year": 2005,
+            "km": 300000,
+        }
+        listing_text = (
+            "BMW Serie 1 120d usata 2006 - 245000 km - 3900 EUR "
+            "https://www.autoscout24.it/annunci/bmw-120d"
+        )
+
         self.assertTrue(server.is_relevant_listing_text(listing_text, payload))
+
+    def test_numeric_model_name_never_matches_another_series(self):
+        payload = {
+            "brand": "BMW",
+            "model": "Serie 1",
+            "year": 2005,
+            "km": 300000,
+        }
+        wrong_model = (
+            "BMW Serie 3 320d usata 2005 - 290000 km - 3900 EUR "
+            "https://www.autoscout24.it/annunci/bmw-serie-3"
+        )
+
+        self.assertFalse(server.is_relevant_listing_text(wrong_model, payload))
+
+    def test_market_relevance_rejects_wrong_engine_when_explicit(self):
+        payload = {
+            "brand": "Volkswagen",
+            "model": "Golf 7",
+            "year": 2015,
+            "km": 150000,
+            "engineDisplacement": "2.0",
+            "fuelType": "Diesel",
+        }
+        wrong_engine = (
+            "Volkswagen Golf 7 1.6 TDI diesel 2015 - 145000 km - 8900 EUR "
+            "https://www.autoscout24.it/annunci/golf-7"
+        )
+
+        self.assertFalse(server.is_relevant_listing_text(wrong_engine, payload))
+
+    def test_missing_year_and_km_have_low_weight_and_do_not_set_price(self):
+        item = {
+            "title": "BMW Serie 1 usata",
+            "url": "https://www.autoscout24.it/annunci/bmw-serie-1",
+            "snippet": "BMW Serie 1 diesel - 4.500 EUR",
+        }
+        listing = server.listing_from_search_item(
+            item,
+            payload={
+                "brand": "BMW",
+                "model": "Serie 1",
+                "year": 2005,
+                "km": 300000,
+                "fuelType": "Diesel",
+            },
+        )
+
+        self.assertIsNotNone(listing)
+        self.assertLess(listing["matchScore"], 0.40)
+        estimate, filtered = market_estimate_from_sources([listing], 4000, 300000, 2005)
+        self.assertIsNone(estimate)
+        self.assertEqual(filtered, [])
 
     def test_market_relevance_still_rejects_wrong_year_when_present(self):
         payload = {
@@ -963,6 +1034,43 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(len(filtered), 3)
         self.assertIsNotNone(estimate)
         self.assertLess(estimate, 8000)
+
+    def test_market_estimate_normalizes_newer_comparable_before_aggregation(self):
+        listings = [
+            {
+                "price": 6000,
+                "year": 2007,
+                "km": 240000,
+                "weight": 1.0,
+                "matchScore": 0.75,
+            },
+            {
+                "price": 5200,
+                "year": 2006,
+                "km": 275000,
+                "weight": 1.0,
+                "matchScore": 0.90,
+            },
+            {
+                "price": 4700,
+                "year": 2005,
+                "km": 300000,
+                "weight": 1.0,
+                "matchScore": 1.0,
+            },
+        ]
+
+        estimate, filtered = market_estimate_from_sources(
+            listings,
+            4400,
+            target_km=300000,
+            target_year=2005,
+        )
+
+        self.assertEqual(len(filtered), 3)
+        self.assertIsNotNone(estimate)
+        self.assertLess(estimate, 5200)
+        self.assertTrue(all("normalizedPrice" in item for item in filtered))
 
     def test_market_cache_key_does_not_include_plate_and_buckets_kilometres(self):
         first = {
