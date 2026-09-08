@@ -1407,8 +1407,10 @@ def parse_engine_cc(value: Any) -> int:
     text = str(value or "").lower().strip()
     if not text:
         return 0
-    if "." in text and not re.search(r"\d{4}", text):
-        as_liters = parse_float(text)
+    liters_text = text.replace(",", ".")
+    liters_match = re.search(r"(?<!\d)([0-8](?:\.[0-9]{1,2})?)(?!\d)", liters_text)
+    if liters_match and not re.search(r"\d{4}", text):
+        as_liters = float(liters_match.group(1))
         if 0.6 <= as_liters <= 8.0:
             return int(round(as_liters * 1000))
     cc = int(parse_float(text))
