@@ -1699,6 +1699,50 @@ def is_market_url(link: str) -> bool:
     return any(domain in link for _, domain in MARKET_SITES)
 
 
+def is_aggregate_market_url(link: str) -> bool:
+    """Return True for search/category pages that are not a single advert."""
+    try:
+        parsed = urllib.parse.urlparse(link.lower())
+    except ValueError:
+        return True
+    path = parsed.path.rstrip("/")
+    query = urllib.parse.parse_qs(parsed.query)
+    if any(key in query for key in ("q", "query", "search", "keyword")):
+        return True
+    aggregate_markers = (
+        "/lst/",
+        "/annunci-italia/",
+        "/auto-usate/",
+        "/auto-usate",
+        "/ricerca/",
+        "/search/",
+        "/catalogo/",
+    )
+    return any(marker in f"{path}/" for marker in aggregate_markers)
+
+
+def is_non_vehicle_listing_text(text: str) -> bool:
+    """Reject parts, rentals and finance offers before extracting a price."""
+    cleaned = f" {normalize_market_text(text)} "
+    excluded_phrases = (
+        " turbina ",
+        " turbine ",
+        " ricambio ",
+        " ricambi ",
+        " autoricambi ",
+        " pezzi di ricambio ",
+        " motore usato ",
+        " cambio usato ",
+        " cerchi in lega ",
+        " pneumatici ",
+        " noleggio ",
+        " leasing ",
+        " anticipo ",
+        " rata mensile ",
+    )
+    return any(phrase in cleaned for phrase in excluded_phrases)
+
+
 def source_weight(link: str) -> float:
     if any(domain in link for domain in DIRECT_MARKET_DOMAINS):
         return 1.0
@@ -1922,6 +1966,8 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
     if not link:
         return None
     if not is_market_url(link):
+        return None
+    if is_aggregate_market_url(link) or is_non_vehicle_listing_text(f"{title} {snippet}"):
         return None
     match_score = (
         market_listing_match_score(combined_text, payload)
@@ -2230,6 +2276,8 @@ def market_estimate_from_sources(
         for item in listings
         if float(item.get("matchScore", 1.0) or 0) >= 0.40
         and parse_float(item.get("price")) > 0
+        and (not target_year or parse_year(item.get("year")) is not None)
+        and (target_km <= 0 or parse_float(item.get("km")) > 0)
     ]
     if not comparable:
         return None, []
@@ -2495,6 +2543,7 @@ def market_floor_value(
     trim: str,
     condition: str,
     age: int,
+    km: float = 0,
 ) -> float:
     brand_model = f"{brand} {model} {trim}".lower()
     normalized_condition = normalize_condition(condition)
@@ -2512,27 +2561,35 @@ def market_floor_value(
             return 350 if normalized_condition == "Sufficiente" else 550
         return 500 if normalized_condition == "Sufficiente" else 700
 
+    mileage_floor_factor = (
+        0.70 if age >= 20 and km >= 300000
+        else 0.78 if age >= 20 and km >= 250000
+        else 0.86 if age >= 20 and km >= 200000
+        else 1.0
+    )
+
     if age >= 25:
         if is_economy:
             if normalized_condition == "Ottimo":
-                return 1800
+                return 1800 * mileage_floor_factor
             if normalized_condition == "Buono":
-                return 1100
-            return 600
+                return 1100 * mileage_floor_factor
+            return 600 * mileage_floor_factor
         if is_premium_or_rare:
             if normalized_condition == "Ottimo":
-                return 2600
+                return 2600 * mileage_floor_factor
             if normalized_condition == "Buono":
-                return 1600
-            return 900
-        return 600 if normalized_condition == "Sufficiente" else 1000
+                return 1600 * mileage_floor_factor
+            return 900 * mileage_floor_factor
+        base_floor = 600 if normalized_condition == "Sufficiente" else 1000
+        return base_floor * mileage_floor_factor
 
     if age >= 15:
         if normalized_condition == "Ottimo":
-            return 4200 if is_premium_or_rare else 1800
+            return (4200 if is_premium_or_rare else 1800) * mileage_floor_factor
         if normalized_condition == "Buono":
-            return 3000 if is_premium_or_rare else 1200
-        return 1800 if is_premium_or_rare else 700
+            return (3000 if is_premium_or_rare else 1200) * mileage_floor_factor
+        return (1800 if is_premium_or_rare else 700) * mileage_floor_factor
 
     return 700 if normalized_condition == "Sufficiente" else 1000
 
@@ -2578,8 +2635,23 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         history_factor += 0.02
 
     detail_factor = vehicle_detail_factor(fuel_type, gearbox, trim, condition, tires_changed, tire_type, air_conditioning_ok, previous_owners, engine_cc)
-    raw_value = base_value * age_factor * mileage_factor * history_factor * detail_factor
-    floor_value = market_floor_value(vehicle_type, brand, model, trim, condition, age)
+    old_high_mileage_factor = (
+        0.72 if actual_age >= 20 and km >= 300000
+        else 0.80 if actual_age >= 20 and km >= 250000
+        else 0.88 if actual_age >= 20 and km >= 200000
+        else 1.0
+    )
+    raw_value = (
+        base_value
+        * age_factor
+        * mileage_factor
+        * history_factor
+        * detail_factor
+        * old_high_mileage_factor
+    )
+    floor_value = market_floor_value(
+        vehicle_type, brand, model, trim, condition, age, km
+    )
     internal_average = max(floor_value, raw_value)
     listings, market_diagnostics = fetch_market_sources(payload, year)
     market_average, filtered_listings = market_estimate_from_sources(
