@@ -959,6 +959,18 @@ class MarketEvidenceTests(unittest.TestCase):
             )
         )
 
+    def test_market_filter_rejects_automobile_model_page(self):
+        item = {
+            "title": "BMW 120 Diesel usato 2005 - 276.000 km - 1.999 EUR",
+            "url": "https://www.automobile.it/bmw-120-diesel",
+        }
+        self.assertIsNone(
+            server.listing_from_search_item(
+                item,
+                payload={"brand": "BMW", "model": "120d", "year": 2005, "km": 300000},
+            )
+        )
+
     def test_market_filter_rejects_parts_results(self):
         item = {
             "title": "Turbine BMW usate 2005 - 300.000 km - 4.000 EUR",
@@ -982,6 +994,25 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIsNotNone(estimate)
         self.assertEqual(len(filtered), 1)
         self.assertEqual(filtered[0]["price"], 2600)
+
+    def test_asking_discount_applies_only_to_external_prices_before_blend(self):
+        listing = {
+            "price": 1500,
+            "year": 2005,
+            "km": 303849,
+            "weight": 1.0,
+            "matchScore": 0.98,
+        }
+        estimate, _ = market_estimate_from_sources(
+            [listing],
+            2600,
+            target_km=300000,
+            target_year=2005,
+            asking_price_factor=0.78,
+        )
+        self.assertIsNotNone(estimate)
+        self.assertGreater(estimate, 1900)
+        self.assertLess(estimate, 2300)
 
     def test_old_high_mileage_premium_floor_is_reduced(self):
         regular = server.market_floor_value(
