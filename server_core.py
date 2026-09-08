@@ -2293,8 +2293,8 @@ def market_estimate_from_sources(
     market_weight = 0.72 if len(filtered) >= 5 else 0.62
     if divergence > 0.45:
         market_weight = min(market_weight, 0.50)
-    blended = (source_average * * market_weight) + (
-        internal_average * * (1 - market_weight)
+    blended = (source_average * market_weight) + (
+        internal_average * (1 - market_weight)
     )
     return blended, filtered
 
