@@ -65,7 +65,8 @@ TAVILY_API_KEY = normalize_provider_secret(
 TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
 BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "30")))
-MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "2")))
+MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "1")))
+MARKET_CACHE_VERSION = "market-v6-calibrated"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -1329,6 +1330,7 @@ def market_cache_key(payload: dict[str, Any]) -> str:
         "trim": str(payload.get("trim") or "").strip().lower(),
         "condition": str(payload.get("condition") or "").strip().lower(),
         "kmBucket": (km // 5000) * 5000,
+        "cacheVersion": MARKET_CACHE_VERSION,
     }
     serialized = json.dumps(fields, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
@@ -2347,14 +2349,16 @@ def market_estimate_from_sources(
     if internal_average <= 0:
         return source_average, filtered
 
-    if len(filtered) < MINIMUM_MARKET_LISTINGS:
-        # One or two comparable adverts cannot override the theoretical value.
-        return (source_average * 0.35) + (internal_average * 0.65), filtered
+    if len(filtered) == 1:
+        # A single advert is indicative: combine it with the internal model.
+        return (source_average * 0.55) + (internal_average * 0.45), filtered
+    if len(filtered) == 2:
+        return (source_average * 0.60) + (internal_average * 0.40), filtered
 
     divergence = abs(source_average - internal_average) / max(internal_average, 1)
     market_weight = 0.72 if len(filtered) >= 5 else 0.62
-    if divergence > 0.45:
-        market_weight = min(market_weight, 0.50)
+    if divergence > 0.65:
+        market_weight = min(market_weight, 0.55)
     blended = (source_average * market_weight) + (
         internal_average * (1 - market_weight)
     )
@@ -2635,16 +2639,10 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     mileage_factor = max(0.52, min(1.08, 1.0 - ((mileage_ratio - 1) * 0.25)))
 
     history_factor = 1.0
-    if int(payload.get("revisionHistoryCount") or 0) > 0:
-        history_factor += 0.04
-    if int(payload.get("insuranceHistoryCount") or 0) > 0:
-        history_factor += 0.02
-    if int(payload.get("taxHistoryCount") or 0) > 0:
-        history_factor += 0.02
+    # Only documented maintenance can modestly support a price estimate.
+    # Revision, insurance, tax and document counts remain in the dossier/score.
     if parse_float(payload.get("worksTotal")) > 0:
         history_factor += 0.03
-    if int(payload.get("documentsCount") or 0) > 0:
-        history_factor += 0.02
 
     detail_factor = vehicle_detail_factor(fuel_type, gearbox, trim, condition, tires_changed, tire_type, air_conditioning_ok, previous_owners, engine_cc)
     old_high_mileage_factor = (
@@ -2698,7 +2696,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if market_based
         else "Server online, ma fonti mercato non configurate. Aggiungi TAVILY_API_KEY o BRAVE_SEARCH_API_KEY su Render per usare prezzi web reali."
         if not market_configured
-        else "Server online: fonti mercato interrogate, ma non ci sono abbastanza prezzi confrontabili. Stima interna usata solo come fallback."
+        else "Stima interna calcolata in base ai dati del veicolo."
         if year is not None and km > 0 and has_details
         else "Media: compila anno, km, stato, cilindrata, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
     )
@@ -2714,7 +2712,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if market_based
         else "API online ma fonti mercato assenti: configura TAVILY_API_KEY o BRAVE_SEARCH_API_KEY su Render."
         if not market_configured
-        else "Server online ma confronto mercato insufficiente: AutoStorico non considera questo valore come prezzo web definitivo."
+        else "Stima interna calcolata in base ai dati del veicolo."
     )
 
     response = {
