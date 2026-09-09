@@ -1721,7 +1721,9 @@ def is_aggregate_market_url(link: str) -> bool:
             return required_path not in f"{path}/"
     if "subito.it" in host:
         return not ("/auto/" in f"{path}/" and path.endswith(".htm"))
-    if "trovit.it" in host or "autouncle.it" in host:
+    if parsed.hostname == "autouncle.it" or (parsed.hostname or "").endswith(".autouncle.it"):
+        return re.fullmatch(r"/it/d/[0-9]+-[^/]+", path) is None
+    if "trovit.it" in host:
         return True
     aggregate_markers = (
         "/lst/",
@@ -2282,8 +2284,8 @@ def market_estimate_from_sources(
     target_year: int | None = None,
     asking_price_factor: float = 1.0,
 ) -> tuple[float | None, list[dict[str, Any]]]:
-    # Pages with neither year nor kilometres remain useful diagnostics, but
-    # cannot determine the price. Search results produced by tests/legacy
+    # Missing mileage lowers matchScore and skips mileage normalization;
+    # a known year is still required. Search results produced by tests/legacy
     # providers have no matchScore and are treated as already validated.
     comparable = [
         dict(item)
@@ -2291,7 +2293,6 @@ def market_estimate_from_sources(
         if float(item.get("matchScore", 1.0) or 0) >= 0.40
         and parse_float(item.get("price")) > 0
         and (not target_year or parse_year(item.get("year")) is not None)
-        and (target_km <= 0 or parse_float(item.get("km")) > 0)
     ]
     if not comparable:
         return None, []
@@ -2315,12 +2316,7 @@ def market_estimate_from_sources(
     center = weighted_median(comparable, "normalizedPrice")
     lower_limit = max(300.0, center * 0.72)
     upper_limit = center * 1.32
-    if internal_average > 0:
-        # The internal model is a safety rail, not a replacement for verified
-        # market evidence.
-        internal_lower_ratio = 0.40 if asking_price_factor < 1.0 else 0.55
-        lower_limit = max(lower_limit, internal_average * internal_lower_ratio)
-        upper_limit = min(upper_limit, internal_average * 1.50)
+    # Filter outliers against observed prices, not the internal estimate.
 
     filtered = [
         item
@@ -2706,6 +2702,11 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         if year is not None and km > 0 and has_details
         else "Media: compila anno, km, stato, cilindrata, gomme, aria condizionata, proprietari, cambio, alimentazione e lavori."
     )
+    if any(not item.get("km") for item in filtered_listings):
+        confidence = (
+            f"Dati limitati: {matched_count} annunci compatibili; chilometraggio "
+            "non disponibile per alcuni annunci. Stima indicativa."
+        )
     method = (
         "Valore calcolato partendo da annunci/fonti mercato compatibili, poi corretto verso un prezzo realistico di vendita tra privati."
         if matched_count >= MINIMUM_MARKET_LISTINGS
@@ -2735,6 +2736,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "marketSearchConfigured": market_configured,
         "configuredProviders": market_diagnostics.get("configuredProviders", {}),
         "sampleListings": filtered_listings[:5],
+        "listingsMissingMileage": sum(1 for item in filtered_listings if not item.get("km")),
     }
     if payload.get("debug") is True:
         response["marketDiagnostics"] = market_diagnostics
@@ -3717,7 +3719,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "brave_once_tavily_once_v4",
+                    "marketSearchRevision": "market_evidence_autouncle_v5",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
