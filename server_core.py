@@ -1553,10 +1553,10 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
     # anno e chilometraggio. Seconda query: stesso veicolo e stesso anno, ma
     # senza km per recuperare annunci i cui snippet non li mostrano.
     exact_parts = [
-        f'"{exact_vehicle}"',
+        exact_vehicle,
         details,
         year_label,
-        f"{rounded_km} km" if rounded_km else "",
+        "",  # Do not constrain the only query by exact mileage.
         "auto usata prezzo Italia",
     ]
     year_parts = [
@@ -1569,7 +1569,7 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         f'"{exact_vehicle}"',
         details,
         year_label,
-        "AutoScout24 Subito Auto Trovit Automobile prezzo Italia",
+        "AutoScout24 Subito Auto AutoUncle Trovit Automobile prezzo Italia",
     ]
     broad_queries = [
         " ".join(part for part in exact_parts if part),
@@ -1893,7 +1893,10 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
     """Return zero for incompatible cars and a confidence weight otherwise."""
     cleaned = normalize_market_text(text)
     brand = normalize_market_text(payload.get("brand") or payload.get("make"))
-    if brand and not _contains_market_signal(cleaned, brand):
+    brand_aliases = {"land rover": ("land rover", "range rover"),
+                     "range rover": ("range rover", "land rover")}
+    if brand and not any(_contains_market_signal(cleaned, alias)
+                         for alias in brand_aliases.get(brand, (brand,))):
         return 0.0
 
     signals = market_model_signals(payload)
@@ -2075,7 +2078,7 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
         request,
         provider="brave",
         timeout=18,
-        attempts=2,
+        attempts=1,
     )
     if data.get("type") == "ErrorResponse":
         raise RuntimeError(str(data.get("message") or "Brave Search error"))
@@ -2146,7 +2149,7 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
         request,
         provider="tavily",
         timeout=20,
-        attempts=2,
+        attempts=1,
     )
     if data.get("error"):
         raise RuntimeError(str(data.get("error")))
@@ -2192,11 +2195,9 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
         return [], diagnostics
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
-    for query_index, query in enumerate(build_market_queries(payload, year)):
-        # La prima query richiede km e anno; la seconda allenta solo i km.
-        # Tre confronti compatibili consolidano la stima. Brave resta primario;
-        # Tavily e Google CSE coprono il fallback mercato
-        # quando Brave non e configurato o restituisce pochi prezzi utili.
+    for query_index, query in enumerate(build_market_queries(payload, year)[:1]):
+        # One broad query per verification: Brave once, Tavily only if needed.
+        # Provider calls do not retry, preserving the daily request budget.
         if query_index >= MARKET_MAX_TAVILY_QUERIES:
             break
         if query_index > 0 and len(listings) >= MINIMUM_MARKET_LISTINGS:
@@ -3716,7 +3717,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "brave_primary_tavily_fallback_v3",
+                    "marketSearchRevision": "brave_once_tavily_once_v4",
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
