@@ -670,6 +670,18 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIsNotNone(estimate)
         self.assertLess(estimate, 8000)
 
+    def test_market_estimate_keeps_real_lower_external_prices_for_older_premium_car(self):
+        listings = [
+            {"price": 11990, "weight": 1.0, "source": "Subito Auto"},
+            {"price": 12900, "weight": 0.65, "source": "AutoUncle"},
+            {"price": 13500, "weight": 1.0, "source": "AutoScout24"},
+        ]
+
+        estimate, filtered = market_estimate_from_sources(listings, 30000)
+
+        self.assertIsNotNone(estimate)
+        self.assertEqual(len(filtered), 3)
+
     def test_market_cache_key_does_not_include_plate_and_buckets_kilometres(self):
         first = {
             "plate": "AA000AA",
