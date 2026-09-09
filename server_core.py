@@ -1841,8 +1841,12 @@ def market_estimate_from_sources(
     lower_limit = max(300.0, center * 0.70)
     upper_limit = center * 1.35
     if internal_average > 0:
-        lower_limit = max(lower_limit, internal_average * 0.62)
-        upper_limit = min(upper_limit, internal_average * 1.22)
+        # The internal model can be much higher than real classified prices
+        # for older premium vehicles (for example a 2013 Range Rover Evoque).
+        # Use it only as a broad sanity guard, not as a hard lower bound that
+        # deletes every genuine external listing.
+        lower_limit = max(lower_limit, internal_average * 0.30)
+        upper_limit = min(upper_limit, internal_average * 1.80)
     filtered = [
         item
         for item in listings
@@ -1850,8 +1854,8 @@ def market_estimate_from_sources(
     ]
     filtered_prices = [float(item["price"]) for item in filtered]
     if len(filtered_prices) < 3 and internal_average > 0:
-        relaxed_lower = max(300.0, internal_average * 0.55)
-        relaxed_upper = internal_average * 1.30
+        relaxed_lower = max(300.0, internal_average * 0.25)
+        relaxed_upper = internal_average * 2.0
         filtered = [
             item
             for item in listings
