@@ -82,6 +82,9 @@ MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
 MINIMUM_MARKET_LISTINGS = 3
 MINIMUM_EXTERNAL_LISTINGS = 1
 MARKET_CACHE_TTL_SECONDS = int(os.environ.get("AUTOSTORICO_CACHE_TTL_SECONDS", str(30 * 24 * 60 * 60)))
+# Bump when market-source/filter rules change so an older internal-only result
+# cannot remain visible for the full cache TTL.
+MARKET_CACHE_VERSION = "market-v3-autoUncle-relaxed"
 MARKET_RATE_WINDOW_SECONDS = int(os.environ.get("AUTOSTORICO_RATE_WINDOW_SECONDS", "3600"))
 MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
 MARKET_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
@@ -1091,6 +1094,7 @@ def market_cache_key(payload: dict[str, Any]) -> str:
     """Keep estimates reusable without retaining a vehicle plate in memory."""
     km = max(0, int(parse_float(payload.get("km"), 0)))
     fields = {
+        "cacheVersion": MARKET_CACHE_VERSION,
         "vehicleType": str(payload.get("vehicleType") or "").strip().lower(),
         "brand": str(payload.get("brand") or payload.get("make") or "").strip().lower(),
         "model": str(payload.get("model") or "").strip().lower(),
