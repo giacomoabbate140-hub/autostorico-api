@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-08T21:09:07.516492+00:00",
-  "cursor": 3,
+  "updatedAt": "2026-09-09T04:41:33.127582+00:00",
+  "cursor": 6,
   "candidates": [
     {
       "status": "approved",
@@ -1719,6 +1719,20 @@
       "title": "Richiamo C3 per airbag difettoso | Il Forum di Quattroruote",
       "snippet": "Anche io ieri ho avuto un problema con un ADAS e Toyota mi ha dato il primo appuntamento utile che era il 6 giugno....credo che funzioni così con tutti i marchi.....un mio collega con un rumore strano al piantone dello sterzo su un Audi A1 ha atteso 15 gg per poter portare l&#x27;auto in officina.....dove dorme al sicuro da una settimana. Buongiorno,ieri tramite raccomandata è arrivata una lettera di richiamo urgente per la mia vettura Citroen C3,dove mi viene detto di fermare assolutamente la macchina perché ci sono dei problemi da risolvere con gli air bag.Chiamo la concessionaria per chiedere spiegazioni e mi dicono di fare la... Anche io ieri ho avuto un problema con un ADAS e Toyota mi ha dato il primo appuntamento utile che era il 6 giugno....credo che funzioni così con tutti i marchi.....un mio collega con un rumore strano al piantone dello sterzo su un Audi A1 ha atteso 15 gg per poter portare l'auto in officina.....dove dorme al sicuro da una settimana.",
       "sourceUrl": "https://forum.quattroruote.it/threads/richiamo-c3-per-airbag-difettoso.147058/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-09T04:41:33.127582+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Affidabilità Audi scadente: soldi gettati? [Archivio] - Forum dell'Audi RS Club",
+      "snippet": "Alla fine lauto ripaga sicuramente. Ma la a3 non è una macchina non di qualità. Sia chiaro. Può capitare che magari alcune possono uscire un po difettose, come tutte le auto, ma ti garantisco che la maggior parte è ok Inviato dal mio iPhone utilizzando Tapatalk Salve a tutti, sono nuovo e fino a ieri un convinto prossimo acquirente di una A3 sedan Admrided. Per occupare l'attesa che mi separava dall'appuntamento col concessionario Audi ho iniziato a leggermi un pò di articoli sulla A3 fino a quando non sono incappato in uno che denunciava la scarsa affidabilità Audi e da lì si è creato un susseguirsi di rimandi a problemi, studi di settore che la incriminavano, indagini dall'affidabilità nei 50.000, 100.000 km: insomma da esperti del settore l'Audi è Direi anti-economico, con quelle percorrenze. facendo un calcolo a spanne, il precedente proprietario si sparava circa 500 km al giorno, per tutti i gg lavorativi dell'anno (restando fermi un mese per le ferie di agosto, e fermi per le festivita' e \"ponti\" vari ecc). Non ha molt osenso. non ho sotto mano la calcolatrice, magari il calcolo preciso dice \"solamente\" 400 km al gg, ma rimane comunque un non-senso... incredibile. sinceramente mi viene un dubbio: ci sara' forse un errore di battitura dei km?? boh. anche la mia A3 ha 300.000km, in 13 anni, e lo sterzo si spella, eccome!! Alla fine lauto ripaga sicuramente. Ma la a3 non è una macchina non di qualità. Sia chiaro. Può capitare che magari alcune possono uscire un po difettose, come tutte le auto, ma ti garantisco che la maggior parte è ok Inviato dal mio iPhone utilizzando Tapatalk Ma la a3 non è una macchina non di qualità. Sia chiaro. Può capitare che magari alcune possono uscire un po’ difettose, come tutte le auto, ma ti garantisco che la maggior parte è ok Inviato dal mio iPhone utilizzando Tapatalk Guarda, preferivo non leggere niente: adesso se compro e ha problemi, mi prendo a schiaffi da solo, se non la compro, rimango con la voglia...uff...",
+      "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-79135.html"
     }
   ],
   "latestUpdate": {
