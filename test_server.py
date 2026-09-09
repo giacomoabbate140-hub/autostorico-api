@@ -163,6 +163,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("Italia", queries[0])
         self.assertIn("site:subito.it", queries[1])
         self.assertIn("site:autoscout24.it", queries[1])
+        self.assertIn("site:autouncle.it", queries[1])
         self.assertIn("Trovit", queries[2])
         self.assertTrue(any("Subito Auto" in query for query in queries))
         self.assertNotIn("Palermo", " ".join(queries))
@@ -342,7 +343,7 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        self.assertEqual(brave.call_count, 2)
+        self.assertEqual(brave.call_count, 3)
         tavily.assert_not_called()
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
         self.assertFalse(diagnostics["configuredProviders"]["tavily"])
@@ -366,7 +367,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(len(listings), 1)
         # With a single listing the focused nationwide fallback is allowed,
         # while the daily Tavily cap still remains in force.
-        self.assertEqual(tavily.call_count, 2)
+        self.assertEqual(tavily.call_count, 3)
 
     def test_plate_info_never_consumes_tavily_market_credits(self):
         with patch.object(server, "brave_search_available", return_value=False), patch.object(
@@ -576,11 +577,24 @@ class MarketEvidenceTests(unittest.TestCase):
             "km": 120000,
         }
         listing_text = (
-            "BMW 120d usata 2008 - 210000 km - 3500 EUR "
+            "BMW 120d usata 2009 - 210000 km - 3500 EUR "
             "https://www.autoscout24.it/annunci/bmw-120d"
         )
 
         self.assertFalse(server.is_relevant_listing_text(listing_text, payload))
+
+    def test_market_relevance_accepts_range_rover_alias_for_land_rover(self):
+        payload = {
+            "brand": "Land Rover",
+            "model": "Range Rover Evoque",
+            "year": 2018,
+        }
+        listing_text = (
+            "Range Rover Evoque 2018 usata - 19.900 EUR "
+            "https://www.autouncle.it/it/auto-usate/range-rover-evoque"
+        )
+
+        self.assertTrue(server.is_relevant_listing_text(listing_text, payload))
 
     def test_market_filter_rejects_explicit_wrong_fuel(self):
         item = {
@@ -963,3 +977,4 @@ class VinRecallCheckTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
