@@ -34,7 +34,7 @@ services:
       - key: AUTOSTORICO_BRAVE_DAILY_LIMIT
         value: "40"
       - key: AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES
-        value: "2"
+        value: "3"
       - key: GOOGLE_CSE_API_KEY
         sync: false
       - key: GOOGLE_CSE_ID
@@ -57,3 +57,4 @@ services:
         sync: false
       - key: AUTOSTORICO_PUBLIC_URL
         value: https://autostorico-api-1.onrender.com
+
