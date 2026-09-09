@@ -63,7 +63,9 @@ TAVILY_API_KEY = normalize_provider_secret(
 TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
 BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "40")))
-MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "2")))
+# Use three focused queries so the primary classified portals plus AutoUncle
+# can all contribute before falling back to the broader market query.
+MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "3")))
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -1273,12 +1275,11 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         f"{base_core} auto usata prezzo "
         "AutoScout24 Subito Trovit Automobile Italia"
     )
-    # Tavily runs only one focused fallback after the broad nationwide query.
-    # Ask explicitly for the two primary classified portals, instead of using
-    # the old generic portal wording that often surfaced only aggregators.
+    # Ask explicitly for the three trusted used-car sources.  The URL allowlist
+    # below still decides which returned pages are eligible for a price.
     preferred_portals_query = (
         f"{base_core} auto usata prezzo "
-        "site:subito.it OR site:autoscout24.it Italia"
+        "site:subito.it OR site:autoscout24.it OR site:autouncle.it Italia"
     )
     broad_queries = [
         national_market_query,
@@ -1498,8 +1499,25 @@ def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
     brand = str(payload.get("brand") or payload.get("make") or "").strip().lower()
     model = str(payload.get("model") or "").strip().lower()
     target_year = parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
-    if brand and brand not in cleaned:
-        return False
+    if brand:
+        # Listings often use the commercial family name instead of the
+        # manufacturer (for example “Range Rover Evoque” instead of “Land
+        # Rover”). Accept those well-known aliases without dropping the
+        # model check below.
+        brand_aliases = {
+            "land rover": ("land rover", "range rover"),
+            "range rover": ("range rover", "land rover"),
+            "mercedes-benz": ("mercedes-benz", "mercedes benz", "mercedes"),
+            "mercedes benz": ("mercedes-benz", "mercedes benz", "mercedes"),
+            "vw": ("vw", "volkswagen"),
+            "volkswagen": ("volkswagen", "vw"),
+        }
+        aliases = brand_aliases.get(brand, (brand,))
+        brand_tokens = [token for token in re.findall(r"[a-z0-9]+", brand) if len(token) > 2]
+        matches_alias = any(alias in cleaned for alias in aliases)
+        matches_tokens = bool(brand_tokens) and all(token in cleaned for token in brand_tokens)
+        if not (matches_alias or matches_tokens):
+            return False
     if model:
         brand_tokens = set(re.findall(r"[a-z0-9]+", brand))
         model_tokens = [
@@ -1509,7 +1527,7 @@ def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
         ]
         generic_tokens = {
             "auto", "usata", "usato", "serie", "series", "classe",
-            "model", "modello", "versione", "range",
+            "model", "modello", "versione",
         }
         signal_tokens = [token for token in model_tokens if token not in generic_tokens]
         tokens_to_check = signal_tokens or model_tokens
@@ -1518,7 +1536,10 @@ def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
         ):
             return False
     listing_year = extract_listing_year(text)
-    if target_year and listing_year and abs(listing_year - target_year) > 1:
+    # Search snippets frequently expose the registration/model year with a
+    # one-year offset. Keep a useful comparison instead of discarding it too
+    # early; larger gaps are still rejected.
+    if target_year and listing_year and abs(listing_year - target_year) > 2:
         return False
     # Km distant or missing should reduce confidence on the client side, not
     # discard a real nationwide market listing before price comparison.
@@ -3508,3 +3529,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
