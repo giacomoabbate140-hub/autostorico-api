@@ -66,7 +66,7 @@ TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
 BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "30")))
 MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "1")))
-MARKET_CACHE_VERSION = "market-v6-calibrated"
+MARKET_CACHE_VERSION = "market-v7-portal-first"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -1574,9 +1574,12 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         "AutoScout24 Subito Auto AutoUncle Trovit Automobile prezzo Italia",
     ]
     broad_queries = [
+        # Only the first broad query is sent to each provider. Put the
+        # portal-aware query first so results favour actual adverts instead
+        # of editorial valuation pages.
+        " ".join(part for part in portal_parts if part),
         " ".join(part for part in exact_parts if part),
         " ".join(part for part in year_parts if part),
-        " ".join(part for part in portal_parts if part),
     ]
 
     if year:
@@ -1913,7 +1916,10 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
     if target_year:
         if years:
             year_difference = min(abs(value - target_year) for value in years)
-            if year_difference > 2:
+            # Older cars have fewer live adverts. A three-year window keeps
+            # the same generation useful without relaxing recent vehicles.
+            max_year_difference = 3 if target_year <= 2016 else 2
+            if year_difference > max_year_difference:
                 return 0.0
             score *= 1.0 - (year_difference * 0.12)
         else:
