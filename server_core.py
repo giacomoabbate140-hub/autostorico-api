@@ -66,7 +66,7 @@ TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
 BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "30")))
 MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "1")))
-MARKET_CACHE_VERSION = "market-v8-portal-tavily-fallback"
+MARKET_CACHE_VERSION = "market-v9-scoped-fallback"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -1747,13 +1747,10 @@ def is_aggregate_market_url(link: str) -> bool:
         return not ("/auto/" in f"{path}/" and path.endswith(".htm"))
     if parsed.hostname == "autouncle.it" or (parsed.hostname or "").endswith(".autouncle.it"):
         return re.fullmatch(r"/it/d/[0-9]+-[^/]+", path) is None
-    if "trovit.it" in host:
-        # Keep Trovit safety filtering: reject generic result pages, allow only
-        # detail-like advert paths with a numeric id or explicit /annunci/.
-        aggregate_markers = ("/auto-usate/", "/ricerca/", "/search/", "/catalogo/", "/lista/", "/categoria/")
-        if any(marker in f"{path}/" for marker in aggregate_markers):
-            return True
-        return not (re.search(r"/(?:annunci?/)?[a-z0-9-]*\\d{4,}(?:[-/]|$)", path) or "/annunci/" in f"{path}/")
+    if parsed.hostname == "trovit.it" or (parsed.hostname or "").endswith(".trovit.it"):
+        # Fail closed on unknown routes: a year or /annunci/ alone is not
+        # evidence that the page describes a single car.
+        return re.fullmatch(r"/annunci?/[0-9]{5,}-[a-z0-9-]+", path) is None
     aggregate_markers = (
         "/lst/",
         "/annunci-italia/",
@@ -2018,6 +2015,12 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
         return None
     if is_aggregate_market_url(link) or is_non_vehicle_listing_text(f"{title} {snippet}"):
         return None
+    hostname = urllib.parse.urlparse(link).hostname or ""
+    if hostname == "trovit.it" or hostname.endswith(".trovit.it"):
+        # Trovit candidates must carry their own year and mileage, never a
+        # price paired with data from another car on a category page.
+        if not extract_listing_years(combined_text) or not extract_listing_kms(combined_text):
+            return None
     match_score = (
         market_listing_match_score(combined_text, payload)
         if payload is not None
@@ -2166,7 +2169,6 @@ def tavily_market_search(
             "country": "italy",
             "language": "it",
             "include_domains": market_domains,
-            "include_domains_mode": "boost",
             "include_answer": False,
             "include_raw_content": False,
             "include_images": False,
@@ -2190,7 +2192,7 @@ def tavily_market_search(
         timeout=20,
         # Retry only a transient network/JSON failure; normal verification
         # still makes a single Tavily request and stays within the daily budget.
-        attempts=2,
+        attempts=1,
     )
     if data.get("error"):
         raise RuntimeError(str(data.get("error")))
@@ -2253,7 +2255,10 @@ def fetch_market_sources(
     tavily_calls = 0
 
     for portal_name, domain in MARKET_PORTAL_SITES:
-        portal_query = f"site:{domain} {base_queries[0]}".strip()
+        # Keep discovery broad; validate year, mileage and engine per advert.
+        brand = str(payload.get("brand") or payload.get("make") or "").strip()
+        model = str(payload.get("model") or "").strip()
+        portal_query = f"site:{domain} {brand} {model} {year or ''} usata prezzo".strip()
         diagnostics["portalsQueried"].append(
             {"portal": portal_name, "domain": domain, "query": portal_query}
         )
@@ -2279,12 +2284,27 @@ def fetch_market_sources(
                     }
                 )
 
-        if (
-            configured_providers["tavily"]
-            and not any(str(item.get("price") or "").strip() for item in query_results if isinstance(item, dict))
-            and tavily_calls < MARKET_MAX_TAVILY_QUERIES
-        ):
+        if query_results:
+            tavily_skip = "compatible_brave_listings"
+        elif tavily_calls >= MARKET_MAX_TAVILY_QUERIES:
+            tavily_skip = "request_budget_exhausted"
+        elif not TAVILY_ENABLED:
+            tavily_skip = "disabled"
+        elif not TAVILY_API_KEY:
+            tavily_skip = "missing_key"
+        elif not tavily_market_search_available():
+            tavily_skip = "daily_budget_exhausted"
+        else:
+            tavily_skip = ""
+        diagnostics.setdefault("fallbackDecisions", []).append(
+            {"portal": portal_name, "provider": "tavily",
+             "status": "skipped" if tavily_skip else "attempted",
+             "reason": tavily_skip or "no_compatible_brave_listings"}
+        )
+        if not tavily_skip:
             before = len(diagnostics["providers"])
+            # Count failures too; never multiply a failing fallback by portals.
+            tavily_calls += 1
             try:
                 query_results.extend(
                     tavily_market_search(
@@ -2294,7 +2314,6 @@ def fetch_market_sources(
                         domain=domain,
                     )
                 )
-                tavily_calls += 1
                 for entry in diagnostics["providers"][before:]:
                     entry["portal"] = portal_name
                     entry["domain"] = domain
@@ -3840,7 +3859,8 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_portal_first_v7",
+                    "marketSearchRevision": "market_scoped_fallback_v9",
+                    "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
                     "configuredProviders": configured_providers,
