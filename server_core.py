@@ -736,6 +736,16 @@ MARKET_SITES = [
     ("Moto.it/Automoto", "automoto.it"),
 ]
 
+# Portali interrogati separatamente per una stima trasparente e verificabile.
+MARKET_PORTAL_SITES = [
+    ("AutoUncle", "autouncle.it"),
+    ("Subito", "subito.it"),
+    ("Trovit", "auto.trovit.it"),
+    ("AutoScout24", "autoscout24.it"),
+    ("Automobile.it", "automobile.it"),
+    ("Quattroruote", "quattroruote.it"),
+]
+
 DIRECT_MARKET_DOMAINS = [
     "autoscout24.it",
     "subito.it",
@@ -2126,7 +2136,12 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
     return results
 
 
-def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def tavily_market_search(
+    query: str,
+    payload: dict[str, Any],
+    diagnostics: dict[str, Any] | None = None,
+    domain: str | None = None,
+) -> list[dict[str, Any]]:
     """Search Tavily for nationwide compatible market listings only."""
     if not tavily_market_search_available():
         return []
@@ -2135,7 +2150,7 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
     # portals without excluding other sources. Advanced search returns the
     # most relevant source chunks, which are much more likely to include the
     # advertised price than the short basic-search summary.
-    market_domains = list(dict.fromkeys(domain for _, domain in MARKET_SITES))
+    market_domains = [domain] if domain else list(dict.fromkeys(site for _, site in MARKET_SITES))
     request_body = json.dumps(
         {
             "query": query,
@@ -2201,71 +2216,147 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
     return results
 
 
-def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def fetch_market_sources(
+    payload: dict[str, Any], year: int | None
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Query each configured market portal separately and merge only afterward."""
     configured_providers = {
         "brave": brave_search_available(),
         "tavily": tavily_market_search_available(),
-        "google_cse": bool(GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID),
+        "google_cse": bool(
+            GOOGLE_CSE_ENABLED and GOOGLE_CSE_API_KEY and GOOGLE_CSE_ID
+        ),
     }
     diagnostics: dict[str, Any] = {
         "configuredProviders": configured_providers,
         "providers": [],
         "errors": [],
+        "portalsQueried": [],
     }
     if not MARKET_SEARCH_ENABLED:
         return [], diagnostics
+
+    base_queries = build_market_queries(payload, year)
+    if not base_queries:
+        diagnostics["errors"].append(
+            {"provider": "system", "error": "Nessuna query mercato generata"}
+        )
+        return [], diagnostics
+
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
-    for query_index, query in enumerate(build_market_queries(payload, year)[:1]):
-        # One broad query per verification: Brave once, Tavily only if needed.
-        # Tavily may retry one transient transport failure; normal traffic stays
-        # within the one-query daily budget.
-        if query_index >= MARKET_MAX_TAVILY_QUERIES:
-            break
-        if query_index > 0 and len(listings) >= MINIMUM_MARKET_LISTINGS:
-            break
+    tavily_calls = 0
+
+    for portal_name, domain in MARKET_PORTAL_SITES:
+        portal_query = f"site:{domain} {base_queries[0]}".strip()
+        diagnostics["portalsQueried"].append(
+            {"portal": portal_name, "domain": domain, "query": portal_query}
+        )
         query_results: list[dict[str, Any]] = []
+
         if configured_providers["brave"]:
+            before = len(diagnostics["providers"])
             try:
-                query_results.extend(brave_market_search(query, payload, diagnostics))
+                query_results.extend(
+                    brave_market_search(portal_query, payload, diagnostics)
+                )
+                for entry in diagnostics["providers"][before:]:
+                    entry["portal"] = portal_name
+                    entry["domain"] = domain
             except Exception as exc:
                 diagnostics["errors"].append(
-                    {"provider": "brave", "query": query, "error": str(exc)[:180]}
+                    {
+                        "provider": "brave",
+                        "portal": portal_name,
+                        "domain": domain,
+                        "query": portal_query,
+                        "error": str(exc)[:180],
+                    }
                 )
-        if configured_providers["tavily"] and len(query_results) < MINIMUM_MARKET_LISTINGS:
+
+        if (
+            configured_providers["tavily"]
+            and not query_results
+            and tavily_calls < MARKET_MAX_TAVILY_QUERIES
+        ):
+            before = len(diagnostics["providers"])
             try:
-                query_results.extend(tavily_market_search(query, payload, diagnostics))
+                query_results.extend(
+                    tavily_market_search(
+                        portal_query,
+                        payload,
+                        diagnostics,
+                        domain=domain,
+                    )
+                )
+                tavily_calls += 1
+                for entry in diagnostics["providers"][before:]:
+                    entry["portal"] = portal_name
+                    entry["domain"] = domain
             except Exception as exc:
                 diagnostics["errors"].append(
-                    {"provider": "tavily", "query": query, "error": str(exc)[:180]}
+                    {
+                        "provider": "tavily",
+                        "portal": portal_name,
+                        "domain": domain,
+                        "query": portal_query,
+                        "error": str(exc)[:180],
+                    }
                 )
-        if configured_providers["google_cse"] and len(query_results) < MINIMUM_MARKET_LISTINGS:
+
+        if configured_providers["google_cse"]:
             try:
-                google_results = google_market_search(query, payload)
+                google_results = google_market_search(portal_query, payload)
                 query_results.extend(google_results)
                 diagnostics["providers"].append(
                     {
                         "provider": "google_cse",
-                        "query": query,
+                        "portal": portal_name,
+                        "domain": domain,
+                        "query": portal_query,
                         "items": len(google_results),
                         "priced": len(google_results),
-                        "sampleUrls": [str(item.get("url") or "") for item in google_results[:3]],
+                        "sampleUrls": [
+                            str(item.get("url") or "")
+                            for item in google_results[:3]
+                        ],
                     }
                 )
             except Exception as exc:
                 diagnostics["errors"].append(
-                    {"provider": "google_cse", "query": query, "error": str(exc)[:180]}
+                    {
+                        "provider": "google_cse",
+                        "portal": portal_name,
+                        "domain": domain,
+                        "query": portal_query,
+                        "error": str(exc)[:180],
+                    }
                 )
+
         for listing in query_results:
-            url = str(listing.get("url") or "")
-            if url in seen_urls:
+            url = str(listing.get("url") or "").strip()
+            dedupe_key = url.lower()
+            if not dedupe_key or dedupe_key in seen_urls:
                 continue
-            seen_urls.add(url)
+            seen_urls.add(dedupe_key)
+            listing.setdefault("portal", portal_name)
+            listing.setdefault("domain", domain)
             listings.append(listing)
-        if len(listings) >= 12:
-            break
 
     diagnostics["pricesFound"] = len(listings)
+    diagnostics["portalsWithResults"] = [
+        {
+            "portal": portal_name,
+            "domain": domain,
+            "listings": sum(
+                1
+                for listing in listings
+                if listing.get("domain") == domain
+                or domain in str(listing.get("url") or "")
+            ),
+        }
+        for portal_name, domain in MARKET_PORTAL_SITES
+    ]
     return listings[:20], diagnostics
 
 
