@@ -66,7 +66,7 @@ TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
 BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "30")))
 MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "1")))
-MARKET_CACHE_VERSION = "market-v7-portal-first"
+MARKET_CACHE_VERSION = "market-v8-portal-tavily-fallback"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -1748,7 +1748,12 @@ def is_aggregate_market_url(link: str) -> bool:
     if parsed.hostname == "autouncle.it" or (parsed.hostname or "").endswith(".autouncle.it"):
         return re.fullmatch(r"/it/d/[0-9]+-[^/]+", path) is None
     if "trovit.it" in host:
-        return True
+        # Keep Trovit safety filtering: reject generic result pages, allow only
+        # detail-like advert paths with a numeric id or explicit /annunci/.
+        aggregate_markers = ("/auto-usate/", "/ricerca/", "/search/", "/catalogo/", "/lista/", "/categoria/")
+        if any(marker in f"{path}/" for marker in aggregate_markers):
+            return True
+        return not (re.search(r"/(?:annunci?/)?[a-z0-9-]*\\d{4,}(?:[-/]|$)", path) or "/annunci/" in f"{path}/")
     aggregate_markers = (
         "/lst/",
         "/annunci-italia/",
@@ -2276,7 +2281,7 @@ def fetch_market_sources(
 
         if (
             configured_providers["tavily"]
-            and not query_results
+            and not any(str(item.get("price") or "").strip() for item in query_results if isinstance(item, dict))
             and tavily_calls < MARKET_MAX_TAVILY_QUERIES
         ):
             before = len(diagnostics["providers"])
