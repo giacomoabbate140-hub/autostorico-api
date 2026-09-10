@@ -1,24 +1,26 @@
 {
-  "catalogVersion": 31,
-  "updatedAt": "2026-09-01",
+  "catalogVersion": 32,
+  "updatedAt": "2026-09-10",
   "latestUpdate": {
-    "id": "2026-09-01-giulietta-richiamo-fonti",
-    "summary": "Aggiunto il richiamo A12/0377/17 per Alfa Romeo Giulietta e le fonti consultabili dell’aggiornamento.",
+    "id": "2026-09-10-evoque-community-airbag",
+    "summary": "Aggiornato il catalogo Range Rover Evoque con casistiche community verificate e un richiamo airbag ufficiale.",
     "details": [
-      "Richiamo europeo A12/0377/17: possibile mancato funzionamento del secondo stadio dell’airbag.",
-      "Veicoli interessati: Alfa Romeo Giulietta tipo 940 prodotte da settembre 2010 a dicembre 2015.",
-      "La conferma definitiva deve essere effettuata tramite VIN presso Alfa Romeo o la rete ufficiale."
+      "Evoque L538: aggiunte segnalazioni ripetute su manicotto intercooler, cielo abitacolo e comando frizione/cambio manuale.",
+      "Evoque L551: aggiunto il richiamo NHTSA 25V454 / JLR N945 relativo al modulo airbag passeggero per veicoli 2021-2025 del mercato indicato dalla fonte.",
+      "Le segnalazioni community non sono richiami; l'applicabilità delle campagne ufficiali deve essere verificata tramite VIN presso Land Rover."
     ],
     "vehicles": [
       {
-        "make": "Alfa Romeo",
-        "model": "Giulietta"
+        "make": "Land Rover",
+        "model": "Range Rover Evoque"
       }
     ],
     "sources": [
-      "https://ec.europa.eu/safety-gate-alerts/screen/webReport",
-      "https://www.alfaromeo.it/acquisto/servizi/manutenzione",
-      "https://car-recalls.eu/recall/alfa-romeo-giulietta-2010-2015/"
+      "https://evoque.forumfree.it/?t=81099017",
+      "https://evoque.forumfree.it/?t=79028479",
+      "https://evoque.forumfree.it/?t=73024172",
+      "https://static.nhtsa.gov/odi/rcl/2025/RCLRPT-25V454-3682.pdf",
+      "https://www.landrover.it/ownership/campagne-di-richiamo.html"
     ]
   },
   "notes": "Catalogo iniziale: fonti ufficiali e community sono sempre separate.",
@@ -2541,15 +2543,15 @@
         {
           "id": "land-rover-evoque-22-diesel-intercooler-oil-community",
           "category": "Aspirazione e perdite",
-          "title": "Controllo manicotti intercooler e perdite d'olio",
+          "title": "Segnalazioni su manicotto intercooler fessurato e sfiato",
           "sourceType": "community_source",
-          "confidence": "unverified",
+          "confidence": "community-repeated",
           "severity": "informative",
           "status": "awaiting-autostorico-reports",
           "engineScope": "Evoque L538 2.2 diesel, 2011-2015.",
-          "sourceName": "Segnalazioni community Evoque",
-          "sourceUrl": "",
-          "userText": "Sono riportati manicotti dell'intercooler che possono fessurarsi e trasudamenti o perdite d'olio. In presenza di fischio, calo di potenza, fumo o macchie sotto l'auto, fai controllare tubazioni turbo/intercooler e l'origine della perdita."
+          "sourceName": "Evoque Forum Italia",
+          "sourceUrl": "https://evoque.forumfree.it/?t=81099017",
+          "userText": "Più utenti descrivono uno sfiato o fischio intermittente intorno a 1.800-2.000 giri; in un caso documentato alcune microfessure nel manicotto in gomma dell'intercooler sono state individuate e la sostituzione ha risolto il sintomo. Non attribuire automaticamente il rumore alla turbina: fai controllare in pressione manicotti, giunti, intercooler e circuito turbo."
         },
         {
           "id": "land-rover-evoque-22-diesel-awd-electronics-community",
@@ -2788,6 +2790,79 @@
           "sourceName": "Range Rover Community",
           "sourceUrl": "https://www.reddit.com/r/LandRover/comments/1mtdmz4/camshaft_position_sensor_replacement/",
           "userText": "La community segnala spie motore/codici di fasatura che possono dipendere da solenoide VVT, passaggi olio o adattamento elettronico. Prima di sostituire sensori, richiedi lettura codici, controllo qualita/livello olio e verifica delle campagne VIN."
+        }
+      ]
+    },
+    {
+      "id": "land-rover-evoque-l538-interiors-manual-community",
+      "make": "Land Rover",
+      "models": [
+        "Range Rover Evoque",
+        "Evoque",
+        "Epoque",
+        "Avoque",
+        "Range Rover Avoque"
+      ],
+      "fromYear": 2011,
+      "toYear": 2018,
+      "reports": [
+        {
+          "id": "land-rover-evoque-l538-headliner-community",
+          "category": "Interni e finiture",
+          "title": "Segnalazioni sul cielo abitacolo che si scolla",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "informative",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Range Rover Evoque L538 di prima generazione, 2011-2018; problema di rivestimento interno non legato al motore.",
+          "sourceName": "Evoque Forum Italia",
+          "sourceUrl": "https://evoque.forumfree.it/?t=79028479",
+          "userText": "Diversi proprietari, inclusi esemplari 2012 e 2013, riferiscono il distacco del tessuto del cielo abitacolo. È un difetto di finitura, non un richiamo: controlla anche eventuale umidità e chiedi un preventivo a un tappezziere specializzato prima di sostituire l'intero pannello."
+        },
+        {
+          "id": "land-rover-evoque-l538-manual-clutch-pedal-community",
+          "category": "Frizione e cambio manuale",
+          "title": "Segnalazioni su pedale frizione alto, scatto e innesti rigidi",
+          "sourceType": "community_source",
+          "confidence": "community-repeated",
+          "severity": "check_promptly",
+          "status": "awaiting-autostorico-reports",
+          "engineScope": "Solo Range Rover Evoque L538 con cambio manuale; non si applica alle versioni automatiche.",
+          "sourceName": "Evoque Forum Italia",
+          "sourceUrl": "https://evoque.forumfree.it/?t=73024172",
+          "userText": "Più proprietari descrivono pedale alto, scatto a fine corsa, ritorno irregolare o marce dure. I sintomi possono dipendere dal circuito idraulico, dalla pompa/cilindro frizione, dal comando o dal gruppo frizione-volano: serve diagnosi, non sostituzione automatica di un singolo componente."
+        }
+      ]
+    },
+    {
+      "id": "land-rover-evoque-l551-official-recalls",
+      "make": "Land Rover",
+      "models": [
+        "Range Rover Evoque",
+        "Evoque",
+        "Epoque",
+        "Avoque",
+        "Range Rover Avoque"
+      ],
+      "fromYear": 2021,
+      "toYear": 2025,
+      "reports": [
+        {
+          "id": "land-rover-evoque-l551-passenger-airbag-n945-25v454",
+          "category": "Airbag e sicurezza",
+          "title": "Possibile lacerazione dell'airbag anteriore passeggero durante l'attivazione",
+          "sourceType": "official_recall",
+          "confidence": "official",
+          "severity": "urgent",
+          "status": "source-verified",
+          "fromYear": 2021,
+          "toYear": 2025,
+          "productionPeriod": "10 luglio 2020 - 7 ottobre 2024, secondo la campagna statunitense",
+          "officialReference": "NHTSA 25V454 / JLR N945",
+          "sourceName": "NHTSA / Jaguar Land Rover",
+          "sourceUrl": "https://static.nhtsa.gov/odi/rcl/2025/RCLRPT-25V454-3682.pdf",
+          "userText": "La campagna statunitense riguarda Evoque model year 2021-2024 e alcuni 2025: l'airbag passeggero può lacerarsi durante l'attivazione, riducendo la protezione e lasciando uscire gas caldi. Il mercato e l'anno non bastano: verifica subito il VIN sul portale Land Rover Italia/UNRAE o presso la rete ufficiale.",
+          "mechanism": "Ripiegatura non corretta del modulo airbag passeggero durante l'assemblaggio."
         }
       ]
     }
