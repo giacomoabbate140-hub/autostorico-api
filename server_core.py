@@ -1346,12 +1346,21 @@ def cached_market_estimate(cache_key: str) -> dict[str, Any] | None:
         if now - created_at > MARKET_CACHE_TTL_SECONDS:
             MARKET_CACHE.pop(cache_key, None)
             return None
-        return estimate
+        return public_market_estimate(estimate)
 
 
 def cache_market_estimate(cache_key: str, estimate: dict[str, Any]) -> None:
     with MARKET_GUARD_LOCK:
         MARKET_CACHE[cache_key] = (time.time(), estimate)
+
+
+def public_market_estimate(estimate: dict[str, Any]) -> dict[str, Any]:
+    """Strip developer-only diagnostics before an estimate enters shared cache."""
+    return {
+        key: value
+        for key, value in estimate.items()
+        if key not in {"marketDiagnostics", "developerDiagnostics"}
+    }
 
 
 def should_bypass_market_cache(payload: dict[str, Any]) -> bool:
@@ -2734,19 +2743,21 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "historicCriteria": historic_kind,
         "vehicleAge": actual_age,
         "matchedListings": matched_count,
-        "totalListingsFound": len(listings),
-        "minimumListingsRequired": MINIMUM_EXTERNAL_LISTINGS,
         "sourcesUsed": source_names,
         "marketBased": market_based,
-        "marketCheckedAt": datetime.now(timezone.utc).isoformat(),
         "serverOnline": True,
-        "marketSearchConfigured": market_configured,
-        "configuredProviders": market_diagnostics.get("configuredProviders", {}),
         "sampleListings": filtered_listings[:5],
         "listingsMissingMileage": sum(1 for item in filtered_listings if not item.get("km")),
     }
-    if payload.get("debug") is True:
+    if developer_market_diagnostics_enabled(payload):
         response["marketDiagnostics"] = market_diagnostics
+        response["developerDiagnostics"] = {
+            "totalListingsFound": len(listings),
+            "minimumListingsRequired": MINIMUM_EXTERNAL_LISTINGS,
+            "marketSearchConfigured": market_configured,
+            "configuredProviders": market_diagnostics.get("configuredProviders", {}),
+            "marketCheckedAt": datetime.now(timezone.utc).isoformat(),
+        }
     return response
 
 
@@ -3154,6 +3165,13 @@ def developer_device_is_authorized(device_id_hash: Any) -> bool:
         re.fullmatch(r"[a-f0-9]{64}", candidate)
         and re.fullmatch(r"[a-f0-9]{64}", DEVELOPER_DEVICE_ID_HASH)
         and hmac.compare_digest(candidate, DEVELOPER_DEVICE_ID_HASH)
+    )
+
+
+def developer_market_diagnostics_enabled(payload: dict[str, Any]) -> bool:
+    """Return internal market diagnostics only to the authorized developer."""
+    return payload.get("debug") is True and developer_device_is_authorized(
+        payload.get("developerDeviceIdHash")
     )
 
 
@@ -4124,7 +4142,9 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     )
                     return
                 estimate = estimate_vehicle_value(payload)
-                cache_market_estimate(cache_key, estimate)
+                # Never cache provider diagnostics: the cache is shared by
+                # developer and consumer requests for the same vehicle.
+                cache_market_estimate(cache_key, public_market_estimate(estimate))
             self.send_json({"estimate": estimate})
         except Exception as exc:
             self.send_json({"error": "bad_request", "detail": str(exc)}, status=400)
