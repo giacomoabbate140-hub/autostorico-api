@@ -362,7 +362,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("annuncio auto usata prezzo", queries[2])
         self.assertNotIn("Palermo", " ".join(queries))
 
-    def test_market_fallback_runs_only_when_first_search_is_insufficient(self):
+    def test_market_search_caps_tavily_to_one_broad_query(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         first = {
             "source": "AutoScout24",
@@ -383,8 +383,10 @@ class MarketEvidenceTests(unittest.TestCase):
         ) as tavily:
             listings, _ = fetch_market_sources(payload, 2011)
 
-        self.assertEqual(len(listings), 2)
-        self.assertEqual(tavily.call_count, 2)
+        # The provider budget is intentionally capped to one broad query even
+        # when a larger legacy configuration value is supplied.
+        self.assertEqual(len(listings), 1)
+        self.assertEqual(tavily.call_count, 1)
 
     def test_market_search_uses_tavily_only_as_fallback_after_brave(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
@@ -410,10 +412,10 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 2)
-        # Two results are useful but not yet consolidated: the second focused
-        # query is intentionally attempted before accepting the estimate.
-        self.assertEqual(brave.call_count, 2)
-        self.assertEqual(tavily.call_count, 2)
+        # Brave is queried once; Tavily is used once only because Brave alone
+        # did not provide the minimum market sample.
+        self.assertEqual(brave.call_count, 1)
+        self.assertEqual(tavily.call_count, 1)
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
 
@@ -446,7 +448,7 @@ class MarketEvidenceTests(unittest.TestCase):
         ), patch.object(server, "tavily_market_search", return_value=[]) as tavily:
             fetch_market_sources(payload, 2011)
 
-        self.assertEqual(tavily.call_count, 2)
+        self.assertEqual(tavily.call_count, 1)
 
     def test_tavily_market_search_boosts_domains_without_filtering_the_web(self):
         class FakeResponse:
@@ -607,7 +609,7 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        self.assertEqual(brave.call_count, 2)
+        self.assertEqual(brave.call_count, 1)
         tavily.assert_not_called()
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
         self.assertFalse(diagnostics["configuredProviders"]["tavily"])
@@ -629,9 +631,9 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, _ = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        # With a single listing the focused nationwide fallback is allowed,
-        # while the daily Tavily cap still remains in force.
-        self.assertEqual(tavily.call_count, 2)
+        # A single broad query is enough to collect the available fallback
+        # evidence; the daily Tavily cap remains in force.
+        self.assertEqual(tavily.call_count, 1)
 
     def test_plate_info_never_consumes_tavily_market_credits(self):
         with patch.object(server, "brave_search_available", return_value=False), patch.object(
@@ -1012,8 +1014,10 @@ class MarketEvidenceTests(unittest.TestCase):
             asking_price_factor=0.78,
         )
         self.assertIsNotNone(estimate)
-        self.assertGreater(estimate, 1900)
-        self.assertLess(estimate, 2300)
+        # One discounted asking price is blended 55% with the 2600 internal
+        # estimate, so the result stays indicative rather than replacing it.
+        self.assertGreater(estimate, 1700)
+        self.assertLess(estimate, 2000)
 
     def test_old_high_mileage_premium_floor_is_reduced(self):
         regular = server.market_floor_value(

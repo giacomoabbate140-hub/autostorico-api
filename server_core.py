@@ -2159,7 +2159,9 @@ def tavily_market_search(query: str, payload: dict[str, Any], diagnostics: dict[
         request,
         provider="tavily",
         timeout=20,
-        attempts=1,
+        # Retry only a transient network/JSON failure; normal verification
+        # still makes a single Tavily request and stays within the daily budget.
+        attempts=2,
     )
     if data.get("error"):
         raise RuntimeError(str(data.get("error")))
@@ -2207,7 +2209,8 @@ def fetch_market_sources(payload: dict[str, Any], year: int | None) -> tuple[lis
     seen_urls: set[str] = set()
     for query_index, query in enumerate(build_market_queries(payload, year)[:1]):
         # One broad query per verification: Brave once, Tavily only if needed.
-        # Provider calls do not retry, preserving the daily request budget.
+        # Tavily may retry one transient transport failure; normal traffic stays
+        # within the one-query daily budget.
         if query_index >= MARKET_MAX_TAVILY_QUERIES:
             break
         if query_index > 0 and len(listings) >= MINIMUM_MARKET_LISTINGS:
