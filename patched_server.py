@@ -180,10 +180,11 @@ def _diagnostic_tavily_market_search(
     query: str,
     payload: dict[str, Any],
     diagnostics: dict[str, Any] | None = None,
+    domain: str | None = None,
 ) -> list[dict[str, Any]]:
     started = time.perf_counter()
     try:
-        results = _ORIGINAL_TAVILY_MARKET_SEARCH(query, payload, diagnostics)
+        results = _ORIGINAL_TAVILY_MARKET_SEARCH(query, payload, diagnostics, domain=domain)
         elapsed = int((time.perf_counter() - started) * 1000)
         _record_provider_result(
             "tavily",
