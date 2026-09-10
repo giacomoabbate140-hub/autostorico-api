@@ -351,14 +351,15 @@ class MarketEvidenceTests(unittest.TestCase):
             2010,
         )
 
-        self.assertGreaterEqual(len(queries), 2)
+        self.assertGreaterEqual(len(queries), 3)
         self.assertIn("Italia", queries[0])
         self.assertIn('"BMW Serie 1 120d"', queries[0])
-        self.assertIn("120000 km", queries[0])
-        self.assertNotIn("site:", queries[1])
-        self.assertIn("annuncio auto usata prezzo", queries[1])
-        self.assertIn("Trovit", queries[2])
-        self.assertTrue(any("Subito Auto" in query for query in queries))
+        self.assertIn("AutoScout24", queries[0])
+        self.assertIn("Subito Auto", queries[0])
+        self.assertIn("AutoUncle", queries[0])
+        self.assertNotIn("site:", queries[0])
+        self.assertNotIn("120000 km", queries[0])
+        self.assertIn("annuncio auto usata prezzo", queries[2])
         self.assertNotIn("Palermo", " ".join(queries))
 
     def test_market_fallback_runs_only_when_first_search_is_insufficient(self):
@@ -1032,7 +1033,7 @@ class MarketEvidenceTests(unittest.TestCase):
             "km": 120000,
         }
         listing_text = (
-            "BMW 120d usata 2008 - 210000 km - 3500 EUR "
+            "BMW 120d usata 2009 - 210000 km - 3500 EUR "
             "https://www.autoscout24.it/annunci/bmw-120d"
         )
 
@@ -1367,7 +1368,7 @@ class MarketEvidenceTests(unittest.TestCase):
         )
 
         self.assertIsNotNone(result)
-        self.assertEqual(5, len(result["reports"]))
+        self.assertEqual(7, len(result["reports"]))
 
     def test_evoque_22_diesel_accepts_common_avoque_typo(self):
         result = vehicle_defect_reports(
@@ -1378,7 +1379,7 @@ class MarketEvidenceTests(unittest.TestCase):
         )
 
         self.assertIsNotNone(result)
-        self.assertEqual(5, len(result["reports"]))
+        self.assertEqual(7, len(result["reports"]))
         self.assertIn(
             "land-rover-evoque-22-diesel-dpf-egr-community",
             {report["id"] for report in result["reports"]},
