@@ -468,11 +468,13 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(len(brave_queries), len(server.MARKET_PORTAL_SITES))
         self.assertEqual(len(tavily_queries), 1)
+        self.assertIsNone(tavily_queries[0][1])
         self.assertEqual(
             {item["source"] for item in listings},
             {"AutoUncle", "Subito"},
         )
         first_fallback = diagnostics["fallbackDecisions"][0]
+        self.assertEqual(first_fallback["portal"], "nationwide_fallback")
         self.assertEqual(first_fallback["status"], "attempted")
         self.assertEqual(first_fallback["braveValidListings"], 1)
         self.assertEqual(
