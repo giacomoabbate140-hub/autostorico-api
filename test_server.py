@@ -419,6 +419,78 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
 
+    def test_audi_a1_2011_190k_tdi_uses_tavily_after_one_valid_brave_listing(self):
+        payload = {
+            "brand": "Audi",
+            "model": "A1",
+            "firstRegistrationDate": "2011-06",
+            "fuelType": "Diesel",
+            "engineDisplacement": "1.6",
+            "km": 190000,
+        }
+        brave_listing = {
+            "source": "AutoUncle",
+            "url": "https://www.autouncle.it/it/d/123456-audi-a1",
+            "price": 5600,
+            "year": 2011,
+            "km": 188000,
+            "matchScore": 0.95,
+            "weight": 0.65,
+        }
+        tavily_listing = {
+            "source": "Subito",
+            "url": "https://www.subito.it/auto/audi-a1-2011-test.htm",
+            "price": 5900,
+            "year": 2011,
+            "km": 193000,
+            "matchScore": 0.92,
+            "weight": 1.0,
+        }
+        brave_queries = []
+        tavily_queries = []
+
+        def fake_brave(query, request_payload, diagnostics=None):
+            brave_queries.append(query)
+            return [brave_listing] if "autouncle.it" in query else []
+
+        def fake_tavily(query, request_payload, diagnostics=None, domain=None):
+            tavily_queries.append((query, domain))
+            return [tavily_listing]
+
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "TAVILY_API_KEY", "tavily-key"
+        ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
+            server, "brave_market_search", side_effect=fake_brave
+        ), patch.object(
+            server, "tavily_market_search", side_effect=fake_tavily
+        ):
+            listings, diagnostics = fetch_market_sources(payload, 2011)
+
+        self.assertEqual(len(brave_queries), len(server.MARKET_PORTAL_SITES))
+        self.assertEqual(len(tavily_queries), 1)
+        self.assertEqual(
+            {item["source"] for item in listings},
+            {"AutoUncle", "Subito"},
+        )
+        first_fallback = diagnostics["fallbackDecisions"][0]
+        self.assertEqual(first_fallback["status"], "attempted")
+        self.assertEqual(first_fallback["braveValidListings"], 1)
+        self.assertEqual(
+            first_fallback["minimumBraveListingsBeforeSkip"],
+            server.MARKET_FALLBACK_MINIMUM_LISTINGS,
+        )
+
+        estimate, comparable = market_estimate_from_sources(
+            listings,
+            internal_average=7000,
+            target_km=190000,
+            target_year=2011,
+        )
+        self.assertIsNotNone(estimate)
+        self.assertEqual(len(comparable), 2)
+        self.assertGreater(estimate, 5000)
+        self.assertLess(estimate, 7000)
+
     def test_market_search_skips_tavily_when_brave_is_sufficient(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         brave_results = [
