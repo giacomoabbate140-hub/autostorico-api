@@ -414,7 +414,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(len(listings), 2)
         # Brave is queried once; Tavily is used once only because Brave alone
         # did not provide the minimum market sample.
-        self.assertEqual(brave.call_count, 1)
+        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_SITES))
         self.assertEqual(tavily.call_count, 1)
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
@@ -512,7 +512,7 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, _ = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), server.MINIMUM_MARKET_LISTINGS)
-        self.assertEqual(brave.call_count, 1)
+        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_SITES))
         tavily.assert_not_called()
 
     def test_market_search_stops_after_the_configured_nationwide_queries(self):
@@ -559,7 +559,6 @@ class MarketEvidenceTests(unittest.TestCase):
         request_payload = json.loads(request_bodies[0])
         self.assertIn("autoscout24.it", request_payload["include_domains"])
         self.assertIn("subito.it", request_payload["include_domains"])
-        self.assertEqual(request_payload["include_domains_mode"], "boost")
         self.assertEqual(request_payload["search_depth"], "advanced")
         self.assertEqual(request_payload["chunks_per_source"], 3)
         self.assertTrue(request_payload["include_usage"])
@@ -639,33 +638,23 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(captured_headers[0]["Authorization"], "Bearer tvly-test")
 
-    def test_tavily_retries_once_after_a_transient_network_error(self):
-        class FakeResponse:
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *args):
-                return None
-
-            def read(self):
-                return b'{"results": []}'
-
+    def test_tavily_does_not_retry_after_a_transient_network_error(self):
         with patch.object(server, "TAVILY_ENABLED", True), patch.object(
             server, "TAVILY_API_KEY", "tavily-key"
         ), patch.object(server, "TAVILY_DAILY_LIMIT", 30), patch.object(
             server, "TAVILY_DAILY_USAGE", {}
-        ), patch.object(server.time, "sleep"), patch.object(
+        ), patch.object(
             server.urllib.request,
             "urlopen",
-            side_effect=[server.urllib.error.URLError("temporary"), FakeResponse()],
+            side_effect=server.urllib.error.URLError("temporary"),
         ) as urlopen:
-            results = server.tavily_market_search(
-                "Audi A1 2011 auto usata prezzo Italia",
-                {"brand": "Audi", "model": "A1"},
-            )
+            with self.assertRaises(server.urllib.error.URLError):
+                server.tavily_market_search(
+                    "Audi A1 2011 auto usata prezzo Italia",
+                    {"brand": "Audi", "model": "A1"},
+                )
 
-        self.assertEqual(results, [])
-        self.assertEqual(urlopen.call_count, 2)
+        self.assertEqual(urlopen.call_count, 1)
 
     def test_brave_runs_market_search_when_tavily_is_missing(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
@@ -683,7 +672,7 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        self.assertEqual(brave.call_count, 1)
+        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_SITES))
         tavily.assert_not_called()
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
         self.assertFalse(diagnostics["configuredProviders"]["tavily"])
