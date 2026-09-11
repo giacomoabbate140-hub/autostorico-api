@@ -66,7 +66,12 @@ TAVILY_ENABLED = os.environ.get("AUTOSTORICO_TAVILY_ENABLED", "1") != "0"
 TAVILY_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_TAVILY_DAILY_LIMIT", "30")))
 BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "30")))
 MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "1")))
-MARKET_CACHE_VERSION = "market-v9-scoped-fallback"
+# Tavily fills a short Brave sample; two valid listings are the minimum
+# before the fallback can be skipped.
+MARKET_FALLBACK_MINIMUM_LISTINGS = 2
+# Increment when market-provider fallback semantics change so old cached
+# estimates cannot mask the corrected provider chain.
+MARKET_CACHE_VERSION = "market-v10-fallback-under-two"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -2284,8 +2289,13 @@ def fetch_market_sources(
                     }
                 )
 
-        if query_results:
-            tavily_skip = "compatible_brave_listings"
+        # Count only listings that survived Brave's compatibility/price filters.
+        # One listing is evidence, but not a sufficient market sample: Tavily
+        # must be allowed to fill the gap whenever fewer than two valid Brave
+        # listings remain. Raw provider hits rejected by listing_from_search_item
+        # never enter query_results and therefore never suppress the fallback.
+        if len(query_results) >= MARKET_FALLBACK_MINIMUM_LISTINGS:
+            tavily_skip = "sufficient_brave_listings"
         elif tavily_calls >= MARKET_MAX_TAVILY_QUERIES:
             tavily_skip = "request_budget_exhausted"
         elif not TAVILY_ENABLED:
@@ -2297,9 +2307,14 @@ def fetch_market_sources(
         else:
             tavily_skip = ""
         diagnostics.setdefault("fallbackDecisions", []).append(
-            {"portal": portal_name, "provider": "tavily",
-             "status": "skipped" if tavily_skip else "attempted",
-             "reason": tavily_skip or "no_compatible_brave_listings"}
+            {
+                "portal": portal_name,
+                "provider": "tavily",
+                "status": "skipped" if tavily_skip else "attempted",
+                "reason": tavily_skip or "brave_valid_listings_below_fallback_threshold",
+                "braveValidListings": len(query_results),
+                "minimumBraveListingsBeforeSkip": MARKET_FALLBACK_MINIMUM_LISTINGS,
+            }
         )
         if not tavily_skip:
             before = len(diagnostics["providers"])
