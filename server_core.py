@@ -2289,60 +2289,6 @@ def fetch_market_sources(
                     }
                 )
 
-        # Count only listings that survived Brave's compatibility/price filters.
-        # One listing is evidence, but not a sufficient market sample: Tavily
-        # must be allowed to fill the gap whenever fewer than two valid Brave
-        # listings remain. Raw provider hits rejected by listing_from_search_item
-        # never enter query_results and therefore never suppress the fallback.
-        if len(query_results) >= MARKET_FALLBACK_MINIMUM_LISTINGS:
-            tavily_skip = "sufficient_brave_listings"
-        elif tavily_calls >= MARKET_MAX_TAVILY_QUERIES:
-            tavily_skip = "request_budget_exhausted"
-        elif not TAVILY_ENABLED:
-            tavily_skip = "disabled"
-        elif not TAVILY_API_KEY:
-            tavily_skip = "missing_key"
-        elif not tavily_market_search_available():
-            tavily_skip = "daily_budget_exhausted"
-        else:
-            tavily_skip = ""
-        diagnostics.setdefault("fallbackDecisions", []).append(
-            {
-                "portal": portal_name,
-                "provider": "tavily",
-                "status": "skipped" if tavily_skip else "attempted",
-                "reason": tavily_skip or "brave_valid_listings_below_fallback_threshold",
-                "braveValidListings": len(query_results),
-                "minimumBraveListingsBeforeSkip": MARKET_FALLBACK_MINIMUM_LISTINGS,
-            }
-        )
-        if not tavily_skip:
-            before = len(diagnostics["providers"])
-            # Count failures too; never multiply a failing fallback by portals.
-            tavily_calls += 1
-            try:
-                query_results.extend(
-                    tavily_market_search(
-                        portal_query,
-                        payload,
-                        diagnostics,
-                        domain=domain,
-                    )
-                )
-                for entry in diagnostics["providers"][before:]:
-                    entry["portal"] = portal_name
-                    entry["domain"] = domain
-            except Exception as exc:
-                diagnostics["errors"].append(
-                    {
-                        "provider": "tavily",
-                        "portal": portal_name,
-                        "domain": domain,
-                        "query": portal_query,
-                        "error": str(exc)[:180],
-                    }
-                )
-
         if configured_providers["google_cse"]:
             try:
                 google_results = google_market_search(portal_query, payload)
@@ -2381,6 +2327,65 @@ def fetch_market_sources(
             listing.setdefault("portal", portal_name)
             listing.setdefault("domain", domain)
             listings.append(listing)
+
+    # Brave is queried per portal for precise diagnostics. Tavily is a single
+    # nationwide fallback after that pass, so it can discover a different
+    # portal instead of repeating the one Brave already found.
+    brave_valid_listings = len(listings)
+    if brave_valid_listings >= MARKET_FALLBACK_MINIMUM_LISTINGS:
+        tavily_skip = "sufficient_brave_listings"
+    elif tavily_calls >= MARKET_MAX_TAVILY_QUERIES:
+        tavily_skip = "request_budget_exhausted"
+    elif not TAVILY_ENABLED:
+        tavily_skip = "disabled"
+    elif not TAVILY_API_KEY:
+        tavily_skip = "missing_key"
+    elif not tavily_market_search_available():
+        tavily_skip = "daily_budget_exhausted"
+    else:
+        tavily_skip = ""
+    diagnostics.setdefault("fallbackDecisions", []).append(
+        {
+            "portal": "nationwide_fallback",
+            "provider": "tavily",
+            "status": "skipped" if tavily_skip else "attempted",
+            "reason": tavily_skip or "brave_valid_listings_below_fallback_threshold",
+            "braveValidListings": brave_valid_listings,
+            "minimumBraveListingsBeforeSkip": MARKET_FALLBACK_MINIMUM_LISTINGS,
+        }
+    )
+    if not tavily_skip:
+        before = len(diagnostics["providers"])
+        tavily_calls += 1
+        fallback_query = base_queries[0]
+        try:
+            tavily_results = tavily_market_search(
+                fallback_query,
+                payload,
+                diagnostics,
+            )
+            for entry in diagnostics["providers"][before:]:
+                entry["portal"] = "nationwide_fallback"
+                entry["domain"] = "multiple"
+            for listing in tavily_results:
+                url = str(listing.get("url") or "").strip()
+                dedupe_key = url.lower()
+                if not dedupe_key or dedupe_key in seen_urls:
+                    continue
+                seen_urls.add(dedupe_key)
+                listing.setdefault("portal", "Tavily")
+                listing.setdefault("domain", urllib.parse.urlparse(url).hostname or "")
+                listings.append(listing)
+        except Exception as exc:
+            diagnostics["errors"].append(
+                {
+                    "provider": "tavily",
+                    "portal": "nationwide_fallback",
+                    "domain": "multiple",
+                    "query": fallback_query,
+                    "error": str(exc)[:180],
+                }
+            )
 
     diagnostics["pricesFound"] = len(listings)
     diagnostics["portalsWithResults"] = [
