@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 2
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v10-fallback-under-two"
+MARKET_CACHE_VERSION = "market-v11-reject-sold-listings"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -2008,6 +2008,23 @@ def is_compatible_fuel_text(text: str, payload: dict[str, Any]) -> bool:
     return not present or target_group in present
 
 
+def is_unavailable_market_listing_text(text: str) -> bool:
+    """Reject listings that are sold, withdrawn, or no longer available."""
+    cleaned = f" {normalize_market_text(text)} "
+    markers = (
+        " annuncio venduto ",
+        " auto venduta ",
+        " auto venduto ",
+        " vettura venduta ",
+        " non piu disponibile ",
+        " non disponibile ",
+        " ritirato dalla vendita ",
+        " sold out ",
+        " listing ended ",
+    )
+    return any(marker in cleaned for marker in markers)
+
+
 def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte web", payload: dict[str, Any] | None = None) -> dict[str, Any] | None:
     title = str(item.get("title") or "")
     snippet = str(item.get("snippet") or item.get("description") or "")
@@ -2019,6 +2036,8 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
     if not is_market_url(link):
         return None
     if is_aggregate_market_url(link) or is_non_vehicle_listing_text(f"{title} {snippet}"):
+        return None
+    if is_unavailable_market_listing_text(f"{title} {snippet}"):
         return None
     hostname = urllib.parse.urlparse(link).hostname or ""
     if hostname == "trovit.it" or hostname.endswith(".trovit.it"):
