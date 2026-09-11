@@ -1669,6 +1669,10 @@ def extract_listing_kms(text: str) -> list[int]:
     for pattern in patterns:
         for match in re.finditer(pattern, normalized, flags=re.IGNORECASE):
             km = int(re.sub(r"\D", "", match.group(1)))
+            # A year such as “2004 km” is a common search-snippet
+            # artefact, not a mileage. Never accept calendar years as km.
+            if 1950 <= km <= datetime.now(timezone.utc).year + 1:
+                continue
             if 1000 <= km <= 500000:
                 values.add(km)
     return sorted(values)
