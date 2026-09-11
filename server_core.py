@@ -725,6 +725,11 @@ DEFECT_ENTITLEMENT_CACHE_TTL_SECONDS = int(
 )
 DEFECT_RESEARCH_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 DEFECT_RESEARCH_LOCK = threading.Lock()
+DEFECT_REVIEW_CACHE_TTL_SECONDS = int(
+    os.environ.get("AUTOSTORICO_DEFECT_REVIEW_CACHE_SECONDS", "300")
+)
+PUBLISHED_DEFECT_SOURCES_CACHE: tuple[float, list[dict[str, Any]]] | None = None
+DEFECT_REVIEW_CACHE_LOCK = threading.Lock()
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
     ("Subito Auto", "subito.it"),
@@ -934,6 +939,243 @@ def defect_research_update_status() -> dict[str, Any]:
     }
 
 
+
+def _load_defect_research_candidates() -> list[dict[str, Any]]:
+    try:
+        queue = json.loads(DEFECT_RESEARCH_QUEUE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    candidates = queue.get("candidates") if isinstance(queue, dict) else []
+    return [item for item in candidates if isinstance(item, dict)] if isinstance(candidates, list) else []
+
+
+def _defect_review_status(value: Any) -> str:
+    status = str(value or "").strip().lower()
+    if status == "approved":
+        return "published"
+    if status in {"pending_review", "published", "rejected"}:
+        return status
+    return "pending_review"
+
+
+def _defect_review_candidate(source_url: str) -> dict[str, Any] | None:
+    clean_url = safe_public_source_url(source_url)
+    if not clean_url:
+        return None
+    for candidate in _load_defect_research_candidates():
+        candidate_url = safe_public_source_url(
+            candidate.get("sourceUrl") or candidate.get("url")
+        )
+        if candidate_url == clean_url:
+            return candidate
+    return None
+
+
+def _defect_review_rows(status: str = "") -> list[dict[str, Any]]:
+    if not SUPABASE_URL or not SUPABASE_SECRET_KEY:
+        return []
+    fields = (
+        "id,source_url,make,model,year,engine,title,snippet,source_name,"
+        "source_type,status,reviewed_at,reviewed_by,created_at"
+    )
+    path = f"/rest/v1/defect_source_reviews?select={fields}&order=created_at.desc"
+    if status:
+        path += f"&status=eq.{urllib.parse.quote(status, safe='')}"
+    try:
+        rows = _supabase_json_request("GET", path)
+    except RuntimeError:
+        return []
+    return [row for row in rows if isinstance(row, dict)] if isinstance(rows, list) else []
+
+
+def _safe_defect_review_item(
+    candidate: dict[str, Any],
+    status_override: str = "",
+) -> dict[str, Any] | None:
+    source_url = safe_public_source_url(
+        candidate.get("sourceUrl") or candidate.get("url")
+    )
+    if not source_url:
+        return None
+    source_type = str(candidate.get("sourceType") or "community_candidate").strip()
+    if source_type not in {
+        "official_candidate",
+        "manufacturer_candidate",
+        "community_candidate",
+        "independent_candidate",
+    }:
+        source_type = "community_candidate"
+    raw_year = candidate.get("year")
+    year = catalog_year_value(raw_year) or None
+    status = _defect_review_status(status_override or candidate.get("status"))
+    return {
+        "sourceUrl": source_url,
+        "make": str(candidate.get("make") or "").strip()[:120],
+        "model": str(candidate.get("model") or "").strip()[:160],
+        "year": year,
+        "engine": str(candidate.get("engine") or "").strip()[:120],
+        "sourceName": str(candidate.get("sourceName") or "Fonte da verificare").strip()[:160],
+        "sourceType": source_type,
+        "researchCategory": str(candidate.get("researchCategory") or "").strip()[:80],
+        "title": str(candidate.get("title") or "Fonte da verificare").strip()[:300],
+        "snippet": str(candidate.get("snippet") or "").strip()[:3000],
+        "collectedAt": str(candidate.get("collectedAt") or "").strip(),
+        "status": status,
+    }
+
+
+def admin_defect_review(payload: dict[str, Any]) -> dict[str, Any]:
+    """List and persist developer decisions for defect-source candidates."""
+    action = str(payload.get("action") or "list").strip().lower()
+    db_rows = _defect_review_rows()
+    db_by_url = {
+        safe_public_source_url(row.get("source_url")): row
+        for row in db_rows
+        if safe_public_source_url(row.get("source_url"))
+    }
+    items: list[dict[str, Any]] = []
+    for candidate in _load_defect_research_candidates():
+        url = safe_public_source_url(candidate.get("sourceUrl") or candidate.get("url"))
+        row = db_by_url.get(url) if url else None
+        status = str(row.get("status") or "") if row else _defect_review_status(candidate.get("status"))
+        item = _safe_defect_review_item(candidate, status)
+        if item is not None:
+            items.append(item)
+    if action == "list":
+        include_resolved = payload.get("includeResolved") is True
+        visible = items if include_resolved else [
+            item for item in items if item["status"] == "pending_review"
+        ]
+        return {
+            "ok": True,
+            "pendingCount": sum(item["status"] == "pending_review" for item in items),
+            "publishedCount": sum(item["status"] == "published" for item in items),
+            "rejectedCount": sum(item["status"] == "rejected" for item in items),
+            "items": visible[:200],
+        }
+    if action not in {"publish", "reject"}:
+        raise ValueError("Azione revisione non valida.")
+    source_url = safe_public_source_url(payload.get("sourceUrl"))
+    candidate = _defect_review_candidate(source_url)
+    if candidate is None:
+        raise ValueError("Fonte non trovata nella coda di ricerca.")
+    item = _safe_defect_review_item(
+        candidate,
+        "published" if action == "publish" else "rejected",
+    )
+    if item is None:
+        raise ValueError("Fonte non valida.")
+    if not SUPABASE_URL or not SUPABASE_SECRET_KEY:
+        raise RuntimeError("Database revisioni non configurato sul server.")
+    row = {
+        "source_url": item["sourceUrl"],
+        "make": item["make"],
+        "model": item["model"],
+        "year": item["year"],
+        "engine": item["engine"],
+        "title": item["title"],
+        "snippet": item["snippet"],
+        "source_name": item["sourceName"],
+        "source_type": item["sourceType"],
+        "status": item["status"],
+        "reviewed_at": datetime.now(timezone.utc).isoformat(),
+        "reviewed_by": "developer",
+    }
+    saved = _supabase_json_request(
+        "POST",
+        "/rest/v1/defect_source_reviews?on_conflict=source_url&select=source_url,status,reviewed_at",
+        payload=row,
+        prefer="resolution=merge-duplicates,return=representation",
+    )
+    global PUBLISHED_DEFECT_SOURCES_CACHE
+    with DEFECT_REVIEW_CACHE_LOCK:
+        PUBLISHED_DEFECT_SOURCES_CACHE = None
+    return {
+        "ok": True,
+        "action": action,
+        "status": item["status"],
+        "source": item,
+        "saved": saved[0] if isinstance(saved, list) and saved else saved,
+    }
+
+
+def _published_defect_source_rows() -> list[dict[str, Any]]:
+    global PUBLISHED_DEFECT_SOURCES_CACHE
+    now = time.time()
+    with DEFECT_REVIEW_CACHE_LOCK:
+        cached = PUBLISHED_DEFECT_SOURCES_CACHE
+        if cached and now - cached[0] < DEFECT_REVIEW_CACHE_TTL_SECONDS:
+            return [dict(row) for row in cached[1]]
+    rows = _defect_review_rows("published")
+    with DEFECT_REVIEW_CACHE_LOCK:
+        PUBLISHED_DEFECT_SOURCES_CACHE = (now, rows)
+    return [dict(row) for row in rows]
+
+
+def published_defect_reports_for_vehicle(
+    make: str,
+    model: str,
+    year: int | None = None,
+    engine: str = "",
+) -> list[dict[str, Any]]:
+    wanted_make = canonical_catalog_make(make)
+    wanted_model = normalize_catalog_text(model)
+    if not wanted_make or not wanted_model:
+        return []
+    source_type_map = {
+        "official_candidate": "official_recall",
+        "manufacturer_candidate": "manufacturer_support",
+        "independent_candidate": "independent_reliability",
+        "community_candidate": "community_source",
+    }
+    reports: list[dict[str, Any]] = []
+    for row in _published_defect_source_rows():
+        if canonical_catalog_make(row.get("make")) != wanted_make:
+            continue
+        if not catalog_model_matches(
+            {"model": row.get("model"), "aliases": []}, model
+        ):
+            continue
+        source_year = catalog_year_value(row.get("year")) or None
+        if source_year and year and source_year != year:
+            continue
+        source_engine = normalize_catalog_text(row.get("engine"))
+        wanted_engine = normalize_catalog_text(engine)
+        if source_engine and wanted_engine and source_engine not in wanted_engine and wanted_engine not in source_engine:
+            continue
+        source_url = safe_public_source_url(row.get("source_url"))
+        if not source_url:
+            continue
+        fingerprint = hashlib.sha256(source_url.encode("utf-8")).hexdigest()[:16]
+        reports.append(
+            {
+                "id": f"published-source-{fingerprint}",
+                "category": "Fonte approvata",
+                "title": str(row.get("title") or "Fonte approvata").strip(),
+                "sourceType": source_type_map.get(
+                    str(row.get("source_type") or ""),
+                    "community_source",
+                ),
+                "severity": "informative",
+                "sourceName": str(row.get("source_name") or "Fonte approvata").strip(),
+                "sourceUrl": source_url,
+                "userText": (
+                    str(row.get("snippet") or "").strip()
+                    or "Fonte verificata manualmente dall'amministratore. "
+                    "Consultala per i dettagli e verifica sempre il veicolo specifico."
+                ),
+                "engineScope": (
+                    f"Motore indicato nella fonte: {str(row.get('engine') or '').strip()}"
+                    if str(row.get("engine") or "").strip()
+                    else ""
+                ),
+                "mechanism": "",
+            }
+        )
+    return reports
+
+
+
 def catalog_update_status() -> dict[str, Any]:
     """Expose only the public metadata used by clients to detect catalog updates."""
     latest = VEHICLE_DEFECT_CATALOG.get("latestUpdate")
@@ -1078,7 +1320,10 @@ def vehicle_defect_reports(
         and catalog_year_matches(family, year)
         and catalog_engine_matches(family, engine)
     ]
-    if not matching_vehicles and not matching_engine_families:
+    published_reports = published_defect_reports_for_vehicle(
+        make, model, year, engine
+    )
+    if not matching_vehicles and not matching_engine_families and not published_reports:
         return None
 
     reports = [
@@ -1097,6 +1342,7 @@ def vehicle_defect_reports(
         and catalog_year_matches(report, year)
         and catalog_engine_matches(report, engine)
     )
+    reports.extend(published_reports)
     return {
         "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
         "make": matching_vehicles[0].get("make") if matching_vehicles else make.strip(),
@@ -4050,6 +4296,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             "/api/consultations/gold",
             "/api/consultations/delete",
             "/api/forum/posts/delete",
+            "/api/admin/defect-review",
         }:
             self.send_json({"error": "not_found"}, status=404)
             return
@@ -4079,6 +4326,28 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             payload = json.loads(raw_body or "{}")
             if not isinstance(payload, dict):
                 raise ValueError("Payload must be an object")
+            if request_path == "/api/admin/defect-review":
+                if not developer_device_is_authorized(
+                    payload.get("developerDeviceIdHash")
+                ):
+                    self.send_json(
+                        {"error": "forbidden", "message": "Autorizzazione amministratore richiesta."},
+                        status=403,
+                    )
+                    return
+                try:
+                    self.send_json(admin_defect_review(payload))
+                except ValueError as exc:
+                    self.send_json(
+                        {"error": "invalid_review", "message": str(exc)},
+                        status=400,
+                    )
+                except RuntimeError as exc:
+                    self.send_json(
+                        {"error": "review_unavailable", "message": str(exc)},
+                        status=503,
+                    )
+                return
             if request_path == "/api/forum/posts/delete":
                 try:
                     user = verify_supabase_user(auth)
