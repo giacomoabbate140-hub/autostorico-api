@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-12T04:33:44.048833+00:00",
-  "cursor": 13,
+  "updatedAt": "2026-09-12T10:45:58.310227+00:00",
+  "cursor": 16,
   "candidates": [
     {
       "status": "approved",
@@ -1733,6 +1733,34 @@
       "title": "Affidabilità Audi scadente: soldi gettati? [Archivio] - Forum dell'Audi RS Club",
       "snippet": "Alla fine lauto ripaga sicuramente. Ma la a3 non è una macchina non di qualità. Sia chiaro. Può capitare che magari alcune possono uscire un po difettose, come tutte le auto, ma ti garantisco che la maggior parte è ok Inviato dal mio iPhone utilizzando Tapatalk Salve a tutti, sono nuovo e fino a ieri un convinto prossimo acquirente di una A3 sedan Admrided. Per occupare l'attesa che mi separava dall'appuntamento col concessionario Audi ho iniziato a leggermi un pò di articoli sulla A3 fino a quando non sono incappato in uno che denunciava la scarsa affidabilità Audi e da lì si è creato un susseguirsi di rimandi a problemi, studi di settore che la incriminavano, indagini dall'affidabilità nei 50.000, 100.000 km: insomma da esperti del settore l'Audi è Direi anti-economico, con quelle percorrenze. facendo un calcolo a spanne, il precedente proprietario si sparava circa 500 km al giorno, per tutti i gg lavorativi dell'anno (restando fermi un mese per le ferie di agosto, e fermi per le festivita' e \"ponti\" vari ecc). Non ha molt osenso. non ho sotto mano la calcolatrice, magari il calcolo preciso dice \"solamente\" 400 km al gg, ma rimane comunque un non-senso... incredibile. sinceramente mi viene un dubbio: ci sara' forse un errore di battitura dei km?? boh. anche la mia A3 ha 300.000km, in 13 anni, e lo sterzo si spella, eccome!! Alla fine lauto ripaga sicuramente. Ma la a3 non è una macchina non di qualità. Sia chiaro. Può capitare che magari alcune possono uscire un po difettose, come tutte le auto, ma ti garantisco che la maggior parte è ok Inviato dal mio iPhone utilizzando Tapatalk Ma la a3 non è una macchina non di qualità. Sia chiaro. Può capitare che magari alcune possono uscire un po’ difettose, come tutte le auto, ma ti garantisco che la maggior parte è ok Inviato dal mio iPhone utilizzando Tapatalk Guarda, preferivo non leggere niente: adesso se compro e ha problemi, mi prendo a schiaffi da solo, se non la compro, rimango con la voglia...uff...",
       "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-79135.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-12T10:45:58.310227+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Cambio manuale Tucson 1.7 - Problemi al sincronizzatore | Pagina 9 | Forum Hyundai Club Italia",
+      "snippet": "La casa madre, si rifiuta di sostituire integralmente il cambio...nonostante le mie insistenti richieste al ripresentarsi del problema per la quarta volta! Capisco da questo forum (ma anche da altre fonti) che questo modello di auto presenta spesso tale difetto e, quindi, il mio non è un caso isolato. La cosa più grave è che Hyundai dovrebbe fare una campagna di richiamo per sostituire il cambio integralmente e proteggere la sua reputazione che può solo peggiorare se questi episodi si infittiscono. La casa madre, si rifiuta di sostituire integralmente il cambio...nonostante le mie insistenti richieste al ripresentarsi del problema per la quarta volta! Capisco da questo forum (ma anche da altre fonti) che questo modello di auto presenta spesso tale difetto e, quindi, il mio non è un caso isolato. La cosa più grave è che Hyundai dovrebbe fare una campagna di richiamo per sostituire il cambio integralmente e proteggere la sua reputazione che può solo peggiorare se questi episodi si infittiscono. Questo succedeva 3 volte. Ora durante l'inserimento della marcia 6, si sentiva un grattare. Portato in officina, problemi al sincronizzatore, sostituito vari pezzi, tutto in garanzia. Lavoro eseguito in 4 giorni lavorativi. Km percorsi: 71.000 Cambio manuale Motorizzazione 1.7 crdi Sarebbe interessante sapere se qualcuno accusa problemi di inserimento marce... in particolare 4a e 5a.... o anche se non accusa assolutamente niente In ogni caso sarebbe da inserire anche il chilometraggio percorso... con un post del tipo Problemi: si/no (con eventuale descrizione) Km percorsi: xxxxx Ripeto Cambio manuale Motorizzazione 1.7 crdi Buongiorno a tutti, sono Vincenzo e sono lieto di far parte di questo gruppo e purtroppo devo cominciare con un appunto che in questi mesi mi sta preoccupando non poco: Nel 2021 compro una Hinday tucson Ix35, macchina bellissima e funzionale prodotta nel 2016, quindi un usato sicuro Lo scorso aprire si rompe il sincronizzatore della sesta, che con una spesa di 500 euro circa sostituisco. Il rivenditore mi dice che è un sincronizzatore modificato, perchè questo modello di cambio riscontra questo difetto.",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/cambio-manuale-tucson-1-7-problemi-al-sincronizzatore.22694/page-9"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-12T10:45:58.310227+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "hyunday tucson usata problemi di rigenerazione del fap | Forum Hyundai Club Italia",
+      "snippet": "In ogni caso se l&#x27;auto l&#x27;hai presa nel Febbraio 2024 (e 18K km dal 2018 sono veramente pochi e questo puzza parecchio) la garanzia non è ancora scaduta. Che io sappia è almeno 1 anno + 2 mesi... nel senso che se il difetto era presente prima della scadenza ma non risolto non potrebbe, legalmente, esimersi dal risolverlo e ci sono altri 2 mesi per farlo oltre la scadenza. Buon pomeriggio ho acquistato una hyundai tucson CRDI 4WD DCT XPRIME usata lo scorso febbraio 2024 con garanzia di un anno attirata dal fatto che avesse meno di 18000 km. da un concessionario da cui avevo gia' acquistato 2 auto in precedenza con cui ho sempre avuto un rapporto cordiale e di fiducia. Nell'usato però ancora qualcosa c'è e quindi se giri molto in città sarebbe stato meglio per te prendere un modello senza FAP (ma non diesel perché oggi in molte zone senza FAP non potrebbe circolare... insomma un gran caos). La tua Tucson di che anno è e quanti km aveva quando l'hai acquistata? Ti è stata data la documentazione degli interventi/riparazioni effettuate dal vecchio proprietario? Questa macchina mi sta esaurendo sono stanca e non posso pensare di dover ogni 3 per 2 andare in officina a spegnere spie rigenerare il fap che mi chiedo se oltre ad essere intastato sia forse difettoso e quindi da sostituire che significherebbe migliaia di euro per la sottoscritta visto che il concessionario che me l'ha venduta da questo orecchio non ci sente ..... In ogni caso se l'auto l'hai presa nel Febbraio 2024 (e 18K km dal 2018 sono veramente pochi e questo puzza parecchio) la garanzia non è ancora scaduta. Che io sappia è almeno 1 anno + 2 mesi... nel senso che se il difetto era presente prima della scadenza ma non risolto non potrebbe, legalmente, esimersi dal risolverlo e ci sono altri 2 mesi per farlo oltre la scadenza.",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/hyunday-tucson-usata-problemi-di-rigenerazione-del-fap.41425/"
     }
   ],
   "latestUpdate": {
