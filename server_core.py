@@ -1162,7 +1162,7 @@ def published_defect_reports_for_vehicle(
     if not wanted_make or not wanted_model:
         return []
     source_type_map = {
-        "official_candidate": "official_recall",
+        "official_candidate": "official_notice",
         "manufacturer_candidate": "manufacturer_support",
         "independent_candidate": "independent_reliability",
         "community_candidate": "community_source",
@@ -1189,7 +1189,10 @@ def published_defect_reports_for_vehicle(
         reports.append(
             {
                 "id": f"published-source-{fingerprint}",
-                "category": "Fonte approvata",
+                "category": ("Comunicazione tecnica da verificare"
+                             if str(row.get("source_type") or "") in {
+                                 "official_candidate", "manufacturer_candidate"
+                             } else "Difetto segnalato"),
                 "title": str(row.get("title") or "Fonte approvata").strip(),
                 "sourceType": source_type_map.get(
                     str(row.get("source_type") or ""),
