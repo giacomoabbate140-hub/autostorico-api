@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-14T12:45:55.223470+00:00",
-  "cursor": 11,
+  "updatedAt": "2026-09-14T21:49:04.845749+00:00",
+  "cursor": 14,
   "candidates": [
     {
       "status": "approved",
@@ -1775,29 +1775,125 @@
       "title": "Richiamo Fiat Tipo 1.5 t4 hybrid 130 cv | Il Forum di Quattroruote",
       "snippet": "Segnalo a tutti i possessori di Fiat Tipo 1.5 hybrid 130 cv (motorizzazione 4 cilindri turbo-benzina) la campagna di servizio Fiat 6466 &quot;verifica ed eventuale riposizionamento del precablato motore&quot;. L&#x27;intervento (riconosciuto in totale garanzia) ha un costo per il cliente pari a 0€, mentre...",
       "sourceUrl": "https://forum.quattroruote.it/threads/richiamo-fiat-tipo-1-5-t4-hybrid-130-cv.148101/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-14T21:49:04.845749+00:00",
+      "make": "Ford",
+      "model": "Puma",
+      "year": 2021,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Forum Auto Caradisiac",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "[Topic Officiel] Ford Puma (2019) - Forum Auto",
+      "snippet": "Le nouveau Crossover Puma promet d'être particulièrement efficient, notamment avec sa motorisation électrifiée EcoBoost Hybrid de 155 ch, pour",
+      "sourceUrl": "https://forum-auto.caradisiac.com/topic/171806-topic-officiel-ford-puma-2019"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-14T21:49:04.845749+00:00",
+      "make": "Ford",
+      "model": "Puma",
+      "year": 2021,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Forum Auto Caradisiac",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "[Topic Officiel] Ford Puma (2019) - Page 67 - Forum auto Caradisiac",
+      "snippet": "Le couple tout en bas sera donc plus présent sur un moteur de cylindrée supérieure. Les Mild-hybrid sont là pour aider le moteur quand il est en",
+      "sourceUrl": "https://forum-auto.caradisiac.com/topic/171806-topic-officiel-ford-puma-2019/page/67"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-14T21:49:04.845749+00:00",
+      "make": "Ford",
+      "model": "Puma",
+      "year": 2021,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Suzuki Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Ford Puma 1.0 ecoboost h Titanium s&s 125cv - Ibrida - Usato Suzuki",
+      "snippet": "Auto Usata Ford Puma Ibrida 1.0 ecoboost h Titanium s&s 125cv del 2023 in vendita a Forli-Cesena a solo € 16.940 da Ferri S.p.a..",
+      "sourceUrl": "https://usatoauto.suzuki.it/auto/usate/forli-cesena/ford/puma/ibrida/1-0-ecoboost-h-titanium-s-s-125cv/10788585"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-14T21:49:04.845749+00:00",
+      "make": "Ford",
+      "model": "Puma",
+      "year": 2021,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Kia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "2026 Kia Stonic 1.0 T-GDi ISG 48V 3",
+      "snippet": "£18,995 Mileage 2,405 miles … £195 yearly tax8. Engine with mild-hybrid. Emissions 129 g/km MPG (combined) 49.60 mpg MPG (extra high)",
+      "sourceUrl": "https://used-uk.kia.com/used-car-details/used-kia-stonic-10-t-gdi-isg-48v-3-estate-grey-automatic-petrol/id-98119257521228"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-14T21:49:04.845749+00:00",
+      "make": "Ford",
+      "model": "Puma",
+      "year": 2021,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Forum Auto Caradisiac",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Conseils d'achat Sandero - Dacia - Forum Marques Automobile",
+      "snippet": "Consommation essence ? Apparemment un nouveau modèle devrait sortir pour le salon 2026 en version hybride (full) avec 2 moteurs électriques. Est",
+      "sourceUrl": "https://forum-auto.caradisiac.com/topic/665973-conseils-dachat-sandero"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-14T21:49:04.845749+00:00",
+      "make": "Ford",
+      "model": "Puma",
+      "year": 2021,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Ministero delle infrastrutture e dei trasporti",
+      "sourceType": "official_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Verifica dei limiti per i neopatentati",
+      "snippet": "È sufficiente inserire il numero di targa dell'autoveicolo per verificare se un neopatentato ne è autorizzato alla guida. Data di ultima modifica: 10/02/2026.",
+      "sourceUrl": "http://mit.gov.it/verifica-dei-limiti-per-i-neopatentati"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-14T21:49:04.845749+00:00",
+      "make": "Ford",
+      "model": "Puma",
+      "year": 2021,
+      "engine": "1.0 EcoBoost mild hybrid",
+      "sourceName": "Forum Auto Caradisiac",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "[Topic Officiel] Dacia Jogger (2022) - Page 4 - Forum Auto",
+      "snippet": "Je trouve INCOMPREHENSIBLE alors que les véhicules légers sont livrés depuis juin 2021 plus souvent en automatique (et/ou robotisé) qu'en boîte",
+      "sourceUrl": "https://forum-auto.caradisiac.com/topic/134324-topic-officiel-dacia-jogger-2022/page/4"
     }
   ],
   "latestUpdate": {
-    "id": "2026-09-06T15:30:00.925323+00:00",
-    "updatedAt": "2026-09-06T15:30:00.925323+00:00",
-    "addedCount": 2,
-    "summary": "Trovate 2 nuove fonti ufficiali per Citroen C3, Dacia Duster, in verifica.",
+    "id": "2026-09-14T21:49:04.845749+00:00",
+    "updatedAt": "2026-09-14T21:49:04.845749+00:00",
+    "addedCount": 3,
+    "summary": "Trovate 3 nuove fonti ufficiali per Ford Puma, in verifica.",
     "details": [
-      "Ministero delle infrastrutture e dei trasporti: Auto: campagna urgente di richiamo veicoli Citroen C3 e DS3 | Ministero delle infrastrutture e dei trasporti",
-      "Kia: 2025 Kia Niro 64.8 kWh 3 - Used Kia Cars for Sale"
+      "Suzuki Italia: Ford Puma 1.0 ecoboost h Titanium s&s 125cv - Ibrida - Usato Suzuki",
+      "Kia: 2026 Kia Stonic 1.0 T-GDi ISG 48V 3",
+      "Ministero delle infrastrutture e dei trasporti: Verifica dei limiti per i neopatentati"
     ],
     "sources": [
-      "https://www.mit.gov.it/comunicazione/news/auto-campagna-urgente-di-richiamo-veicoli-citroen-c3-e-ds3",
-      "https://used-uk.kia.com/used-car-details/used-kia-niro-648-kwh-3-suv-mineral-blue-automatic-electric/id-3042"
+      "https://usatoauto.suzuki.it/auto/usate/forli-cesena/ford/puma/ibrida/1-0-ecoboost-h-titanium-s-s-125cv/10788585",
+      "https://used-uk.kia.com/used-car-details/used-kia-stonic-10-t-gdi-isg-48v-3-estate-grey-automatic-petrol/id-98119257521228",
+      "http://mit.gov.it/verifica-dei-limiti-per-i-neopatentati"
     ],
     "vehicles": [
       {
-        "make": "Citroen",
-        "model": "C3"
-      },
-      {
-        "make": "Dacia",
-        "model": "Duster"
+        "make": "Ford",
+        "model": "Puma"
       }
     ]
   }
