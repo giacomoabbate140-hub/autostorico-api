@@ -32,6 +32,15 @@ assert len(db) == 1
 assert review({'includeResolved':True})['publishedCount'] == 1
 queue.clear()
 assert review({'includeResolved':True})['publishedCount'] == 1
+# A rejected source must remain publishable after it leaves the research queue.
+review({'action':'reject', 'sourceUrl':url})
+assert db[url]['status'] == 'rejected'
+review({'action':'publish', 'sourceUrl':url})
+assert db[url]['status'] == 'published'
+assert len(db) == 1
+try: review({'action':'publish', 'sourceUrl':'https://example.com/unknown'})
+except ValueError: pass
+else: raise AssertionError('Unknown source accepted')
 queue.append(candidate)
 ns['_supabase_json_request'] = lambda method, *args, **kwargs: []
 try: review({'action':'publish', 'sourceUrl':url})
@@ -43,4 +52,4 @@ try: review({})
 except RuntimeError: pass
 else: raise AssertionError('Database read failure hidden')
 assert ns['_defect_source_key'](url) != ns['_defect_source_key'](url.replace('id=1','id=2'))
-print('PASS: dedupe, repeated publish, retained published list, unconfirmed save, DB failure, distinct URLs')
+print('PASS: dedupe, repeated publish, retained published list, unconfirmed save, DB failure, distinct URLs, rejected source recovery, unknown source rejection')
