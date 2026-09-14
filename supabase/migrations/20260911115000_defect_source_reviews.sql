@@ -29,3 +29,6 @@ create policy defect_source_reviews_no_client_access
   for all to anon, authenticated
   using (false)
   with check (false);
+
+-- Only the backend may persist administrator reviews.
+grant select, insert, update on table public.defect_source_reviews to service_role;
