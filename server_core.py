@@ -958,12 +958,29 @@ def _defect_review_status(value: Any) -> str:
     return "pending_review"
 
 
+def _defect_source_key(value: Any) -> str:
+    """Deduplicate tracking variants; preserve meaningful query/path differences."""
+    url = safe_public_source_url(value)
+    if not url:
+        return ""
+    parts = urllib.parse.urlsplit(url)
+    query = [(key, val) for key, val in urllib.parse.parse_qsl(
+        parts.query, keep_blank_values=True
+    ) if not key.lower().startswith("utm_") and key.lower() not in {
+        "fbclid", "gclid", "msclkid"
+    }]
+    return urllib.parse.urlunsplit((
+        parts.scheme.lower(), parts.netloc.lower(), parts.path,
+        urllib.parse.urlencode(query), ""
+    ))
+
+
 def _defect_review_candidate(source_url: str) -> dict[str, Any] | None:
-    clean_url = safe_public_source_url(source_url)
+    clean_url = _defect_source_key(source_url)
     if not clean_url:
         return None
     for candidate in _load_defect_research_candidates():
-        candidate_url = safe_public_source_url(
+        candidate_url = _defect_source_key(
             candidate.get("sourceUrl") or candidate.get("url")
         )
         if candidate_url == clean_url:
@@ -973,7 +990,7 @@ def _defect_review_candidate(source_url: str) -> dict[str, Any] | None:
 
 def _defect_review_rows(status: str = "") -> list[dict[str, Any]]:
     if not SUPABASE_URL or not SUPABASE_SECRET_KEY:
-        return []
+        raise RuntimeError("Database revisioni non configurato sul server.")
     fields = (
         "id,source_url,make,model,year,engine,title,snippet,source_name,"
         "source_type,status,reviewed_at,reviewed_by,created_at"
@@ -981,18 +998,17 @@ def _defect_review_rows(status: str = "") -> list[dict[str, Any]]:
     path = f"/rest/v1/defect_source_reviews?select={fields}&order=created_at.desc"
     if status:
         path += f"&status=eq.{urllib.parse.quote(status, safe='')}"
-    try:
-        rows = _supabase_json_request("GET", path)
-    except RuntimeError:
-        return []
-    return [row for row in rows if isinstance(row, dict)] if isinstance(rows, list) else []
+    rows = _supabase_json_request("GET", path)
+    if not isinstance(rows, list):
+        raise RuntimeError("Risposta database revisioni non valida.")
+    return [row for row in rows if isinstance(row, dict)]
 
 
 def _safe_defect_review_item(
     candidate: dict[str, Any],
     status_override: str = "",
 ) -> dict[str, Any] | None:
-    source_url = safe_public_source_url(
+    source_url = _defect_source_key(
         candidate.get("sourceUrl") or candidate.get("url")
     )
     if not source_url:
@@ -1029,17 +1045,24 @@ def admin_defect_review(payload: dict[str, Any]) -> dict[str, Any]:
     action = str(payload.get("action") or "list").strip().lower()
     db_rows = _defect_review_rows()
     db_by_url = {
-        safe_public_source_url(row.get("source_url")): row
+        _defect_source_key(row.get("source_url")): row
         for row in db_rows
-        if safe_public_source_url(row.get("source_url"))
+        if _defect_source_key(row.get("source_url"))
     }
     items: list[dict[str, Any]] = []
-    for candidate in _load_defect_research_candidates():
-        url = safe_public_source_url(candidate.get("sourceUrl") or candidate.get("url"))
+    seen: set[str] = set()
+    candidates = _load_defect_research_candidates() + [
+        {**row, "sourceUrl": row["source_url"],
+         "sourceName": row["source_name"], "sourceType": row["source_type"]}
+        for row in db_rows
+    ]
+    for candidate in candidates:
+        url = _defect_source_key(candidate.get("sourceUrl") or candidate.get("url"))
         row = db_by_url.get(url) if url else None
         status = str(row.get("status") or "") if row else _defect_review_status(candidate.get("status"))
         item = _safe_defect_review_item(candidate, status)
-        if item is not None:
+        if item is not None and url not in seen:
+            seen.add(url)
             items.append(item)
     if action == "list":
         include_resolved = payload.get("includeResolved") is True
@@ -1051,11 +1074,11 @@ def admin_defect_review(payload: dict[str, Any]) -> dict[str, Any]:
             "pendingCount": sum(item["status"] == "pending_review" for item in items),
             "publishedCount": sum(item["status"] == "published" for item in items),
             "rejectedCount": sum(item["status"] == "rejected" for item in items),
-            "items": visible[:200],
+            "items": visible,
         }
     if action not in {"publish", "reject"}:
         raise ValueError("Azione revisione non valida.")
-    source_url = safe_public_source_url(payload.get("sourceUrl"))
+    source_url = _defect_source_key(payload.get("sourceUrl"))
     candidate = _defect_review_candidate(source_url)
     if candidate is None:
         raise ValueError("Fonte non trovata nella coda di ricerca.")
@@ -1087,6 +1110,11 @@ def admin_defect_review(payload: dict[str, Any]) -> dict[str, Any]:
         payload=row,
         prefer="resolution=merge-duplicates,return=representation",
     )
+    if (not isinstance(saved, list) or len(saved) != 1
+            or not isinstance(saved[0], dict)
+            or saved[0].get("source_url") != item["sourceUrl"]
+            or saved[0].get("status") != item["status"]):
+        raise RuntimeError("Salvataggio non confermato dal database. Ricarica le fonti prima di riprovare.")
     global PUBLISHED_DEFECT_SOURCES_CACHE
     with DEFECT_REVIEW_CACHE_LOCK:
         PUBLISHED_DEFECT_SOURCES_CACHE = None
@@ -1106,7 +1134,10 @@ def _published_defect_source_rows() -> list[dict[str, Any]]:
         cached = PUBLISHED_DEFECT_SOURCES_CACHE
         if cached and now - cached[0] < DEFECT_REVIEW_CACHE_TTL_SECONDS:
             return [dict(row) for row in cached[1]]
-    rows = _defect_review_rows("published")
+    try:
+        rows = _defect_review_rows("published")
+    except RuntimeError:
+        return []
     with DEFECT_REVIEW_CACHE_LOCK:
         PUBLISHED_DEFECT_SOURCES_CACHE = (now, rows)
     return [dict(row) for row in rows]
