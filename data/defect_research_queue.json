@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-14T04:55:52.606464+00:00",
-  "cursor": 8,
+  "updatedAt": "2026-09-14T12:45:55.223470+00:00",
+  "cursor": 11,
   "candidates": [
     {
       "status": "approved",
@@ -1761,6 +1761,20 @@
       "title": "hyunday tucson usata problemi di rigenerazione del fap | Forum Hyundai Club Italia",
       "snippet": "In ogni caso se l&#x27;auto l&#x27;hai presa nel Febbraio 2024 (e 18K km dal 2018 sono veramente pochi e questo puzza parecchio) la garanzia non è ancora scaduta. Che io sappia è almeno 1 anno + 2 mesi... nel senso che se il difetto era presente prima della scadenza ma non risolto non potrebbe, legalmente, esimersi dal risolverlo e ci sono altri 2 mesi per farlo oltre la scadenza. Buon pomeriggio ho acquistato una hyundai tucson CRDI 4WD DCT XPRIME usata lo scorso febbraio 2024 con garanzia di un anno attirata dal fatto che avesse meno di 18000 km. da un concessionario da cui avevo gia' acquistato 2 auto in precedenza con cui ho sempre avuto un rapporto cordiale e di fiducia. Nell'usato però ancora qualcosa c'è e quindi se giri molto in città sarebbe stato meglio per te prendere un modello senza FAP (ma non diesel perché oggi in molte zone senza FAP non potrebbe circolare... insomma un gran caos). La tua Tucson di che anno è e quanti km aveva quando l'hai acquistata? Ti è stata data la documentazione degli interventi/riparazioni effettuate dal vecchio proprietario? Questa macchina mi sta esaurendo sono stanca e non posso pensare di dover ogni 3 per 2 andare in officina a spegnere spie rigenerare il fap che mi chiedo se oltre ad essere intastato sia forse difettoso e quindi da sostituire che significherebbe migliaia di euro per la sottoscritta visto che il concessionario che me l'ha venduta da questo orecchio non ci sente ..... In ogni caso se l'auto l'hai presa nel Febbraio 2024 (e 18K km dal 2018 sono veramente pochi e questo puzza parecchio) la garanzia non è ancora scaduta. Che io sappia è almeno 1 anno + 2 mesi... nel senso che se il difetto era presente prima della scadenza ma non risolto non potrebbe, legalmente, esimersi dal risolverlo e ci sono altri 2 mesi per farlo oltre la scadenza.",
       "sourceUrl": "https://www.hyundai-club.eu/threads/hyunday-tucson-usata-problemi-di-rigenerazione-del-fap.41425/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-14T12:45:55.223470+00:00",
+      "make": "Fiat",
+      "model": "Tipo",
+      "year": 2018,
+      "engine": "1.6 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiamo Fiat Tipo 1.5 t4 hybrid 130 cv | Il Forum di Quattroruote",
+      "snippet": "Segnalo a tutti i possessori di Fiat Tipo 1.5 hybrid 130 cv (motorizzazione 4 cilindri turbo-benzina) la campagna di servizio Fiat 6466 &quot;verifica ed eventuale riposizionamento del precablato motore&quot;. L&#x27;intervento (riconosciuto in totale garanzia) ha un costo per il cliente pari a 0€, mentre...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/richiamo-fiat-tipo-1-5-t4-hybrid-130-cv.148101/"
     }
   ],
   "latestUpdate": {
