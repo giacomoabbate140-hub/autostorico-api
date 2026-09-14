@@ -1081,7 +1081,15 @@ def admin_defect_review(payload: dict[str, Any]) -> dict[str, Any]:
     source_url = _defect_source_key(payload.get("sourceUrl"))
     candidate = _defect_review_candidate(source_url)
     if candidate is None:
-        raise ValueError("Fonte non trovata nella coda di ricerca.")
+        existing = db_by_url.get(source_url)
+        if existing:
+            candidate = {
+                **existing, "sourceUrl": existing["source_url"],
+                "sourceName": existing["source_name"],
+                "sourceType": existing["source_type"],
+            }
+    if candidate is None:
+        raise ValueError("Fonte non trovata nella coda di ricerca o nelle revisioni salvate.")
     item = _safe_defect_review_item(
         candidate,
         "published" if action == "publish" else "rejected",
