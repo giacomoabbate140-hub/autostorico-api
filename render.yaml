@@ -22,7 +22,7 @@ services:
       - key: GOOGLE_PLAY_SUBSCRIPTION_ID
         value: premium_6_mesi
       - key: GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
-        value: goldseimesi
+        value: premium_gold_6_mesi
       - key: BRAVE_SEARCH_API_KEY
         sync: false
       - key: TAVILY_API_KEY
