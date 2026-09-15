@@ -690,8 +690,12 @@ GOOGLE_PLAY_SUBSCRIPTION_ID = os.environ.get(
     "GOOGLE_PLAY_SUBSCRIPTION_ID", "premium_6_mesi"
 ).strip()
 GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = os.environ.get(
-    "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "goldseimesi"
+    "GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID", "premium_gold_6_mesi"
 ).strip()
+# Google Play uses `premium_gold_6_mesi` as the subscription product ID;
+# `goldseimesi` is only its six-month base-plan ID from the console.
+if GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID == "goldseimesi":
+    GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = "premium_gold_6_mesi"
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 DEVELOPER_DEVICE_ID_HASH = os.environ.get(
     "AUTOSTORICO_DEVELOPER_DEVICE_ID_HASH", ""
