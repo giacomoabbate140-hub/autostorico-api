@@ -4339,16 +4339,11 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
         if request_path in {"/api/defects", "/defects"}:
             self.send_json(lookup_defects(urllib.parse.parse_qs(parsed_url.query)))
             return
-        if request_path in {"/api/trial/status", "/api/trial/claim"}:
+        if request_path == "/api/trial/status":
             auth = self.headers.get("Authorization", "")
             try:
                 user = verify_supabase_user(auth)
-                self.send_json(
-                    trial_status_for_user(
-                        user,
-                        claim=request_path == "/api/trial/claim",
-                    )
-                )
+                self.send_json(trial_status_for_user(user, claim=False))
             except PermissionError as exc:
                 self.send_json({"error": "unauthorized", "message": str(exc)}, status=401)
             except (RuntimeError, ValueError) as exc:
@@ -4469,6 +4464,21 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             payload = json.loads(raw_body or "{}")
             if not isinstance(payload, dict):
                 raise ValueError("Payload must be an object")
+            if request_path == "/api/trial/claim":
+                try:
+                    user = verify_supabase_user(auth)
+                    self.send_json(trial_status_for_user(user, claim=True))
+                except PermissionError as exc:
+                    self.send_json(
+                        {"error": "unauthorized", "message": str(exc)},
+                        status=401,
+                    )
+                except (RuntimeError, ValueError) as exc:
+                    self.send_json(
+                        {"error": "trial_unavailable", "message": str(exc)},
+                        status=503,
+                    )
+                return
             if request_path == "/api/admin/defect-review":
                 if not developer_device_is_authorized(
                     payload.get("developerDeviceIdHash")
