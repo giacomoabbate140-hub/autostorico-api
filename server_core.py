@@ -187,6 +187,82 @@ def verify_supabase_user(authorization: str) -> dict[str, Any]:
     return user
 
 
+TRIAL_ENTITLEMENTS_TABLE = "trial_entitlements"
+TRIAL_DURATION_DAYS = 30
+
+
+def _trial_row_for_user(user_id: str) -> dict[str, Any] | None:
+    """Read the immutable server-side trial record for one authenticated user."""
+    normalized = str(user_id or "").strip()
+    if not re.fullmatch(
+        r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}",
+        normalized,
+    ):
+        raise ValueError("Identificativo utente non valido")
+    encoded = urllib.parse.quote(normalized, safe="")
+    rows = _supabase_json_request(
+        "GET",
+        f"/rest/v1/{TRIAL_ENTITLEMENTS_TABLE}"
+        f"?user_id=eq.{encoded}&select=user_id,trial_started_at,trial_ends_at",
+    )
+    if not isinstance(rows, list) or not rows:
+        return None
+    return rows[0] if isinstance(rows[0], dict) else None
+
+
+def _trial_status_payload(row: dict[str, Any] | None) -> dict[str, Any]:
+    now = datetime.now(timezone.utc)
+    if row is None:
+        return {
+            "ok": True,
+            "trialUsed": False,
+            "trialActive": False,
+            "trialAvailable": True,
+            "trialStartedAt": None,
+            "trialEndsAt": None,
+            "daysRemaining": 0,
+            "serverTime": now.isoformat(),
+        }
+    started_raw = str(row.get("trial_started_at") or "").strip()
+    ends_raw = str(row.get("trial_ends_at") or "").strip()
+    try:
+        ends_at = datetime.fromisoformat(ends_raw.replace("Z", "+00:00"))
+    except ValueError:
+        ends_at = now
+    if ends_at.tzinfo is None:
+        ends_at = ends_at.replace(tzinfo=timezone.utc)
+    active = now < ends_at
+    remaining = max(0, math.ceil((ends_at - now).total_seconds() / 86400))
+    return {
+        "ok": True,
+        "trialUsed": True,
+        "trialActive": active,
+        "trialAvailable": False,
+        "trialStartedAt": started_raw or None,
+        "trialEndsAt": ends_at.astimezone(timezone.utc).isoformat(),
+        "daysRemaining": remaining,
+        "serverTime": now.isoformat(),
+    }
+
+
+def trial_status_for_user(user: dict[str, Any], claim: bool = False) -> dict[str, Any]:
+    """Claim/read trial state without trusting local app storage."""
+    user_id = str(user.get("id") or "").strip()
+    if not user_id:
+        raise PermissionError("Account non valido")
+    row = _trial_row_for_user(user_id)
+    if row is None and claim:
+        encoded = urllib.parse.quote(user_id, safe="")
+        _supabase_json_request(
+            "POST",
+            f"/rest/v1/{TRIAL_ENTITLEMENTS_TABLE}",
+            payload={"user_id": user_id},
+            prefer="resolution=ignore-duplicates,return=representation",
+        )
+        row = _trial_row_for_user(user_id)
+    return _trial_status_payload(row)
+
+
 def _consultation_payload(payload: dict[str, Any]) -> dict[str, str]:
     fields = {
         "vehicle_make": str(payload.get("vehicleMake") or "").strip(),
@@ -4221,6 +4297,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationPaymentsConfigured": consultation_payments_configured(),
                     "consultationPriceCents": CONSULTATION_PRICE_CENTS,
                     "consultationCurrency": CONSULTATION_CURRENCY,
+                    "trialEntitlementRevision": "server_trial_ledger_v1",
                     "consultationPaymentConfiguration": {
                         "stripeSdk": stripe is not None,
                         "stripeSecret": bool(STRIPE_SECRET_KEY),
@@ -4261,6 +4338,24 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             return
         if request_path in {"/api/defects", "/defects"}:
             self.send_json(lookup_defects(urllib.parse.parse_qs(parsed_url.query)))
+            return
+        if request_path in {"/api/trial/status", "/api/trial/claim"}:
+            auth = self.headers.get("Authorization", "")
+            try:
+                user = verify_supabase_user(auth)
+                self.send_json(
+                    trial_status_for_user(
+                        user,
+                        claim=request_path == "/api/trial/claim",
+                    )
+                )
+            except PermissionError as exc:
+                self.send_json({"error": "unauthorized", "message": str(exc)}, status=401)
+            except (RuntimeError, ValueError) as exc:
+                self.send_json(
+                    {"error": "trial_unavailable", "message": str(exc)},
+                    status=503,
+                )
             return
         if request_path == "/api/plate-info":
             status_code, payload = plate_info_lookup(urllib.parse.parse_qs(parsed_url.query))
@@ -4343,6 +4438,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             "/api/consultations/delete",
             "/api/forum/posts/delete",
             "/api/admin/defect-review",
+            "/api/trial/claim",
         }:
             self.send_json({"error": "not_found"}, status=404)
             return
@@ -4353,6 +4449,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             "/api/consultations/gold",
             "/api/consultations/delete",
             "/api/forum/posts/delete",
+            "/api/trial/claim",
         }:
             pass
         elif request_path == "/api/premium/verify":
