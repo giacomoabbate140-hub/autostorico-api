@@ -869,7 +869,7 @@ class MarketEvidenceTests(unittest.TestCase):
                     "subscriptionState": "SUBSCRIPTION_STATE_ACTIVE",
                     "lineItems": [
                         {
-                            "productId": "goldseimesi",
+                            "productId": server.GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID,
                             "expiryTime": "2099-12-31T00:00:00Z",
                         }
                     ],
@@ -895,7 +895,7 @@ class MarketEvidenceTests(unittest.TestCase):
             server, "AuthorizedSession", FakeSession
         ), patch.object(server, "service_account", FakeServiceAccount):
             result = verify_google_play_subscription(
-                "token-123456789", "goldseimesi"
+                "token-123456789", server.GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
             )
 
         self.assertTrue(result["active"])
@@ -922,7 +922,7 @@ class MarketEvidenceTests(unittest.TestCase):
             calls,
             [
                 ("premium-token-123", "premium_6_mesi"),
-                ("gold-token-123", "goldseimesi"),
+                ("gold-token-123", server.GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID),
             ],
         )
 
