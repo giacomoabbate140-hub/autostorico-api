@@ -869,7 +869,7 @@ class MarketEvidenceTests(unittest.TestCase):
                     "subscriptionState": "SUBSCRIPTION_STATE_ACTIVE",
                     "lineItems": [
                         {
-                            "productId": "goldseimesi",
+                            "productId": server.GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID,
                             "expiryTime": "2099-12-31T00:00:00Z",
                         }
                     ],
@@ -895,7 +895,7 @@ class MarketEvidenceTests(unittest.TestCase):
             server, "AuthorizedSession", FakeSession
         ), patch.object(server, "service_account", FakeServiceAccount):
             result = verify_google_play_subscription(
-                "token-123456789", "goldseimesi"
+                "token-123456789", server.GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
             )
 
         self.assertTrue(result["active"])
@@ -922,7 +922,7 @@ class MarketEvidenceTests(unittest.TestCase):
             calls,
             [
                 ("premium-token-123", "premium_6_mesi"),
-                ("gold-token-123", "goldseimesi"),
+                ("gold-token-123", server.GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID),
             ],
         )
 
@@ -1520,6 +1520,62 @@ class VinRecallCheckTests(unittest.TestCase):
         self.assertFalse(result["valid"])
         self.assertEqual("invalid", result["status"])
         self.assertEqual("", result["maskedVin"])
+
+
+class TrialDeviceAntiAbuseTests(unittest.TestCase):
+    def test_same_device_cannot_claim_trial_with_second_account(self):
+        device_hash = "a" * 64
+        owner = {
+            "user_id": "11111111-1111-4111-8111-111111111111",
+            "device_hash": device_hash,
+        }
+        with patch.object(server, "_trial_row_for_user", return_value=None), patch.object(
+            server, "_trial_row_for_device", return_value=owner
+        ), patch.object(server, "_supabase_json_request") as request:
+            result = server.trial_status_for_user(
+                {"id": "22222222-2222-4222-8222-222222222222"},
+                claim=True,
+                device_hash=device_hash,
+            )
+
+        self.assertTrue(result["trialBlocked"])
+        self.assertTrue(result["deviceTrialUsed"])
+        self.assertFalse(result["trialAvailable"])
+        request.assert_not_called()
+
+    def test_new_trial_is_atomically_bound_to_account_and_device(self):
+        device_hash = "b" * 64
+        user_id = "33333333-3333-4333-8333-333333333333"
+        claimed = {
+            "user_id": user_id,
+            "device_hash": device_hash,
+            "trial_started_at": "2026-09-16T08:00:00+00:00",
+            "trial_ends_at": "2026-10-16T08:00:00+00:00",
+        }
+        with patch.object(
+            server, "_trial_row_for_user", side_effect=[None, claimed]
+        ), patch.object(
+            server, "_trial_row_for_device", return_value=None
+        ), patch.object(server, "_supabase_json_request") as request:
+            result = server.trial_status_for_user(
+                {"id": user_id},
+                claim=True,
+                device_hash=device_hash,
+            )
+
+        self.assertTrue(result["trialUsed"])
+        payload = request.call_args.kwargs["payload"]
+        self.assertEqual(payload["user_id"], user_id)
+        self.assertEqual(payload["device_hash"], device_hash)
+
+    def test_trial_claim_rejects_missing_or_invalid_device_hash(self):
+        user = {"id": "44444444-4444-4444-8444-444444444444"}
+        with patch.object(server, "_trial_row_for_user", return_value=None):
+            with self.assertRaises(ValueError):
+                server.trial_status_for_user(user, claim=True, device_hash="")
+            with self.assertRaises(ValueError):
+                server.trial_status_for_user(user, claim=True, device_hash="not-a-hash")
+
 
 
 if __name__ == "__main__":

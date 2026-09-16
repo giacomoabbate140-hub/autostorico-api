@@ -189,6 +189,19 @@ def verify_supabase_user(authorization: str) -> dict[str, Any]:
 
 TRIAL_ENTITLEMENTS_TABLE = "trial_entitlements"
 TRIAL_DURATION_DAYS = 30
+TRIAL_DEVICE_HASH_PATTERN = re.compile(r"^[0-9a-f]{64}$")
+
+
+def normalize_trial_device_hash(value: Any, *, required: bool = False) -> str:
+    """Validate the app-scoped device hash without storing a hardware identifier."""
+    normalized = str(value or "").strip().lower()
+    if not normalized:
+        if required:
+            raise ValueError("Identificativo dispositivo richiesto")
+        return ""
+    if not TRIAL_DEVICE_HASH_PATTERN.fullmatch(normalized):
+        raise ValueError("Identificativo dispositivo non valido")
+    return normalized
 
 
 def _trial_row_for_user(user_id: str) -> dict[str, Any] | None:
@@ -203,7 +216,23 @@ def _trial_row_for_user(user_id: str) -> dict[str, Any] | None:
     rows = _supabase_json_request(
         "GET",
         f"/rest/v1/{TRIAL_ENTITLEMENTS_TABLE}"
-        f"?user_id=eq.{encoded}&select=user_id,trial_started_at,trial_ends_at",
+        f"?user_id=eq.{encoded}&select=user_id,trial_started_at,trial_ends_at,device_hash",
+    )
+    if not isinstance(rows, list) or not rows:
+        return None
+    return rows[0] if isinstance(rows[0], dict) else None
+
+
+def _trial_row_for_device(device_hash: str) -> dict[str, Any] | None:
+    """Find a previous trial claim for the same app-scoped device hash."""
+    normalized = normalize_trial_device_hash(device_hash)
+    if not normalized:
+        return None
+    encoded = urllib.parse.quote(normalized, safe="")
+    rows = _supabase_json_request(
+        "GET",
+        f"/rest/v1/{TRIAL_ENTITLEMENTS_TABLE}"
+        f"?device_hash=eq.{encoded}&select=user_id,trial_started_at,trial_ends_at,device_hash",
     )
     if not isinstance(rows, list) or not rows:
         return None
@@ -218,6 +247,8 @@ def _trial_status_payload(row: dict[str, Any] | None) -> dict[str, Any]:
             "trialUsed": False,
             "trialActive": False,
             "trialAvailable": True,
+            "trialBlocked": False,
+            "deviceTrialUsed": False,
             "trialStartedAt": None,
             "trialEndsAt": None,
             "daysRemaining": 0,
@@ -238,6 +269,8 @@ def _trial_status_payload(row: dict[str, Any] | None) -> dict[str, Any]:
         "trialUsed": True,
         "trialActive": active,
         "trialAvailable": False,
+        "trialBlocked": False,
+        "deviceTrialUsed": False,
         "trialStartedAt": started_raw or None,
         "trialEndsAt": ends_at.astimezone(timezone.utc).isoformat(),
         "daysRemaining": remaining,
@@ -245,21 +278,72 @@ def _trial_status_payload(row: dict[str, Any] | None) -> dict[str, Any]:
     }
 
 
-def trial_status_for_user(user: dict[str, Any], claim: bool = False) -> dict[str, Any]:
-    """Claim/read trial state without trusting local app storage."""
+def _trial_device_blocked_payload() -> dict[str, Any]:
+    now = datetime.now(timezone.utc)
+    return {
+        "ok": True,
+        "trialUsed": False,
+        "trialActive": False,
+        "trialAvailable": False,
+        "trialBlocked": True,
+        "deviceTrialUsed": True,
+        "trialStartedAt": None,
+        "trialEndsAt": None,
+        "daysRemaining": 0,
+        "serverTime": now.isoformat(),
+        "message": "La prova gratuita e gia stata utilizzata su questo dispositivo.",
+    }
+
+
+def trial_status_for_user(
+    user: dict[str, Any],
+    claim: bool = False,
+    device_hash: str = "",
+) -> dict[str, Any]:
+    """Claim/read trial state without trusting app storage or account switching."""
     user_id = str(user.get("id") or "").strip()
     if not user_id:
         raise PermissionError("Account non valido")
+    normalized_device = normalize_trial_device_hash(
+        device_hash,
+        required=claim,
+    )
     row = _trial_row_for_user(user_id)
-    if row is None and claim:
-        encoded = urllib.parse.quote(user_id, safe="")
+
+    # Existing account entitlements always win. Older rows are opportunistically
+    # bound to the first valid device that presents them.
+    if row is not None:
+        if normalized_device and not str(row.get("device_hash") or "").strip():
+            owner = _trial_row_for_device(normalized_device)
+            if owner is None or str(owner.get("user_id") or "") == user_id:
+                encoded_user = urllib.parse.quote(user_id, safe="")
+                _supabase_json_request(
+                    "PATCH",
+                    f"/rest/v1/{TRIAL_ENTITLEMENTS_TABLE}?user_id=eq.{encoded_user}",
+                    payload={"device_hash": normalized_device},
+                    prefer="return=minimal",
+                )
+                row = {**row, "device_hash": normalized_device}
+        return _trial_status_payload(row)
+
+    if normalized_device:
+        owner = _trial_row_for_device(normalized_device)
+        if owner is not None and str(owner.get("user_id") or "") != user_id:
+            return _trial_device_blocked_payload()
+
+    if claim:
         _supabase_json_request(
             "POST",
             f"/rest/v1/{TRIAL_ENTITLEMENTS_TABLE}",
-            payload={"user_id": user_id},
+            payload={"user_id": user_id, "device_hash": normalized_device},
             prefer="resolution=ignore-duplicates,return=representation",
         )
         row = _trial_row_for_user(user_id)
+        if row is None:
+            owner = _trial_row_for_device(normalized_device)
+            if owner is not None and str(owner.get("user_id") or "") != user_id:
+                return _trial_device_blocked_payload()
+            raise RuntimeError("Impossibile registrare la prova gratuita")
     return _trial_status_payload(row)
 
 
@@ -4343,10 +4427,23 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             auth = self.headers.get("Authorization", "")
             try:
                 user = verify_supabase_user(auth)
-                self.send_json(trial_status_for_user(user, claim=False))
+                self.send_json(
+                    trial_status_for_user(
+                        user,
+                        claim=False,
+                        device_hash=self.headers.get(
+                            "X-AutoStorico-Device-Hash", ""
+                        ),
+                    )
+                )
             except PermissionError as exc:
                 self.send_json({"error": "unauthorized", "message": str(exc)}, status=401)
-            except (RuntimeError, ValueError) as exc:
+            except ValueError as exc:
+                self.send_json(
+                    {"error": "invalid_device", "message": str(exc)},
+                    status=400,
+                )
+            except RuntimeError as exc:
                 self.send_json(
                     {"error": "trial_unavailable", "message": str(exc)},
                     status=503,
@@ -4467,13 +4564,26 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             if request_path == "/api/trial/claim":
                 try:
                     user = verify_supabase_user(auth)
-                    self.send_json(trial_status_for_user(user, claim=True))
+                    self.send_json(
+                        trial_status_for_user(
+                            user,
+                            claim=True,
+                            device_hash=self.headers.get(
+                                "X-AutoStorico-Device-Hash", ""
+                            ),
+                        )
+                    )
                 except PermissionError as exc:
                     self.send_json(
                         {"error": "unauthorized", "message": str(exc)},
                         status=401,
                     )
-                except (RuntimeError, ValueError) as exc:
+                except ValueError as exc:
+                    self.send_json(
+                        {"error": "invalid_device", "message": str(exc)},
+                        status=400,
+                    )
+                except RuntimeError as exc:
                     self.send_json(
                         {"error": "trial_unavailable", "message": str(exc)},
                         status=503,
