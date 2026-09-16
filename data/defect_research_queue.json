@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-16T16:54:50.129624+00:00",
-  "cursor": 6,
+  "updatedAt": "2026-09-16T21:17:41.351485+00:00",
+  "cursor": 9,
   "candidates": [
     {
       "status": "approved",
@@ -2139,25 +2139,37 @@
       "title": "Tagliando dopo 2 anni ma solo 10mila km: va fatto? Quanto costa?",
       "snippet": "Il costo è firmare un'autorizzazione di “Cambio olio e filtro olio” e non di “Tagliando”. Poi in base alle conoscenze che hai sentirei un'",
       "sourceUrl": "https://forum.audirsclub.it/showthread.php?82725-Tagliando-dopo-2-anni-ma-solo-10mila-km-va-fatto-Quanto-costa="
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-16T21:17:41.351485+00:00",
+      "make": "Fiat",
+      "model": "Panda",
+      "year": 2018,
+      "engine": "1.3 Multijet",
+      "sourceName": "Commissione europea",
+      "sourceType": "official_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Home - Erasmus+",
+      "snippet": "Erasmus+ home page Erasmus+ home page\n\nLanguage: English\n\n# Select your language\n\n## EU official languages\n\n bgбългарски\n esespañol\n csCzech\n dadansk\n deDeutsch\n eteesti\n elελληνικά\n enEnglish\n frfrançais\n gaIrish\n hrhrvatski\n itItalian\n lvlatviešu\n ltlietuvių\n huHungarian\n mtMaltese\n nlNederlands\n plpolski\n ptportuguês\n roromnă\n skslovenčina\n slslovenščina\n fisuomi\n svsvenska\n\nEU programme for education, training, youth and sport\n\n## Empowering individuals and organisations [...] Where can learning take you? Across borders. Into new experiences. Toward a future you never imagined. From classrooms to city streets, from hands-on learning to lasting connections, Erasmus+ empowers individuals and organisations to grow, connect, and shape their futures across Europe and beyond.\n\n## Impact\n\nWhat's new\n\n## Give your feedback about this page\n\n## Share this page",
+      "sourceUrl": "https://erasmus-plus.ec.europa.eu"
     }
   ],
   "latestUpdate": {
-    "id": "2026-09-16T16:54:50.129624+00:00",
-    "updatedAt": "2026-09-16T16:54:50.129624+00:00",
-    "addedCount": 2,
-    "summary": "Trovate 2 nuove fonti ufficiali per Audi Q3, in verifica.",
+    "id": "2026-09-16T21:17:41.351485+00:00",
+    "updatedAt": "2026-09-16T21:17:41.351485+00:00",
+    "addedCount": 1,
+    "summary": "Trovate 1 nuove fonti ufficiali per Fiat Panda, in verifica.",
     "details": [
-      "NHTSA: Takata Air Bag Recall Spotlight - NHTSA",
-      "NHTSA: Vehicle Detail Search - 2019 AUDI Q3 SUV AWD - NHTSA"
+      "Commissione europea: Home - Erasmus+"
     ],
     "sources": [
-      "https://www.nhtsa.gov/vehicle-safety/takata-recall-spotlight",
-      "https://www.nhtsa.gov/vehicle/2019/AUDI/Q3/SUV/AWD"
+      "https://erasmus-plus.ec.europa.eu"
     ],
     "vehicles": [
       {
-        "make": "Audi",
-        "model": "Q3"
+        "make": "Fiat",
+        "model": "Panda"
       }
     ]
   }
