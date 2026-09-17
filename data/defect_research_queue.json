@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-17T04:51:59.074524+00:00",
-  "cursor": 12,
+  "updatedAt": "2026-09-17T11:40:48.241549+00:00",
+  "cursor": 15,
   "candidates": [
     {
       "status": "approved",
@@ -2153,23 +2153,53 @@
       "title": "Home - Erasmus+",
       "snippet": "Erasmus+ home page Erasmus+ home page\n\nLanguage: English\n\n# Select your language\n\n## EU official languages\n\n bgбългарски\n esespañol\n csCzech\n dadansk\n deDeutsch\n eteesti\n elελληνικά\n enEnglish\n frfrançais\n gaIrish\n hrhrvatski\n itItalian\n lvlatviešu\n ltlietuvių\n huHungarian\n mtMaltese\n nlNederlands\n plpolski\n ptportuguês\n roromnă\n skslovenčina\n slslovenščina\n fisuomi\n svsvenska\n\nEU programme for education, training, youth and sport\n\n## Empowering individuals and organisations [...] Where can learning take you? Across borders. Into new experiences. Toward a future you never imagined. From classrooms to city streets, from hands-on learning to lasting connections, Erasmus+ empowers individuals and organisations to grow, connect, and shape their futures across Europe and beyond.\n\n## Impact\n\nWhat's new\n\n## Give your feedback about this page\n\n## Share this page",
       "sourceUrl": "https://erasmus-plus.ec.europa.eu"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-17T11:40:48.241549+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "Ministero delle infrastrutture e dei trasporti",
+      "sourceType": "official_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Decreto Dirigenziale 367 del 29/09/2025",
+      "snippet": "Descrizione breve. Nuovo decreto direttoriale sull'operatività della piattaforma di censimento dei c.d. Velox · Temi/Argomento. Mezzi stradali.",
+      "sourceUrl": "https://www.mit.gov.it/normativa/decreto-dirigenziale-367-del-29092025"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-17T11:40:48.241549+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "Ministero delle infrastrutture e dei trasporti",
+      "sourceType": "official_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Circolare protocollo 28822 del 19/09/2019",
+      "snippet": "Procedure amministrative per il conseguimento della patente di guida delle categorie A1, A2 e A. Temi/Argomento. Patenti mezzi stradali.",
+      "sourceUrl": "https://www.mit.gov.it/normativa/circolare-protocollo-28822-del-19092019"
     }
   ],
   "latestUpdate": {
-    "id": "2026-09-16T21:17:41.351485+00:00",
-    "updatedAt": "2026-09-16T21:17:41.351485+00:00",
-    "addedCount": 1,
-    "summary": "Trovate 1 nuove fonti ufficiali per Fiat Panda, in verifica.",
+    "id": "2026-09-17T11:40:48.241549+00:00",
+    "updatedAt": "2026-09-17T11:40:48.241549+00:00",
+    "addedCount": 2,
+    "summary": "Trovate 2 nuove fonti ufficiali per Jeep Renegade, in verifica.",
     "details": [
-      "Commissione europea: Home - Erasmus+"
+      "Ministero delle infrastrutture e dei trasporti: Decreto Dirigenziale 367 del 29/09/2025",
+      "Ministero delle infrastrutture e dei trasporti: Circolare protocollo 28822 del 19/09/2019"
     ],
     "sources": [
-      "https://erasmus-plus.ec.europa.eu"
+      "https://www.mit.gov.it/normativa/decreto-dirigenziale-367-del-29092025",
+      "https://www.mit.gov.it/normativa/circolare-protocollo-28822-del-19092019"
     ],
     "vehicles": [
       {
-        "make": "Fiat",
-        "model": "Panda"
+        "make": "Jeep",
+        "model": "Renegade"
       }
     ]
   }
