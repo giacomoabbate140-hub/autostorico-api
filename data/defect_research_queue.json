@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-20T16:05:48.787651+00:00",
-  "cursor": 25,
+  "updatedAt": "2026-09-20T20:48:38.556108+00:00",
+  "cursor": 28,
   "candidates": [
     {
       "status": "approved",
@@ -2671,6 +2671,20 @@
       "title": "2023 Kia XCeed 1.5 T-GDi ISG 3 - Used Kia Cars for Sale",
       "snippet": "Kia XCeed 1.5 T-GDi ISG 3 £16995. Mileage 23,781 miles. Now: 20/09/2026 02:33:20. Used Car Remaining Kia Warranty 3 years 11 months £195 yearly tax8",
       "sourceUrl": "https://used-uk.kia.com/used-car-details/used-kia-xceed-15-t-gdi-isg-3-hatchback-spirit-green-manual-petrol/id-6571"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-20T20:48:38.556108+00:00",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year": 2018,
+      "engine": "1.5 TSI Evo",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Tiriamo le somme sui motori a benzina 1.0- 1.2-1.4-1.5 TSI del gruppo Volkswagen ? | Page 2 | Il Forum di Quattroruote",
+      "snippet": "Aggiornamenti centralina non hanno mai risolto il problema completamente. Problema misteriosamente risolto solo a partire dal 2020 con Golf8 e successive. Questa &quot;caratteristica&quot; non ha inficiato l&#x27;affidabilita&#x27; del motore. Ad oggi. Sui modelli precedenti permane secondo i proprietari in maniera piu&#x27; o meno presente. Minimo irregolare: un sistema di catena di distribuzione difettoso può causare un minimo irregolare. Spia del motore: un codice di errore come P0008 o P0016 può indicare problemi alla catena di distribuzione. Tra i più comuni si segnalano irregolarità di funzionamento, soprattutto a motore freddo, che si manifestano con singhiozzi o strattonamenti, e problemi legati al sistema di alimentazione e al turbo, che può guastarsi. Inoltre, il software del motore potrebbe richiedere aggiornamenti per risolvere malfunzionamenti. Aggiornamenti centralina non hanno mai risolto il problema completamente. Problema misteriosamente risolto solo a partire dal 2020 con Golf8 e successive. Questa \"caratteristica\" non ha inficiato l'affidabilita' del motore. Ad oggi. Sui modelli precedenti permane secondo i proprietari in maniera piu' o meno presente. VW EA211 evo: Dati tecnici ed elenco veicoli Codice motore: DPBC, potenza: 84 kW (114 CV) a 4500-6000 g/min, coppia: 220 Nm a 1750-3000 g/min Volkswagen VW Caddy V dal 11/2020 Ford Ford Tourneo Connect dal 05/2022 Codice motore: DACA, potenza: 96 kW (130 CV) a 5000-6000/min, coppia: 200 Nm a 1400-4000/min Seat Seat Leon III dal 09/2018 Volkswagen VW Golf VII dal 07/2017 VW Golf Sportsvan dal 10/2017 Lettera di codice del motore: DADA e DPCA, potenza: 110 kW (150 CV) a 5000-6000 giri/min, coppia: 250 Nm a 1500-3500 giri/min Audi Audi A1 GB dal 11/2018 e DPCA dal 08/2019 Audi A3 8V dal 05/2017 e Per il resto , vedo questa MODA che si sta diffondendo sui canali youtube e di sporadici forumer di fare contenuti dove si spara a zero su auto e motori di determinati marchi. Manco avessero i report con le statistiche delle difettosita' in mano inerenti i singoli marchi automobilistici.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/tiriamo-le-somme-sui-motori-a-benzina-1-0-1-2-1-4-1-5-tsi-del-gruppo-volkswagen.133355/page-2"
     }
   ],
   "latestUpdate": {
