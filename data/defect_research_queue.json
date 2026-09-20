@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-20T04:53:19.924217+00:00",
-  "cursor": 19,
+  "updatedAt": "2026-09-20T11:22:56.218314+00:00",
+  "cursor": 22,
   "candidates": [
     {
       "status": "approved",
@@ -2657,33 +2657,37 @@
       "title": "PROBLEMA DISCHI FRENO NUOVA CLASSE A - Mercedes-Benz Club Italia",
       "snippet": "Le pasticche si vetrificano subito (è come se si bruciassero in superficie), già dopo un paio di frenate allegre...già cambiate una volta. E&#x27; la resistenza allo stress che è davvero ridicola. In officina mi hanno detto che è già capitato ad altri proprietari di MB W176....dicendomi che questa macchina ha una frenata delicatissima e frena &quot;parecchio&quot;....giustificazioni incredibili. Le pasticche si vetrificano subito (è come se si bruciassero in superficie), già dopo un paio di frenate allegre...già cambiate una volta. E' la resistenza allo stress che è davvero ridicola. In officina mi hanno detto che è già capitato ad altri proprietari di MB W176....dicendomi che questa macchina ha una frenata delicatissima e frena \"parecchio\"....giustificazioni incredibili. Lo fa a disco caldo quando ti fermi per qualche minuto e poi riprendi ad utilizzare la vettura. Ho sostituito anche le pasticche, lo fa sempre. Sono le pasticche rumorose già dopo pochi km, altro difetto di questa \"fantastica\" auto. Altra vergogna MB che non è in grado di fornire pasticche all'altezza.",
       "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=73304"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-20T11:22:56.218314+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Kia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "2023 Kia XCeed 1.5 T-GDi ISG 3 - Used Kia Cars for Sale",
+      "snippet": "Kia XCeed 1.5 T-GDi ISG 3 £16995. Mileage 23,781 miles. Now: 20/09/2026 02:33:20. Used Car Remaining Kia Warranty 3 years 11 months £195 yearly tax8",
+      "sourceUrl": "https://used-uk.kia.com/used-car-details/used-kia-xceed-15-t-gdi-isg-3-hatchback-spirit-green-manual-petrol/id-6571"
     }
   ],
   "latestUpdate": {
-    "id": "2026-09-19T20:39:42.139431+00:00",
-    "updatedAt": "2026-09-19T20:39:42.139431+00:00",
-    "addedCount": 9,
-    "summary": "Trovate 9 nuove fonti ufficiali per Jeep Renegade, in verifica.",
+    "id": "2026-09-20T11:22:56.218314+00:00",
+    "updatedAt": "2026-09-20T11:22:56.218314+00:00",
+    "addedCount": 1,
+    "summary": "Trovate 1 nuove fonti ufficiali per Peugeot 208, in verifica.",
     "details": [
-      "Documentazione ufficiale Stellantis: [PDF] Jeep - RENEGADE USO E MANUTENZIONE - Fiat",
-      "Documentazione ufficiale Stellantis: [PDF] RENEGADE OWNER HANDBOOK - Fiat",
-      "Documentazione ufficiale Stellantis: [PDF] RENEGADE - Fiat",
-      "NHTSA: Check for Recalls: Vehicle, Car Seat, Tire, Equipment",
-      "NHTSA: NHTSA | National Highway Traffic Safety Administration",
-      "NHTSA: Safer Car Vehicle Safety, Ratings and Recalls | NHTSA"
+      "Kia: 2023 Kia XCeed 1.5 T-GDi ISG 3 - Used Kia Cars for Sale"
     ],
     "sources": [
-      "https://aftersales.fiat.com/eLumData/IT/57/609_RENEGADE/57_609_RENEGADE_603.91.110_IT_03_01.17_L_LG/57_609_RENEGADE_603.91.110_IT_03_01.17_L_LG.pdf",
-      "https://aftersales.fiat.com/eLumData/EN/57/609_RENEGADE/57_609_RENEGADE_603.85.069_EN_01_10.19_L_LG/57_609_RENEGADE_603.85.069_EN_01_10.19_L_LG.pdf",
-      "https://aftersales.fiat.com/eLumData/IT/57/609_RENEGADE/57_609_RENEGADE_603.85.937_IT_02_12.23_L_LG/57_609_RENEGADE_603.85.937_IT_02_12.23_L_LG.pdf",
-      "https://www.nhtsa.gov/recalls",
-      "https://www.nhtsa.gov",
-      "https://www.nhtsa.gov/campaign/safercargov"
+      "https://used-uk.kia.com/used-car-details/used-kia-xceed-15-t-gdi-isg-3-hatchback-spirit-green-manual-petrol/id-6571"
     ],
     "vehicles": [
       {
-        "make": "Jeep",
-        "model": "Renegade"
+        "make": "Peugeot",
+        "model": "208"
       }
     ]
   }
