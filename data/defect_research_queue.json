@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-19T20:39:42.139431+00:00",
-  "cursor": 16,
+  "updatedAt": "2026-09-20T04:53:19.924217+00:00",
+  "cursor": 19,
   "candidates": [
     {
       "status": "approved",
@@ -2629,6 +2629,34 @@
       "title": "Bienvenue sur le site de Hyundai",
       "snippet": "### Newsletter\n\nConcessionnaires\n\n### Concessionnaires Hyundai\n\n### Les solutions de chargement d' Eneco eMobility\n\n## La conduite électrique commence chez Hyundai.\n\nThe Hyundai IONIQ 6 electric sedan plugged into charge with mountains in the background.\nLogo\n\nSelect Country\n\nⒸ Copyright 2026 Hyundai Motor Company. All rights reserved. [...] Red Hyundai IONIQ 3 shown from front three‑quarter angle on an urban street.\n\nIONIQ 3\n\nDécouvrez la toute nouvelle IONIQ 3\n\nGamme KONA\n\nREPRISE HYUNDAI\n\nRecevez gratuitement une estimation de la valeur de reprise de votre voiture.\n\nA woman leans against the new Hyundai INSTER small electric car, using Bluelink on her smartphone.\n\nHyundai Digital Key.\n\nThe Hyundai IONIQ 5 electric vehicle getting plugged in to charge.\n\nSolutions de recharge\n\n## Bien plus que du football\n\nINSTER [...] INSTER\n\n## Promo septembre\n\nINSTER\n\n## Hyundai IONIQ 3\n\nINSTER\n\n## Hyundai i20\n\n# Nos offres du moment\n\nNe manquez pas ces offres : nos modèles intéressants à des conditions attractives.\n\n### INSTER\n\n### KONA\n\n### TUCSON\n\nHyundai IONIQ 3 parked on a city street outside a residential building.\n\n### Hyundai IONIQ 3\n\n### 5 ans de sérénité illimitée\n\nThe Hyunday KONA Electric plugged in to an exterior charger next to a building.\n\n### Garantie de 8 ans sur la batterie\n\nNewsletter\n\n### Newsletter",
       "sourceUrl": "https://www.hyundai.com/be/fr.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-20T04:53:19.924217+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Scricchiolii, rumorini e vibrazioni: elenco e soluzioni - Mercedes-Benz Club Italia",
+      "snippet": "Io ho riscontrato solo il problema del jack della cintura del passeggero e un piccolo rumore all&#x27;attacco delle cinture (che poi sono facilmente risolvibili secondo me). comunque se credi puoi portarla in assistenza e fare presenti tutti i presunti difetti. Io sono molto attento all&#x27;auto ma a volte secondo me si esagera a cercare il pelo nell&#x27;uovo. Salve a tutti. Da premettere che la classe A è un piccolo grande gioiellino avrei però da evidenziare alcuni difettucci di fabbricazione. Attualmente ho contato ben 6 rumorini molesti. Non credo siano di difficile risoluzione però un pò devo dire il vero ci sono rimasto male..cavolo è Mercedes!! Io credo che questo è \"terrorismo psicologico\" :).. Nel senso, alcuni utenti è vero hanno riscontrato alcuni piccoli difetti però molte volte ci si fa prendere dal panico perché l'auto non è perfetta, ma ricordiamoci che niente è perfetto!!.. Forse le auto fatte tutte a mano sono meno soggette, ma quelle fatte in serie ben o male presentano qualche difetto. Io ho riscontrato solo il problema del jack della cintura del passeggero e un piccolo rumore all'attacco delle cinture (che poi sono facilmente risolvibili secondo me). comunque se credi puoi portarla in assistenza e fare presenti tutti i presunti difetti. Io sono molto attento all'auto ma a volte secondo me si esagera a cercare il pelo nell'uovo. Qualcuno ha già avuto problemi simili? In officina aspettano una pò di tempo per capire realmente i difetti dell'auto (sopratutto per il punto 6.",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?f=87&t=65221"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-20T04:53:19.924217+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "PROBLEMA DISCHI FRENO NUOVA CLASSE A - Mercedes-Benz Club Italia",
+      "snippet": "Le pasticche si vetrificano subito (è come se si bruciassero in superficie), già dopo un paio di frenate allegre...già cambiate una volta. E&#x27; la resistenza allo stress che è davvero ridicola. In officina mi hanno detto che è già capitato ad altri proprietari di MB W176....dicendomi che questa macchina ha una frenata delicatissima e frena &quot;parecchio&quot;....giustificazioni incredibili. Le pasticche si vetrificano subito (è come se si bruciassero in superficie), già dopo un paio di frenate allegre...già cambiate una volta. E' la resistenza allo stress che è davvero ridicola. In officina mi hanno detto che è già capitato ad altri proprietari di MB W176....dicendomi che questa macchina ha una frenata delicatissima e frena \"parecchio\"....giustificazioni incredibili. Lo fa a disco caldo quando ti fermi per qualche minuto e poi riprendi ad utilizzare la vettura. Ho sostituito anche le pasticche, lo fa sempre. Sono le pasticche rumorose già dopo pochi km, altro difetto di questa \"fantastica\" auto. Altra vergogna MB che non è in grado di fornire pasticche all'altezza.",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?t=73304"
     }
   ],
   "latestUpdate": {
