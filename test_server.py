@@ -844,7 +844,11 @@ class MarketEvidenceTests(unittest.TestCase):
                     "collectedAt": "2026-08-20T10:00:00+00:00",
                     "make": "Peugeot",
                     "model": "3008",
-                    "sourceUrl": "https://example.test/peugeot-3008",
+                    "sourceName": "Peugeot Italia",
+                    "sourceType": "manufacturer_candidate",
+                    "title": "Peugeot 3008: campagna tecnica",
+                    "snippet": "Informazioni ufficiali Peugeot per il modello 3008.",
+                    "sourceUrl": "https://www.peugeot.it/3008/campagna-tecnica",
                 }
             ],
         }
@@ -856,7 +860,7 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(update["id"], "2026-08-20T10:00:00+00:00")
         self.assertEqual(update["vehicles"], [{"make": "Peugeot", "model": "3008"}])
-        self.assertEqual(update["sources"], ["https://example.test/peugeot-3008"])
+        self.assertEqual(update["sources"], ["https://www.peugeot.it/3008/campagna-tecnica"])
 
     def test_gold_subscription_uses_google_play_subscriptions_endpoint(self):
         class FakeCredentials:

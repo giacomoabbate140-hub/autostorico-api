@@ -297,6 +297,14 @@ def official_only_defect_research_update_status() -> dict[str, Any]:
         and server.defect_source_relevant_to_vehicle(item)
     ]
     if not notifiable_pending:
+        # Older queue snapshots stored only the already-filtered latestUpdate.
+        # Preserve that official batch for compatibility; its stable id prevents
+        # a stale notification from being emitted again.
+        if str(base.get("id") or "").strip():
+            return {
+                **base,
+                "pendingCount": int(base.get("addedCount") or 0),
+            }
         return {
             **base,
             "id": "",
