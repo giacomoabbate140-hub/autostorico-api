@@ -2513,23 +2513,27 @@ def historic_classification(age: int, brand: str, model: str, trim: str = "") ->
     return "potential_historic_interest"
 
 
-def extract_price_from_listing_page(link: str) -> int | None:
-    if not link or not is_market_url(link):
-        return None
+def fetch_listing_page_content(link: str) -> str:
+    """Fetch one direct advert page so missing search metadata can be recovered."""
+    if not link or not is_market_url(link) or is_aggregate_market_url(link):
+        return ""
     request = urllib.request.Request(
         link,
         headers={
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Language": "it-IT,it;q=0.9",
-            "User-Agent": "Mozilla/5.0 AutoStoricoValueBot/1.0",
+            "User-Agent": "Mozilla/5.0 AutoStoricoValueBot/1.1",
         },
     )
     with urllib.request.urlopen(request, timeout=8) as response:
         content_type = response.headers.get("Content-Type", "")
         if "text/html" not in content_type and "application/xhtml" not in content_type:
-            return None
-        raw = response.read(900000).decode("utf-8", errors="ignore")
-    page = html.unescape(raw)
+            return ""
+        return response.read(900000).decode("utf-8", errors="ignore")
+
+
+def extract_price_from_listing_content(page: str) -> int | None:
+    page = html.unescape(page or "")
     structured_patterns = [
         r'"price"\s*:\s*"?([0-9]{3,6}(?:[.,][0-9]{1,2})?)"?',
         r'"priceAmount"\s*:\s*"?([0-9]{3,6}(?:[.,][0-9]{1,2})?)"?',
@@ -2543,6 +2547,67 @@ def extract_price_from_listing_page(link: str) -> int | None:
                 return price
     return extract_listing_price(page[:300000])
 
+
+def extract_listing_page_metadata(
+    link: str,
+    target_year: int | None = None,
+    target_km: float = 0,
+) -> dict[str, int]:
+    """Read structured price, year and mileage from one direct advert page."""
+    page = html.unescape(fetch_listing_page_content(link))
+    if not page:
+        return {}
+
+    metadata: dict[str, int] = {}
+    price = extract_price_from_listing_content(page)
+    if price is not None:
+        metadata["price"] = price
+
+    year_patterns = (
+        r'"(?:vehicleModelDate|modelDate|productionDate|firstRegistration)"\s*:\s*"?((?:19|20)[0-9]{2})',
+        r'(?:Anno|Immatricolazione)[^0-9]{0,40}((?:19|20)[0-9]{2})',
+    )
+    years: list[int] = []
+    for pattern in year_patterns:
+        years.extend(
+            int(match.group(1))
+            for match in re.finditer(pattern, page[:350000], flags=re.IGNORECASE)
+        )
+        if years:
+            break
+    years = [value for value in years if 1950 <= value <= 2027]
+    if years:
+        metadata["year"] = (
+            min(years, key=lambda value: abs(value - target_year))
+            if target_year
+            else years[0]
+        )
+
+    km_patterns = (
+        r'"mileageFromOdometer"\s*:\s*\{[^}]{0,300}"value"\s*:\s*"?([0-9][0-9.\s]{2,8})',
+        r'"(?:mileage|mileageValue|odometer)"\s*:\s*"?([0-9][0-9.\s]{2,8})',
+        r'(?:Km|Chilometraggio)[^0-9]{0,40}([0-9][0-9.\s]{2,8})',
+    )
+    kilometres: list[int] = []
+    for pattern in km_patterns:
+        for match in re.finditer(pattern, page[:350000], flags=re.IGNORECASE):
+            value = int(re.sub(r"\D", "", match.group(1)))
+            if 0 <= value <= 1500000:
+                kilometres.append(value)
+        if kilometres:
+            break
+    if kilometres:
+        metadata["km"] = (
+            min(kilometres, key=lambda value: abs(value - target_km))
+            if target_km > 0
+            else kilometres[0]
+        )
+    return metadata
+
+
+def extract_price_from_listing_page(link: str) -> int | None:
+    """Backward-compatible price-only helper."""
+    return extract_listing_page_metadata(link).get("price")
 
 def extract_listing_engine_cc(text: str) -> int:
     cleaned = normalize_market_text(text)
@@ -2700,36 +2765,66 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
         return None
     if payload is not None and not is_compatible_fuel_text(combined_text, payload):
         return None
-    extracted_price = item.get("extracted_price")
-    price = (
-        int(float(extracted_price))
-        if extracted_price is not None
-        else extract_listing_price(f"{title} {snippet} {item_text}")
-    )
-    if price is None:
-        try:
-            price = extract_price_from_listing_page(link)
-        except Exception:
-            price = None
-    if price is None or not 300 <= price <= 250000:
-        return None
+
     target_year = (
         parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
         if payload is not None
         else None
     )
     target_km = parse_float(payload.get("km")) if payload is not None else 0
+    listing_year = extract_listing_year(combined_text, target_year)
+    listing_km = extract_listing_km(combined_text, target_km)
+    extracted_price = item.get("extracted_price")
+    price = (
+        int(float(extracted_price))
+        if extracted_price is not None
+        else extract_listing_price(f"{title} {snippet} {item_text}")
+    )
+
+    page_metadata: dict[str, int] = {}
+    needs_page_metadata = (
+        price is None
+        or (target_year is not None and listing_year is None)
+        or (target_km > 0 and listing_km is None)
+    )
+    if needs_page_metadata:
+        try:
+            page_metadata = extract_listing_page_metadata(
+                link,
+                target_year=target_year,
+                target_km=target_km,
+            )
+        except Exception:
+            page_metadata = {}
+        if price is None:
+            price = page_metadata.get("price")
+        listing_year = listing_year or page_metadata.get("year")
+        listing_km = listing_km or page_metadata.get("km")
+        if page_metadata and payload is not None:
+            enriched_text = " ".join(
+                part
+                for part in [
+                    combined_text,
+                    str(listing_year or ""),
+                    f"{listing_km} km" if listing_km is not None else "",
+                ]
+                if part
+            )
+            match_score = market_listing_match_score(enriched_text, payload)
+
+    if price is None or not 300 <= price <= 250000 or match_score <= 0:
+        return None
     return {
         "source": market_source_name(link, str(item.get("source") or fallback_source)),
         "title": title[:140],
         "url": link,
         "price": price,
-        "year": extract_listing_year(combined_text, target_year),
-        "km": extract_listing_km(combined_text, target_km),
+        "year": listing_year,
+        "km": listing_km,
         "weight": source_weight(link) * max(0.20, match_score),
         "matchScore": round(match_score, 3),
+        "metadataSource": "listing_page" if page_metadata else "search_result",
     }
-
 
 def google_market_search(query: str, payload: dict[str, Any]) -> list[dict[str, Any]]:
     if not GOOGLE_CSE_ENABLED or not GOOGLE_CSE_API_KEY or not GOOGLE_CSE_ID:
