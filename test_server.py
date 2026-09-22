@@ -467,7 +467,7 @@ class MarketEvidenceTests(unittest.TestCase):
         ):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
-        self.assertEqual(len(brave_queries), len(server.MARKET_PORTAL_SITES))
+        self.assertEqual(len(brave_queries), len(server.MARKET_PORTAL_BATCHES))
         self.assertEqual(len(tavily_queries), 1)
         self.assertIsNone(tavily_queries[0][1])
         self.assertEqual(
