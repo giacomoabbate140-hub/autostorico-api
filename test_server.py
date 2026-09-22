@@ -415,7 +415,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(len(listings), 2)
         # Brave is queried once; Tavily is used once only because Brave alone
         # did not provide the minimum market sample.
-        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_SITES))
+        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_BATCHES))
         self.assertEqual(tavily.call_count, 1)
         self.assertTrue(diagnostics["configuredProviders"]["tavily"])
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
@@ -501,6 +501,8 @@ class MarketEvidenceTests(unittest.TestCase):
                 "source": "Subito Auto",
                 "url": f"https://example.test/a1-brave-{index}",
                 "price": 8800 + index,
+                "year": 2011,
+                "matchScore": 0.9,
                 "weight": 1.0,
             }
             for index in range(server.MINIMUM_MARKET_LISTINGS)
@@ -513,8 +515,36 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, _ = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), server.MINIMUM_MARKET_LISTINGS)
-        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_SITES))
+        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_BATCHES))
         tavily.assert_not_called()
+
+
+    def test_priced_pages_without_year_do_not_block_tavily_fallback(self):
+        payload = {"brand": "Audi", "model": "A1", "km": 100000}
+        incomplete = [
+            {
+                "source": "AutoUncle",
+                "url": f"https://www.autouncle.it/it/d/incomplete-{index}",
+                "price": 8500 + index,
+                "matchScore": 0.8,
+                "weight": 0.65,
+            }
+            for index in range(2)
+        ]
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "TAVILY_API_KEY", "tavily-key"
+        ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
+            server, "brave_market_search", return_value=incomplete
+        ) as brave, patch.object(
+            server, "tavily_market_search", return_value=[]
+        ) as tavily:
+            _, diagnostics = fetch_market_sources(payload, 2011)
+
+        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_BATCHES))
+        self.assertEqual(tavily.call_count, 1)
+        decision = diagnostics["fallbackDecisions"][0]
+        self.assertEqual(decision["braveUsableListings"], 0)
+        self.assertEqual(decision["status"], "attempted")
 
     def test_market_search_stops_after_the_configured_nationwide_queries(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
@@ -673,7 +703,7 @@ class MarketEvidenceTests(unittest.TestCase):
             listings, diagnostics = fetch_market_sources(payload, 2011)
 
         self.assertEqual(len(listings), 1)
-        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_SITES))
+        self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_BATCHES))
         tavily.assert_not_called()
         self.assertTrue(diagnostics["configuredProviders"]["brave"])
         self.assertFalse(diagnostics["configuredProviders"]["tavily"])

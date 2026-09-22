@@ -920,6 +920,27 @@ MARKET_PORTAL_SITES = [
     ("Quattroruote", "quattroruote.it"),
 ]
 
+# Search the same six portals in two groups instead of spending one Brave
+# request per domain. Results are still attributed to their real portal.
+MARKET_PORTAL_BATCHES = [
+    (
+        "comparators",
+        [
+            ("AutoUncle", "autouncle.it"),
+            ("Quattroruote", "quattroruote.it"),
+            ("Automobile.it", "automobile.it"),
+        ],
+    ),
+    (
+        "classifieds",
+        [
+            ("Subito", "subito.it"),
+            ("AutoScout24", "autoscout24.it"),
+            ("Trovit", "auto.trovit.it"),
+        ],
+    ),
+]
+
 DIRECT_MARKET_DOMAINS = [
     "autoscout24.it",
     "subito.it",
@@ -2875,7 +2896,7 @@ def tavily_market_search(
 def fetch_market_sources(
     payload: dict[str, Any], year: int | None
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """Query each configured market portal separately and merge only afterward."""
+    """Search six market portals with two Brave calls and one Tavily fallback."""
     configured_providers = {
         "brave": brave_search_available(),
         "tavily": tavily_market_search_available(),
@@ -2899,17 +2920,36 @@ def fetch_market_sources(
         )
         return [], diagnostics
 
+    brand = str(payload.get("brand") or payload.get("make") or "").strip()
+    model = str(payload.get("model") or "").strip()
+    trim = str(payload.get("trim") or "").strip()
+    fuel_type = str(payload.get("fuelType") or "").strip()
+    engine_cc = parse_engine_cc(
+        payload.get("engineDisplacement") or payload.get("engineCc")
+    )
+    engine_label = engine_query_label(engine_cc)
+    vehicle_label = " ".join(part for part in [brand, model] if part).strip()
+    details = " ".join(
+        part for part in [trim, engine_label, fuel_type] if part
+    ).strip()
+
     listings: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     tavily_calls = 0
 
-    for portal_name, domain in MARKET_PORTAL_SITES:
-        # Keep discovery broad; validate year, mileage and engine per advert.
-        brand = str(payload.get("brand") or payload.get("make") or "").strip()
-        model = str(payload.get("model") or "").strip()
-        portal_query = f"site:{domain} {brand} {model} {year or ''} usata prezzo".strip()
+    for batch_name, portals in MARKET_PORTAL_BATCHES:
+        site_filter = " OR ".join(f"site:{domain}" for _, domain in portals)
+        portal_query = (
+            f'({site_filter}) "{vehicle_label}" {details} '
+            f"{year or ''} usata prezzo"
+        ).strip()
         diagnostics["portalsQueried"].append(
-            {"portal": portal_name, "domain": domain, "query": portal_query}
+            {
+                "batch": batch_name,
+                "portals": [name for name, _ in portals],
+                "domains": [domain for _, domain in portals],
+                "query": portal_query,
+            }
         )
         query_results: list[dict[str, Any]] = []
 
@@ -2920,14 +2960,14 @@ def fetch_market_sources(
                     brave_market_search(portal_query, payload, diagnostics)
                 )
                 for entry in diagnostics["providers"][before:]:
-                    entry["portal"] = portal_name
-                    entry["domain"] = domain
+                    entry["portal"] = batch_name
+                    entry["domains"] = [domain for _, domain in portals]
             except Exception as exc:
                 diagnostics["errors"].append(
                     {
                         "provider": "brave",
-                        "portal": portal_name,
-                        "domain": domain,
+                        "portal": batch_name,
+                        "domains": [domain for _, domain in portals],
                         "query": portal_query,
                         "error": str(exc)[:180],
                     }
@@ -2940,8 +2980,8 @@ def fetch_market_sources(
                 diagnostics["providers"].append(
                     {
                         "provider": "google_cse",
-                        "portal": portal_name,
-                        "domain": domain,
+                        "portal": batch_name,
+                        "domains": [domain for _, domain in portals],
                         "query": portal_query,
                         "items": len(google_results),
                         "priced": len(google_results),
@@ -2955,8 +2995,8 @@ def fetch_market_sources(
                 diagnostics["errors"].append(
                     {
                         "provider": "google_cse",
-                        "portal": portal_name,
-                        "domain": domain,
+                        "portal": batch_name,
+                        "domains": [domain for _, domain in portals],
                         "query": portal_query,
                         "error": str(exc)[:180],
                     }
@@ -2968,15 +3008,28 @@ def fetch_market_sources(
             if not dedupe_key or dedupe_key in seen_urls:
                 continue
             seen_urls.add(dedupe_key)
-            listing.setdefault("portal", portal_name)
-            listing.setdefault("domain", domain)
+            matched_portal = next(
+                (
+                    (portal_name, domain)
+                    for portal_name, domain in MARKET_PORTAL_SITES
+                    if domain in url.lower()
+                ),
+                (batch_name, urllib.parse.urlparse(url).hostname or ""),
+            )
+            listing.setdefault("portal", matched_portal[0])
+            listing.setdefault("domain", matched_portal[1])
             listings.append(listing)
 
-    # Brave is queried per portal for precise diagnostics. Tavily is a single
-    # nationwide fallback after that pass, so it can discover a different
-    # portal instead of repeating the one Brave already found.
-    brave_valid_listings = len(listings)
-    if brave_valid_listings >= MARKET_FALLBACK_MINIMUM_LISTINGS:
+    # A priced page without a usable year is not enough to suppress Tavily:
+    # the final estimator would reject it and return no result.
+    brave_usable_listings = sum(
+        1
+        for item in listings
+        if float(item.get("matchScore", 1.0) or 0) >= 0.40
+        and parse_float(item.get("price")) > 0
+        and (not year or parse_year(item.get("year")) is not None)
+    )
+    if brave_usable_listings >= MARKET_FALLBACK_MINIMUM_LISTINGS:
         tavily_skip = "sufficient_brave_listings"
     elif tavily_calls >= MARKET_MAX_TAVILY_QUERIES:
         tavily_skip = "request_budget_exhausted"
@@ -2993,8 +3046,9 @@ def fetch_market_sources(
             "portal": "nationwide_fallback",
             "provider": "tavily",
             "status": "skipped" if tavily_skip else "attempted",
-            "reason": tavily_skip or "brave_valid_listings_below_fallback_threshold",
-            "braveValidListings": brave_valid_listings,
+            "reason": tavily_skip or "brave_usable_listings_below_fallback_threshold",
+            "braveValidListings": brave_usable_listings,
+            "braveUsableListings": brave_usable_listings,
             "minimumBraveListingsBeforeSkip": MARKET_FALLBACK_MINIMUM_LISTINGS,
         }
     )
@@ -3017,8 +3071,16 @@ def fetch_market_sources(
                 if not dedupe_key or dedupe_key in seen_urls:
                     continue
                 seen_urls.add(dedupe_key)
-                listing.setdefault("portal", "Tavily")
-                listing.setdefault("domain", urllib.parse.urlparse(url).hostname or "")
+                matched_portal = next(
+                    (
+                        (portal_name, domain)
+                        for portal_name, domain in MARKET_PORTAL_SITES
+                        if domain in url.lower()
+                    ),
+                    ("Tavily", urllib.parse.urlparse(url).hostname or ""),
+                )
+                listing.setdefault("portal", matched_portal[0])
+                listing.setdefault("domain", matched_portal[1])
                 listings.append(listing)
         except Exception as exc:
             diagnostics["errors"].append(
@@ -3032,6 +3094,13 @@ def fetch_market_sources(
             )
 
     diagnostics["pricesFound"] = len(listings)
+    diagnostics["usableListings"] = sum(
+        1
+        for item in listings
+        if float(item.get("matchScore", 1.0) or 0) >= 0.40
+        and parse_float(item.get("price")) > 0
+        and (not year or parse_year(item.get("year")) is not None)
+    )
     diagnostics["portalsWithResults"] = [
         {
             "portal": portal_name,
@@ -3046,7 +3115,6 @@ def fetch_market_sources(
         for portal_name, domain in MARKET_PORTAL_SITES
     ]
     return listings[:20], diagnostics
-
 
 def normalize_comparable_price(
     item: dict[str, Any],
