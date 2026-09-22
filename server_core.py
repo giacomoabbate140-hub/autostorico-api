@@ -1009,6 +1009,126 @@ def canonical_catalog_make(value: Any) -> str:
     }.get(normalized, normalized)
 
 
+_DEFECT_MAKE_ALIASES: dict[str, tuple[str, ...]] = {
+    "alfa romeo": ("alfa romeo",),
+    "audi": ("audi",),
+    "bmw": ("bmw",),
+    "citroen": ("citroen", "citroën"),
+    "dacia": ("dacia",),
+    "fiat": ("fiat",),
+    "ford": ("ford",),
+    "honda": ("honda",),
+    "hyundai": ("hyundai",),
+    "jeep": ("jeep",),
+    "kia": ("kia",),
+    "land rover": ("land rover", "range rover",),
+    "mazda": ("mazda",),
+    "mercedes benz": ("mercedes benz", "mercedes",),
+    "mini": ("mini",),
+    "nissan": ("nissan",),
+    "opel": ("opel",),
+    "peugeot": ("peugeot",),
+    "porsche": ("porsche",),
+    "renault": ("renault",),
+    "seat": ("seat",),
+    "skoda": ("skoda", "škoda"),
+    "subaru": ("subaru",),
+    "suzuki": ("suzuki",),
+    "tesla": ("tesla",),
+    "toyota": ("toyota",),
+    "volkswagen": ("volkswagen", "vw",),
+    "volvo": ("volvo",),
+}
+
+
+def normalize_defect_relevance_text(value: Any) -> str:
+    """Normalize source evidence before checking its vehicle relevance."""
+    decoded = urllib.parse.unquote(html.unescape(str(value or "")))
+    ascii_text = "".join(
+        character
+        for character in unicodedata.normalize("NFKD", decoded)
+        if not unicodedata.combining(character)
+    )
+    return re.sub(r"[^a-z0-9]+", " ", ascii_text.casefold()).strip()
+
+
+def _defect_text_contains(text: str, phrase: str) -> bool:
+    normalized_phrase = normalize_defect_relevance_text(phrase)
+    if not normalized_phrase:
+        return False
+    return re.search(
+        rf"(?:^|\s){re.escape(normalized_phrase)}(?:\s|$)",
+        text,
+    ) is not None
+
+
+def defect_source_relevant_to_vehicle(
+    candidate: dict[str, Any],
+    make: str = "",
+    model: str = "",
+) -> bool:
+    """Reject trusted-domain results that belong to a different vehicle."""
+    target_make = canonical_catalog_make(make or candidate.get("make"))
+    target_model = normalize_defect_relevance_text(
+        model or candidate.get("model")
+    )
+    if not target_make or not target_model:
+        return False
+
+    source_url = str(
+        candidate.get("sourceUrl")
+        or candidate.get("source_url")
+        or candidate.get("url")
+        or ""
+    )
+    source_name = str(
+        candidate.get("sourceName") or candidate.get("source_name") or ""
+    )
+    extra_snippets = candidate.get("extra_snippets")
+    if not isinstance(extra_snippets, list):
+        extra_snippets = []
+    evidence = normalize_defect_relevance_text(
+        " ".join(
+            [
+                str(candidate.get("title") or ""),
+                str(candidate.get("snippet") or ""),
+                str(candidate.get("content") or ""),
+                str(candidate.get("description") or ""),
+                source_name,
+                source_url,
+                *[str(value) for value in extra_snippets],
+            ]
+        )
+    )
+    if not _defect_text_contains(evidence, target_model):
+        return False
+
+    normalized_target_make = normalize_defect_relevance_text(target_make)
+    aliases = _DEFECT_MAKE_ALIASES.get(
+        normalized_target_make,
+        (normalized_target_make,),
+    )
+    normalized_aliases = tuple(
+        normalize_defect_relevance_text(alias) for alias in aliases
+    )
+
+    source_type = str(
+        candidate.get("sourceType") or candidate.get("source_type") or ""
+    ).strip()
+    if source_type == "manufacturer_candidate":
+        identity = normalize_defect_relevance_text(f"{source_name} {source_url}")
+        identified_makes = {
+            known_make
+            for known_make, known_aliases in _DEFECT_MAKE_ALIASES.items()
+            if any(_defect_text_contains(identity, alias) for alias in known_aliases)
+        }
+        if identified_makes and normalized_target_make not in identified_makes:
+            return False
+
+    return any(_defect_text_contains(evidence, alias) for alias in normalized_aliases)
+
+
+
 def load_vehicle_defect_catalog() -> dict[str, Any]:
     try:
         catalog = json.loads(DEFECT_CATALOG_PATH.read_text(encoding="utf-8"))
@@ -1177,6 +1297,8 @@ def _safe_defect_review_item(
     )
     if not source_url:
         return None
+    if not defect_source_relevant_to_vehicle(candidate):
+        return None
     source_type = str(candidate.get("sourceType") or "community_candidate").strip()
     if source_type not in {
         "official_candidate",
@@ -1333,6 +1455,8 @@ def published_defect_reports_for_vehicle(
     }
     reports: list[dict[str, Any]] = []
     for row in _published_defect_source_rows():
+        if not defect_source_relevant_to_vehicle(row, make, model):
+            continue
         if canonical_catalog_make(row.get("make")) != wanted_make:
             continue
         if not catalog_model_matches(

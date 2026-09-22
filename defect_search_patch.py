@@ -208,6 +208,7 @@ def improved_search_defect_source_candidates(
 
     candidates: list[dict[str, str]] = []
     seen_urls: set[str] = set()
+    discarded_irrelevant_count = 0
     for provider, item in provider_items:
         url = server.safe_public_source_url(item.get("url"))
         trusted = server.trusted_defect_source(url)
@@ -225,21 +226,27 @@ def improved_search_defect_source_candidates(
                 ]
             )
         )
-        candidates.append(
-            {
-                "title": str(item.get("title") or "Fonte da verificare"),
-                "url": url,
-                "snippet": str(snippet or "").strip(),
-                "sourceName": source_name,
-                "sourceType": source_type,
-                "researchCategory": (
-                    "community"
-                    if source_type == "community_candidate"
-                    else "official_or_technical"
-                ),
-                "status": "pending_review",
-            }
-        )
+        candidate = {
+            "make": clean_make,
+            "model": clean_model,
+            "title": str(item.get("title") or "Fonte da verificare"),
+            "url": url,
+            "snippet": str(snippet or "").strip(),
+            "sourceName": source_name,
+            "sourceType": source_type,
+            "researchCategory": (
+                "community"
+                if source_type == "community_candidate"
+                else "official_or_technical"
+            ),
+            "status": "pending_review",
+        }
+        if not server.defect_source_relevant_to_vehicle(
+            candidate, clean_make, clean_model
+        ):
+            discarded_irrelevant_count += 1
+            continue
+        candidates.append(candidate)
         if len(candidates) >= 20:
             break
 
@@ -257,6 +264,7 @@ def improved_search_defect_source_candidates(
         "providerErrors": provider_errors,
         "fallbackUsed": "tavily" in providers_used,
         "trustedBraveCount": trusted_from_brave,
+        "discardedIrrelevantCount": discarded_irrelevant_count,
         "disclaimer": (
             "Candidati automatici: devono essere verificati e approvati prima "
             "di entrare nel catalogo visibile agli utenti."
@@ -268,7 +276,7 @@ def improved_search_defect_source_candidates(
 
 
 def official_only_defect_research_update_status() -> dict[str, Any]:
-    """Keep fresh metadata, but notify only for official/manufacturer candidates."""
+    """Expose only the newest relevant official/manufacturer review batch."""
     base = _ORIGINAL_DEFECT_RESEARCH_UPDATE_STATUS()
     if not isinstance(base, dict):
         base = {}
@@ -286,13 +294,56 @@ def official_only_defect_research_update_status() -> dict[str, Any]:
         if isinstance(item, dict)
         and item.get("status") == "pending_review"
         and item.get("sourceType") in _NOTIFIABLE_SOURCE_TYPES
+        and server.defect_source_relevant_to_vehicle(item)
     ]
+    if not notifiable_pending:
+        return {
+            **base,
+            "id": "",
+            "pendingCount": 0,
+            "addedCount": 0,
+            "details": [],
+            "vehicles": [],
+            "sources": [],
+        }
 
-    # Preserve the original newest-batch logic (id, vehicles, details, sources)
-    # so stale metadata is still replaced. Only pendingCount is filtered: the
-    # Android app uses that field to decide whether a research notification is
-    # emitted, so community-only batches remain silent.
-    return {**base, "pendingCount": len(notifiable_pending)}
+    newest_at = max(str(item.get("collectedAt") or "") for item in notifiable_pending)
+    newest = [
+        item
+        for item in notifiable_pending
+        if str(item.get("collectedAt") or "") == newest_at
+    ]
+    update_id = newest_at or str(base.get("id") or "").strip()
+    details: list[str] = []
+    vehicles: list[dict[str, str]] = []
+    sources: list[str] = []
+    seen_vehicles: set[tuple[str, str]] = set()
+    for item in newest:
+        label = str(item.get("sourceName") or "Fonte ufficiale").strip()
+        title = str(item.get("title") or "").strip()
+        detail = f"{label}: {title}" if title else label
+        if detail and detail not in details:
+            details.append(detail)
+        source_url = server.safe_public_source_url(item.get("sourceUrl"))
+        if source_url and source_url not in sources:
+            sources.append(source_url)
+        make = str(item.get("make") or "").strip()
+        model = str(item.get("model") or "").strip()
+        vehicle_key = (make.casefold(), model.casefold())
+        if make and model and vehicle_key not in seen_vehicles:
+            seen_vehicles.add(vehicle_key)
+            vehicles.append({"make": make, "model": model})
+
+    return {
+        "id": update_id,
+        "updatedAt": newest_at,
+        "pendingCount": len(newest),
+        "addedCount": len(newest),
+        "summary": "Nuove fonti ufficiali pertinenti in attesa di verifica.",
+        "details": details[:6],
+        "vehicles": vehicles[:6],
+        "sources": sources[:6],
+    }
 
 
 server.search_defect_source_candidates = improved_search_defect_source_candidates

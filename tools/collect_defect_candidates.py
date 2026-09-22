@@ -20,6 +20,11 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from server_core import defect_source_relevant_to_vehicle
+
 TARGETS_PATH = ROOT / "data" / "defect_research_targets.json"
 QUEUE_PATH = ROOT / "data" / "defect_research_queue.json"
 API_URL = os.environ.get(
@@ -101,7 +106,7 @@ def normalize_candidate(source: dict, target: dict, now: str) -> dict | None:
     url = str(source.get("url") or "").strip()
     if not url:
         return None
-    return {
+    candidate = {
         "status": "pending_review",
         "collectedAt": now,
         "make": target["make"],
@@ -117,6 +122,7 @@ def normalize_candidate(source: dict, target: dict, now: str) -> dict | None:
         "snippet": str(source.get("snippet") or ""),
         "sourceUrl": url,
     }
+    return candidate if defect_source_relevant_to_vehicle(candidate) else None
 
 
 def build_latest_update(notifiable: list[dict], now: str) -> dict:

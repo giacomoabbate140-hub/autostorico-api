@@ -12,6 +12,7 @@ from server import (
     build_vin_recall_check,
     catalog_update_status,
     defect_research_cache_key,
+    defect_source_relevant_to_vehicle,
     fetch_market_sources,
     market_cache_key,
     market_estimate_from_sources,
@@ -1481,6 +1482,55 @@ class MarketEvidenceTests(unittest.TestCase):
             defect_research_cache_key("Audi", "A1", 2011, "benzina 1390 cc"),
             defect_research_cache_key("Audi", "A1", 2021, "benzina 999 cc"),
         )
+
+
+
+class DefectSourceRelevanceTests(unittest.TestCase):
+    def test_accepts_matching_community_source(self):
+        self.assertTrue(defect_source_relevant_to_vehicle({
+            "make": "Audi",
+            "model": "A1",
+            "sourceName": "Audi RS Club Italia",
+            "sourceType": "community_candidate",
+            "title": "Audi A1: problemi e difetti segnalati",
+            "snippet": "Esperienze dei proprietari Audi A1.",
+            "sourceUrl": "https://audirsclub.it/forum/audi-a1-problemi",
+        }))
+
+    def test_rejects_kia_source_associated_with_peugeot_208(self):
+        self.assertFalse(defect_source_relevant_to_vehicle({
+            "make": "Peugeot",
+            "model": "208",
+            "sourceName": "Kia",
+            "sourceType": "manufacturer_candidate",
+            "title": "Kia XCeed usata",
+            "snippet": "Informazioni e assistenza Kia XCeed.",
+            "sourceUrl": "https://www.kia.com/it/xceed",
+        }))
+
+    def test_rejects_hyundai_source_associated_with_jeep_renegade(self):
+        self.assertFalse(defect_source_relevant_to_vehicle({
+            "make": "Jeep",
+            "model": "Renegade",
+            "sourceName": "Hyundai",
+            "sourceType": "manufacturer_candidate",
+            "title": "Aggiornamento navigatore Hyundai",
+            "snippet": "Mappe e software per veicoli Hyundai.",
+            "sourceUrl": "https://www.hyundai.com/it/service/navigation",
+        }))
+
+    def test_accepts_mercedes_alias_and_generation_wide_source(self):
+        self.assertTrue(defect_source_relevant_to_vehicle({
+            "make": "Mercedes-Benz",
+            "model": "Classe A",
+            "year": 2016,
+            "engine": "1.5 diesel",
+            "sourceName": "Mercedes-Benz Club Italia",
+            "sourceType": "community_candidate",
+            "title": "Mercedes Classe A: difetti ricorrenti",
+            "snippet": "Discussione generale sulla generazione, senza anno o motore.",
+            "sourceUrl": "https://mercedesbenzclub.it/classe-a/difetti",
+        }))
 
 
 class VinRecallCheckTests(unittest.TestCase):
