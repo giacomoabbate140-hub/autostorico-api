@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-21T21:58:42.744431+00:00",
-  "cursor": 8,
+  "updatedAt": "2026-09-22T04:55:17.658944+00:00",
+  "cursor": 11,
   "candidates": [
     {
       "status": "approved",
@@ -2685,23 +2685,173 @@
       "title": "Tiriamo le somme sui motori a benzina 1.0- 1.2-1.4-1.5 TSI del gruppo Volkswagen ? | Page 2 | Il Forum di Quattroruote",
       "snippet": "Aggiornamenti centralina non hanno mai risolto il problema completamente. Problema misteriosamente risolto solo a partire dal 2020 con Golf8 e successive. Questa &quot;caratteristica&quot; non ha inficiato l&#x27;affidabilita&#x27; del motore. Ad oggi. Sui modelli precedenti permane secondo i proprietari in maniera piu&#x27; o meno presente. Minimo irregolare: un sistema di catena di distribuzione difettoso può causare un minimo irregolare. Spia del motore: un codice di errore come P0008 o P0016 può indicare problemi alla catena di distribuzione. Tra i più comuni si segnalano irregolarità di funzionamento, soprattutto a motore freddo, che si manifestano con singhiozzi o strattonamenti, e problemi legati al sistema di alimentazione e al turbo, che può guastarsi. Inoltre, il software del motore potrebbe richiedere aggiornamenti per risolvere malfunzionamenti. Aggiornamenti centralina non hanno mai risolto il problema completamente. Problema misteriosamente risolto solo a partire dal 2020 con Golf8 e successive. Questa \"caratteristica\" non ha inficiato l'affidabilita' del motore. Ad oggi. Sui modelli precedenti permane secondo i proprietari in maniera piu' o meno presente. VW EA211 evo: Dati tecnici ed elenco veicoli Codice motore: DPBC, potenza: 84 kW (114 CV) a 4500-6000 g/min, coppia: 220 Nm a 1750-3000 g/min Volkswagen VW Caddy V dal 11/2020 Ford Ford Tourneo Connect dal 05/2022 Codice motore: DACA, potenza: 96 kW (130 CV) a 5000-6000/min, coppia: 200 Nm a 1400-4000/min Seat Seat Leon III dal 09/2018 Volkswagen VW Golf VII dal 07/2017 VW Golf Sportsvan dal 10/2017 Lettera di codice del motore: DADA e DPCA, potenza: 110 kW (150 CV) a 5000-6000 giri/min, coppia: 250 Nm a 1500-3500 giri/min Audi Audi A1 GB dal 11/2018 e DPCA dal 08/2019 Audi A3 8V dal 05/2017 e Per il resto , vedo questa MODA che si sta diffondendo sui canali youtube e di sporadici forumer di fare contenuti dove si spara a zero su auto e motori di determinati marchi. Manco avessero i report con le statistiche delle difettosita' in mano inerenti i singoli marchi automobilistici.",
       "sourceUrl": "https://forum.quattroruote.it/threads/tiriamo-le-somme-sui-motori-a-benzina-1-0-1-2-1-4-1-5-tsi-del-gruppo-volkswagen.133355/page-2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Termostato e alloggiamento orig. Ford EcoSport Fiesta 1.0 GTDi ...",
+      "snippet": "2018 ... Ford EcoSport Fiesta 1.0 GTDi EcoBoost 1872633. N. articolo 1872633. 162,00€. Disponibile e pronto per la spedizione. Spedizione stimata: 22/09/2026.",
+      "sourceUrl": "https://shop.ford.it/products/liquido-refrigerante-termostato-originale-ford-ecosport-fiesta-1-0-gtdi-ecoboost"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Tubo benzina Ford B-Max Fiesta 1.0 EcoBoost 1858329",
+      "snippet": "Disponibile e pronto per la spedizione. Spedizione stimata: 22/09/2026. Seleziona il tuo veicolo per verificarne la compatibilità:Nessun veicolo selezionato.",
+      "sourceUrl": "https://shop.ford.it/products/tubo-benzina-ford-b-max-fiesta-1-0-ecoboost-1858329"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Ventola raffreddamento 1.0 EcoBoost Ford EcoSport Fiesta B-Max ...",
+      "snippet": "*L'offerta è valida fino al 30/09/2026 o fino a esaurimento scorte e può essere revocata i casi di forza maggiore in generale, le agitazioni sindacali, l'",
+      "sourceUrl": "https://shop.ford.it/products/ventola-raffreddamento-1-0-ecoboost-ford-ecosport-fiesta-b-max-2145091"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Bullone fissaggio volano Ford 1.0 EcoBoost M10x26mm 2018+ ...",
+      "snippet": "Bullone fissaggio volano Ford 1.0 EcoBoost M10x26mm 2018+ 2584857 ... Disponibile e pronto per la spedizione. Spedizione stimata: 22/09/2026. Seleziona",
+      "sourceUrl": "https://shop.ford.it/products/bullone-fissaggio-volano-ford-1-0-ecoboost-m10x26mm-2018-2584857"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Cinghia di distribuzione originale Focus Mondeo Fiesta 1.0 EcoBoost",
+      "snippet": "Questo è un ricambio originale Ford progettato per veicoli Ford compatibili. È prodotto secondo le specifiche Ford ed è destinato a sostituire il componente",
+      "sourceUrl": "https://shop.ford.it/products/cinghia-dentata-focus-mk3-mondeo-fiesta-mk8-1-0-ecoboost"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Tubo ingresso acqua orig. Ford EcoSport Fiesta Focus 1.0 GTDI ...",
+      "snippet": "Disponibile e pronto per la spedizione. Spedizione stimata: 22/09/2026. Si tratta di prodotti che richiedono conoscenze specialistiche e/o strumenti speciali",
+      "sourceUrl": "https://shop.ford.it/products/tubo-alimentazione-acqua-originale-ford-ecosport-fiesta-focus-1-0-gtdi-ecoboost-2023617"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Filtro olio spin-on Fiesta Focus Kuga Puma 1.0 1.5 EcoBoost",
+      "snippet": "Questo è un ricambio originale Ford progettato per veicoli Ford compatibili. È prodotto secondo le specifiche Ford ed è destinato a sostituire il componente",
+      "sourceUrl": "https://shop.ford.it/products/filtro-olio-spin-on-fiesta-focus-kuga-puma-1-0-1-5-ecoboost"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Sonda lambda Focus 1.0 EcoBoost 2018+ - Ford Shop Italia",
+      "snippet": "Questo è un ricambio originale Ford progettato per veicoli Ford compatibili. È prodotto secondo le specifiche Ford ed è destinato a sostituire il componente",
+      "sourceUrl": "https://shop.ford.it/products/sonda-lambda-focus-1-0-ecoboost-2018"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Sonda lambda gas di scarico originale Ford Fiesta 1.0 EcoBoost ...",
+      "snippet": "Sonda lambda gas di scarico originale Ford Fiesta 1.0 EcoBoost 2014+ 1871326. N. articolo 1871326. 135,51€. 158,00€. Prezzo min",
+      "sourceUrl": "https://shop.ford.it/products/sonda-lambda-gas-di-scarico-originale-ford-fiesta-1-0-ecoboost-2014-1871326"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-22T04:55:17.658944+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Manicotto tra vaso di espansione e motore Fiesta 1.6 EcoBoost",
+      "snippet": "Questo è un ricambio originale Ford progettato per veicoli Ford compatibili. È prodotto secondo le specifiche Ford ed è destinato a sostituire il componente",
+      "sourceUrl": "https://shop.ford.it/products/flessibile-serbatoio-di-compensazione-originale-ford-fiesta-1-6-ecoboost-1844186"
     }
   ],
   "latestUpdate": {
-    "id": "2026-09-20T11:22:56.218314+00:00",
-    "updatedAt": "2026-09-20T11:22:56.218314+00:00",
-    "addedCount": 1,
-    "summary": "Trovate 1 nuove fonti ufficiali per Peugeot 208, in verifica.",
+    "id": "2026-09-22T04:55:17.658944+00:00",
+    "updatedAt": "2026-09-22T04:55:17.658944+00:00",
+    "addedCount": 10,
+    "summary": "Trovate 10 nuove fonti ufficiali per Ford Fiesta, in verifica.",
     "details": [
-      "Kia: 2023 Kia XCeed 1.5 T-GDi ISG 3 - Used Kia Cars for Sale"
+      "Ford Italia: Termostato e alloggiamento orig. Ford EcoSport Fiesta 1.0 GTDi ...",
+      "Ford Italia: Tubo benzina Ford B-Max Fiesta 1.0 EcoBoost 1858329",
+      "Ford Italia: Ventola raffreddamento 1.0 EcoBoost Ford EcoSport Fiesta B-Max ...",
+      "Ford Italia: Bullone fissaggio volano Ford 1.0 EcoBoost M10x26mm 2018+ ...",
+      "Ford Italia: Cinghia di distribuzione originale Focus Mondeo Fiesta 1.0 EcoBoost",
+      "Ford Italia: Tubo ingresso acqua orig. Ford EcoSport Fiesta Focus 1.0 GTDI ..."
     ],
     "sources": [
-      "https://used-uk.kia.com/used-car-details/used-kia-xceed-15-t-gdi-isg-3-hatchback-spirit-green-manual-petrol/id-6571"
+      "https://shop.ford.it/products/liquido-refrigerante-termostato-originale-ford-ecosport-fiesta-1-0-gtdi-ecoboost",
+      "https://shop.ford.it/products/tubo-benzina-ford-b-max-fiesta-1-0-ecoboost-1858329",
+      "https://shop.ford.it/products/ventola-raffreddamento-1-0-ecoboost-ford-ecosport-fiesta-b-max-2145091",
+      "https://shop.ford.it/products/bullone-fissaggio-volano-ford-1-0-ecoboost-m10x26mm-2018-2584857",
+      "https://shop.ford.it/products/cinghia-dentata-focus-mk3-mondeo-fiesta-mk8-1-0-ecoboost",
+      "https://shop.ford.it/products/tubo-alimentazione-acqua-originale-ford-ecosport-fiesta-focus-1-0-gtdi-ecoboost-2023617"
     ],
     "vehicles": [
       {
-        "make": "Peugeot",
-        "model": "208"
+        "make": "Ford",
+        "model": "Fiesta"
       }
     ]
   }
