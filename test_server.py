@@ -1523,6 +1523,40 @@ class DefectSourceRelevanceTests(unittest.TestCase):
             "sourceUrl": "https://www.hyundai.com/it/service/navigation",
         }))
 
+
+    def test_rejects_ford_spare_parts_shop(self):
+        self.assertFalse(defect_source_relevant_to_vehicle({
+            "make": "Ford",
+            "model": "Fiesta",
+            "sourceName": "Ford Italia",
+            "sourceType": "manufacturer_candidate",
+            "title": "Termostato originale Ford EcoSport Fiesta 1.0 EcoBoost",
+            "snippet": "Disponibile e pronto per la spedizione.",
+            "sourceUrl": "https://shop.ford.it/products/termostato-ford-fiesta",
+        }))
+
+    def test_rejects_used_car_listing_even_when_make_and_model_match(self):
+        self.assertFalse(defect_source_relevant_to_vehicle({
+            "make": "Ford",
+            "model": "Puma",
+            "sourceName": "Usato Suzuki",
+            "sourceType": "manufacturer_candidate",
+            "title": "Ford Puma 1.0 Hybrid usata in vendita",
+            "snippet": "Prezzo 16.940 euro.",
+            "sourceUrl": "https://usatoauto.suzuki.it/auto/usate/ford/puma/123",
+        }))
+
+    def test_accepts_official_ford_recall_page(self):
+        self.assertTrue(defect_source_relevant_to_vehicle({
+            "make": "Ford",
+            "model": "Puma",
+            "sourceName": "Ford Italia",
+            "sourceType": "manufacturer_candidate",
+            "title": "Ford Puma - campagne di richiamo",
+            "snippet": "Verifica le campagne di sicurezza e i richiami Ford.",
+            "sourceUrl": "https://www.ford.it/supporto/campagne-di-richiamo/puma",
+        }))
+
     def test_accepts_mercedes_alias_and_generation_wide_source(self):
         self.assertTrue(defect_source_relevant_to_vehicle({
             "make": "Mercedes-Benz",

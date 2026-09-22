@@ -1100,6 +1100,51 @@ def defect_source_relevant_to_vehicle(
             ]
         )
     )
+
+    parsed_url = urllib.parse.urlparse(source_url)
+    source_host = normalize_defect_relevance_text(parsed_url.hostname or "")
+    source_path = "/" + str(parsed_url.path or "").strip("/").casefold() + "/"
+    commercial_host_prefixes = ("shop ", "store ", "usato ", "used ")
+    commercial_path_markers = (
+        "/products/",
+        "/product/",
+        "/shop/",
+        "/ricambi/",
+        "/accessori/",
+        "/parts/",
+        "/auto/usate/",
+        "/auto-usate/",
+        "/used-cars/",
+    )
+    if source_host.startswith(commercial_host_prefixes) or any(
+        marker in source_path for marker in commercial_path_markers
+    ):
+        return False
+
+    defect_signals = (
+        "richiam",
+        "recall",
+        "difett",
+        "problem",
+        "guast",
+        "avari",
+        "anomali",
+        "malfunzion",
+        "affidabil",
+        "reliability",
+        "bollettin",
+        "campagna tecnica",
+        "campagna di sicurezza",
+        "rottur",
+        "failure",
+        "fault",
+        "panne",
+        "spia motore",
+        "codice errore",
+    )
+    if not any(signal in evidence for signal in defect_signals):
+        return False
+
     if not _defect_text_contains(evidence, target_model):
         return False
 
