@@ -1066,22 +1066,77 @@ class MarketEvidenceTests(unittest.TestCase):
             "url": "https://www.autoscout24.it/annunci/bmw-serie-1",
             "snippet": "BMW Serie 1 diesel - 4.500 EUR",
         }
-        listing = server.listing_from_search_item(
-            item,
-            payload={
-                "brand": "BMW",
-                "model": "Serie 1",
-                "year": 2005,
-                "km": 300000,
-                "fuelType": "Diesel",
-            },
-        )
+        with patch.object(
+            server, "extract_listing_page_metadata", return_value={}
+        ):
+            listing = server.listing_from_search_item(
+                item,
+                payload={
+                    "brand": "BMW",
+                    "model": "Serie 1",
+                    "year": 2005,
+                    "km": 300000,
+                    "fuelType": "Diesel",
+                },
+            )
 
         self.assertIsNotNone(listing)
         self.assertLess(listing["matchScore"], 0.40)
         estimate, filtered = market_estimate_from_sources([listing], 4000, 300000, 2005)
         self.assertIsNone(estimate)
         self.assertEqual(filtered, [])
+
+    def test_missing_search_metadata_is_recovered_from_direct_listing_page(self):
+        item = {
+            "title": "BMW 120d usata",
+            "url": "https://www.autouncle.it/it/d/12345678-usata-bmw-120d",
+            "snippet": "BMW 120d diesel - 4.500 EUR",
+        }
+        page_metadata = {"price": 4500, "year": 2005, "km": 298000}
+        with patch.object(
+            server, "extract_listing_page_metadata", return_value=page_metadata
+        ) as metadata:
+            listing = server.listing_from_search_item(
+                item,
+                payload={
+                    "brand": "BMW",
+                    "model": "120d",
+                    "year": 2005,
+                    "km": 300000,
+                    "fuelType": "Diesel",
+                },
+            )
+
+        metadata.assert_called_once()
+        self.assertIsNotNone(listing)
+        self.assertEqual(listing["year"], 2005)
+        self.assertEqual(listing["km"], 298000)
+        self.assertGreaterEqual(listing["matchScore"], 0.40)
+        self.assertEqual(listing["metadataSource"], "listing_page")
+        estimate, filtered = market_estimate_from_sources(
+            [listing], 4000, 300000, 2005
+        )
+        self.assertIsNotNone(estimate)
+        self.assertEqual(len(filtered), 1)
+
+    def test_listing_page_metadata_reads_structured_price_year_and_km(self):
+        page = """
+        <script type="application/ld+json">
+        {
+          "price": "4500",
+          "vehicleModelDate": "2005",
+          "mileageFromOdometer": {"value": "298000"}
+        }
+        </script>
+        """
+        with patch.object(server, "fetch_listing_page_content", return_value=page):
+            metadata = server.extract_listing_page_metadata(
+                "https://www.autouncle.it/it/d/12345678-usata-bmw-120d",
+                target_year=2005,
+                target_km=300000,
+            )
+
+        self.assertEqual(metadata, {"price": 4500, "year": 2005, "km": 298000})
 
     def test_market_filter_rejects_aggregate_result_pages(self):
         item = {
