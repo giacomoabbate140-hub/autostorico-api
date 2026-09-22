@@ -11,6 +11,7 @@ import server
 _ORIGINAL_PLATE_INFO_LOOKUP = server.plate_info_lookup
 _ORIGINAL_BRAVE_MARKET_SEARCH = server.brave_market_search
 _ORIGINAL_TAVILY_MARKET_SEARCH = server.tavily_market_search
+_ORIGINAL_FETCH_MARKET_SOURCES = server.fetch_market_sources
 _ORIGINAL_SEARCH_DEFECT_SOURCE_CANDIDATES = server.search_defect_source_candidates
 _ORIGINAL_DO_GET = server.AutoStoricoApi.do_GET
 
@@ -239,6 +240,26 @@ def _diagnostic_brave_market_search(
         raise
 
 
+
+def _diagnostic_fetch_market_sources(
+    payload: dict[str, Any],
+    year: int | None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Replace per-batch Brave status with the aggregate valuation result."""
+    started = time.perf_counter()
+    listings, diagnostics = _ORIGINAL_FETCH_MARKET_SOURCES(payload, year)
+    elapsed = int((time.perf_counter() - started) * 1000)
+    usable_count = int(diagnostics.get("usableListings") or 0)
+    _record_provider_result(
+        "brave",
+        status=200,
+        result_count=usable_count,
+        operation="market_search_aggregate",
+        elapsed_ms=elapsed,
+    )
+    return listings, diagnostics
+
+
 def _diagnostic_search_defect_source_candidates(
     make: str,
     model: str,
@@ -462,6 +483,7 @@ def enhanced_plate_info_lookup(query: dict[str, list[str]]) -> tuple[int, dict[s
 
 server.tavily_market_search = _diagnostic_tavily_market_search
 server.brave_market_search = _diagnostic_brave_market_search
+server.fetch_market_sources = _diagnostic_fetch_market_sources
 server.search_defect_source_candidates = _diagnostic_search_defect_source_candidates
 server.AutoStoricoApi.do_GET = _diagnostic_do_get
 server.plate_info_lookup = enhanced_plate_info_lookup

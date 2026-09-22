@@ -58,6 +58,33 @@ class ProviderDiagnosticsTests(unittest.TestCase):
             "Brave: OK — 10 risultati trovati",
         )
 
+
+    def test_market_diagnostics_report_aggregate_usable_results(self):
+        diagnostics = {
+            "usableListings": 2,
+            "providers": [
+                {"provider": "brave", "priced": 2},
+                {"provider": "brave", "priced": 0},
+            ],
+        }
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "test-key"), patch.object(
+            server, "BRAVE_DAILY_LIMIT", 30
+        ), patch.object(server, "BRAVE_DAILY_USAGE", {}), patch.object(
+            patched_server,
+            "_ORIGINAL_FETCH_MARKET_SOURCES",
+            return_value=([{"url": "https://www.autouncle.it/1"}], diagnostics),
+        ):
+            patched_server._diagnostic_fetch_market_sources(
+                {"brand": "Audi", "model": "A1"},
+                2011,
+            )
+            payload = patched_server.provider_diagnostics_payload()
+
+        brave = payload["providers"]["brave"]
+        self.assertEqual(brave["lastResults"], 2)
+        self.assertEqual(brave["lastOperation"], "market_search_aggregate")
+        self.assertEqual(brave["message"], "Brave: OK — 2 risultati trovati")
+
     def test_diagnostics_endpoint_is_passive_and_does_not_call_search(self):
         with patch.object(server, "TAVILY_ENABLED", True), patch.object(
             server, "TAVILY_API_KEY", "test-key"

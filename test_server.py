@@ -498,14 +498,20 @@ class MarketEvidenceTests(unittest.TestCase):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         brave_results = [
             {
-                "source": "Subito Auto",
-                "url": f"https://example.test/a1-brave-{index}",
+                "source": source,
+                "url": url,
                 "price": 8800 + index,
                 "year": 2011,
                 "matchScore": 0.9,
                 "weight": 1.0,
             }
-            for index in range(server.MINIMUM_MARKET_LISTINGS)
+            for index, (source, url) in enumerate(
+                [
+                    ("AutoUncle", "https://www.autouncle.it/it/d/a1-brave-1"),
+                    ("Quattroruote", "https://www.quattroruote.it/auto-usate/a1-brave-2"),
+                    ("Subito Auto", "https://www.subito.it/auto/a1-brave-3.htm"),
+                ]
+            )
         ]
         with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
             server, "TAVILY_API_KEY", "tavily-key"
@@ -518,6 +524,35 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(brave.call_count, len(server.MARKET_PORTAL_BATCHES))
         tavily.assert_not_called()
 
+
+
+    def test_same_portal_brave_results_still_activate_tavily(self):
+        payload = {"brand": "Audi", "model": "A1", "km": 100000}
+        same_portal = [
+            {
+                "source": "AutoUncle",
+                "url": f"https://www.autouncle.it/it/d/a1-same-{index}",
+                "price": 8500 + index,
+                "year": 2011,
+                "matchScore": 0.9,
+                "weight": 0.65,
+            }
+            for index in range(3)
+        ]
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "TAVILY_API_KEY", "tavily-key"
+        ), patch.object(server, "TAVILY_ENABLED", True), patch.object(
+            server, "brave_market_search", return_value=same_portal
+        ), patch.object(
+            server, "tavily_market_search", return_value=[]
+        ) as tavily:
+            _, diagnostics = fetch_market_sources(payload, 2011)
+
+        self.assertEqual(tavily.call_count, 1)
+        decision = diagnostics["fallbackDecisions"][0]
+        self.assertEqual(decision["braveUsableListings"], 3)
+        self.assertEqual(decision["braveUsablePortals"], 1)
+        self.assertEqual(decision["status"], "attempted")
 
     def test_priced_pages_without_year_do_not_block_tavily_fallback(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}

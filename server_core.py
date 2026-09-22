@@ -68,7 +68,7 @@ BRAVE_DAILY_LIMIT = max(0, int(os.environ.get("AUTOSTORICO_BRAVE_DAILY_LIMIT", "
 MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TAVILY_QUERIES", "1")))
 # Tavily fills a short Brave sample; two valid listings are the minimum
 # before the fallback can be skipped.
-MARKET_FALLBACK_MINIMUM_LISTINGS = 2
+MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
 MARKET_CACHE_VERSION = "market-v11-reject-sold-listings"
@@ -3022,15 +3022,29 @@ def fetch_market_sources(
 
     # A priced page without a usable year is not enough to suppress Tavily:
     # the final estimator would reject it and return no result.
-    brave_usable_listings = sum(
-        1
+    brave_usable_items = [
+        item
         for item in listings
         if float(item.get("matchScore", 1.0) or 0) >= 0.40
         and parse_float(item.get("price")) > 0
         and (not year or parse_year(item.get("year")) is not None)
+    ]
+    brave_usable_listings = len(brave_usable_items)
+    brave_usable_portals = {
+        str(item.get("domain") or urllib.parse.urlparse(
+            str(item.get("url") or "")
+        ).hostname or "").casefold()
+        for item in brave_usable_items
+        if str(item.get("domain") or urllib.parse.urlparse(
+            str(item.get("url") or "")
+        ).hostname or "").strip()
+    }
+    brave_sample_is_sufficient = (
+        brave_usable_listings >= MARKET_FALLBACK_MINIMUM_LISTINGS
+        and len(brave_usable_portals) >= 2
     )
-    if brave_usable_listings >= MARKET_FALLBACK_MINIMUM_LISTINGS:
-        tavily_skip = "sufficient_brave_listings"
+    if brave_sample_is_sufficient:
+        tavily_skip = "sufficient_diverse_brave_listings"
     elif tavily_calls >= MARKET_MAX_TAVILY_QUERIES:
         tavily_skip = "request_budget_exhausted"
     elif not TAVILY_ENABLED:
@@ -3049,7 +3063,9 @@ def fetch_market_sources(
             "reason": tavily_skip or "brave_usable_listings_below_fallback_threshold",
             "braveValidListings": brave_usable_listings,
             "braveUsableListings": brave_usable_listings,
+            "braveUsablePortals": len(brave_usable_portals),
             "minimumBraveListingsBeforeSkip": MARKET_FALLBACK_MINIMUM_LISTINGS,
+            "minimumBravePortalsBeforeSkip": 2,
         }
     )
     if not tavily_skip:
@@ -4591,7 +4607,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_scoped_fallback_v9",
+                    "marketSearchRevision": "market_batched_diverse_fallback_v10",
                     "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
