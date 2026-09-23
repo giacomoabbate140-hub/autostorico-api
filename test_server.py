@@ -363,6 +363,44 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn("annuncio auto usata prezzo", queries[2])
         self.assertNotIn("Palermo", " ".join(queries))
 
+    def test_market_query_includes_joined_and_spaced_model_aliases(self):
+        queries = build_market_queries(
+            {
+                "brand": "BMW",
+                "model": "120D",
+                "fuelType": "Diesel",
+                "km": 300000,
+            },
+            2005,
+        )
+
+        self.assertIn('"BMW 120D"', queries[0])
+        self.assertIn('"BMW 120 D"', queries[0])
+
+    def test_old_vehicle_uses_one_exact_and_one_broad_portal_query(self):
+        payload = {
+            "brand": "BMW",
+            "model": "120D",
+            "firstRegistrationDate": "2005-01",
+            "fuelType": "Diesel",
+            "km": 300000,
+        }
+        brave_queries = []
+
+        def fake_brave(query, request_payload, diagnostics=None):
+            brave_queries.append(query)
+            return []
+
+        with patch.object(server, "BRAVE_SEARCH_API_KEY", "brave-key"), patch.object(
+            server, "TAVILY_ENABLED", False
+        ), patch.object(server, "brave_market_search", side_effect=fake_brave):
+            fetch_market_sources(payload, 2005)
+
+        self.assertEqual(len(brave_queries), len(server.MARKET_PORTAL_BATCHES))
+        self.assertIn("2005", brave_queries[0])
+        self.assertNotIn("2005", brave_queries[1])
+        self.assertIn('"BMW 120 D"', brave_queries[1])
+
     def test_market_search_caps_tavily_to_one_broad_query(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
         first = {
@@ -1029,6 +1067,99 @@ class MarketEvidenceTests(unittest.TestCase):
         )
 
         self.assertTrue(server.is_relevant_listing_text(listing_text, payload))
+
+    def test_market_relevance_accepts_spaced_alphanumeric_model(self):
+        payload = {
+            "brand": "BMW",
+            "model": "120D",
+            "year": 2005,
+            "km": 300000,
+            "fuelType": "Diesel",
+        }
+        listing_text = (
+            "BMW Serie 1 120 d usata 2005 - 295000 km - 4200 EUR "
+            "https://www.autoscout24.it/annunci/bmw-serie-1-120-d"
+        )
+
+        self.assertGreaterEqual(
+            server.market_listing_match_score(listing_text, payload),
+            server.MINIMUM_COMPARABLE_MATCH_SCORE,
+        )
+
+    def test_older_vehicle_accepts_extrapolated_mileage_comparable(self):
+        payload = {
+            "brand": "Audi",
+            "model": "A1",
+            "year": 2011,
+            "km": 190000,
+            "fuelType": "Diesel",
+            "engineDisplacement": "1.6",
+        }
+        listing_text = (
+            "Audi A1 1.6 TDI 2012 - 100000 km - 7900 EUR "
+            "https://www.autoscout24.it/annunci/audi-a1-16-tdi"
+        )
+
+        score = server.market_listing_match_score(listing_text, payload)
+        self.assertGreaterEqual(score, server.MINIMUM_COMPARABLE_MATCH_SCORE)
+        self.assertEqual(
+            server.market_comparison_tier(2012, 100000, 2011, 190000),
+            "extrapolated",
+        )
+
+    def test_extrapolation_still_rejects_different_generation(self):
+        payload = {
+            "brand": "Audi",
+            "model": "A1",
+            "year": 2011,
+            "km": 190000,
+        }
+        different_generation = (
+            "Audi A1 2019 - 90000 km - 18500 EUR "
+            "https://www.autoscout24.it/annunci/audi-a1-2019"
+        )
+
+        self.assertEqual(
+            server.market_listing_match_score(different_generation, payload),
+            0.0,
+        )
+
+    def test_extrapolated_listing_sets_transparent_response_metadata(self):
+        payload = {
+            "vehicleType": "Auto",
+            "brand": "Audi",
+            "model": "A1",
+            "firstRegistrationDate": "2011-06",
+            "fuelType": "Diesel",
+            "engineDisplacement": "1.6",
+            "gearbox": "Manuale",
+            "condition": "Buono",
+            "previousOwners": "1 proprietario",
+            "km": 190000,
+        }
+        comparable = {
+            "source": "AutoScout24",
+            "url": "https://www.autoscout24.it/annunci/audi-a1-test",
+            "price": 7900,
+            "year": 2012,
+            "km": 100000,
+            "matchScore": 0.45,
+            "comparisonTier": "extrapolated",
+            "weight": 0.45,
+        }
+        diagnostics = {
+            "configuredProviders": {"brave": True, "tavily": True},
+            "providers": [],
+            "errors": [],
+        }
+        with patch.object(
+            server, "fetch_market_sources", return_value=([comparable], diagnostics)
+        ):
+            estimate = server.estimate_vehicle_value(payload)
+
+        self.assertTrue(estimate["marketBased"])
+        self.assertEqual(estimate["extrapolatedListings"], 1)
+        self.assertIn("estrapolata", estimate["method"].lower())
 
     def test_numeric_model_name_never_matches_another_series(self):
         payload = {

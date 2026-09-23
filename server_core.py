@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v11-reject-sold-listings"
+MARKET_CACHE_VERSION = "market-v12-expanded-comparables"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -87,6 +87,10 @@ MARKET_SEARCH_ENABLED = os.environ.get("AUTOSTORICO_MARKET_SEARCH", "1") != "0"
 # external estimate. Three or more remain the consolidated threshold.
 MINIMUM_MARKET_LISTINGS = 3
 MINIMUM_EXTERNAL_LISTINGS = 1
+# A comparable may be extrapolated when the exact year/km combination is
+# scarce. Missing both values still scores below this threshold and is never
+# allowed to set an external market price.
+MINIMUM_COMPARABLE_MATCH_SCORE = 0.30
 MARKET_CACHE_TTL_SECONDS = int(os.environ.get("AUTOSTORICO_CACHE_TTL_SECONDS", str(30 * 24 * 60 * 60)))
 MARKET_RATE_WINDOW_SECONDS = int(os.environ.get("AUTOSTORICO_RATE_WINDOW_SECONDS", "3600"))
 MARKET_RATE_LIMIT = int(os.environ.get("AUTOSTORICO_RATE_LIMIT", "12"))
@@ -2198,7 +2202,45 @@ def market_model_signals(payload: dict[str, Any]) -> list[str]:
 
 
 def _contains_market_signal(text: str, signal: str) -> bool:
-    return f" {signal} " in f" {normalize_market_text(text)} "
+    normalized_text = normalize_market_text(text)
+    normalized_signal = normalize_market_text(signal)
+    if f" {normalized_signal} " in f" {normalized_text} ":
+        return True
+
+    # Vehicle variants are commonly written both joined and separated:
+    # "120d"/"120 d", "A1"/"A 1", "500X"/"500 X". Compare the compact
+    # form only for mixed letter/number identifiers so normal words cannot
+    # create broad substring matches.
+    compact_signal = normalized_signal.replace(" ", "")
+    if not (
+        compact_signal
+        and any(char.isalpha() for char in compact_signal)
+        and any(char.isdigit() for char in compact_signal)
+    ):
+        return False
+    compact_tokens = normalized_text.split()
+    for start in range(len(compact_tokens)):
+        combined = ""
+        for token in compact_tokens[start : start + 3]:
+            combined += token
+            if combined == compact_signal:
+                return True
+            if len(combined) >= len(compact_signal):
+                break
+    return False
+
+
+def market_vehicle_search_expression(brand: str, model: str) -> str:
+    """Return quoted joined/spaced model spellings without brand-specific rules."""
+    exact_vehicle = " ".join(part for part in [brand, model] if part).strip()
+    if not exact_vehicle:
+        return ""
+    spaced_model = re.sub(r"(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)", " ", model)
+    spaced_vehicle = " ".join(part for part in [brand, spaced_model] if part).strip()
+    variants = list(dict.fromkeys([exact_vehicle, spaced_vehicle]))
+    if len(variants) == 1:
+        return f'"{variants[0]}"'
+    return "(" + " OR ".join(f'"{variant}"' for variant in variants) + ")"
 
 
 def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]:
@@ -2210,6 +2252,7 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
     engine_label = engine_query_label(engine_cc)
     km = int(parse_float(payload.get("km")))
     exact_vehicle = " ".join(part for part in [brand, model] if part).strip()
+    vehicle_expression = market_vehicle_search_expression(brand, model)
     details = " ".join(part for part in [trim, engine_label, fuel_type] if part).strip()
     year_label = str(year or "").strip()
     rounded_km = int(round(km / 10000) * 10000) if km > 0 else 0
@@ -2228,13 +2271,13 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
         "auto usata prezzo Italia",
     ]
     year_parts = [
-        f'"{exact_vehicle}"',
+        vehicle_expression,
         details,
         year_label,
         "annuncio auto usata prezzo chilometri Italia",
     ]
     portal_parts = [
-        f'"{exact_vehicle}"',
+        vehicle_expression,
         details,
         year_label,
         "AutoScout24 Subito Auto AutoUncle Trovit Automobile prezzo Italia",
@@ -2653,12 +2696,20 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
     if target_year:
         if years:
             year_difference = min(abs(value - target_year) for value in years)
-            # Older cars have fewer live adverts. A three-year window keeps
-            # the same generation useful without relaxing recent vehicles.
-            max_year_difference = 3 if target_year <= 2016 else 2
-            if year_difference > max_year_difference:
+            # Keep a tight direct window, but allow a wider low-confidence
+            # comparison for scarce vehicles. The estimator normalizes the
+            # asking price back to the selected vehicle year.
+            direct_year_difference = 3 if target_year <= 2016 else 2
+            maximum_year_difference = 5 if target_year <= 2016 else 3
+            if year_difference > maximum_year_difference:
                 return 0.0
-            score *= 1.0 - (year_difference * 0.12)
+            if year_difference <= direct_year_difference:
+                score *= 1.0 - (year_difference * 0.12)
+            else:
+                score *= max(
+                    0.42,
+                    0.58 - ((year_difference - direct_year_difference) * 0.06),
+                )
         else:
             score *= 0.45
 
@@ -2667,10 +2718,21 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
     if target_km > 0:
         if kilometres:
             km_difference = min(abs(value - target_km) for value in kilometres)
-            km_tolerance = max(30000.0, target_km * 0.35)
-            if km_difference > km_tolerance:
+            direct_km_tolerance = max(30000.0, target_km * 0.35)
+            maximum_km_tolerance = max(90000.0, target_km * 0.65)
+            if km_difference > maximum_km_tolerance:
                 return 0.0
-            score *= max(0.55, 1.0 - ((km_difference / km_tolerance) * 0.35))
+            if km_difference <= direct_km_tolerance:
+                score *= max(
+                    0.55,
+                    1.0 - ((km_difference / direct_km_tolerance) * 0.35),
+                )
+            else:
+                relaxed_span = max(1.0, maximum_km_tolerance - direct_km_tolerance)
+                relaxed_progress = (
+                    km_difference - direct_km_tolerance
+                ) / relaxed_span
+                score *= max(0.42, 0.55 - (relaxed_progress * 0.13))
         else:
             score *= 0.55
 
@@ -2686,8 +2748,32 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
     return max(0.0, min(1.0, score))
 
 
+def market_comparison_tier(
+    listing_year: int | None,
+    listing_km: int | None,
+    target_year: int | None,
+    target_km: float,
+) -> str:
+    """Label evidence as direct or extrapolated for transparent UI text."""
+    if target_year:
+        if listing_year is None:
+            return "extrapolated"
+        direct_year_difference = 3 if target_year <= 2016 else 2
+        if abs(listing_year - target_year) > direct_year_difference:
+            return "extrapolated"
+    if target_km > 0:
+        if listing_km is None:
+            return "extrapolated"
+        if abs(listing_km - target_km) > max(30000.0, target_km * 0.35):
+            return "extrapolated"
+    return "direct"
+
+
 def is_relevant_listing_text(text: str, payload: dict[str, Any]) -> bool:
-    return market_listing_match_score(text, payload) > 0
+    return (
+        market_listing_match_score(text, payload)
+        >= MINIMUM_COMPARABLE_MATCH_SCORE
+    )
 
 
 def is_compatible_fuel_text(text: str, payload: dict[str, Any]) -> bool:
@@ -2823,6 +2909,9 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
         "km": listing_km,
         "weight": source_weight(link) * max(0.20, match_score),
         "matchScore": round(match_score, 3),
+        "comparisonTier": market_comparison_tier(
+            listing_year, listing_km, target_year, target_km
+        ),
         "metadataSource": "listing_page" if page_metadata else "search_result",
     }
 
@@ -3024,6 +3113,7 @@ def fetch_market_sources(
     )
     engine_label = engine_query_label(engine_cc)
     vehicle_label = " ".join(part for part in [brand, model] if part).strip()
+    vehicle_expression = market_vehicle_search_expression(brand, model)
     details = " ".join(
         part for part in [trim, engine_label, fuel_type] if part
     ).strip()
@@ -3034,9 +3124,19 @@ def fetch_market_sources(
 
     for batch_name, portals in MARKET_PORTAL_BATCHES:
         site_filter = " OR ".join(f"site:{domain}" for _, domain in portals)
+        # For older/high-mileage cars, use one exact-year batch and one broad
+        # batch. This expands coverage without increasing provider calls.
+        broaden_classifieds = bool(
+            batch_name == "classifieds"
+            and (
+                (year is not None and year <= 2018)
+                or parse_float(payload.get("km")) >= 180000
+            )
+        )
+        query_year = "" if broaden_classifieds else str(year or "")
         portal_query = (
-            f'({site_filter}) "{vehicle_label}" {details} '
-            f"{year or ''} usata prezzo"
+            f"({site_filter}) {vehicle_expression or vehicle_label} {details} "
+            f"{query_year} usata prezzo chilometri"
         ).strip()
         diagnostics["portalsQueried"].append(
             {
@@ -3120,7 +3220,7 @@ def fetch_market_sources(
     brave_usable_items = [
         item
         for item in listings
-        if float(item.get("matchScore", 1.0) or 0) >= 0.40
+        if float(item.get("matchScore", 1.0) or 0) >= MINIMUM_COMPARABLE_MATCH_SCORE
         and parse_float(item.get("price")) > 0
         and (not year or parse_year(item.get("year")) is not None)
     ]
@@ -3208,7 +3308,7 @@ def fetch_market_sources(
     diagnostics["usableListings"] = sum(
         1
         for item in listings
-        if float(item.get("matchScore", 1.0) or 0) >= 0.40
+        if float(item.get("matchScore", 1.0) or 0) >= MINIMUM_COMPARABLE_MATCH_SCORE
         and parse_float(item.get("price")) > 0
         and (not year or parse_year(item.get("year")) is not None)
     )
@@ -3241,17 +3341,17 @@ def normalize_comparable_price(
     if target_km > 0 and listing_km > 0:
         difference = target_km - listing_km
         if difference > 0:
-            price *= 1 - min(0.22, (difference / 1000) * 0.0015)
+            price *= 1 - min(0.32, (difference / 1000) * 0.0015)
         elif difference < 0:
-            price *= 1 + min(0.12, (-difference / 1000) * 0.0010)
+            price *= 1 + min(0.22, (-difference / 1000) * 0.0010)
 
     listing_year = parse_year(item.get("year"))
     if target_year and listing_year:
         year_difference = target_year - listing_year
         if year_difference < 0:
-            price *= 1 - min(0.12, (-year_difference) * 0.055)
+            price *= 1 - min(0.25, (-year_difference) * 0.055)
         elif year_difference > 0:
-            price *= 1 + min(0.10, year_difference * 0.045)
+            price *= 1 + min(0.20, year_difference * 0.045)
     return price
 
 
@@ -3268,7 +3368,7 @@ def market_estimate_from_sources(
     comparable = [
         dict(item)
         for item in listings
-        if float(item.get("matchScore", 1.0) or 0) >= 0.40
+        if float(item.get("matchScore", 1.0) or 0) >= MINIMUM_COMPARABLE_MATCH_SCORE
         and parse_float(item.get("price")) > 0
         and (not target_year or parse_year(item.get("year")) is not None)
     ]
@@ -3665,6 +3765,9 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
     market_based = matched_count >= MINIMUM_EXTERNAL_LISTINGS
     market_configured = any(market_diagnostics.get("configuredProviders", {}).values())
     source_names = sorted({str(item.get("source") or "Fonte web") for item in filtered_listings})
+    extrapolated_count = sum(
+        1 for item in filtered_listings if item.get("comparisonTier") == "extrapolated"
+    )
     confidence = (
         f"Alta: valore confrontato con {matched_count} annunci/fonti web compatibili."
         if matched_count >= 8
@@ -3681,9 +3784,16 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
             f"Dati limitati: {matched_count} annunci compatibili; chilometraggio "
             "non disponibile per alcuni annunci. Stima indicativa."
         )
+    elif market_based and extrapolated_count:
+        confidence = (
+            f"Stima indicativa: {matched_count} annunci compatibili, di cui "
+            f"{extrapolated_count} adattati per anno o chilometraggio."
+        )
     method = (
         "Valore calcolato partendo da annunci/fonti mercato compatibili, poi corretto verso un prezzo realistico di vendita tra privati."
         if matched_count >= MINIMUM_MARKET_LISTINGS
+        else "Stima esterna estrapolata: annunci dello stesso veicolo adattati per differenze di anno o chilometraggio."
+        if market_based and extrapolated_count
         else "Stima esterna prudente: confronto web limitato, integrato con i dati del veicolo."
         if market_based
         else "API online ma fonti mercato assenti: configura TAVILY_API_KEY o BRAVE_SEARCH_API_KEY su Render."
@@ -3706,6 +3816,7 @@ def estimate_vehicle_value(payload: dict[str, Any]) -> dict[str, Any]:
         "serverOnline": True,
         "sampleListings": filtered_listings[:5],
         "listingsMissingMileage": sum(1 for item in filtered_listings if not item.get("km")),
+        "extrapolatedListings": extrapolated_count,
     }
     if developer_market_diagnostics_enabled(payload):
         response["marketDiagnostics"] = market_diagnostics
