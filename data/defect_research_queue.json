@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-23T11:35:35.853565+00:00",
-  "cursor": 3,
+  "updatedAt": "2026-09-23T16:57:33.081163+00:00",
+  "cursor": 6,
   "candidates": [
     {
       "status": "approved",
@@ -2825,6 +2825,20 @@
       "title": "Manicotto tra vaso di espansione e motore Fiesta 1.6 EcoBoost",
       "snippet": "Questo è un ricambio originale Ford progettato per veicoli Ford compatibili. È prodotto secondo le specifiche Ford ed è destinato a sostituire il componente",
       "sourceUrl": "https://shop.ford.it/products/flessibile-serbatoio-di-compensazione-originale-ford-fiesta-1-6-ecoboost-1844186"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-23T16:57:33.081163+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Grazie Audi: mi hai piantato ancora a piedi. [Archivio] - Forum dell'Audi RS Club",
+      "snippet": "Io ho saputo come fermare la macchina in sicurezza con lo sterzo e i freni che erano diventati durissimi... mettiamo che al mio posto ci fosse stata una ragazza che ha comprato l&#x27;A3 solo perchè le piaceva e di auto non sa niente... Poteva andare contro un guard rail o peggio provocare un incidente... Mi sa che l&#x27;Audi è l&#x27;unica ad avere questa minchiata di mappatura... Dato che non penso di essere l&#x27;unico ad aver rotto 2 iniettori nel giro di pochi mesi perchè Audi non fa una campagna di richiamo anche solo per controllare gli iniettori sui 2.0 TDI 170 cv? Ciao ragazzi... ieri sera era Halloween e la mia piccola Audi A3 ha deciso di rendermela indimenticabile. Dopo avermi fatto fare un rientro dalle ferie in Calabria che resterà agli annali, piantandomi a piedi a Firenze, ieri sera ha deciso di farmi rivivere quelle emozioni, caso mai le avessi scordate... Io ho saputo come fermare la macchina in sicurezza con lo sterzo e i freni che erano diventati durissimi... mettiamo che al mio posto ci fosse stata una ragazza che ha comprato l'A3 solo perchè le piaceva e di auto non sa niente... Poteva andare contro un guard rail o peggio provocare un incidente... Mi sa che l'Audi è l'unica ad avere questa minchiata di mappatura... Dato che non penso di essere l'unico ad aver rotto 2 iniettori nel giro di pochi mesi perchè Audi non fa una campagna di richiamo anche solo per controllare gli iniettori sui 2.0 TDI 170 cv? Non vuol far sapere a tutti che sta facendo un richiamo? Il 1.3 Mjet all'inizio non aveva affidabilità.... io non ho mai sentito di catene saltate però ammetto che possa essere successo... La Panda 1.3 Mjet costa circa 13.000 euro.... La Punto 1.3 Mjet (non la Grande Punto) costa più o meno quella cifra... Cosa costa un'Audi A3 2.0 TDI 140 cv? A che punto una Casa automobilistica fa scattare la campagna di richiamo... Toyota per la minima cazzatina richiama tutto e tutti in nome della qualità... Fiat fa frequenti richiami, Opel idem... Non so per Audi... sui giornali si leggono ben pochi richiami di Audi... Sono tutte perfette? Il difetto alle teste dei 2.0 TDI non è limitato a pochi esemplari del primo periodo di produzione...",
+      "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-15302.html"
     }
   ],
   "latestUpdate": {
