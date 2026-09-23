@@ -399,7 +399,8 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(len(brave_queries), len(server.MARKET_PORTAL_BATCHES))
         self.assertIn("2005", brave_queries[0])
         self.assertNotIn("2005", brave_queries[1])
-        self.assertIn('"BMW 120 D"', brave_queries[1])
+        self.assertIn("BMW 120D", brave_queries[1])
+        self.assertNotIn('"BMW 120D"', brave_queries[1])
 
     def test_market_search_caps_tavily_to_one_broad_query(self):
         payload = {"brand": "Audi", "model": "A1", "km": 100000}
@@ -508,6 +509,8 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(len(brave_queries), len(server.MARKET_PORTAL_BATCHES))
         self.assertEqual(len(tavily_queries), 1)
         self.assertIsNone(tavily_queries[0][1])
+        self.assertIn("Audi A1", tavily_queries[0][0])
+        self.assertNotIn('"Audi A1"', tavily_queries[0][0])
         self.assertEqual(
             {item["source"] for item in listings},
             {"AutoUncle", "Subito"},

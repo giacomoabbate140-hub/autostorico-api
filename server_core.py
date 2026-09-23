@@ -3134,8 +3134,11 @@ def fetch_market_sources(
             )
         )
         query_year = "" if broaden_classifieds else str(year or "")
+        search_vehicle = (
+            vehicle_label if broaden_classifieds else vehicle_expression or vehicle_label
+        )
         portal_query = (
-            f"({site_filter}) {vehicle_expression or vehicle_label} {details} "
+            f"({site_filter}) {search_vehicle} {details} "
             f"{query_year} usata prezzo chilometri"
         ).strip()
         diagnostics["portalsQueried"].append(
@@ -3266,7 +3269,14 @@ def fetch_market_sources(
     if not tavily_skip:
         before = len(diagnostics["providers"])
         tavily_calls += 1
-        fallback_query = base_queries[0]
+        # The fallback must also tolerate portal titles such as
+        # "BMW Serie 1 120d" when the stored model is simply "120D".
+        fallback_query = (
+            base_queries[1]
+            if (year is not None and year <= 2018)
+            or parse_float(payload.get("km")) >= 180000
+            else base_queries[0]
+        )
         try:
             tavily_results = tavily_market_search(
                 fallback_query,
