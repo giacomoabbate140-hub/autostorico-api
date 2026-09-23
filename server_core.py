@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v12-expanded-comparables"
+MARKET_CACHE_VERSION = "market-v13-expanded-vehicle-coverage"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -2164,6 +2164,13 @@ def market_model_signals(payload: dict[str, Any]) -> list[str]:
     if not model_tokens:
         return []
 
+    # Single-character models must remain tied to their make. Requiring the
+    # full phrase avoids treating every Lancia as a Lancia Y or every DS as a
+    # DS 3 while still supporting names such as Smart #1.
+    if len(model_tokens) == 1 and len(model_tokens[0]) == 1:
+        brand = normalize_market_text(payload.get("brand") or payload.get("make"))
+        return [f"{brand} {model_tokens[0]}".strip()] if brand else []
+
     generic_prefixes = {"serie", "series", "classe", "class", "modello", "model"}
     phrases: list[str] = []
     protected_names: set[str] = set()
@@ -2181,6 +2188,11 @@ def market_model_signals(payload: dict[str, Any]) -> list[str]:
         ):
             # "Golf 7", "Polo 6" and equivalent generations must not match a
             # different generation merely because the family name is present.
+            phrases.append(f"{token} {following}")
+            protected_names.add(token)
+        elif token.isdigit() and len(following) == 1 and following.isalpha():
+            # Fiat 500 L/X/E and similar variants are separate market models;
+            # never reduce them to the base numeric name.
             phrases.append(f"{token} {following}")
             protected_names.add(token)
 
@@ -2228,6 +2240,23 @@ def _contains_market_signal(text: str, signal: str) -> bool:
             if len(combined) >= len(compact_signal):
                 break
     return False
+
+
+def market_model_variant_conflicts(text: str, payload: dict[str, Any]) -> bool:
+    """Reject well-known derivative families when the base model was requested."""
+    target_tokens = normalize_market_text(payload.get("model")).split()
+    if len(target_tokens) != 1:
+        return False
+    base = target_tokens[0]
+    cleaned = f" {normalize_market_text(text)} "
+    derivative_suffixes = {"cross", "aircross", "picasso", "cactus", "verso"}
+    if base.isdigit():
+        derivative_suffixes.update({"x", "l", "e"})
+    return any(
+        f" {base} {suffix} " in cleaned
+        or f" {base}{suffix} " in cleaned
+        for suffix in derivative_suffixes
+    )
 
 
 def market_vehicle_search_expression(brand: str, model: str) -> str:
@@ -2316,7 +2345,10 @@ def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]
 def extract_listing_price(text: str) -> int | None:
     normalized = html.unescape(text).replace("\u00a0", " ")
     price_token = r"(?:\u20ac|EUR)"
-    number_token = r"([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})"
+    # Older city cars can legitimately be advertised below EUR 1,000.
+    # Requiring four digits made the parser skip a visible EUR 800/900 price
+    # and sometimes pick an unrelated recommendation from an extra snippet.
+    number_token = r"([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{3,6})"
     for pattern in (rf"{price_token}\s*{number_token}", rf"{number_token}\s*{price_token}"):
         for match in re.finditer(pattern, normalized, flags=re.IGNORECASE):
             price = int(re.sub(r"\D", "", match.group(1)))
@@ -2687,10 +2719,28 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
         return 0.0
 
     signals = market_model_signals(payload)
-    if signals and not any(_contains_market_signal(cleaned, signal) for signal in signals):
+    signals_match = not signals or any(
+        _contains_market_signal(cleaned, signal) for signal in signals
+    )
+    # Some portals catalogue the 1995-2003 Lancia Y under the later Ypsilon
+    # family name. Accept that historical alias only for a pre-2004 target and
+    # a pre-2004 advert; newer Ypsilon generations remain separate.
+    target_year = parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
+    listing_years = extract_listing_years(text)
+    legacy_lancia_y_alias = bool(
+        normalize_market_text(payload.get("brand") or payload.get("make")) == "lancia"
+        and normalize_market_text(payload.get("model")) == "y"
+        and target_year is not None
+        and target_year <= 2003
+        and listing_years
+        and min(listing_years) <= 2003
+        and _contains_market_signal(cleaned, "lancia ypsilon")
+    )
+    if not signals_match and not legacy_lancia_y_alias:
+        return 0.0
+    if market_model_variant_conflicts(cleaned, payload):
         return 0.0
 
-    target_year = parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
     years = extract_listing_years(text)
     score = 1.0
     if target_year:
@@ -3137,8 +3187,9 @@ def fetch_market_sources(
         search_vehicle = (
             vehicle_label if broaden_classifieds else vehicle_expression or vehicle_label
         )
+        search_details = "" if broaden_classifieds else details
         portal_query = (
-            f"({site_filter}) {search_vehicle} {details} "
+            f"({site_filter}) {search_vehicle} {search_details} "
             f"{query_year} usata prezzo chilometri"
         ).strip()
         diagnostics["portalsQueried"].append(
@@ -3272,7 +3323,7 @@ def fetch_market_sources(
         # The fallback must also tolerate portal titles such as
         # "BMW Serie 1 120d" when the stored model is simply "120D".
         fallback_query = (
-            base_queries[1]
+            f"{vehicle_label} {year or ''} usata prezzo chilometri Italia".strip()
             if (year is not None and year <= 2018)
             or parse_float(payload.get("km")) >= 180000
             else base_queries[0]
@@ -4823,7 +4874,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_batched_diverse_fallback_v10",
+                    "marketSearchRevision": "market_expanded_vehicle_coverage_v13",
                     "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),

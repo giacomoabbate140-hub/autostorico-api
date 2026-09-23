@@ -1089,6 +1089,73 @@ class MarketEvidenceTests(unittest.TestCase):
             server.MINIMUM_COMPARABLE_MATCH_SCORE,
         )
 
+    def test_single_character_models_require_make_and_model_phrase(self):
+        lancia_y = {"brand": "Lancia", "model": "Y", "year": 2002, "km": 140000}
+        ds_3 = {"brand": "DS", "model": "3", "year": 2018, "km": 80000}
+        smart_1 = {"brand": "Smart", "model": "1", "year": 2023, "km": 30000}
+
+        self.assertTrue(server.is_relevant_listing_text(
+            "Lancia Y 2002 140000 km 2200 EUR", lancia_y
+        ))
+        self.assertFalse(server.is_relevant_listing_text(
+            "Lancia Delta 2002 140000 km 2200 EUR", lancia_y
+        ))
+        self.assertTrue(server.is_relevant_listing_text(
+            "Lancia Ypsilon 2002 140000 km 2200 EUR", lancia_y
+        ))
+        self.assertFalse(server.is_relevant_listing_text(
+            "Lancia Ypsilon 2012 140000 km 6200 EUR", lancia_y
+        ))
+        self.assertTrue(server.is_relevant_listing_text(
+            "DS 3 2018 80000 km 12000 EUR", ds_3
+        ))
+        self.assertFalse(server.is_relevant_listing_text(
+            "DS 7 2018 80000 km 22000 EUR", ds_3
+        ))
+        self.assertTrue(server.is_relevant_listing_text(
+            "Smart #1 elettrica 2023 30000 km 25000 EUR", smart_1
+        ))
+        self.assertFalse(server.is_relevant_listing_text(
+            "Smart ForTwo elettrica 2023 30000 km 18000 EUR", smart_1
+        ))
+
+    def test_base_models_reject_distinct_derivative_families(self):
+        cases = [
+            (
+                {"brand": "Citroen", "model": "C3", "year": 2019, "km": 70000},
+                "Citroen C3 Aircross 2019 70000 km 15000 EUR",
+            ),
+            (
+                {"brand": "Toyota", "model": "Yaris", "year": 2020, "km": 70000},
+                "Toyota Yaris Cross Hybrid 2020 70000 km 19000 EUR",
+            ),
+            (
+                {"brand": "Fiat", "model": "500", "year": 2018, "km": 80000},
+                "Fiat 500 X 2018 80000 km 15000 EUR",
+            ),
+        ]
+
+        for payload, listing_text in cases:
+            with self.subTest(model=payload["model"]):
+                self.assertFalse(
+                    server.is_relevant_listing_text(listing_text, payload)
+                )
+
+    def test_numeric_model_with_letter_keeps_full_variant(self):
+        payload = {"brand": "Fiat", "model": "500 L", "year": 2018, "km": 80000}
+
+        self.assertTrue(server.is_relevant_listing_text(
+            "Fiat 500 L 2018 80000 km 12000 EUR", payload
+        ))
+        self.assertFalse(server.is_relevant_listing_text(
+            "Fiat 500 2018 80000 km 9500 EUR", payload
+        ))
+
+    def test_three_digit_used_car_prices_are_not_replaced_by_extra_snippets(self):
+        text = "Usata Fiat 600 (2005) - 900 EUR. Altri annunci da 11.200 EUR"
+
+        self.assertEqual(server.extract_listing_price(text), 900)
+
     def test_older_vehicle_accepts_extrapolated_mileage_comparable(self):
         payload = {
             "brand": "Audi",
