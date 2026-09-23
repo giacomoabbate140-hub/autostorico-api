@@ -1351,6 +1351,24 @@ class MarketEvidenceTests(unittest.TestCase):
             )
         )
 
+    def test_market_filter_rejects_model_specific_aggregate_title(self):
+        item = {
+            "title": "Volkswagen Polo usate 2014 - Offerte e annunci | Annunci alVolante.it",
+            "url": "https://annunci.alvolante.it/auto-usate/volkswagen-polo-2014",
+            "snippet": "Volkswagen Polo 2014 da 1.000 EUR, 140.000 km",
+        }
+        self.assertIsNone(
+            server.listing_from_search_item(
+                item,
+                payload={
+                    "brand": "Volkswagen",
+                    "model": "Polo",
+                    "year": 2014,
+                    "km": 140000,
+                },
+            )
+        )
+
     def test_market_filter_rejects_automobile_model_page(self):
         item = {
             "title": "BMW 120 Diesel usato 2005 - 276.000 km - 1.999 EUR",

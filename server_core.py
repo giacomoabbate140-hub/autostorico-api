@@ -2872,6 +2872,18 @@ def is_unavailable_market_listing_text(text: str) -> bool:
     return any(marker in cleaned for marker in markers)
 
 
+def is_aggregate_market_listing_text(text: str) -> bool:
+    """Reject category/search titles even when their URL looks model-specific."""
+    cleaned = f" {normalize_market_text(text)} "
+    markers = (
+        " offerte e annunci ",
+        " tutti gli annunci ",
+        " annunci auto usate ",
+        " auto usate in vendita ",
+    )
+    return any(marker in cleaned for marker in markers)
+
+
 def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte web", payload: dict[str, Any] | None = None) -> dict[str, Any] | None:
     title = str(item.get("title") or "")
     snippet = str(item.get("snippet") or item.get("description") or "")
@@ -2882,7 +2894,11 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
         return None
     if not is_market_url(link):
         return None
-    if is_aggregate_market_url(link) or is_non_vehicle_listing_text(f"{title} {snippet}"):
+    if (
+        is_aggregate_market_url(link)
+        or is_aggregate_market_listing_text(title)
+        or is_non_vehicle_listing_text(f"{title} {snippet}")
+    ):
         return None
     if is_unavailable_market_listing_text(f"{title} {snippet}"):
         return None
