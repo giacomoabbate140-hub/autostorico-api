@@ -20,6 +20,7 @@ class PublishedClassificationTest(unittest.TestCase):
             mask_vehicle_vin=lambda s: s[:3]+'********'+s[-6:],
             vin_verification_source=lambda s: ('Costruttore', 'https://example.com/vin'),
             vin_make_candidates=lambda s: ('audi',),
+            defect_source_relevant_to_vehicle=lambda candidate, make='', model='': True,
             VIN_FORMAT=re.compile(r'^[A-HJ-NPR-Z0-9]{17}$'))
         exec(compile(ast.Module(body=[n for n in source.body
             if isinstance(n, ast.FunctionDef) and n.name in names],

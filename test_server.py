@@ -21,6 +21,7 @@ from server import (
     trusted_defect_source,
     verify_defect_online_entitlement,
     verify_google_play_subscription,
+    verify_samsung_iap_subscription,
     developer_device_is_authorized,
     developer_user_is_authorized,
     vehicle_defect_reports,
@@ -1042,6 +1043,113 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertFalse(entitlement["ok"])
         self.assertEqual(entitlement["status"], 402)
+
+    def test_samsung_subscription_checks_receipt_account_and_live_status(self):
+        account_hash = "a" * 64
+        receipt = {
+            "status": "success",
+            "packageName": "autostorico.myapp.samsung",
+            "itemId": "premium_6_mesi",
+            "itemType": "subscription",
+            "mode": "PRODUCTION",
+            "obfuscatedAccountId": account_hash,
+        }
+        subscription = {
+            "itemID": "premium_6_mesi",
+            "subscriptionStatus": "ACTIVE",
+            "subscriptionEndDate": "2099-12-31 23:59:59 GMT",
+            "gracePeriodYN": "N",
+        }
+
+        class FakeResponse:
+            def __init__(self, payload):
+                self.payload = payload
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return json.dumps(self.payload).encode("utf-8")
+
+        responses = [FakeResponse(receipt), FakeResponse(subscription)]
+        with patch.object(server, "SAMSUNG_IAP_SERVICE_ACCOUNT_ID", "service-1"), patch.object(
+            server, "SAMSUNG_IAP_ACCESS_TOKEN", "access-token"
+        ), patch.object(server.urllib.request, "urlopen", side_effect=responses) as urlopen:
+            result = verify_samsung_iap_subscription(
+                "purchase-123456789",
+                "premium_6_mesi",
+                expected_account_hash=account_hash,
+            )
+
+        self.assertTrue(result["active"])
+        self.assertEqual(urlopen.call_count, 2)
+        status_request = urlopen.call_args_list[1].args[0]
+        self.assertEqual(status_request.headers["Authorization"], "Bearer access-token")
+        self.assertEqual(status_request.headers["Service-account-id"], "service-1")
+
+    def test_samsung_subscription_rejects_another_autostorico_account(self):
+        receipt = {
+            "status": "success",
+            "packageName": "autostorico.myapp.samsung",
+            "itemId": "premium_6_mesi",
+            "itemType": "subscription",
+            "mode": "PRODUCTION",
+            "obfuscatedAccountId": "b" * 64,
+        }
+
+        class FakeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return json.dumps(receipt).encode("utf-8")
+
+        with patch.object(server, "SAMSUNG_IAP_SERVICE_ACCOUNT_ID", "service-1"), patch.object(
+            server, "SAMSUNG_IAP_ACCESS_TOKEN", "access-token"
+        ), patch.object(server.urllib.request, "urlopen", return_value=FakeResponse()):
+            result = verify_samsung_iap_subscription(
+                "purchase-123456789",
+                "premium_6_mesi",
+                expected_account_hash="a" * 64,
+            )
+
+        self.assertFalse(result["active"])
+        self.assertIn("altro account", result["message"])
+
+    def test_samsung_gold_entitlement_uses_both_store_receipts(self):
+        payload = {
+            "premiumPurchaseToken": "premium-purchase-123",
+            "defectsGoldPurchaseToken": "gold-purchase-123",
+            "store": "samsung",
+        }
+        calls = []
+
+        def fake_subscription(token, product_id, *, expected_account_hash=""):
+            calls.append((token, product_id, expected_account_hash))
+            return {"active": True}
+
+        with patch.object(server, "DEFECT_ENTITLEMENT_CACHE", {}), patch.object(
+            server, "verify_samsung_iap_subscription", fake_subscription
+        ):
+            entitlement = verify_defect_online_entitlement(
+                payload, user={"id": "customer-1"}
+            )
+
+        expected_hash = server.hashlib.sha256(b"customer-1").hexdigest()
+        self.assertTrue(entitlement["ok"])
+        self.assertEqual(
+            calls,
+            [
+                ("premium-purchase-123", "premium_6_mesi", expected_hash),
+                ("gold-purchase-123", "premium_gold_6_mesi", expected_hash),
+            ],
+        )
 
     def test_market_relevance_rejects_incompatible_mileage(self):
         payload = {

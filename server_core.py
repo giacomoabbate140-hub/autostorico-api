@@ -574,7 +574,9 @@ def create_gold_consultation(
                 "developerDeviceIdHash": str(
                     payload.get("developerDeviceIdHash") or ""
                 ).strip(),
-            }
+                "store": str(payload.get("store") or "google_play").strip(),
+            },
+            user=user,
         )
         if not entitlement.get("ok"):
             message = str(
@@ -860,6 +862,25 @@ GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = os.environ.get(
 # `goldseimesi` is only its six-month base-plan ID from the console.
 if GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID == "goldseimesi":
     GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID = "premium_gold_6_mesi"
+SAMSUNG_IAP_PACKAGE_NAME = os.environ.get(
+    "SAMSUNG_IAP_PACKAGE_NAME", "autostorico.myapp.samsung"
+).strip()
+SAMSUNG_IAP_SUBSCRIPTION_ID = os.environ.get(
+    "SAMSUNG_IAP_SUBSCRIPTION_ID", "premium_6_mesi"
+).strip()
+SAMSUNG_IAP_GOLD_SUBSCRIPTION_ID = os.environ.get(
+    "SAMSUNG_IAP_GOLD_SUBSCRIPTION_ID", "premium_gold_6_mesi"
+).strip()
+SAMSUNG_IAP_SERVICE_ACCOUNT_ID = os.environ.get(
+    "SAMSUNG_IAP_SERVICE_ACCOUNT_ID", ""
+).strip()
+SAMSUNG_IAP_ACCESS_TOKEN = normalize_provider_secret(
+    os.environ.get("SAMSUNG_IAP_ACCESS_TOKEN", ""),
+    "SAMSUNG_IAP_ACCESS_TOKEN",
+)
+SAMSUNG_IAP_ALLOW_TEST = os.environ.get(
+    "SAMSUNG_IAP_ALLOW_TEST", "0"
+).strip() == "1"
 PREMIUM_API_KEY = os.environ.get("AUTOSTORICO_PREMIUM_API_KEY", "").strip()
 DEVELOPER_DEVICE_ID_HASH = os.environ.get(
     "AUTOSTORICO_DEVELOPER_DEVICE_ID_HASH", ""
@@ -4232,11 +4253,174 @@ def verify_google_play_product(
         }
 
 
+def samsung_iap_verification_configured() -> bool:
+    return bool(
+        SAMSUNG_IAP_PACKAGE_NAME
+        and SAMSUNG_IAP_SERVICE_ACCOUNT_ID
+        and SAMSUNG_IAP_ACCESS_TOKEN
+        and SAMSUNG_IAP_SUBSCRIPTION_ID
+        and SAMSUNG_IAP_GOLD_SUBSCRIPTION_ID
+    )
+
+
+def _parse_samsung_iap_datetime(value: Any) -> datetime | None:
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    for pattern in ("%Y-%m-%d %H:%M:%S GMT", "%Y-%m-%d %H:%M:%S"):
+        try:
+            return datetime.strptime(raw, pattern).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+    return None
+
+
+def verify_samsung_iap_subscription(
+    purchase_id: str,
+    product_id: str,
+    *,
+    expected_account_hash: str = "",
+) -> dict[str, Any]:
+    """Verify a Galaxy Store subscription using Samsung server APIs."""
+    allowed_products = {
+        SAMSUNG_IAP_SUBSCRIPTION_ID,
+        SAMSUNG_IAP_GOLD_SUBSCRIPTION_ID,
+    }
+    if product_id not in allowed_products:
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Piano Galaxy Store non valido.",
+        }
+    if not purchase_id or len(purchase_id) < 12:
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Identificativo acquisto Galaxy Store non valido.",
+        }
+    try:
+        receipt_url = (
+            "https://iap.samsungapps.com/iap/v6/receipt?purchaseID="
+            f"{urllib.parse.quote(purchase_id, safe='')}"
+        )
+        with urllib.request.urlopen(receipt_url, timeout=12) as response:
+            receipt = json.loads(response.read().decode("utf-8"))
+        if not isinstance(receipt, dict) or receipt.get("status") != "success":
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Acquisto non confermato da Galaxy Store.",
+            }
+        if str(receipt.get("packageName") or "") != SAMSUNG_IAP_PACKAGE_NAME:
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Pacchetto Galaxy Store non riconosciuto.",
+            }
+        if str(receipt.get("itemId") or "") != product_id:
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Il piano acquistato non corrisponde ad AutoStorico.",
+            }
+        if str(receipt.get("itemType") or "").lower() != "subscription":
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Il prodotto Galaxy Store non e un abbonamento.",
+            }
+        if (
+            str(receipt.get("mode") or "").upper() != "PRODUCTION"
+            and not SAMSUNG_IAP_ALLOW_TEST
+        ):
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Acquisto di prova Galaxy Store non valido in produzione.",
+            }
+        receipt_account_hash = str(
+            receipt.get("obfuscatedAccountId") or ""
+        ).strip().lower()
+        if expected_account_hash and not hmac.compare_digest(
+            receipt_account_hash, expected_account_hash.lower()
+        ):
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Acquisto associato a un altro account AutoStorico.",
+            }
+        if not samsung_iap_verification_configured():
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Verifica Galaxy Store non ancora configurata sul server.",
+            }
+
+        package_name = urllib.parse.quote(SAMSUNG_IAP_PACKAGE_NAME, safe="")
+        encoded_purchase = urllib.parse.quote(purchase_id, safe="")
+        status_url = (
+            "https://devapi.samsungapps.com/iap/seller/v6/applications/"
+            f"{package_name}/purchases/subscriptions/{encoded_purchase}"
+        )
+        request = urllib.request.Request(
+            status_url,
+            headers={
+                "Accept": "application/json",
+                "content-type": "application/json",
+                "Authorization": f"Bearer {SAMSUNG_IAP_ACCESS_TOKEN}",
+                "service-account-id": SAMSUNG_IAP_SERVICE_ACCOUNT_ID,
+            },
+        )
+        with urllib.request.urlopen(request, timeout=12) as response:
+            status = json.loads(response.read().decode("utf-8"))
+        if not isinstance(status, dict):
+            raise ValueError("Invalid Samsung subscription response")
+        if str(status.get("itemID") or "") != product_id:
+            return {
+                "active": False,
+                "isTrial": False,
+                "message": "Abbonamento Galaxy Store non corrispondente.",
+            }
+        expiry = _parse_samsung_iap_datetime(status.get("subscriptionEndDate"))
+        grace_expiry = _parse_samsung_iap_datetime(status.get("gracePeriodEndDate"))
+        now = datetime.now(timezone.utc)
+        state = str(status.get("subscriptionStatus") or "").upper()
+        active_until = grace_expiry if status.get("gracePeriodYN") == "Y" else expiry
+        active = bool(
+            active_until
+            and active_until > now
+            and state in {"ACTIVE", "CANCEL"}
+        )
+        return {
+            "active": active,
+            "isTrial": False,
+            "productId": product_id,
+            "expiresAt": active_until.isoformat() if active and active_until else None,
+            "message": (
+                "Premium verificato e attivo."
+                if product_id == SAMSUNG_IAP_SUBSCRIPTION_ID
+                else "Gold Difetti verificato e attivo."
+            ) if active else "Abbonamento Galaxy Store non attivo.",
+        }
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError):
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Verifica Galaxy Store temporaneamente non disponibile.",
+        }
+    except (ValueError, KeyError, TypeError, json.JSONDecodeError):
+        return {
+            "active": False,
+            "isTrial": False,
+            "message": "Risposta Galaxy Store non valida.",
+        }
+
+
 def cached_defect_entitlement(
-    premium_token: str, gold_token: str
+    premium_token: str, gold_token: str, store: str = "google_play"
 ) -> dict[str, Any] | None:
     cache_key = hashlib.sha256(
-        f"{premium_token}\n{gold_token}".encode("utf-8")
+        f"{store}\n{premium_token}\n{gold_token}".encode("utf-8")
     ).hexdigest()
     now = time.time()
     with MARKET_GUARD_LOCK:
@@ -4251,16 +4435,21 @@ def cached_defect_entitlement(
 
 
 def cache_defect_entitlement(
-    premium_token: str, gold_token: str, entitlement: dict[str, Any]
+    premium_token: str,
+    gold_token: str,
+    entitlement: dict[str, Any],
+    store: str = "google_play",
 ) -> None:
     cache_key = hashlib.sha256(
-        f"{premium_token}\n{gold_token}".encode("utf-8")
+        f"{store}\n{premium_token}\n{gold_token}".encode("utf-8")
     ).hexdigest()
     with MARKET_GUARD_LOCK:
         DEFECT_ENTITLEMENT_CACHE[cache_key] = (time.time(), entitlement)
 
 
-def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
+def verify_defect_online_entitlement(
+    payload: dict[str, Any], user: dict[str, Any] | None = None
+) -> dict[str, Any]:
     if developer_device_is_authorized(payload.get("developerDeviceIdHash")):
         return {
             "ok": True,
@@ -4269,6 +4458,7 @@ def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
         }
     premium_token = str(payload.get("premiumPurchaseToken") or "").strip()
     gold_token = str(payload.get("defectsGoldPurchaseToken") or "").strip()
+    store = str(payload.get("store") or "google_play").strip().lower()
     if not premium_token or not gold_token:
         return {
             "ok": False,
@@ -4276,22 +4466,52 @@ def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
             "message": "Per Difetti Gold servono Premium attivo e acquisto Gold verificato.",
         }
 
-    cached = cached_defect_entitlement(premium_token, gold_token)
+    if store not in {"google_play", "samsung"}:
+        return {
+            "ok": False,
+            "status": 400,
+            "message": "Store acquisti non riconosciuto.",
+        }
+    if store == "samsung" and not user:
+        return {
+            "ok": False,
+            "status": 401,
+            "message": "Account AutoStorico richiesto per Galaxy Store.",
+        }
+
+    cached = cached_defect_entitlement(premium_token, gold_token, store)
     if cached is not None:
         return cached
 
-    premium = verify_google_play_subscription(
-        premium_token, GOOGLE_PLAY_SUBSCRIPTION_ID
-    )
+    if store == "samsung":
+        expected_account_hash = hashlib.sha256(
+            str(user.get("id") or "").encode("utf-8")
+        ).hexdigest()
+        premium = verify_samsung_iap_subscription(
+            premium_token,
+            SAMSUNG_IAP_SUBSCRIPTION_ID,
+            expected_account_hash=expected_account_hash,
+        )
+    else:
+        premium = verify_google_play_subscription(
+            premium_token, GOOGLE_PLAY_SUBSCRIPTION_ID
+        )
     if not premium.get("active"):
         return {
             "ok": False,
             "status": 402,
             "message": premium.get("message") or "Premium non attivo.",
         }
-    gold = verify_google_play_subscription(
-        gold_token, GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
-    )
+    if store == "samsung":
+        gold = verify_samsung_iap_subscription(
+            gold_token,
+            SAMSUNG_IAP_GOLD_SUBSCRIPTION_ID,
+            expected_account_hash=expected_account_hash,
+        )
+    else:
+        gold = verify_google_play_subscription(
+            gold_token, GOOGLE_PLAY_DEFECTS_GOLD_PRODUCT_ID
+        )
     if not gold.get("active"):
         return {
             "ok": False,
@@ -4300,7 +4520,7 @@ def verify_defect_online_entitlement(payload: dict[str, Any]) -> dict[str, Any]:
         }
 
     entitlement = {"ok": True, "status": 200, "message": "Difetti Gold verificata."}
-    cache_defect_entitlement(premium_token, gold_token, entitlement)
+    cache_defect_entitlement(premium_token, gold_token, entitlement, store)
     return entitlement
 
 
@@ -5080,10 +5300,10 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
             "/api/trial/claim",
         }:
             pass
-        elif request_path == "/api/premium/verify":
-            if auth and PREMIUM_API_KEY and auth != f"Bearer {PREMIUM_API_KEY}":
-                self.send_json({"error": "unauthorized"}, status=401)
-                return
+        elif request_path in {"/api/premium/verify", "/api/vehicle-defects"}:
+            # Select authentication after reading the store channel. Google
+            # keeps the legacy API key; Samsung requires a Supabase session.
+            pass
         elif auth and API_KEY and auth != f"Bearer {API_KEY}":
             self.send_json({"error": "unauthorized"}, status=401)
             return
@@ -5271,29 +5491,61 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                         status=429,
                     )
                     return
-                integrity = verify_play_integrity(payload)
-                if not integrity.get("ok"):
-                    self.send_json(
-                        {
-                            "active": False,
-                            "isTrial": False,
-                            "message": integrity.get("message")
-                            or "Controllo sicurezza non superato.",
-                        }
-                    )
-                    return
+                store = str(payload.get("store") or "google_play").strip().lower()
                 product_id = str(payload.get("productId") or "").strip()
                 product_type = str(payload.get("productType") or "").strip().lower()
-                if product_type in {"inapp", "product", "one_time"}:
-                    verification = verify_google_play_product(
+                if store == "samsung":
+                    try:
+                        user = verify_supabase_user(auth)
+                    except PermissionError as exc:
+                        self.send_json(
+                            {"error": "unauthorized", "message": str(exc)},
+                            status=401,
+                        )
+                        return
+                    account_hash = hashlib.sha256(
+                        str(user.get("id") or "").encode("utf-8")
+                    ).hexdigest()
+                    verification = verify_samsung_iap_subscription(
                         str(payload.get("purchaseToken") or "").strip(),
                         product_id,
+                        expected_account_hash=account_hash,
                     )
                 else:
-                    verification = verify_google_play_subscription(
-                        str(payload.get("purchaseToken") or "").strip(),
-                        product_id,
-                    )
+                    if store != "google_play":
+                        self.send_json(
+                            {
+                                "active": False,
+                                "isTrial": False,
+                                "message": "Store acquisti non riconosciuto.",
+                            },
+                            status=400,
+                        )
+                        return
+                    if auth and PREMIUM_API_KEY and auth != f"Bearer {PREMIUM_API_KEY}":
+                        self.send_json({"error": "unauthorized"}, status=401)
+                        return
+                    integrity = verify_play_integrity(payload)
+                    if not integrity.get("ok"):
+                        self.send_json(
+                            {
+                                "active": False,
+                                "isTrial": False,
+                                "message": integrity.get("message")
+                                or "Controllo sicurezza non superato.",
+                            }
+                        )
+                        return
+                    if product_type in {"inapp", "product", "one_time"}:
+                        verification = verify_google_play_product(
+                            str(payload.get("purchaseToken") or "").strip(),
+                            product_id,
+                        )
+                    else:
+                        verification = verify_google_play_subscription(
+                            str(payload.get("purchaseToken") or "").strip(),
+                            product_id,
+                        )
                 self.send_json(verification)
                 return
             if request_path == "/api/developer/entitlement":
@@ -5329,7 +5581,23 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                         status=429,
                     )
                     return
-                entitlement = verify_defect_online_entitlement(payload)
+                entitlement_user = None
+                store = str(payload.get("store") or "google_play").strip().lower()
+                if store == "samsung":
+                    try:
+                        entitlement_user = verify_supabase_user(auth)
+                    except PermissionError as exc:
+                        self.send_json(
+                            {"error": "unauthorized", "message": str(exc)},
+                            status=401,
+                        )
+                        return
+                elif auth and API_KEY and auth != f"Bearer {API_KEY}":
+                    self.send_json({"error": "unauthorized"}, status=401)
+                    return
+                entitlement = verify_defect_online_entitlement(
+                    payload, user=entitlement_user
+                )
                 if not entitlement.get("ok"):
                     self.send_json(
                         {

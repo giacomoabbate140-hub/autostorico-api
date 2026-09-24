@@ -12,6 +12,7 @@ ns = dict(Any=Any, urllib=urllib, datetime=datetime, timezone=timezone,
           SUPABASE_URL='configured', SUPABASE_SECRET_KEY='configured',
           DEFECT_REVIEW_CACHE_LOCK=threading.Lock(),
           safe_public_source_url=lambda v: str(v or '') if str(v or '').startswith('https://') else '',
+          defect_source_relevant_to_vehicle=lambda candidate, make='', model='': True,
           catalog_year_value=lambda v: int(v or 0))
 exec(compile(ast.Module(body=[n for n in module.body if isinstance(n, ast.FunctionDef) and n.name in names], type_ignores=[]), '<review functions>', 'exec'), ns)
 url = 'https://example.com/topic?id=1'
