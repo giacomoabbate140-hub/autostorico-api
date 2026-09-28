@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-27T21:20:40.657470+00:00",
-  "cursor": 28,
+  "updatedAt": "2026-09-28T05:23:07.113769+00:00",
+  "cursor": 2,
   "candidates": [
     {
       "status": "approved",
@@ -2839,6 +2839,20 @@
       "title": "Grazie Audi: mi hai piantato ancora a piedi. [Archivio] - Forum dell'Audi RS Club",
       "snippet": "Io ho saputo come fermare la macchina in sicurezza con lo sterzo e i freni che erano diventati durissimi... mettiamo che al mio posto ci fosse stata una ragazza che ha comprato l&#x27;A3 solo perchè le piaceva e di auto non sa niente... Poteva andare contro un guard rail o peggio provocare un incidente... Mi sa che l&#x27;Audi è l&#x27;unica ad avere questa minchiata di mappatura... Dato che non penso di essere l&#x27;unico ad aver rotto 2 iniettori nel giro di pochi mesi perchè Audi non fa una campagna di richiamo anche solo per controllare gli iniettori sui 2.0 TDI 170 cv? Ciao ragazzi... ieri sera era Halloween e la mia piccola Audi A3 ha deciso di rendermela indimenticabile. Dopo avermi fatto fare un rientro dalle ferie in Calabria che resterà agli annali, piantandomi a piedi a Firenze, ieri sera ha deciso di farmi rivivere quelle emozioni, caso mai le avessi scordate... Io ho saputo come fermare la macchina in sicurezza con lo sterzo e i freni che erano diventati durissimi... mettiamo che al mio posto ci fosse stata una ragazza che ha comprato l'A3 solo perchè le piaceva e di auto non sa niente... Poteva andare contro un guard rail o peggio provocare un incidente... Mi sa che l'Audi è l'unica ad avere questa minchiata di mappatura... Dato che non penso di essere l'unico ad aver rotto 2 iniettori nel giro di pochi mesi perchè Audi non fa una campagna di richiamo anche solo per controllare gli iniettori sui 2.0 TDI 170 cv? Non vuol far sapere a tutti che sta facendo un richiamo? Il 1.3 Mjet all'inizio non aveva affidabilità.... io non ho mai sentito di catene saltate però ammetto che possa essere successo... La Panda 1.3 Mjet costa circa 13.000 euro.... La Punto 1.3 Mjet (non la Grande Punto) costa più o meno quella cifra... Cosa costa un'Audi A3 2.0 TDI 140 cv? A che punto una Casa automobilistica fa scattare la campagna di richiamo... Toyota per la minima cazzatina richiama tutto e tutti in nome della qualità... Fiat fa frequenti richiami, Opel idem... Non so per Audi... sui giornali si leggono ben pochi richiami di Audi... Sono tutte perfette? Il difetto alle teste dei 2.0 TDI non è limitato a pochi esemplari del primo periodo di produzione...",
       "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-15302.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-09-28T05:23:07.113769+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "year": 2016,
+      "engine": "1.6 Multijet",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Mini richiamo Alfa Romeo Giulietta - ClubAlfa.it Forum",
+      "snippet": "Il difetto riguarda l’attacco difettoso del braccio oscillante della sospensione, il quale potrebbe uscire dalla sua sede creando scompensi alla stabilità del mezzo, con il rischio di causare la perdita di controllo da parte del guidatore. IIl problema viene risolto dalle officine autorizzate Alfa sostituendo il braccio difettoso, ma va detto che i numeri della campagna di richiamo della Giulietta sono comunque minimi. Il difetto riguarda l’attacco difettoso del braccio oscillante della sospensione, il quale potrebbe uscire dalla sua sede creando scompensi alla stabilità del mezzo, con il rischio di causare la perdita di controllo da parte del guidatore. IIl problema viene risolto dalle officine autorizzate Alfa sostituendo il braccio difettoso, ma va detto che i numeri della campagna di richiamo della Giulietta sono comunque minimi. Riferimento: Mini Richiamo Alfa Romeo perche spargi fango su cose che non sei informato o solo su sentito dire!!! la campagna del braccetto non e da telaio a talaio ma solo su singoli telai non e mai uscita nessuna campagna sul padale accelleratore !!!!!!!!! Riferimento: Mini richiamo Alfa Romeo Giulietta guarda che le riviste fanno solo allarmismo per far notizia e vende copie la notizia della campagna del braccetto se guardi sul forum l'ho gia postata io un bel po di tempo fa compreso l'elenco dei telai interesati in modo che tutti potevano controllarselo prima che le arrivassela lettera da fiat e per il fatto dell'accelleratore non esiste nulla a riguardo non ho bisogno di guardare notizie tramite quotidiani dove da una goccia di acqua tirano fuori unn'alluvione per far notizia le novita del gruppo fiat le so in diretta prima che vengano publicate non ce nessun rischio di distacco del braccetto Clicca per espandere... il buon scintilla ci aveva già avvisato un po di tempo fa elencando i SOLI telai interessati...e per il pedale quello non era un preblema visto che è oraticamente impossibile pigare un acceleratore in quel modo e con quella forza durante la guida ma purtroppo i tedeschi invidiosi hanno dovuto trovare il pelo nell'uovo e cmq non era una campagna visto che si era appena all'inio delle consegne ma era solo una delle tante modifiche, d'altronde basta andare sull'eper e vedere già quanto è lungo l'elenco delle modifiche apportate.",
+      "sourceUrl": "https://forum.clubalfa.it/threads/mini-richiamo-alfa-romeo-giulietta.47326/"
     }
   ],
   "latestUpdate": {
