@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-03T11:38:54.455766+00:00",
-  "cursor": 21,
+  "updatedAt": "2026-10-03T16:17:05.745630+00:00",
+  "cursor": 24,
   "candidates": [
     {
       "status": "approved",
@@ -2951,6 +2951,20 @@
       "title": "Ford EcoSport: Mini-SUV im Test",
       "snippet": "Dank einer inzwischen auch schon wieder fünf Jahre zurückliegenden, grundlegenden Überarbeitung hat der Kölner aber ordentlich aufgeholt. Vieles wurde verbessert, was auch deshalb nötig war, weil der kleine SUV mit dem Ford Puma eine attraktive, hausinterne Konkurrenz bekommen hat. Das ist an den Zulassungszahlen von 2022 sehr gut zu erkennen: Der EcoSport wurde in Deutschland gerade mal 6049 Mal verkauft, der Puma immerhin 17.573 Mal. Mit ein Grund: Preislich liegt der EcoSport (ab 25.100 [...] | Technische Daten (Herstellerangaben) | Ford EcoSport 1.0 EcoBoost Titanium (09/20 - 12/22) | Ford EcoSport 1.0 EcoBoost Active (09/20 - 12/22) |\n --- \n| Motorart | Otto | Otto |\n| Hubraum (Verbrennungsmotor) | 998 ccm | 998 ccm |\n| Leistung maximal in kW (Systemleistung) | 92 | 92 |\n| Leistung maximal in PS (Systemleistung) | 125 | 125 |\n| Drehmoment (Systemleistung) | 170 Nm | 170 Nm |\n| Leistung maximal bei U/min. (Verbrennungsmotor) | 5.000 U/min | 5.000 U/min | [...] Navigation\n Suche\n Seiteninhalt\n Fußzeile\n\n# Test Ford EcoSport: Mini-SUV im Schatten des Puma\n\n• Lesezeit: 5 Min.\n\nVon Jochen Wieler\n\nFeedback\n\nFord EcoSport: Von vorn sieht der Kleinwagen-SUV recht bullig aus© Ford\n\nMini-SUVs sind der Renner in Deutschland. Und auch der Ford EcoSport verkaufte sich ordentlich. Jetzt wurde er eingestellt. Für Gebrauchtwagenkäufer könnte er dennoch interessant sein. Hier der letzte Fahrbericht von 2023.",
       "sourceUrl": "https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/ford/ford-ecosport"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-03T16:17:05.745630+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Disservizi e menefreghismo - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "In passato ho avuto macchine tedesche e giapponesi, ma non posso fare paragoni perché nessun veicolo è mai stato soggetto a campagne dii richiamo né ad interventi straordinari. La mia precedente 3008 nei primi 90000 km ha invece dovuto sostituire il climatizzatore e gli iniettori... In passato ho avuto macchine tedesche e giapponesi, ma non posso fare paragoni perché nessun veicolo è mai stato soggetto a campagne dii richiamo né ad interventi straordinari. La mia precedente 3008 nei primi 90000 km ha invece dovuto sostituire il climatizzatore e gli iniettori... Ho scoperto poi che quel motore aveva un difetto di realizzazione/progettazione e che, superati 100.000 km, iniziava a mangiare olio in alcune condizioni soprattutto come in autostrada a velocità costante. quando mi è arrivata la cartolina per giudicare la qualità del servizio e ho dato voto negativo sono stato richiamato dal proprietario della concessionaria per essere sgridato perché avevo abbassato la media della loro qualità di intervento e non per sapere per quale motivo avevo dato il mio voto negativo Peugeot 308 allure 1.6 bluehdi 120cv eat6 grigio platino. Vetri oscurati, keyless system, retrocamera, pedaliera alluminio, battitacco in acciaio, ruota di scorta. Aprile 2018. LINK Peugeot possedute in precedenza: 206 1.4 XT (2002) 2007->2018, 205 1.1 Open (1990) 1998->2007 ... Peugeottista D.O.C. ... Ciao jurko99 Massima comprensione per questo trattamento. Se le tue 3 Peugeot dimostrano di macinare km in totale affidabilità, comfort e sicurezza, goditele e tienitele sin che campano. Ricevo una lettera per un intervento di richiamo con durata dichiarata non superiore ad un'ora. Provo a prenotare tramite app e sito Peugeot, ma mi è impossibile perché la targa del mio veicolo risulta inesistente. Provo allora a cercare sul sito un'officina autorizzata per prenotare telefonicamente, ma il CAP della mia città risulta pure inesistente.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=119108"
     }
   ],
   "latestUpdate": {
