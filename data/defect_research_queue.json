@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-04T05:51:41.812347+00:00",
-  "cursor": 1,
+  "updatedAt": "2026-10-04T12:20:54.067663+00:00",
+  "cursor": 4,
   "candidates": [
     {
       "status": "approved",
@@ -2965,6 +2965,48 @@
       "title": "Disservizi e menefreghismo - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "In passato ho avuto macchine tedesche e giapponesi, ma non posso fare paragoni perché nessun veicolo è mai stato soggetto a campagne dii richiamo né ad interventi straordinari. La mia precedente 3008 nei primi 90000 km ha invece dovuto sostituire il climatizzatore e gli iniettori... In passato ho avuto macchine tedesche e giapponesi, ma non posso fare paragoni perché nessun veicolo è mai stato soggetto a campagne dii richiamo né ad interventi straordinari. La mia precedente 3008 nei primi 90000 km ha invece dovuto sostituire il climatizzatore e gli iniettori... Ho scoperto poi che quel motore aveva un difetto di realizzazione/progettazione e che, superati 100.000 km, iniziava a mangiare olio in alcune condizioni soprattutto come in autostrada a velocità costante. quando mi è arrivata la cartolina per giudicare la qualità del servizio e ho dato voto negativo sono stato richiamato dal proprietario della concessionaria per essere sgridato perché avevo abbassato la media della loro qualità di intervento e non per sapere per quale motivo avevo dato il mio voto negativo Peugeot 308 allure 1.6 bluehdi 120cv eat6 grigio platino. Vetri oscurati, keyless system, retrocamera, pedaliera alluminio, battitacco in acciaio, ruota di scorta. Aprile 2018. LINK Peugeot possedute in precedenza: 206 1.4 XT (2002) 2007->2018, 205 1.1 Open (1990) 1998->2007 ... Peugeottista D.O.C. ... Ciao jurko99 Massima comprensione per questo trattamento. Se le tue 3 Peugeot dimostrano di macinare km in totale affidabilità, comfort e sicurezza, goditele e tienitele sin che campano. Ricevo una lettera per un intervento di richiamo con durata dichiarata non superiore ad un'ora. Provo a prenotare tramite app e sito Peugeot, ma mi è impossibile perché la targa del mio veicolo risulta inesistente. Provo allora a cercare sul sito un'officina autorizzata per prenotare telefonicamente, ma il CAP della mia città risulta pure inesistente.",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=119108"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-04T12:20:54.067663+00:00",
+      "make": "Audi",
+      "model": "A1",
+      "year": 2011,
+      "engine": "1.6 TDI CAYB",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "problemi cambio s tronic [Archivio] - Forum dell'Audi RS Club",
+      "snippet": "Hanno cercato di fare i furbi (anche con altri possessori della medesima vettura) dicendo che quel rumore di ferraglia era normale...invece il stronic era difettoso proprio per colpa di un ingranaggio di qualche fornitore. Io sono stato fortunato poiché la vettura era anche in garanzia. ... con il motore 1.6 tdi era abbinato il cambio automatico 7 marce con frizioni a secco. quel cambio ha avuto un sacco di noie, nelle prime serie prodotte, alcuni anni fa (c&#x27;era un surriscaldamento frizioni, strattoni, rumorosita&#x27; ecc). c&#x27;e stato anche un maxi richiamo, in asia, con milioni di veicoli coinvolti. Salve a tutti ragazzi, ho 2 quesiti da porvi! ho acquistato la mia audi A3 SPB 1.6(nuova) fine 2014 con cambio automatico ed ora ha praticamente 40.000 km o poco più. Praticamente qualche settimana fa avvertivo uno strano rumore al motore e per questo, essendo ancora l'auto in garanzia, l'ho portata in un concessionario audi. Buonasera, sfrutto la discussione per avere info in merito alla rumorosità del cambio s-tronic 7 marce, la mia audi a1 1.4 tfsi del 2011 manifesta rumori metallici sia in scalata (a marce basse 3-2 e 2-1), sia su fondi stradali irregolari, l'auto ora ha 70k km, a 58k km (dall'ex proprietario) é stata cambiata la meccatronica ed effettuato il cambio filtro e olio (come da richiamo Audi) con fattura di circa 1400EUR interamente a carico del cliente. Hanno cercato di fare i furbi (anche con altri possessori della medesima vettura) dicendo che quel rumore di ferraglia era normale...invece il stronic era difettoso proprio per colpa di un ingranaggio di qualche fornitore. Io sono stato fortunato poiché la vettura era anche in garanzia. ... con il motore 1.6 tdi era abbinato il cambio automatico 7 marce con frizioni a secco. quel cambio ha avuto un sacco di noie, nelle prime serie prodotte, alcuni anni fa (c'era un surriscaldamento frizioni, strattoni, rumorosita' ecc). c'e stato anche un maxi richiamo, in asia, con milioni di veicoli coinvolti. 2) dopo ieri ho notato che quando metto la leva del cambio in \"R\" mi rimane bloccato il pulsante del cambio (a differenza di \"P\" \"N\" \"D\")! è normale? ho provato a chiamare l'audi ma ovviamente il ragazzo del service era impegnato e non mi hanno più richiamato. Grazie mille. ... Ti porto l'esempio della mia A1 185 CV biturbo (turbo+ compressore) che aveva dei problemi su S tronic ma il 7 marce.",
+      "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-73452.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-04T12:20:54.067663+00:00",
+      "make": "Audi",
+      "model": "A1",
+      "year": 2011,
+      "engine": "1.6 TDI CAYB",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Consiglio acquisto Audi A1 | Il Forum di Quattroruote",
+      "snippet": "Come consumi sono praticamente identici: il motore è lo stesso, forse cambia la rapportatura del cambio, ma non ne sarei sicuro. Ovviamente se usi tutti i 110 cv consumerai di più. A parità di andatura invece è la stessa cosa. Il motore a quanto ne so è piuttosto affidabile e beve pochissimo. Salve, sono in procinto di acquistare per mio figlio un' AUDI A1 identity black 30 TFSI S tronic, secondo voi è meglio il 110cv oppure il 95cv?? La concessionaria spinge per il 110cv, ma i consumi come sono?? La vettura ha qualche problema riscontrato?? grazie in anticipo Come consumi sono praticamente identici: il motore è lo stesso, forse cambia la rapportatura del cambio, ma non ne sarei sicuro. Ovviamente se usi tutti i 110 cv consumerai di più. A parità di andatura invece è la stessa cosa. Il motore a quanto ne so è piuttosto affidabile e beve pochissimo.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/consiglio-acquisto-audi-a1.146323/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-04T12:20:54.067663+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Audi RS Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Disperazione totale!! Aiutoooooo [Archivio] - Forum dell'Audi RS Club",
+      "snippet": "credo anche io che la garanzia sui ricambi sia di un anno. quando li hai cambiati hai pagato?li hai cambaiti perchè difettosi o per un richiamo? Dunque Luca, quando sono stati sostituiti l&#x27;auto era ancora del precedente proprietario, infatti la fattura è intestata a lui.. Forum dell'Audi RS Club > Aspetti Tecnici > Tagliandi - Manutenzione - Riparazioni - Sostituzioni - Difetti - Guasti - Anomalie - Strani sintomi > Disperazione totale!! Aiutoooooo ... Ragazzi, salve a tutti.. Sono disperato, qualcuno mi aiuti!! Ora spiego che mi è successo: ieri appena entrato nel raccordo autostradale di Bereguarda a 70 km orari in piena accelerazione il motore della mia AUDI A3 2.0 TDI 170 CV del 2007 ha iniziato a strappare in modo violento ed andare a colpi. credo anche io che la garanzia sui ricambi sia di un anno. quando li hai cambiati hai pagato?li hai cambaiti perchè difettosi o per un richiamo? Dunque Luca, quando sono stati sostituiti l'auto era ancora del precedente proprietario, infatti la fattura è intestata a lui.. ---------- Post added at 12.35.46 ---------- Previous post was at 12.32.15 ---------- ecco il richiamo:In data 01/09/2012 è stata fatta un'azione di richiamo per i motori bmn (170 cv) prodotti dal 2006 al 2008.Sono stati segnalati ai concessionari i telai delle auto che potrebbero avere problemi agli iniettori.I concessionari stessi dovrebbero provvedere a contattare i proprietari delle auto in questione e provvedere alla sostituzione di tutti e 4 gli iniettori.L'azione è la numero 23k1. Non è roba di testata come ha detto Tony. Non ci perdere la testa. Riportala in audi e fatti controllare di nuovo gli iniettori. Secondo me non ti hanno cambiato un bel niente. Te lo dico perché ho visto dal mio meccanico un a3 del 2008 che gli era saltato un iniettore e andava a 3.",
+      "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-50577.html"
     }
   ],
   "latestUpdate": {
