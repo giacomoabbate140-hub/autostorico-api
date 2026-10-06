@@ -6,6 +6,22 @@ import server
 
 
 class MarketAdvertRegressionTests(unittest.TestCase):
+    def test_shared_family_does_not_admit_another_explicit_variant(self):
+        for brand, target, title in (
+            ("BMW", "Serie 1 120d", "BMW Serie 1 118d"),
+            ("Mercedes", "Classe A A180", "Mercedes Classe A A200"),
+            ("Audi", "A1", "Audi A3"),
+        ):
+            with self.subTest(brand=brand):
+                item = {"title": title, "url": "https://www.autoscout24.it/annunci/car",
+                        "snippet": f"{brand} {target} 2011 158000 km 9500 EUR"}
+                self.assertIsNone(server.listing_from_search_item(item, payload={
+                    "brand": brand, "model": target, "year": 2011, "km": 158000}))
+        self.assertFalse(server.market_model_variant_conflicts(
+            "BMW 120 184 CV Diesel", {"model": "Serie 1 120d"}))
+        self.assertFalse(server.market_model_variant_conflicts(
+            "BMW Serie 1 120 d", {"model": "Serie 1 120d"}))
+
     def test_aliases_keep_generations_and_trim_only_names_specific(self):
         for brand, model, wanted, forbidden in (
             ("BMW", "Serie 1 120d", "BMW 120d", "BMW 1"),

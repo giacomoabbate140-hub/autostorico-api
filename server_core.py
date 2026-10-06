@@ -2282,6 +2282,26 @@ def _contains_market_signal(text: str, signal: str) -> bool:
 
 def market_model_variant_conflicts(text: str, payload: dict[str, Any]) -> bool:
     """Reject well-known derivative families when the base model was requested."""
+    model = normalize_market_text(payload.get("model"))
+    # Family names such as Serie 1 or Classe A are shared by several variants.
+    # A clearly different designation must not pass through that family match.
+    def designators(value: str) -> list[tuple[str, str, str]]:
+        value = re.sub(r"\b([a-z]{1,2})\s+(\d{1,3})\b", r"\1\2", value)
+        value = re.sub(r"\b(\d{3})\s+([dixe])\b", r"\1\2", value)
+        return [match.groups() for match in re.finditer(r"\b([a-z]*)(\d{1,3})([a-z]*)\b", value)
+                if match.group(1) or match.group(3)]
+    observed = designators(normalize_market_text(text))
+    for prefix, number, suffix in designators(model):
+        target = f"{prefix}{number}{suffix}"
+        if _contains_market_signal(text, target):
+            continue
+        rivals = [candidate for candidate in observed if (
+            (prefix and candidate[0] == prefix)
+            or (not prefix and len(number) == 3 and suffix in {"d", "i", "e", "x", "l"}
+                and not candidate[0] and len(candidate[1]) == 3
+                and candidate[2] in {"d", "i", "e", "x", "l"}))]
+        if any(candidate != (prefix, number, suffix) for candidate in rivals):
+            return True
     target_tokens = normalize_market_text(payload.get("model")).split()
     if len(target_tokens) != 1:
         return False
@@ -3016,6 +3036,8 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
         return reject("non_vehicle_description")
     if is_unavailable_market_listing_text(f"{title} {snippet}"):
         return reject("unavailable")
+    if payload is not None and market_model_variant_conflicts(title, payload):
+        return reject("incompatible_model_variant")
     hostname = urllib.parse.urlparse(link).hostname or ""
     if hostname == "trovit.it" or hostname.endswith(".trovit.it"):
         # Trovit candidates must carry their own year and mileage, never a
