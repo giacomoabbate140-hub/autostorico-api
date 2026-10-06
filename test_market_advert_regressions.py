@@ -21,8 +21,10 @@ class MarketAdvertRegressionTests(unittest.TestCase):
         for params in captured[:4]:
             rules = params["goggles"][0]
             self.assertTrue(rules.startswith("$discard\n"))
-            self.assertIn("/annunci/$boost=3,site=autoscout24.it", rules)
-            self.assertIn("/auto/$boost=3,site=subito.it", rules)
+            self.assertIn("autoscout24.it/annunci/$boost=3,site=autoscout24.it", rules)
+            self.assertIn("subito.it/auto/$boost=3,site=subito.it", rules)
+            # /auto/ alone also matched Subito's /annunci-italia/vendita/auto/.
+            self.assertNotIn("\n/auto/$boost", rules)
             self.assertEqual(params["extra_snippets"], ["true"])
         self.assertNotIn("goggles", captured[4])
 

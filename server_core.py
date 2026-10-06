@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v18-direct-advert-retrieval"
+MARKET_CACHE_VERSION = "market-v19-host-qualified-advert-routes"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -978,7 +978,7 @@ MARKET_ADVERT_PATHS = {
 }
 MARKET_ADVERT_GOGGLES = "\n".join(
     ["$discard"] + [
-        f"{path}$boost=3,site={domain}"
+        f"{domain}{path}$boost=3,site={domain}"
         for domain, path in MARKET_ADVERT_PATHS.items()
     ]
 )
@@ -5168,7 +5168,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_direct_advert_retrieval_v18",
+                    "marketSearchRevision": "market_host_qualified_advert_routes_v19",
                     "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
