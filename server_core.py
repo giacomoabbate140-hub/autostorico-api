@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v19-host-qualified-advert-routes"
+MARKET_CACHE_VERSION = "market-v20-model-aliases-primary-advert-content"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -2302,12 +2302,33 @@ def market_vehicle_search_expression(brand: str, model: str) -> str:
     exact_vehicle = " ".join(part for part in [brand, model] if part).strip()
     if not exact_vehicle:
         return ""
-    spaced_model = re.sub(r"(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)", " ", model)
-    spaced_vehicle = " ".join(part for part in [brand, spaced_model] if part).strip()
-    variants = list(dict.fromkeys([exact_vehicle, spaced_vehicle]))
+    variants = []
+    for alias in market_model_search_aliases(brand, model):
+        spaced = re.sub(r"(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)", " ", alias)
+        variants.extend(" ".join(part for part in [brand, name] if part).strip()
+                        for name in (alias, spaced))
+    variants = list(dict.fromkeys(variants))
     if len(variants) == 1:
         return f'"{variants[0]}"'
     return "(" + " OR ".join(f'"{variant}"' for variant in variants) + ")"
+
+
+def market_model_search_aliases(brand: str, model: str) -> list[str]:
+    """Include a specific variant when a portal omits the generic family name."""
+    model = " ".join(model.split())
+    brand = " ".join(brand.split())
+    while brand and model.casefold().startswith(brand.casefold() + " "):
+        model = model[len(brand):].strip()
+    aliases = [model]
+    tokens = model.split()
+    if (len(tokens) >= 3 and tokens[0].casefold() in {"serie", "series", "classe", "class"}
+            and (len(tokens[1]) == 1 or tokens[1].isdigit())):
+        # Keep A1, Golf 7, Serie 1 and trim-only labels intact. Shortening is
+        # allowed only when an explicit mixed letter/number variant remains.
+        variant = tokens[2]
+        if re.fullmatch(r"(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{2,}", variant):
+            aliases.append(" ".join(tokens[2:]))
+    return list(dict.fromkeys(aliases))
 
 
 def build_market_queries(payload: dict[str, Any], year: int | None) -> list[str]:
@@ -2416,9 +2437,10 @@ def extract_listing_year(text: str, target_year: int | None = None) -> int | Non
 
 def extract_listing_kms(text: str) -> list[int]:
     normalized = html.unescape(text).replace("\u00a0", " ")
+    normalized = normalized.replace("**", "").replace("__", "")
     patterns = [
         r"(?<![A-Za-z0-9])([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})\s*(?:km|chilometri)\b",
-        r"(?:km|chilometri)\s*(?<![A-Za-z0-9])([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})\b",
+        r"(?:km|chilometri|chilometraggio)\s*[:\-]?\s*(?<![A-Za-z0-9])([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]{4,6})\b",
     ]
     values: set[int] = set()
     for pattern in patterns:
@@ -2477,14 +2499,39 @@ def parse_price_amount(value: str) -> int | None:
 
 
 def market_source_name(link: str, fallback: str = "Fonte web") -> str:
+    hostname = urllib.parse.urlsplit(link).hostname or ""
     return next(
-        (name for name, domain in MARKET_SITES if domain in link),
+        (name for name, domain in MARKET_SITES
+         if hostname == domain or hostname.endswith("." + domain)),
         fallback,
     )
 
 
 def is_market_url(link: str) -> bool:
-    return any(domain in link for _, domain in MARKET_SITES)
+    try:
+        parsed = urllib.parse.urlsplit(link)
+        hostname = parsed.hostname or ""
+        return (parsed.scheme in {"http", "https"}
+                and parsed.username is None and parsed.password is None
+                and parsed.port in {None, 80, 443}
+                and any(hostname == domain or hostname.endswith("." + domain)
+                        for _, domain in MARKET_SITES))
+    except ValueError:
+        return False
+
+
+def market_listing_dedupe_key(link: str) -> str:
+    """Ignore tracking variations of a validated direct advert URL."""
+    if not is_market_url(link) or is_aggregate_market_url(link):
+        return link.lower()
+    parsed = urllib.parse.urlsplit(link)
+    hostname = (parsed.hostname or "").removeprefix("www.")
+    query = urllib.parse.urlencode(sorted(
+        (key, value) for key, value in urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
+        if not key.casefold().startswith("utm_")
+        and key.casefold() not in {"gclid", "fbclid", "msclkid"}
+    ))
+    return f"{hostname}{parsed.path.rstrip('/')}" + (f"?{query}" if query else "")
 
 
 def is_aggregate_market_url(link: str) -> bool:
@@ -2559,9 +2606,12 @@ def is_non_vehicle_listing_text(text: str, *, check_equipment: bool = True) -> b
 
 
 def source_weight(link: str) -> float:
-    if any(domain in link for domain in DIRECT_MARKET_DOMAINS):
+    hostname = urllib.parse.urlsplit(link).hostname or ""
+    if any(hostname == domain or hostname.endswith("." + domain)
+           for domain in DIRECT_MARKET_DOMAINS):
         return 1.0
-    if any(domain in link for domain in REFERENCE_MARKET_DOMAINS):
+    if any(hostname == domain or hostname.endswith("." + domain)
+           for domain in REFERENCE_MARKET_DOMAINS):
         return 0.65
     return 0.45
 
@@ -2757,7 +2807,9 @@ def extract_listing_engine_cc(text: str) -> int:
     return 0
 
 
-def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
+def market_listing_match_score(text: str, payload: dict[str, Any], *,
+                               listing_year: int | None = None,
+                               listing_km: float | None = None) -> float:
     """Return zero for incompatible cars and a confidence weight otherwise."""
     cleaned = normalize_market_text(text)
     brand = normalize_market_text(payload.get("brand") or payload.get("make"))
@@ -2775,7 +2827,7 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
     # family name. Accept that historical alias only for a pre-2004 target and
     # a pre-2004 advert; newer Ypsilon generations remain separate.
     target_year = parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
-    listing_years = extract_listing_years(text)
+    listing_years = [listing_year] if listing_year is not None else extract_listing_years(text)
     legacy_lancia_y_alias = bool(
         normalize_market_text(payload.get("brand") or payload.get("make")) == "lancia"
         and normalize_market_text(payload.get("model")) == "y"
@@ -2790,7 +2842,7 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
     if market_model_variant_conflicts(cleaned, payload):
         return 0.0
 
-    years = extract_listing_years(text)
+    years = listing_years
     score = 1.0
     if target_year:
         if years:
@@ -2813,7 +2865,7 @@ def market_listing_match_score(text: str, payload: dict[str, Any]) -> float:
             score *= 0.45
 
     target_km = parse_float(payload.get("km"))
-    kilometres = extract_listing_kms(text)
+    kilometres = [listing_km] if listing_km is not None else extract_listing_kms(text)
     if target_km > 0:
         if kilometres:
             km_difference = min(abs(value - target_km) for value in kilometres)
@@ -3012,19 +3064,11 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
             page_metadata = {}
         if price is None:
             price = page_metadata.get("price")
-        listing_year = listing_year or page_metadata.get("year")
-        listing_km = listing_km or page_metadata.get("km")
-        if page_metadata and payload is not None:
-            enriched_text = " ".join(
-                part
-                for part in [
-                    combined_text,
-                    str(listing_year or ""),
-                    f"{listing_km} km" if listing_km is not None else "",
-                ]
-                if part
-            )
-            match_score = market_listing_match_score(enriched_text, payload)
+        listing_year = page_metadata.get("year", listing_year)
+        listing_km = page_metadata.get("km", listing_km)
+    if payload is not None:
+        match_score = market_listing_match_score(
+            combined_text, payload, listing_year=listing_year, listing_km=listing_km)
 
     if price is None:
         return reject("missing_price")
@@ -3044,7 +3088,8 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
         "comparisonTier": market_comparison_tier(
             listing_year, listing_km, target_year, target_km
         ),
-        "metadataSource": "listing_page" if page_metadata else "search_result",
+        "metadataSource": ("listing_page" if page_metadata else
+                           "provider_page" if item.get("primary_page_content") else "search_result"),
     }
 
 def google_market_search(query: str, payload: dict[str, Any]) -> list[dict[str, Any]]:
@@ -3137,6 +3182,24 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
     return results
 
 
+def primary_market_advert_text(raw_content: Any) -> str:
+    """Bound page content and exclude recommendations from advert metadata."""
+    if not isinstance(raw_content, str):
+        return ""
+    text = raw_content[:50000]
+    heading = re.search(r"(?m)^#\s+\S", text)
+    if heading:
+        text = text[heading.start():]
+    related = re.search(
+        r"(?im)^\s*(?:#{1,6}\s*)?(?:offerte selezionate|auto simili|annunci simili|"
+        r"veicoli simili|potrebbe interessarti|altre auto)\s*(?:\n|$)", text)
+    if related:
+        text = text[:related.start()]
+    # Link targets may carry the year/model of another search or recommendation.
+    text = re.sub(r"!?\[([^\]]*)\]\([^\n)]*\)", r"\1", text)
+    return text[:20000].strip()
+
+
 def tavily_market_search(
     query: str,
     payload: dict[str, Any],
@@ -3164,7 +3227,7 @@ def tavily_market_search(
             "language": "it",
             "include_domains": market_domains,
             "include_answer": False,
-            "include_raw_content": False,
+            "include_raw_content": True,
             "include_images": False,
             "include_usage": True,
         }
@@ -3194,11 +3257,16 @@ def tavily_market_search(
     results = []
     rejection_diagnostics: dict[str, Any] = {}
     for item in search_items:
+        primary_text = primary_market_advert_text(item.get("raw_content"))
+        use_page_text = bool(primary_text and (
+            extract_listing_years(primary_text) or extract_listing_kms(primary_text)
+            or extract_listing_price(primary_text) is not None))
         normalized = {
             "title": item.get("title"),
             "url": item.get("url"),
-            "snippet": item.get("content"),
+            "snippet": primary_text if use_page_text else item.get("content"),
             "source": "Tavily",
+            "primary_page_content": use_page_text,
         }
         listing = listing_from_search_item(normalized, fallback_source="Tavily", payload=payload, rejection_diagnostics=rejection_diagnostics)
         if listing is not None:
@@ -3255,7 +3323,9 @@ def fetch_market_sources(
         payload.get("engineDisplacement") or payload.get("engineCc")
     )
     engine_label = engine_query_label(engine_cc)
-    vehicle_label = " ".join(part for part in [brand, model] if part).strip()
+    model_aliases = market_model_search_aliases(brand, model)
+    vehicle_label = " ".join(part for part in [brand, model_aliases[0]] if part).strip()
+    broad_vehicle_label = " ".join(part for part in [brand, model_aliases[-1]] if part).strip()
     vehicle_expression = market_vehicle_search_expression(brand, model)
     details = " ".join(
         part for part in [trim, engine_label, fuel_type] if part
@@ -3280,7 +3350,7 @@ def fetch_market_sources(
         )
         query_year = str(year or "")
         search_vehicle = (
-            vehicle_label if broaden_classifieds else vehicle_expression or vehicle_label
+            broad_vehicle_label if broaden_classifieds else vehicle_expression or vehicle_label
         )
         search_details = "" if broaden_classifieds else details
         portal_query = (
@@ -3348,7 +3418,7 @@ def fetch_market_sources(
 
         for listing in query_results:
             url = str(listing.get("url") or "").strip()
-            dedupe_key = url.lower()
+            dedupe_key = market_listing_dedupe_key(url)
             if not dedupe_key or dedupe_key in seen_urls:
                 continue
             seen_urls.add(dedupe_key)
@@ -3418,7 +3488,7 @@ def fetch_market_sources(
         # The fallback must also tolerate portal titles such as
         # "BMW Serie 1 120d" when the stored model is simply "120D".
         fallback_query = (
-            f"{vehicle_label} {year or ''} usata prezzo chilometri Italia".strip()
+            f"{broad_vehicle_label} {year or ''} usata prezzo chilometri Italia".strip()
             if (year is not None and year <= 2018)
             or parse_float(payload.get("km")) >= 180000
             else base_queries[0]
@@ -3434,7 +3504,7 @@ def fetch_market_sources(
                 entry["domain"] = "multiple"
             for listing in tavily_results:
                 url = str(listing.get("url") or "").strip()
-                dedupe_key = url.lower()
+                dedupe_key = market_listing_dedupe_key(url)
                 if not dedupe_key or dedupe_key in seen_urls:
                     continue
                 seen_urls.add(dedupe_key)
@@ -5168,7 +5238,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_host_qualified_advert_routes_v19",
+                    "marketSearchRevision": "market_primary_advert_content_v20",
                     "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
