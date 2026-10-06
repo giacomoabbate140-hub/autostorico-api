@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v14-advert-only-equipment-safe"
+MARKET_CACHE_VERSION = "market-v15-advert-only-equipment-safe"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -2481,7 +2481,10 @@ def is_aggregate_market_url(link: str) -> bool:
     query = urllib.parse.parse_qs(parsed.query)
     # Editorial pages can mention a model year and a new-car list price.
     # They must never become used-car comparables, even on a market domain.
-    if any(segment in path.split("/") for segment in ("news", "prove", "listino", "guide")):
+    if any(
+        segment in path.split("/")
+        for segment in ("news", "prove", "listino", "guide", "info")
+    ):
         return True
     if any(key in query for key in ("q", "query", "search", "keyword")):
         return True
@@ -5119,7 +5122,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_expanded_vehicle_coverage_v13",
+                    "marketSearchRevision": "market_advert_only_equipment_safe_v15",
                     "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
