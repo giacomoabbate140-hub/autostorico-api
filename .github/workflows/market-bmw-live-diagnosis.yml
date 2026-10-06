@@ -1,4 +1,4 @@
-name: BMW market live diagnosis
+name: Market hardening live verification
 on:
   push:
     branches: [codex/market-bmw-diagnosis-20261006]
@@ -10,69 +10,42 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Query current market API without deployment
+      - name: Verify current users API with BMW and Audi
         run: |
           python - <<'PY'
-          import json
-          import urllib.request
-          import urllib.error
-          import time
+          import json, time, urllib.request
           BASE = "https://autostorico-api-1.onrender.com"
-          def request(path, payload=None, timeout=150):
-              body = None if payload is None else json.dumps(payload).encode()
-              req = urllib.request.Request(BASE + path, data=body,
-                  headers={"Content-Type": "application/json", "User-Agent": "AutoStorico-Market-Diagnosis/1"})
-              try:
-                  with urllib.request.urlopen(req, timeout=timeout) as response:
-                      return {"status": response.status, "data": json.load(response)}
-              except urllib.error.HTTPError as exc:
-                  return {"status": exc.code}
-              except Exception as exc:
-                  return {"errorType": type(exc).__name__}
-          def providers(label):
-              result = request("/api/diagnostics/providers")
-              data = result.get("data", {})
-              selected = {}
-              for name, values in data.get("providers", {}).items():
-                  selected[name] = {key: values.get(key) for key in (
-                      "configured", "available", "usedToday", "dailyLimit",
-                      "lastStatus", "lastResults", "lastOperation", "elapsedMs", "lastSuccessAt", "lastMarketSearch")}
-              print(json.dumps({label: {"status": result.get("status"),
-                  "errorType": result.get("errorType"), "providers": selected}}, ensure_ascii=False))
+          def request(path, payload=None):
+              req = urllib.request.Request(BASE + path,
+                  data=None if payload is None else json.dumps(payload).encode(),
+                  headers={"Content-Type": "application/json", "User-Agent": "AutoStorico-Market-Verification/2"})
+              with urllib.request.urlopen(req, timeout=150) as response:
+                  return json.load(response)
           for attempt in range(24):
-              health = request("/health").get("data", {})
-              if health.get("marketSearchRevision") == "market_host_qualified_advert_routes_v19":
+              if request("/health").get("marketSearchRevision") == "market_primary_advert_content_v20":
                   break
               time.sleep(15)
           else:
-              raise SystemExit("v19 not deployed")
-          providers("before")
-          result = request("/api/vehicle-value", {
-              "vehicleType": "Auto", "brand": "BMW", "model": "Serie 1 120d",
-              "firstRegistrationDate": "2011", "km": 158000,
-              "fuelType": "Diesel", "engineDisplacement": 1995,
-              "gearbox": "Manuale", "condition": "Buono",
-              "previousOwners": "1 proprietario"})
-          estimate = result.get("data", {}).get("estimate", {})
-          keys = ("serverOnline", "marketBased", "matchedListings", "sourcesUsed",
-                  "sampleListings", "value", "minValue", "maxValue", "confidence", "method",
-                  "cached", "marketCacheHit")
-          print(json.dumps({"market": {"status": result.get("status"),
-              "errorType": result.get("errorType"),
-              "estimate": {key: estimate.get(key) for key in keys}}}, ensure_ascii=False))
-          providers("after")
-          if not result.get("status") == 200:
-              raise SystemExit("Market API request did not succeed")
-          if not estimate.get("marketBased") or not estimate.get("matchedListings"):
-              raise SystemExit("No real comparable advert reached the user estimate")
+              raise SystemExit("v20 not deployed")
+          failed = []
+          vehicles = [
+            {"vehicleType": "Auto", "brand": "BMW", "model": "Serie 1 120d",
+             "firstRegistrationDate": "2011", "km": 158000, "fuelType": "Diesel", "engineDisplacement": 1995},
+            {"vehicleType": "Auto", "brand": "Audi", "model": "A1",
+             "firstRegistrationDate": "2011", "km": 190000, "fuelType": "Diesel", "engineDisplacement": 1598}]
+          for vehicle in vehicles:
+              result = request("/api/vehicle-value", {**vehicle, "gearbox": "Manuale",
+                  "condition": "Buono", "previousOwners": "1 proprietario"})
+              estimate = result.get("estimate", {})
+              keys = ("serverOnline", "marketBased", "matchedListings", "sourcesUsed", "sampleListings",
+                      "minValue", "maxValue", "confidence", "method", "directListings", "extrapolatedListings")
+              print(json.dumps({"market": vehicle["brand"], "estimate": {key: estimate.get(key) for key in keys}}, ensure_ascii=False))
+              diagnostics = request("/api/diagnostics/providers")
+              selected = {name: {key: data.get(key) for key in ("lastStatus", "lastResults", "usedToday",
+                    "lastMarketSearch", "elapsedMs")} for name, data in diagnostics.get("providers", {}).items()}
+              print(json.dumps({"providersAfter": vehicle["brand"], "providers": selected}, ensure_ascii=False))
+              if not estimate.get("serverOnline") or not estimate.get("marketBased") or not estimate.get("matchedListings"):
+                  failed.append(vehicle["brand"])
+          if failed:
+              raise SystemExit("No comparable advert reached the estimate: " + ", ".join(failed))
           PY
-
-# Post-deployment verification for 6bb9ab4cb89bc1bfd72393b9bc28b284d2456abe
-
-# Final v15 production verification
-
-# Final v16 year-focused production verification
-
-# Verify direct advert retrieval, not just HTTP success
-
-# Host-qualified direct-advert route final verification
