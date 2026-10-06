@@ -1,10 +1,31 @@
 import unittest
+import urllib.parse
 from unittest.mock import patch
 
 import server
 
 
 class MarketAdvertRegressionTests(unittest.TestCase):
+    def test_price_queries_target_advert_paths_without_changing_plate_search(self):
+        captured = []
+        def fake_read(request, **kwargs):
+            captured.append(urllib.parse.parse_qs(urllib.parse.urlsplit(request.full_url).query))
+            return {"web": {"results": []}}
+        with patch.object(server, "brave_search_available", return_value=True), patch.object(
+            server, "read_provider_json", side_effect=fake_read):
+            for brand, model in (("BMW", "Serie 1 120d"), ("Audi", "A1"),
+                                 ("Mercedes", "Classe A"), ("Alfa Romeo", "Giulietta")):
+                server.brave_market_search(f"{brand} {model} 2011", {},
+                    {"providers": [], "marketAdvertSearch": True})
+            server.brave_market_search("AA123BB", {}, {"providers": []})
+        for params in captured[:4]:
+            rules = params["goggles"][0]
+            self.assertTrue(rules.startswith("$discard\n"))
+            self.assertIn("/annunci/$boost=3,site=autoscout24.it", rules)
+            self.assertIn("/auto/$boost=3,site=subito.it", rules)
+            self.assertEqual(params["extra_snippets"], ["true"])
+        self.assertNotIn("goggles", captured[4])
+
     def test_rejections_are_counted_without_exposing_query_strings(self):
         diagnostics = {}
         server.listing_from_search_item({

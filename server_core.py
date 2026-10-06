@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v17-rejection-diagnostics"
+MARKET_CACHE_VERSION = "market-v18-direct-advert-retrieval"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -965,6 +965,23 @@ MARKET_PORTAL_BATCHES = [
         ],
     ),
 ]
+
+# Search the advert routes, rather than returning category pages that the
+# comparable parser correctly rejects. These rules apply to all makes/models.
+MARKET_ADVERT_PATHS = {
+    "autouncle.it": "/it/d/",
+    "subito.it": "/auto/",
+    "auto.trovit.it": "/annunci/",
+    "autoscout24.it": "/annunci/",
+    "automobile.it": "/annunci/",
+    "quattroruote.it": "/auto-usate/annuncio/",
+}
+MARKET_ADVERT_GOGGLES = "\n".join(
+    ["$discard"] + [
+        f"{path}$boost=3,site={domain}"
+        for domain, path in MARKET_ADVERT_PATHS.items()
+    ]
+)
 
 DIRECT_MARKET_DOMAINS = [
     "autoscout24.it",
@@ -3061,15 +3078,20 @@ def google_market_search(query: str, payload: dict[str, Any]) -> list[dict[str, 
 def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     if not brave_search_available():
         return []
-    params = urllib.parse.urlencode(
-        {
-            "q": query,
-            "count": MARKET_BRAVE_RESULT_COUNT,
-            "country": MARKET_SEARCH_COUNTRY,
-            "search_lang": "it",
-            "safesearch": "moderate",
-        }
-    )
+    search_params = {
+        "q": query,
+        "count": MARKET_BRAVE_RESULT_COUNT,
+        "country": MARKET_SEARCH_COUNTRY,
+        "search_lang": "it",
+        "safesearch": "moderate",
+    }
+    if diagnostics is not None and diagnostics.get("marketAdvertSearch"):
+        # Generic discard has lower priority than explicit path boosts.
+        # Brave therefore ranks single adverts before applying the result cap.
+        search_params["goggles"] = MARKET_ADVERT_GOGGLES
+        search_params["extra_snippets"] = "true"
+        search_params["spellcheck"] = "false"
+    params = urllib.parse.urlencode(search_params)
     url = f"https://api.search.brave.com/res/v1/web/search?{params}"
     request = urllib.request.Request(
         url,
@@ -3125,11 +3147,12 @@ def tavily_market_search(
     if not tavily_market_search_available():
         return []
     api_key = normalize_provider_secret(TAVILY_API_KEY, "TAVILY_API_KEY")
-    # Tavily's native domain boost improves the ranking of Italian classified
-    # portals without excluding other sources. Advanced search returns the
-    # most relevant source chunks, which are much more likely to include the
-    # advertised price than the short basic-search summary.
-    market_domains = [domain] if domain else list(dict.fromkeys(site for _, site in MARKET_SITES))
+    # Restrict Tavily to single-advert URL prefixes. Broad domain queries
+    # returned only categories/catalogues in the live BMW regression.
+    # Advanced chunks help recover the advertised price, year and mileage.
+    market_domains = [domain] if domain else [
+        f"{site}{path}" for site, path in MARKET_ADVERT_PATHS.items()
+    ]
     request_body = json.dumps(
         {
             "query": query,
@@ -3208,6 +3231,7 @@ def fetch_market_sources(
         ),
     }
     diagnostics: dict[str, Any] = {
+        "marketAdvertSearch": True,
         "configuredProviders": configured_providers,
         "providers": [],
         "errors": [],
@@ -5144,7 +5168,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_rejection_diagnostics_v17",
+                    "marketSearchRevision": "market_direct_advert_retrieval_v18",
                     "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),

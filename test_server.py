@@ -632,7 +632,7 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(tavily.call_count, 1)
 
-    def test_tavily_market_search_boosts_domains_without_filtering_the_web(self):
+    def test_tavily_market_search_restricts_results_to_direct_advert_paths(self):
         class FakeResponse:
             headers = {"Content-Type": "application/json"}
 
@@ -665,8 +665,8 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(len(request_bodies), 1)
         request_payload = json.loads(request_bodies[0])
-        self.assertIn("autoscout24.it", request_payload["include_domains"])
-        self.assertIn("subito.it", request_payload["include_domains"])
+        self.assertIn("autoscout24.it/annunci/", request_payload["include_domains"])
+        self.assertIn("subito.it/auto/", request_payload["include_domains"])
         self.assertEqual(request_payload["search_depth"], "advanced")
         self.assertEqual(request_payload["chunks_per_source"], 3)
         self.assertTrue(request_payload["include_usage"])
