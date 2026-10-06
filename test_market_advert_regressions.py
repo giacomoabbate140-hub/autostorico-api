@@ -5,6 +5,16 @@ import server
 
 
 class MarketAdvertRegressionTests(unittest.TestCase):
+    def test_rejections_are_counted_without_exposing_query_strings(self):
+        diagnostics = {}
+        server.listing_from_search_item({
+            "title": "BMW Serie 1", "url": "https://www.autoscout24.it/lst/bmw/120?q=private",
+            "snippet": "2011 158000 km 9500 EUR"},
+            rejection_diagnostics=diagnostics)
+        self.assertEqual(diagnostics["rejections"], {"aggregate_or_editorial": 1})
+        self.assertEqual(diagnostics["rejectedSamples"], [{
+            "url": "https://www.autoscout24.it/lst/bmw/120", "reason": "aggregate_or_editorial"}])
+
     def test_live_bmw_editorial_result_never_becomes_a_comparable(self):
         item = {
             "title": "BMW Serie 1 Coupè M.Y. 2011 - News",
