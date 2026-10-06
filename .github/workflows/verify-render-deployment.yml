@@ -24,7 +24,7 @@ jobs:
             if grep -q '"developerAuthorization": "device_or_verified_github"' <<<"$response" \
               && grep -q '"developerAuthorizationRevision": "github_identity_v2"' <<<"$response" \
               && grep -q '"consultationDeleteRevision": "closed_owner_delete_v1"' <<<"$response" \
-              && grep -q '"marketSearchRevision": "market_rejection_diagnostics_v17"' <<<"$response"; then
+              && grep -q '"marketSearchRevision": "market_direct_advert_retrieval_v18"' <<<"$response"; then
               echo "Render is serving the current authorization, consultation and market-query revisions."
               exit 0
             fi
