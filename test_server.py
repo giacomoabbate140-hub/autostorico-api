@@ -378,7 +378,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertIn('"BMW 120D"', queries[0])
         self.assertIn('"BMW 120 D"', queries[0])
 
-    def test_old_vehicle_uses_one_exact_and_one_broad_portal_query(self):
+    def test_old_vehicle_keeps_year_in_broad_classifieds_query(self):
         payload = {
             "brand": "BMW",
             "model": "120D",
@@ -399,7 +399,7 @@ class MarketEvidenceTests(unittest.TestCase):
 
         self.assertEqual(len(brave_queries), len(server.MARKET_PORTAL_BATCHES))
         self.assertIn("2005", brave_queries[0])
-        self.assertNotIn("2005", brave_queries[1])
+        self.assertIn("2005", brave_queries[1])
         self.assertIn("BMW 120D", brave_queries[1])
         self.assertNotIn('"BMW 120D"', brave_queries[1])
 

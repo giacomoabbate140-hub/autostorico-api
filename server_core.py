@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v15-advert-only-equipment-safe"
+MARKET_CACHE_VERSION = "market-v16-year-focused-classifieds"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -3223,8 +3223,10 @@ def fetch_market_sources(
 
     for batch_name, portals in MARKET_PORTAL_BATCHES:
         site_filter = " OR ".join(f"site:{domain}" for _, domain in portals)
-        # For older/high-mileage cars, use one exact-year batch and one broad
-        # batch. This expands coverage without increasing provider calls.
+        # For older/high-mileage cars, keep the registration year in the
+        # classifieds query while broadening only quotes and engine details.
+        # Without the year, search providers rank current-model guides above
+        # the older adverts that the valuation actually needs.
         broaden_classifieds = bool(
             batch_name == "classifieds"
             and (
@@ -3232,7 +3234,7 @@ def fetch_market_sources(
                 or parse_float(payload.get("km")) >= 180000
             )
         )
-        query_year = "" if broaden_classifieds else str(year or "")
+        query_year = str(year or "")
         search_vehicle = (
             vehicle_label if broaden_classifieds else vehicle_expression or vehicle_label
         )
@@ -5122,7 +5124,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_advert_only_equipment_safe_v15",
+                    "marketSearchRevision": "market_year_focused_classifieds_v16",
                     "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),
