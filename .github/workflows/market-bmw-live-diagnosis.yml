@@ -41,11 +41,11 @@ jobs:
                   "errorType": result.get("errorType"), "providers": selected}}, ensure_ascii=False))
           for attempt in range(24):
               health = request("/health").get("data", {})
-              if health.get("marketSearchRevision") == "market_rejection_diagnostics_v17":
+              if health.get("marketSearchRevision") == "market_direct_advert_retrieval_v18":
                   break
               time.sleep(15)
           else:
-              raise SystemExit("v17 not deployed")
+              raise SystemExit("v18 not deployed")
           providers("before")
           result = request("/api/vehicle-value", {
               "vehicleType": "Auto", "brand": "BMW", "model": "Serie 1 120d",
@@ -63,6 +63,8 @@ jobs:
           providers("after")
           if not result.get("status") == 200:
               raise SystemExit("Market API request did not succeed")
+          if not estimate.get("marketBased") or not estimate.get("matchedListings"):
+              raise SystemExit("No real comparable advert reached the user estimate")
           PY
 
 # Post-deployment verification for 6bb9ab4cb89bc1bfd72393b9bc28b284d2456abe
@@ -70,3 +72,5 @@ jobs:
 # Final v15 production verification
 
 # Final v16 year-focused production verification
+
+# Verify direct advert retrieval, not just HTTP success
