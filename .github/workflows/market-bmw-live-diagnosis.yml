@@ -1,0 +1,58 @@
+name: BMW market live diagnosis
+on:
+  push:
+    branches: [codex/market-bmw-diagnosis-20261006]
+    paths: [.github/workflows/market-bmw-live-diagnosis.yml]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Query current market API without deployment
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+          import urllib.error
+          BASE = "https://autostorico-api-1.onrender.com"
+          def request(path, payload=None, timeout=150):
+              body = None if payload is None else json.dumps(payload).encode()
+              req = urllib.request.Request(BASE + path, data=body,
+                  headers={"Content-Type": "application/json", "User-Agent": "AutoStorico-Market-Diagnosis/1"})
+              try:
+                  with urllib.request.urlopen(req, timeout=timeout) as response:
+                      return {"status": response.status, "data": json.load(response)}
+              except urllib.error.HTTPError as exc:
+                  return {"status": exc.code}
+              except Exception as exc:
+                  return {"errorType": type(exc).__name__}
+          def providers(label):
+              result = request("/api/diagnostics/providers")
+              data = result.get("data", {})
+              selected = {}
+              for name, values in data.get("providers", {}).items():
+                  selected[name] = {key: values.get(key) for key in (
+                      "configured", "available", "usedToday", "dailyLimit",
+                      "lastStatus", "lastResults", "lastOperation", "elapsedMs", "lastSuccessAt")}
+              print(json.dumps({label: {"status": result.get("status"),
+                  "errorType": result.get("errorType"), "providers": selected}}, ensure_ascii=False))
+          providers("before")
+          result = request("/api/vehicle-value", {
+              "vehicleType": "Auto", "brand": "BMW", "model": "Serie 1 120d",
+              "firstRegistrationDate": "2011", "km": 158000,
+              "fuelType": "Diesel", "engineDisplacement": 1995,
+              "gearbox": "Manuale", "condition": "Buono",
+              "previousOwners": "1 proprietario"})
+          estimate = result.get("data", {}).get("estimate", {})
+          keys = ("serverOnline", "marketBased", "matchedListings", "sourcesUsed",
+                  "sampleListings", "value", "minValue", "maxValue", "confidence", "method",
+                  "cached", "marketCacheHit")
+          print(json.dumps({"market": {"status": result.get("status"),
+              "errorType": result.get("errorType"),
+              "estimate": {key: estimate.get(key) for key in keys}}}, ensure_ascii=False))
+          providers("after")
+          if not result.get("status") == 200:
+              raise SystemExit("Market API request did not succeed")
+          PY
