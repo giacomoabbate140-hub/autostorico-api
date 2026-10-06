@@ -56,3 +56,5 @@ jobs:
           if not result.get("status") == 200:
               raise SystemExit("Market API request did not succeed")
           PY
+
+# Post-deployment verification for 6bb9ab4cb89bc1bfd72393b9bc28b284d2456abe
