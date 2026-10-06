@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v13-expanded-vehicle-coverage"
+MARKET_CACHE_VERSION = "market-v14-advert-only-equipment-safe"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -2479,6 +2479,10 @@ def is_aggregate_market_url(link: str) -> bool:
     host = parsed.netloc
     path = parsed.path.rstrip("/")
     query = urllib.parse.parse_qs(parsed.query)
+    # Editorial pages can mention a model year and a new-car list price.
+    # They must never become used-car comparables, even on a market domain.
+    if any(segment in path.split("/") for segment in ("news", "prove", "listino", "guide")):
+        return True
     if any(key in query for key in ("q", "query", "search", "keyword")):
         return True
     direct_path_rules = {
@@ -2508,7 +2512,7 @@ def is_aggregate_market_url(link: str) -> bool:
     return any(marker in f"{path}/" for marker in aggregate_markers)
 
 
-def is_non_vehicle_listing_text(text: str) -> bool:
+def is_non_vehicle_listing_text(text: str, *, check_equipment: bool = True) -> bool:
     """Reject parts, rentals and finance offers before extracting a price."""
     cleaned = f" {normalize_market_text(text)} "
     excluded_phrases = (
@@ -2520,14 +2524,18 @@ def is_non_vehicle_listing_text(text: str) -> bool:
         " pezzi di ricambio ",
         " motore usato ",
         " cambio usato ",
-        " cerchi in lega ",
-        " pneumatici ",
         " noleggio ",
         " leasing ",
         " anticipo ",
         " rata mensile ",
     )
-    return any(phrase in cleaned for phrase in excluded_phrases)
+    if any(phrase in cleaned for phrase in excluded_phrases):
+        return True
+    # In an advert title these identify parts; in a car's description they
+    # commonly describe its equipment and must not discard the whole car.
+    return check_equipment and any(
+        phrase in cleaned for phrase in (" cerchi in lega ", " pneumatici ")
+    )
 
 
 def source_weight(link: str) -> float:
@@ -2918,7 +2926,8 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
     if (
         is_aggregate_market_url(link)
         or is_aggregate_market_listing_text(title)
-        or is_non_vehicle_listing_text(f"{title} {snippet}")
+        or is_non_vehicle_listing_text(title)
+        or is_non_vehicle_listing_text(f"{title} {snippet}", check_equipment=False)
     ):
         return None
     if is_unavailable_market_listing_text(f"{title} {snippet}"):
