@@ -7,6 +7,7 @@ on:
     paths:
       - server_core.py
       - test_server.py
+      - test_market_advert_regressions.py
       - .github/workflows/verify-render-deployment.yml
   workflow_dispatch:
 
@@ -23,8 +24,8 @@ jobs:
             if grep -q '"developerAuthorization": "device_or_verified_github"' <<<"$response" \
               && grep -q '"developerAuthorizationRevision": "github_identity_v2"' <<<"$response" \
               && grep -q '"consultationDeleteRevision": "closed_owner_delete_v1"' <<<"$response" \
-              && grep -q '"marketSearchRevision": "market_batched_diverse_fallback_v10"' <<<"$response"; then
-              echo "Render is serving the current authorization, consultation and provider revisions."
+              && grep -q '"marketSearchRevision": "market_advert_only_equipment_safe_v15"' <<<"$response"; then
+              echo "Render is serving the current authorization, consultation and market-filter revisions."
               exit 0
             fi
             echo "Attempt $attempt: Render has not activated the new revision yet."
