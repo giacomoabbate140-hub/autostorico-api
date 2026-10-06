@@ -1,0 +1,49 @@
+name: Market metadata hardening audit
+on:
+  push:
+    branches: [codex/market-metadata-audit-20261006]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: a13f4980d50cdf6e6e21fca44bc6339a94e3a387
+      - name: Read metadata from public direct adverts
+        run: |
+          python - <<'PY'
+          import json, re
+          import server
+          urls = [
+            "https://www.autouncle.it/it/d/103575858-usata-2011-bmw-120-m-sport-177-cv",
+            "https://www.autouncle.it/it/d/102336189-usata-2011-bmw-120-184-cv",
+            "https://www.subito.it/auto/bmw-120d-automatica-8marce-trento-661489086.htm"]
+          for url in urls:
+              try:
+                  page = server.fetch_listing_page_content(url)
+                  old_fetch = server.fetch_listing_page_content
+                  server.fetch_listing_page_content = lambda link: page
+                  metadata = server.extract_listing_page_metadata(url, target_year=2011, target_km=158000)
+                  server.fetch_listing_page_content = old_fetch
+                  scripts = re.findall(r'<script[^>]*type=["\x27]application/ld\+json["\x27][^>]*>(.*?)</script>', page, re.I | re.S)
+                  structured = []
+                  for script in scripts:
+                      try:
+                          data = json.loads(script)
+                          rows = data if isinstance(data, list) else [data]
+                          for row in rows:
+                              if isinstance(row, dict):
+                                  structured.append({k: row.get(k) for k in ("@type", "name", "url", "vehicleModelDate", "mileageFromOdometer", "offers", "additionalProperty") if k in row})
+                      except ValueError:
+                          pass
+                  plain = re.sub("<[^>]+>", " ", page)
+                  plain = re.sub(r"\s+", " ", plain)
+                  km_fragments = re.findall(r".{0,30}(?:Km|Chilometraggio).{0,70}", plain, re.I)[:4]
+                  print(json.dumps({"url": url, "bytes": len(page), "metadata": metadata,
+                                    "structured": structured[:3], "kmFragments": km_fragments}, ensure_ascii=False))
+              except Exception as exc:
+                  print(json.dumps({"url": url, "errorType": type(exc).__name__}))
+          PY
