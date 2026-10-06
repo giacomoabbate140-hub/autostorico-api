@@ -6,6 +6,105 @@ import server
 
 
 class MarketAdvertRegressionTests(unittest.TestCase):
+    def test_shared_family_does_not_admit_another_explicit_variant(self):
+        for brand, target, title in (
+            ("BMW", "Serie 1 120d", "BMW Serie 1 118d"),
+            ("Mercedes", "Classe A A180", "Mercedes Classe A A200"),
+            ("Audi", "A1", "Audi A3"),
+        ):
+            with self.subTest(brand=brand):
+                item = {"title": title, "url": "https://www.autoscout24.it/annunci/car",
+                        "snippet": f"{brand} {target} 2011 158000 km 9500 EUR"}
+                self.assertIsNone(server.listing_from_search_item(item, payload={
+                    "brand": brand, "model": target, "year": 2011, "km": 158000}))
+        self.assertFalse(server.market_model_variant_conflicts(
+            "BMW 120 184 CV Diesel", {"model": "Serie 1 120d"}))
+        self.assertFalse(server.market_model_variant_conflicts(
+            "BMW Serie 1 120 d", {"model": "Serie 1 120d"}))
+
+    def test_aliases_keep_generations_and_trim_only_names_specific(self):
+        for brand, model, wanted, forbidden in (
+            ("BMW", "Serie 1 120d", "BMW 120d", "BMW 1"),
+            ("Mercedes", "Classe A A180", "Mercedes A180", "Mercedes A"),
+            ("Audi", "Audi A1", "Audi A1", "Audi Audi A1"),
+            ("Volkswagen", "Golf 7", "Volkswagen Golf 7", '"Volkswagen Golf"'),
+            ("BMW", "Serie 1 M Sport", "BMW Serie 1 M Sport", '"BMW M Sport"'),
+            ("Alfa Romeo", "Giulietta", "Alfa Romeo Giulietta", "Alfa Giulietta"),
+        ):
+            with self.subTest(model=model):
+                query = server.market_vehicle_search_expression(brand, model)
+                self.assertIn(wanted, query)
+                self.assertNotIn('"' + forbidden + '"' if '"' not in forbidden else forbidden, query)
+
+    def test_market_url_validates_hostname_not_brand_in_path_or_query(self):
+        for url in ("https://autoscout24.it.evil.test/annunci/car",
+                    "https://evil.test/?site=subito.it",
+                    "https://subito.it@evil.test/auto/car.htm",
+                    "ftp://subito.it/auto/car.htm",
+                    "https://subito.it:9000/auto/car.htm",
+                    "https://[invalid/auto/subito.it"):
+            with self.subTest(url=url):
+                self.assertFalse(server.is_market_url(url))
+        self.assertTrue(server.is_market_url("https://www.autoscout24.it/annunci/car"))
+        self.assertTrue(server.is_market_url("https://auto.trovit.it/annunci/123456-car"))
+        url = "https://www.autouncle.it/it/d/123456-car?source=subito.it"
+        self.assertEqual(server.market_source_name(url), "AutoUncle")
+        self.assertEqual(server.source_weight(url), 0.65)
+
+    def test_tracking_links_do_not_count_as_multiple_comparables(self):
+        self.assertNotEqual(
+            server.market_listing_dedupe_key("https://www.autohero.com/it/car?id=1"),
+            server.market_listing_dedupe_key("https://www.autohero.com/it/car?id=2"))
+        def advert(url):
+            return {"url": url, "price": 9500, "year": 2011,
+                    "km": 158000, "matchScore": 1, "source": "Subito"}
+        first = "https://www.subito.it/auto/bmw-120d-661489086.htm?utm_source=brave"
+        second = "https://subito.it/auto/bmw-120d-661489086.htm?utm_source=tavily#details"
+        with patch.object(server, "brave_search_available", return_value=True), patch.object(
+            server, "tavily_market_search_available", return_value=True), patch.object(
+            server, "TAVILY_ENABLED", True), patch.object(server, "TAVILY_API_KEY", "test"), patch.object(
+            server, "brave_market_search", side_effect=[[advert(first)], []]), patch.object(
+            server, "tavily_market_search", return_value=[advert(second)]):
+            listings, _ = server.fetch_market_sources({"brand": "BMW", "model": "120d"}, 2011)
+        self.assertEqual(len(listings), 1)
+
+    def test_raw_primary_content_recovers_mileage_without_an_extra_page_request(self):
+        payload = {"brand": "BMW", "model": "Serie 1 120d", "year": 2011, "km": 158000}
+        raw = ("Navigation\n# Usata 2011 BMW 120d\n"
+               "* Anno 2011\n* Km: **158.000**\nDiesel\n9500 EUR\n"
+               "## Auto simili\nBMW 120d 2025 30000 km 29000 EUR")
+        item = {"title": "BMW 120d usata", "url": "https://www.autouncle.it/it/d/123456-car",
+                "content": "BMW 120d 2011 9500 EUR", "raw_content": raw}
+        with patch.object(server, "tavily_market_search_available", return_value=True), patch.object(
+            server, "read_provider_json", return_value={"results": [item]}), patch.object(
+            server, "extract_listing_page_metadata") as page:
+            listings = server.tavily_market_search("BMW 120d 2011", payload)
+        page.assert_not_called()
+        self.assertEqual(len(listings), 1)
+        self.assertEqual(listings[0]["km"], 158000)
+        self.assertEqual(listings[0]["year"], 2011)
+        self.assertEqual(listings[0]["metadataSource"], "provider_page")
+
+    def test_raw_primary_mileage_cannot_be_replaced_by_a_closer_recommendation(self):
+        item = {"title": "BMW 120d usata", "url": "https://www.autouncle.it/it/d/123456-car",
+                "content": "BMW 120d 2011 158000 km 5500 EUR",
+                "raw_content": "# BMW 120d\nAnno 2011\nKm 287.000\n5500 EUR\n"
+                               "## Offerte selezionate\nBMW 120d 2011 158000 km 9500 EUR"}
+        with patch.object(server, "tavily_market_search_available", return_value=True), patch.object(
+            server, "read_provider_json", return_value={"results": [item]}):
+            listings = server.tavily_market_search("BMW 120d 2011", {
+                "brand": "BMW", "model": "120d", "year": 2011, "km": 158000})
+        self.assertEqual(listings, [])
+
+    def test_recovered_page_mileage_overrides_stale_search_mileage(self):
+        item = {"title": "BMW 120d", "url": "https://www.autouncle.it/it/d/123456-car",
+                "snippet": "2011 Diesel 158000 km"}
+        with patch.object(server, "extract_listing_page_metadata", return_value={
+            "price": 5500, "year": 2011, "km": 287000}):
+            listing = server.listing_from_search_item(item, payload={
+                "brand": "BMW", "model": "120d", "year": 2011, "km": 158000})
+        self.assertIsNone(listing)
+
     def test_price_queries_target_advert_paths_without_changing_plate_search(self):
         captured = []
         def fake_read(request, **kwargs):

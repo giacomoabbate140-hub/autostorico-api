@@ -671,7 +671,7 @@ class MarketEvidenceTests(unittest.TestCase):
         self.assertEqual(request_payload["chunks_per_source"], 3)
         self.assertTrue(request_payload["include_usage"])
         self.assertFalse(request_payload["include_answer"])
-        self.assertFalse(request_payload["include_raw_content"])
+        self.assertTrue(request_payload["include_raw_content"])
         self.assertFalse(request_payload["include_images"])
         self.assertEqual(request_payload["language"], "it")
 
