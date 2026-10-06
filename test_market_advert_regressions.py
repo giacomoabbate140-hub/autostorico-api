@@ -19,6 +19,20 @@ class MarketAdvertRegressionTests(unittest.TestCase):
         self.assertIsNone(result)
         fetch.assert_not_called()
 
+    def test_vehicle_information_page_never_becomes_a_comparable(self):
+        item = {
+            "title": "Quali sono i motori per una BMW Serie 1?",
+            "url": "https://www.autohero.com/it/auto/info/bmw/serie-1/motore",
+            "snippet": "BMW Serie 1 120d 2011",
+        }
+        with patch.object(server, "extract_listing_page_metadata",
+                          return_value={"price": 2000, "year": 2011, "km": 123}) as fetch:
+            result = server.listing_from_search_item(item, payload={
+                "brand": "BMW", "model": "Serie 1 120d", "year": 2011,
+                "km": 158000, "fuelType": "Diesel"})
+        self.assertIsNone(result)
+        fetch.assert_not_called()
+
     def test_car_equipment_in_description_does_not_remove_real_adverts(self):
         for brand, model in (("BMW", "120d"), ("Audi", "A1"),
                              ("Mercedes", "Classe A"), ("Alfa Romeo", "Giulietta")):
