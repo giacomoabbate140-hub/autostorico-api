@@ -71,7 +71,7 @@ MARKET_MAX_TAVILY_QUERIES = max(1, int(os.environ.get("AUTOSTORICO_MARKET_MAX_TA
 MARKET_FALLBACK_MINIMUM_LISTINGS = 3
 # Increment when market-provider fallback semantics change so old cached
 # estimates cannot mask the corrected provider chain.
-MARKET_CACHE_VERSION = "market-v16-year-focused-classifieds"
+MARKET_CACHE_VERSION = "market-v17-rejection-diagnostics"
 # Market comparisons are nationwide.  Keep the locale Italian without
 # sending a city/region, otherwise scarce local inventory skews the sample.
 MARKET_SEARCH_COUNTRY = "it"
@@ -2916,40 +2916,52 @@ def is_aggregate_market_listing_text(text: str) -> bool:
     return any(marker in cleaned for marker in markers)
 
 
-def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte web", payload: dict[str, Any] | None = None) -> dict[str, Any] | None:
+def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte web", payload: dict[str, Any] | None = None, rejection_diagnostics: dict[str, Any] | None = None) -> dict[str, Any] | None:
     title = str(item.get("title") or "")
     snippet = str(item.get("snippet") or item.get("description") or "")
     link = str(item.get("link") or item.get("url") or item.get("product_link") or "")
+    def reject(reason: str) -> None:
+        if rejection_diagnostics is not None:
+            counts = rejection_diagnostics.setdefault("rejections", {})
+            counts[reason] = counts.get(reason, 0) + 1
+            samples = rejection_diagnostics.setdefault("rejectedSamples", [])
+            if len(samples) < 20:
+                parsed = urllib.parse.urlsplit(link)
+                # Public advert paths only: never expose query strings, search
+                # payloads, provider credentials or the caller's vehicle data.
+                safe_url = urllib.parse.urlunsplit((parsed.scheme, parsed.hostname or "", parsed.path, "", ""))
+                samples.append({"url": safe_url[:500], "reason": reason})
+        return None
+
     item_text = json.dumps(item, ensure_ascii=False)
     combined_text = f"{title} {snippet} {link} {item_text}"
     if not link:
-        return None
+        return reject("missing_url")
     if not is_market_url(link):
-        return None
-    if (
-        is_aggregate_market_url(link)
-        or is_aggregate_market_listing_text(title)
-        or is_non_vehicle_listing_text(title)
-        or is_non_vehicle_listing_text(f"{title} {snippet}", check_equipment=False)
-    ):
-        return None
+        return reject("unsupported_domain")
+    if is_aggregate_market_url(link) or is_aggregate_market_listing_text(title):
+        return reject("aggregate_or_editorial")
+    if is_non_vehicle_listing_text(title):
+        return reject("non_vehicle_title")
+    if is_non_vehicle_listing_text(f"{title} {snippet}", check_equipment=False):
+        return reject("non_vehicle_description")
     if is_unavailable_market_listing_text(f"{title} {snippet}"):
-        return None
+        return reject("unavailable")
     hostname = urllib.parse.urlparse(link).hostname or ""
     if hostname == "trovit.it" or hostname.endswith(".trovit.it"):
         # Trovit candidates must carry their own year and mileage, never a
         # price paired with data from another car on a category page.
         if not extract_listing_years(combined_text) or not extract_listing_kms(combined_text):
-            return None
+            return reject("missing_aggregator_metadata")
     match_score = (
         market_listing_match_score(combined_text, payload)
         if payload is not None
         else 1.0
     )
     if match_score <= 0:
-        return None
+        return reject("incompatible_vehicle_year_or_km")
     if payload is not None and not is_compatible_fuel_text(combined_text, payload):
-        return None
+        return reject("incompatible_fuel")
 
     target_year = (
         parse_year(payload.get("firstRegistrationDate") or payload.get("year"))
@@ -2997,8 +3009,12 @@ def listing_from_search_item(item: dict[str, Any], fallback_source: str = "Fonte
             )
             match_score = market_listing_match_score(enriched_text, payload)
 
-    if price is None or not 300 <= price <= 250000 or match_score <= 0:
-        return None
+    if price is None:
+        return reject("missing_price")
+    if not 300 <= price <= 250000:
+        return reject("invalid_price")
+    if match_score <= 0:
+        return reject("incompatible_enriched_metadata")
     return {
         "source": market_source_name(link, str(item.get("source") or fallback_source)),
         "title": title[:140],
@@ -3073,6 +3089,7 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
     if data.get("type") == "ErrorResponse":
         raise RuntimeError(str(data.get("message") or "Brave Search error"))
     results = []
+    rejection_diagnostics: dict[str, Any] = {}
     search_items = list(data.get("web", {}).get("results", []) or [])
     for item in search_items:
         item["snippet"] = " ".join(
@@ -3081,7 +3098,7 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
                 " ".join(str(value) for value in item.get("extra_snippets") or []),
             ]
         )
-        listing = listing_from_search_item(item, payload=payload)
+        listing = listing_from_search_item(item, payload=payload, rejection_diagnostics=rejection_diagnostics)
         if listing is not None:
             results.append(listing)
     if diagnostics is not None:
@@ -3091,6 +3108,7 @@ def brave_market_search(query: str, payload: dict[str, Any], diagnostics: dict[s
                 "query": query,
                 "items": len(search_items),
                 "priced": len(results),
+                **rejection_diagnostics,
                 "sampleUrls": [str(item.get("url") or "") for item in search_items[:3]],
             }
         )
@@ -3151,6 +3169,7 @@ def tavily_market_search(
         raise RuntimeError(str(data.get("error")))
     search_items = list(data.get("results") or [])
     results = []
+    rejection_diagnostics: dict[str, Any] = {}
     for item in search_items:
         normalized = {
             "title": item.get("title"),
@@ -3158,7 +3177,7 @@ def tavily_market_search(
             "snippet": item.get("content"),
             "source": "Tavily",
         }
-        listing = listing_from_search_item(normalized, fallback_source="Tavily", payload=payload)
+        listing = listing_from_search_item(normalized, fallback_source="Tavily", payload=payload, rejection_diagnostics=rejection_diagnostics)
         if listing is not None:
             results.append(listing)
     if diagnostics is not None:
@@ -3168,6 +3187,7 @@ def tavily_market_search(
                 "query": query,
                 "items": len(search_items),
                 "priced": len(results),
+                **rejection_diagnostics,
                 "sampleUrls": [str(item.get("url") or "") for item in search_items[:3]],
                 "searchDepth": "advanced",
                 "credits": int((data.get("usage") or {}).get("credits") or 0),
@@ -5124,7 +5144,7 @@ class AutoStoricoApi(BaseHTTPRequestHandler):
                     "consultationDeleteRevision": "closed_owner_delete_v1",
                     "forumDeleteRevision": "resolved_owner_delete_v1",
                     "developerConsultationRevision": "direct_paid_record_v1",
-                    "marketSearchRevision": "market_year_focused_classifieds_v16",
+                    "marketSearchRevision": "market_rejection_diagnostics_v17",
                     "deployedCommit": os.environ.get("RENDER_GIT_COMMIT", ""),
                     "supportedInputs": ["fuelType", "engineDisplacement"],
                     "marketSearchConfigured": any(configured_providers.values()),

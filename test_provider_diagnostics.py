@@ -59,12 +59,15 @@ class ProviderDiagnosticsTests(unittest.TestCase):
         )
 
 
-    def test_market_diagnostics_report_aggregate_usable_results(self):
+    def test_market_diagnostics_separate_raw_results_and_do_not_mask_errors(self):
         diagnostics = {
             "usableListings": 2,
             "providers": [
-                {"provider": "brave", "priced": 2},
-                {"provider": "brave", "priced": 0},
+                {"provider": "brave", "items": 5, "priced": 2,
+                 "rejections": {"aggregate_or_editorial": 3}},
+                {"provider": "brave", "items": 4, "priced": 0,
+                 "rejections": {"missing_price": 4}},
+                {"provider": "tavily", "items": 3, "priced": 1},
             ],
         }
         with patch.object(server, "BRAVE_SEARCH_API_KEY", "test-key"), patch.object(
@@ -74,6 +77,9 @@ class ProviderDiagnosticsTests(unittest.TestCase):
             "_ORIGINAL_FETCH_MARKET_SOURCES",
             return_value=([{"url": "https://www.autouncle.it/1"}], diagnostics),
         ):
+            patched_server._record_provider_result(
+                "brave", status=429, result_count=0,
+                operation="market_or_plate_search", elapsed_ms=1)
             patched_server._diagnostic_fetch_market_sources(
                 {"brand": "Audi", "model": "A1"},
                 2011,
@@ -81,9 +87,13 @@ class ProviderDiagnosticsTests(unittest.TestCase):
             payload = patched_server.provider_diagnostics_payload()
 
         brave = payload["providers"]["brave"]
-        self.assertEqual(brave["lastResults"], 2)
-        self.assertEqual(brave["lastOperation"], "market_search_aggregate")
-        self.assertEqual(brave["message"], "Brave: OK — 2 risultati trovati")
+        self.assertEqual(brave["lastStatus"], 429)
+        self.assertEqual(brave["lastResults"], 0)
+        self.assertEqual(brave["lastMarketSearch"]["received"], 9)
+        self.assertEqual(brave["lastMarketSearch"]["priced"], 2)
+        self.assertEqual(brave["lastMarketSearch"]["rejections"],
+                         {"aggregate_or_editorial": 3, "missing_price": 4})
+        self.assertEqual(payload["providers"]["tavily"]["lastMarketSearch"]["received"], 3)
 
     def test_diagnostics_endpoint_is_passive_and_does_not_call_search(self):
         with patch.object(server, "TAVILY_ENABLED", True), patch.object(

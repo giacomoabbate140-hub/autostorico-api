@@ -245,18 +245,29 @@ def _diagnostic_fetch_market_sources(
     payload: dict[str, Any],
     year: int | None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """Replace per-batch Brave status with the aggregate valuation result."""
-    started = time.perf_counter()
+    """Keep raw provider results distinct from accepted market comparables."""
     listings, diagnostics = _ORIGINAL_FETCH_MARKET_SOURCES(payload, year)
-    elapsed = int((time.perf_counter() - started) * 1000)
-    usable_count = int(diagnostics.get("usableListings") or 0)
-    _record_provider_result(
-        "brave",
-        status=200,
-        result_count=usable_count,
-        operation="market_search_aggregate",
-        elapsed_ms=elapsed,
-    )
+    with _PROVIDER_DIAGNOSTICS_LOCK:
+        for provider in ("brave", "tavily"):
+            entries = [entry for entry in diagnostics.get("providers", [])
+                       if entry.get("provider") == provider]
+            if not entries:
+                continue
+            rejection_counts: dict[str, int] = {}
+            samples = []
+            for entry in entries:
+                for reason, count in entry.get("rejections", {}).items():
+                    rejection_counts[reason] = rejection_counts.get(reason, 0) + int(count)
+                samples.extend(entry.get("rejectedSamples", []))
+            _PROVIDER_DIAGNOSTICS[provider]["lastMarketSearch"] = {
+                "received": sum(int(entry.get("items") or 0) for entry in entries),
+                "priced": sum(int(entry.get("priced") or 0) for entry in entries),
+                "rejections": rejection_counts,
+                "rejectedSamples": samples[:30],
+                "recordedAt": _utc_now_iso(),
+            }
+    # Do not turn a failed/skipped Brave request into HTTP 200, or attribute
+    # Tavily's accepted listings to Brave's response.
     return listings, diagnostics
 
 
@@ -490,3 +501,4 @@ server.plate_info_lookup = enhanced_plate_info_lookup
 
 if __name__ == "__main__":
     server.main()
+
