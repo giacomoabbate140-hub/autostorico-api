@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-07T13:22:19.507829+00:00",
-  "cursor": 28,
+  "updatedAt": "2026-10-07T23:04:46.897253+00:00",
+  "cursor": 2,
   "candidates": [
     {
       "status": "approved",
@@ -3007,6 +3007,20 @@
       "title": "Disperazione totale!! Aiutoooooo [Archivio] - Forum dell'Audi RS Club",
       "snippet": "credo anche io che la garanzia sui ricambi sia di un anno. quando li hai cambiati hai pagato?li hai cambaiti perchè difettosi o per un richiamo? Dunque Luca, quando sono stati sostituiti l&#x27;auto era ancora del precedente proprietario, infatti la fattura è intestata a lui.. Forum dell'Audi RS Club > Aspetti Tecnici > Tagliandi - Manutenzione - Riparazioni - Sostituzioni - Difetti - Guasti - Anomalie - Strani sintomi > Disperazione totale!! Aiutoooooo ... Ragazzi, salve a tutti.. Sono disperato, qualcuno mi aiuti!! Ora spiego che mi è successo: ieri appena entrato nel raccordo autostradale di Bereguarda a 70 km orari in piena accelerazione il motore della mia AUDI A3 2.0 TDI 170 CV del 2007 ha iniziato a strappare in modo violento ed andare a colpi. credo anche io che la garanzia sui ricambi sia di un anno. quando li hai cambiati hai pagato?li hai cambaiti perchè difettosi o per un richiamo? Dunque Luca, quando sono stati sostituiti l'auto era ancora del precedente proprietario, infatti la fattura è intestata a lui.. ---------- Post added at 12.35.46 ---------- Previous post was at 12.32.15 ---------- ecco il richiamo:In data 01/09/2012 è stata fatta un'azione di richiamo per i motori bmn (170 cv) prodotti dal 2006 al 2008.Sono stati segnalati ai concessionari i telai delle auto che potrebbero avere problemi agli iniettori.I concessionari stessi dovrebbero provvedere a contattare i proprietari delle auto in questione e provvedere alla sostituzione di tutti e 4 gli iniettori.L'azione è la numero 23k1. Non è roba di testata come ha detto Tony. Non ci perdere la testa. Riportala in audi e fatti controllare di nuovo gli iniettori. Secondo me non ti hanno cambiato un bel niente. Te lo dico perché ho visto dal mio meccanico un a3 del 2008 che gli era saltato un iniettore e andava a 3.",
       "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-50577.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-07T23:04:46.897253+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "alfa romeo giulia - Club Alfa Forum",
+      "snippet": "Apro questa discussione per richiedervi consigli e pareri. Ho acquistato una AR Giulia nuova consegnata il 06/2017 con garanzia di 2 anni. Dopo il primo anno, inizio a riscontrare i primi problemi al navigatore. Crepe ovunque. Contatto il servizio clienti e mi viene... ... alfa giulia navigatore crepato alfa problemi alfa romeo difetti alfa romeo giulia alfa romeo navigatore alfa romeo servizi clienti Apro questa discussione per richiedervi consigli e pareri. Ho acquistato una AR Giulia nuova consegnata il 06/2017 con garanzia di 2 anni. Dopo il primo anno, inizio a riscontrare i primi problemi al navigatore. Crepe ovunque. Contatto il servizio clienti e mi viene... ... alfa giulia navigatore crepato alfa problemi alfa romeo difetti alfa romeo giulia alfa romeo navigatore alfa romeo servizi clienti Opinioni, recensioni, pregi e difetti della nuova Alfa Romeo Giulia 2016 Questa è una discussione ufficiale.",
+      "sourceUrl": "https://forum.clubalfa.it/tags/alfa-romeo-giulia/"
     }
   ],
   "latestUpdate": {
