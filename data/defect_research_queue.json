@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-08T23:20:32.599934+00:00",
-  "cursor": 11,
+  "updatedAt": "2026-10-09T06:07:56.630444+00:00",
+  "cursor": 14,
   "candidates": [
     {
       "status": "approved",
@@ -3021,6 +3021,20 @@
       "title": "alfa romeo giulia - Club Alfa Forum",
       "snippet": "Apro questa discussione per richiedervi consigli e pareri. Ho acquistato una AR Giulia nuova consegnata il 06/2017 con garanzia di 2 anni. Dopo il primo anno, inizio a riscontrare i primi problemi al navigatore. Crepe ovunque. Contatto il servizio clienti e mi viene... ... alfa giulia navigatore crepato alfa problemi alfa romeo difetti alfa romeo giulia alfa romeo navigatore alfa romeo servizi clienti Apro questa discussione per richiedervi consigli e pareri. Ho acquistato una AR Giulia nuova consegnata il 06/2017 con garanzia di 2 anni. Dopo il primo anno, inizio a riscontrare i primi problemi al navigatore. Crepe ovunque. Contatto il servizio clienti e mi viene... ... alfa giulia navigatore crepato alfa problemi alfa romeo difetti alfa romeo giulia alfa romeo navigatore alfa romeo servizi clienti Opinioni, recensioni, pregi e difetti della nuova Alfa Romeo Giulia 2016 Questa è una discussione ufficiale.",
       "sourceUrl": "https://forum.clubalfa.it/tags/alfa-romeo-giulia/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-09T06:07:56.630444+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "manutenzione - Campagne di Richiamo o Assistenza | Pagina 4 | Forum Hyundai Club Italia",
+      "snippet": "Tucson PHEV Exellence + Deluxe P. + Lounge P, Dark Knight ... per caso la raccomandata arriva da Torino? Ieri mi sono ritrovato un avviso di giacenza di una raccomandata in arrivo appunto da Torino... Clicca per espandere... per curiosità, prova a vedere nel link indicato qualche messaggio più sopra se inserendo il tuo VIN ti restituisce effettivamente che devi fare il richiamo Tucson PHEV Exellence + Deluxe P. + Lounge P, Dark Knight ... per caso la raccomandata arriva da Torino? Ieri mi sono ritrovato un avviso di giacenza di una raccomandata in arrivo appunto da Torino... Clicca per espandere... per curiosità, prova a vedere nel link indicato qualche messaggio più sopra se inserendo il tuo VIN ti restituisce effettivamente che devi fare il richiamo Nelle vostre verifiche c'è un richiamo inerente il problema del continuo Reset delle \"info dal rifornimento\" dopo una sosta di qualche giorno, e l'uso del portello posteriore in questa sosta (evidentemente eneegivoro) . Problema a detta di qualcuno irrisolvibile. Avete aggiornamenti? ... Nella mia verifica è uscito questo risultato (foto). Che significa? Di che si tratta? ... Tucson 1.6HEV Full Hybrid 2WD Exellence + Deluxe P. Buongiorno, ricevuto oggi zona Grosseto, lettera richiamo Tucson mild hibrid. Tramite raccomandata. @hazet36 a sinistra dei tuoi messaggi oggi appare questo e questo crea una certa confusione in chi legge il Forum quando tu dici \"stessa auto\" facendo riferimento a una Tucson MHEV del 2023. Nel tuo profilo indichi \"IX35 CRDI 2WD Confort\" Quindi se hai cambiato SUV meglio aggiornare il profilo altrimenti non si capisce di cosa stai parlando Aggiornare profilo",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/campagne-di-richiamo-o-assistenza.31657/page-4"
     }
   ],
   "latestUpdate": {
