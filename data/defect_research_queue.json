@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-09T06:07:56.630444+00:00",
-  "cursor": 14,
+  "updatedAt": "2026-10-09T13:16:14.693244+00:00",
+  "cursor": 17,
   "candidates": [
     {
       "status": "approved",
@@ -3035,6 +3035,20 @@
       "title": "manutenzione - Campagne di Richiamo o Assistenza | Pagina 4 | Forum Hyundai Club Italia",
       "snippet": "Tucson PHEV Exellence + Deluxe P. + Lounge P, Dark Knight ... per caso la raccomandata arriva da Torino? Ieri mi sono ritrovato un avviso di giacenza di una raccomandata in arrivo appunto da Torino... Clicca per espandere... per curiosità, prova a vedere nel link indicato qualche messaggio più sopra se inserendo il tuo VIN ti restituisce effettivamente che devi fare il richiamo Tucson PHEV Exellence + Deluxe P. + Lounge P, Dark Knight ... per caso la raccomandata arriva da Torino? Ieri mi sono ritrovato un avviso di giacenza di una raccomandata in arrivo appunto da Torino... Clicca per espandere... per curiosità, prova a vedere nel link indicato qualche messaggio più sopra se inserendo il tuo VIN ti restituisce effettivamente che devi fare il richiamo Nelle vostre verifiche c'è un richiamo inerente il problema del continuo Reset delle \"info dal rifornimento\" dopo una sosta di qualche giorno, e l'uso del portello posteriore in questa sosta (evidentemente eneegivoro) . Problema a detta di qualcuno irrisolvibile. Avete aggiornamenti? ... Nella mia verifica è uscito questo risultato (foto). Che significa? Di che si tratta? ... Tucson 1.6HEV Full Hybrid 2WD Exellence + Deluxe P. Buongiorno, ricevuto oggi zona Grosseto, lettera richiamo Tucson mild hibrid. Tramite raccomandata. @hazet36 a sinistra dei tuoi messaggi oggi appare questo e questo crea una certa confusione in chi legge il Forum quando tu dici \"stessa auto\" facendo riferimento a una Tucson MHEV del 2023. Nel tuo profilo indichi \"IX35 CRDI 2WD Confort\" Quindi se hai cambiato SUV meglio aggiornare il profilo altrimenti non si capisce di cosa stai parlando Aggiornare profilo",
       "sourceUrl": "https://www.hyundai-club.eu/threads/campagne-di-richiamo-o-assistenza.31657/page-4"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-09T13:16:14.693244+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Problema cambio Jeep Renegade 1.6 DDCT | Il Forum di Quattroruote",
+      "snippet": "Il servizio clienti Jeep, dopo avermi fatto riportare la macchina in officina ed attendere più di un mese per fornire una risposta, mi dice che nonostante il caso effettivamente particolare, anche se fosse un difetto di fabbrica, essendo l&#x27;auto fuori garanzia, il produttore non se ne assume la responsabilità. Una Jeep Renegade 1.6 automatica del 2019 con SOLI 30.000 km che presenta ad agosto spie di controllo motore e controllo cambio le quali a parere dell'officina rimandano ad un surriscaldamento della frizione e dell'attuatore. Mi viene fatto un preventivo di ben 3000 euro per un difetto chiaramente non imputabile all'usura effettiva visti i 30000 km. Il servizio clienti Jeep, dopo avermi fatto riportare la macchina in officina ed attendere più di un mese per fornire una risposta, mi dice che nonostante il caso effettivamente particolare, anche se fosse un difetto di fabbrica, essendo l'auto fuori garanzia, il produttore non se ne assume la responsabilità. A detta di tutti i meccanici che l'hanno controllata, è impossibile che una vettura così giovane abbia un'usura della frizione di questo genere e tutti sono concordi che la casa madre dovrebbe farsene carico. Ora mi ritrovo con un'auto da riscattare e difettata, avrei potuto scegliere una nuova Jeep ma non lo farò mai considerato il trattamento ricevuto Una bella rogna è un doppia frizione che lavorano in tandem cioè quando apre una chiude l'altra , a meno che tu non abbia fatto tantissimi chilometri in salita con frizionate da paura , il problema è da attribuire alla gestione elettronica delle frizioni, oppure una debolezza costruttiva ,come fai a dimostrarlo? https://www.meccanicanews.com/2020/01/17/valutazione-dinamica-delle-risposte-di-un-cambio-ddct/ NB il problema dei DCT è la durata frizioni rispetto a quelli col convertitore idraulico che hanno almeno tre frizionì multidisco a bagno d'olio ma non slittano si chiudono e basta lo s",
+      "sourceUrl": "https://forum.quattroruote.it/threads/problema-cambio-jeep-renegade-1-6-ddct.143529/"
     }
   ],
   "latestUpdate": {
