@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-11T21:57:43.568071+00:00",
-  "cursor": 9,
+  "updatedAt": "2026-10-12T05:56:56.446425+00:00",
+  "cursor": 12,
   "candidates": [
     {
       "status": "approved",
@@ -3049,28 +3049,78 @@
       "title": "Problema cambio Jeep Renegade 1.6 DDCT | Il Forum di Quattroruote",
       "snippet": "Il servizio clienti Jeep, dopo avermi fatto riportare la macchina in officina ed attendere più di un mese per fornire una risposta, mi dice che nonostante il caso effettivamente particolare, anche se fosse un difetto di fabbrica, essendo l&#x27;auto fuori garanzia, il produttore non se ne assume la responsabilità. Una Jeep Renegade 1.6 automatica del 2019 con SOLI 30.000 km che presenta ad agosto spie di controllo motore e controllo cambio le quali a parere dell'officina rimandano ad un surriscaldamento della frizione e dell'attuatore. Mi viene fatto un preventivo di ben 3000 euro per un difetto chiaramente non imputabile all'usura effettiva visti i 30000 km. Il servizio clienti Jeep, dopo avermi fatto riportare la macchina in officina ed attendere più di un mese per fornire una risposta, mi dice che nonostante il caso effettivamente particolare, anche se fosse un difetto di fabbrica, essendo l'auto fuori garanzia, il produttore non se ne assume la responsabilità. A detta di tutti i meccanici che l'hanno controllata, è impossibile che una vettura così giovane abbia un'usura della frizione di questo genere e tutti sono concordi che la casa madre dovrebbe farsene carico. Ora mi ritrovo con un'auto da riscattare e difettata, avrei potuto scegliere una nuova Jeep ma non lo farò mai considerato il trattamento ricevuto Una bella rogna è un doppia frizione che lavorano in tandem cioè quando apre una chiude l'altra , a meno che tu non abbia fatto tantissimi chilometri in salita con frizionate da paura , il problema è da attribuire alla gestione elettronica delle frizioni, oppure una debolezza costruttiva ,come fai a dimostrarlo? https://www.meccanicanews.com/2020/01/17/valutazione-dinamica-delle-risposte-di-un-cambio-ddct/ NB il problema dei DCT è la durata frizioni rispetto a quelli col convertitore idraulico che hanno almeno tre frizionì multidisco a bagno d'olio ma non slittano si chiudono e basta lo s",
       "sourceUrl": "https://forum.quattroruote.it/threads/problema-cambio-jeep-renegade-1-6-ddct.143529/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-12T05:56:56.446425+00:00",
+      "make": "Fiat",
+      "model": "Tipo",
+      "year": 2018,
+      "engine": "1.6 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Odissea Fiat tipo 1.3 multijet 2019 | Il Forum di Quattroruote",
+      "snippet": "Il problema è che l’auto è perfetta per il resto, in autostrada si riposa proprio (cosa che la Opel non faceva visto il motore) e guidarla è un piacere ed è rilassante se non fosse per questo problema, mi sembra assurdo che tutti questi controlli antinquinamento siano così difettosi, una vera piaga, si diceva doveva essere un motore eterno il multijet, mah. Il problema è che l’auto è perfetta per il resto, in autostrada si riposa proprio (cosa che la Opel non faceva visto il motore) e guidarla è un piacere ed è rilassante se non fosse per questo problema, mi sembra assurdo che tutti questi controlli antinquinamento siano così difettosi, una vera piaga, si diceva doveva essere un motore eterno il multijet, mah.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/odissea-fiat-tipo-1-3-multijet-2019.149569/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-12T05:56:56.446425+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Ford EcoBoost",
+      "snippet": "Campagna di richiamo. ASSISTENZA & MANUTENZIONE. Prenota un intervento ... Il motore 1.0 EcoBoost è anche usato per la propulsione delle nostre Fiesta",
+      "sourceUrl": "https://www.ford.it/supporto/come-fare/altre-tematiche/motore-e-transmissione/ecoboost"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-12T05:56:56.446425+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "2018 Fiesta (2017) Manuali d'uso e altre informazioni",
+      "snippet": "Campagna di richiamo. ASSISTENZA & MANUTENZIONE. Prenota un intervento ... Il mio veicolo Ford | Ford Italia>Manuali d'uso>Fiesta (2017) 2018. Search Icon",
+      "sourceUrl": "https://www.ford.it/supporto/veicolo/fiesta-2017/2018/manuali-utente"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-12T05:56:56.446425+00:00",
+      "make": "Ford",
+      "model": "Fiesta",
+      "year": 2018,
+      "engine": "1.0 EcoBoost",
+      "sourceName": "Ford Italia",
+      "sourceType": "manufacturer_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Richiami - Il mio veicolo Ford | Ford Italia",
+      "snippet": "Campagna di richiamo. ASSISTENZA & MANUTENZIONE. Prenota un intervento ... Nuova Fiesta · Ecosport · Puma · Focus · Kuga · Mach-E · Explorer · Mustang · Puma ST",
+      "sourceUrl": "https://www.ford.it/supporto/come-fare/richiami"
     }
   ],
   "latestUpdate": {
-    "id": "2026-09-22T04:55:17.658944+00:00",
-    "updatedAt": "2026-09-22T04:55:17.658944+00:00",
-    "addedCount": 10,
-    "summary": "Trovate 10 nuove fonti ufficiali per Ford Fiesta, in verifica.",
+    "id": "2026-10-12T05:56:56.446425+00:00",
+    "updatedAt": "2026-10-12T05:56:56.446425+00:00",
+    "addedCount": 3,
+    "summary": "Trovate 3 nuove fonti ufficiali per Ford Fiesta, in verifica.",
     "details": [
-      "Ford Italia: Termostato e alloggiamento orig. Ford EcoSport Fiesta 1.0 GTDi ...",
-      "Ford Italia: Tubo benzina Ford B-Max Fiesta 1.0 EcoBoost 1858329",
-      "Ford Italia: Ventola raffreddamento 1.0 EcoBoost Ford EcoSport Fiesta B-Max ...",
-      "Ford Italia: Bullone fissaggio volano Ford 1.0 EcoBoost M10x26mm 2018+ ...",
-      "Ford Italia: Cinghia di distribuzione originale Focus Mondeo Fiesta 1.0 EcoBoost",
-      "Ford Italia: Tubo ingresso acqua orig. Ford EcoSport Fiesta Focus 1.0 GTDI ..."
+      "Ford Italia: Ford EcoBoost",
+      "Ford Italia: 2018 Fiesta (2017) Manuali d'uso e altre informazioni",
+      "Ford Italia: Richiami - Il mio veicolo Ford | Ford Italia"
     ],
     "sources": [
-      "https://shop.ford.it/products/liquido-refrigerante-termostato-originale-ford-ecosport-fiesta-1-0-gtdi-ecoboost",
-      "https://shop.ford.it/products/tubo-benzina-ford-b-max-fiesta-1-0-ecoboost-1858329",
-      "https://shop.ford.it/products/ventola-raffreddamento-1-0-ecoboost-ford-ecosport-fiesta-b-max-2145091",
-      "https://shop.ford.it/products/bullone-fissaggio-volano-ford-1-0-ecoboost-m10x26mm-2018-2584857",
-      "https://shop.ford.it/products/cinghia-dentata-focus-mk3-mondeo-fiesta-mk8-1-0-ecoboost",
-      "https://shop.ford.it/products/tubo-alimentazione-acqua-originale-ford-ecosport-fiesta-focus-1-0-gtdi-ecoboost-2023617"
+      "https://www.ford.it/supporto/come-fare/altre-tematiche/motore-e-transmissione/ecoboost",
+      "https://www.ford.it/supporto/veicolo/fiesta-2017/2018/manuali-utente",
+      "https://www.ford.it/supporto/come-fare/richiami"
     ],
     "vehicles": [
       {
