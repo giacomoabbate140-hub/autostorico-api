@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-13T14:10:54.399872+00:00",
-  "cursor": 21,
+  "updatedAt": "2026-10-13T22:44:13.361953+00:00",
+  "cursor": 24,
   "candidates": [
     {
       "status": "approved",
@@ -3119,6 +3119,20 @@
       "title": "nissan juke e famoso motore 1.5. tdci con problemi bronzine | Il Forum di Quattroruote",
       "snippet": "Clicca per allargare... i motori difettosi risalgono a partite di alcuni anni fa,quando il juke non era nemmeno stato pensato. stai pure tranquillo. circolano ancora 1500 dci che stanno per compiere 10 anni, conuna barca di km, che non hanno avuto problemi. lo stesso motore è montato anche sul suzuki jimny,però stranamente lì non ha difettato. Buona sera a tutti io sono proprietario di una juke 1.5 dci immatricolata a luglio del 2011 sono quasi arrivato a 40000 km senza grossi problemi........ Clicca per allargare... i motori difettosi risalgono a partite di alcuni anni fa,quando il juke non era nemmeno stato pensato. stai pure tranquillo. circolano ancora 1500 dci che stanno per compiere 10 anni, conuna barca di km, che non hanno avuto problemi. lo stesso motore è montato anche sul suzuki jimny,però stranamente lì non ha difettato.",
       "sourceUrl": "https://forum.quattroruote.it/threads/nissan-juke-e-famoso-motore-1-5-tdci-con-problemi-bronzine.45495/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-13T22:44:13.361953+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo OSE - Verifica tecnica veicoli Peugeot - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Specialmente anche considerando che se la lettera della campagna OSE è arrivata anche te (Coupe Franche) oltre che a me e a omino, sono propenso a credere che sia un&#x27;altra cosa, perchè, almeno a vedere dalle firme tu non hai un Puretech e-thp come me o omino ma hai un blueHDI (almeno che poi non soffra di problemi alla distribuzione anche il bluehdi 120cv....) Peugeot 3008 GT Line 1.5 BlueHdi Bianco Nacrè madreperla, cambio manuale, Advanced Grip Control, Ricarica Wireless, Keyless System, Visiopark 180, Pedaliera sportiva + battitacchi in alluminio e Tettuccio apribile Ex Peugeot 308 Allure 1600 120 cv Bluehdi Bianco Nacrè Madreperla - DAP - Pack Ciel - Cerchi 18\" - Interni Misto Tep e Alcantara - Lettore CD - Retrocamera Specialmente anche considerando che se la lettera della campagna OSE è arrivata anche te (Coupe Franche) oltre che a me e a omino, sono propenso a credere che sia un'altra cosa, perchè, almeno a vedere dalle firme tu non hai un Puretech e-thp come me o omino ma hai un blueHDI (almeno che poi non soffra di problemi alla distribuzione anche il bluehdi 120cv....) Peugeot 206 XS 2.0 HDI - 90CV Blu china 04/2002 (in comodato d'uso alla moglie...) Peugeot 308 Business BlueHDI Full Optional 1.6 - 120CV S&S Grigio Artense metallizato 05/2015 I also tried to go to the website of the ministry of transport ... but it gives me an NOT updated list of recalls ... like months ago or a year ago ...",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=121187"
     }
   ],
   "latestUpdate": {
