@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-17T04:24:39.048526+00:00",
-  "cursor": 5,
+  "updatedAt": "2026-10-17T10:42:58.360066+00:00",
+  "cursor": 8,
   "candidates": [
     {
       "status": "approved",
@@ -3133,6 +3133,20 @@
       "title": "Campagna di richiamo OSE - Verifica tecnica veicoli Peugeot - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Specialmente anche considerando che se la lettera della campagna OSE è arrivata anche te (Coupe Franche) oltre che a me e a omino, sono propenso a credere che sia un&#x27;altra cosa, perchè, almeno a vedere dalle firme tu non hai un Puretech e-thp come me o omino ma hai un blueHDI (almeno che poi non soffra di problemi alla distribuzione anche il bluehdi 120cv....) Peugeot 3008 GT Line 1.5 BlueHdi Bianco Nacrè madreperla, cambio manuale, Advanced Grip Control, Ricarica Wireless, Keyless System, Visiopark 180, Pedaliera sportiva + battitacchi in alluminio e Tettuccio apribile Ex Peugeot 308 Allure 1600 120 cv Bluehdi Bianco Nacrè Madreperla - DAP - Pack Ciel - Cerchi 18\" - Interni Misto Tep e Alcantara - Lettore CD - Retrocamera Specialmente anche considerando che se la lettera della campagna OSE è arrivata anche te (Coupe Franche) oltre che a me e a omino, sono propenso a credere che sia un'altra cosa, perchè, almeno a vedere dalle firme tu non hai un Puretech e-thp come me o omino ma hai un blueHDI (almeno che poi non soffra di problemi alla distribuzione anche il bluehdi 120cv....) Peugeot 206 XS 2.0 HDI - 90CV Blu china 04/2002 (in comodato d'uso alla moglie...) Peugeot 308 Business BlueHDI Full Optional 1.6 - 120CV S&S Grigio Artense metallizato 05/2015 I also tried to go to the website of the ministry of transport ... but it gives me an NOT updated list of recalls ... like months ago or a year ago ...",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=121187"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-17T10:42:58.360066+00:00",
+      "make": "BMW",
+      "model": "Serie 1",
+      "year": 2015,
+      "engine": "2.0 diesel N47",
+      "sourceName": "BMW Passion Forum",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "problema | BMWpassion forum e blog",
+      "snippet": "Questo sito utilizza i cookies. Continuando a navigare tra queste pagine acconsenti implicitamente all&#x27;uso dei cookies. Scopri di più · Ciao a tutti, ho appena ritirato una BMW Serie 1 F40 116d Advantage del 2023 acquistata usata e sto cercando di capire l’origine di alcuni · Buonasera ...",
+      "sourceUrl": "https://www.bmwpassion.com/forum/tags/problema/"
     }
   ],
   "latestUpdate": {
