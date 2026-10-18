@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-18T11:03:39.656151+00:00",
-  "cursor": 20,
+  "updatedAt": "2026-10-18T15:51:53.520904+00:00",
+  "cursor": 23,
   "candidates": [
     {
       "status": "approved",
@@ -3399,6 +3399,20 @@
       "title": "bollettino semestrale di richiamo dei veicoli difettosi",
       "snippet": "70 NEW RANGE ROVER EVOQUE Periodo di produzione: non indicato Numero veicoli da richiamare: 54 Difetto: possibile distacco livello serbatoio carburante Inizio campagna di richiamo: aprile 2019 718 71 RANGE ROVER /DISCOVERY vari modelli Periodo di produzione: anni 2016/2018 Numero veicoli da richiamare: 309 Difetto: emissioni CO2 non a norma Inizio campagna di richiamo: giugno 2019 72 RANGE ROVER EVOQUE (LV) diesel Ingenium I4.2.0L Periodo di produzione: anni 2016/2018 Numero veicoli da [...] contatto cablaggio motore/staffa intercooler Inizio campagna di richiamo: ottobre 2017 Al 30 giugno 2018, risanati 1343 veicoli Al 31 dicembre 2018, risanati 1356 veicoli Al 31 dicembre 2019, campagna conclusa 63 RANGE ROVER/RANGE ROVER SPORT Periodo di produzione: anno 2017 Numero veicoli da richiamare: 3142 Difetto: possibile malfunzionamento quadro strumenti Inizio campagna di richiamo: ottobre 2017 Al 30 giugno 2018, risanati 2394 veicoli Al 31 dicembre 2018, risanati 2394 veicoli 64 RANGE [...] ottobre 2017 Al 30 giugno 2018, risanati 47 veicoli Al 31 dicembre 2018, risanati 49 veicoli 61 RANGE ROVER/EVOQUE/DISCOVERY SPORT Periodo di produzione: anni 2016/2017 Numero veicoli da richiamare: 26 Difetto: eccessivo serraggio giunto portafuso/braccio comando inferiore destro Inizio campagna di richiamo: ottobre 2017 Al 31 dicembre 2018, risanati 23 veicoli 716 62 EVOQUE/DISCOVERY SPORT Periodo di produzione: anni 2016/2017 Numero veicoli da richiamare: 1438 Difetto: contatto cablaggio",
       "sourceUrl": "https://www.mit.gov.it/sites/default/files/media/documentazione/2020-01/Bollettino%20semestrale%20di%20richiamo%20dei%20veicoli%20difettosi%20n.38.pdf"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-18T15:51:53.520904+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Grave problema 208 Pure Tech 82 GPL - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Mi chiedo se stessero parlando del tuo difetto. Peugeot 208 Allure 1.2 82cv PureTech Benzina/GPL Fari funzione cornering, cromature, retrocamera di parcheggio, retrovisori riscaldabili, vano portaoggetti refrigerato, Screen 7&#x27;&#x27;, navigatore e il mio affetto più puro Mi chiedo se stessero parlando del tuo difetto. Peugeot 208 Allure 1.2 82cv PureTech Benzina/GPL Fari funzione cornering, cromature, retrocamera di parcheggio, retrovisori riscaldabili, vano portaoggetti refrigerato, Screen 7'', navigatore e il mio affetto più puro -ex PEUGEOT 208 1.2 puretech GPL 82hp ACTIVE 06/17 -PEUGEOT 308 1.6 120 Bluehdi manuale allure 18 sephir noir,park assist,visio park 180,fari automatici,abbaglianti automatici,tregi automatici,rilevatore stanchezza,3d navi,CD,mantenimento corsia,Tep-Alcantara,ruotino,monitoraggio angolo cieco,keyless,drive sport pack,persa 220v.,SOS e assistenza,allarme volumetrico,rilevatore stanchezza guidatore,grigio artense -Audi 3.0 V6 Tdi quattro avant Guasti, difetti, problemi e cose che non ci piacciono; costi dei tagliandi e delle riparazioni",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=108796"
     }
   ],
   "latestUpdate": {
