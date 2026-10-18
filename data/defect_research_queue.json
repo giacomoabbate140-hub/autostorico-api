@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-17T20:35:54.242432+00:00",
-  "cursor": 14,
+  "updatedAt": "2026-10-18T04:32:54.758351+00:00",
+  "cursor": 17,
   "candidates": [
     {
       "status": "approved",
@@ -3385,27 +3385,37 @@
       "title": "Used test: Citroen C3 Aircross vs Ford Puma vs Hyundai ...",
       "snippet": "The Bayon, like the Puma, is also available as a mild hybrid for a minor bump in performance and fuel economy. The C3 Aircross doesn't receive",
       "sourceUrl": "https://www.whatcar.com/news/used-test-citroen-c3-aircross-vs-ford-puma-vs-hyundai-bayon/n25840"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-18T04:32:54.758351+00:00",
+      "make": "Land Rover",
+      "model": "Range Rover Evoque",
+      "year": 2017,
+      "engine": "2.0 Ingenium diesel",
+      "sourceName": "Ministero delle infrastrutture e dei trasporti",
+      "sourceType": "official_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "bollettino semestrale di richiamo dei veicoli difettosi",
+      "snippet": "70 NEW RANGE ROVER EVOQUE Periodo di produzione: non indicato Numero veicoli da richiamare: 54 Difetto: possibile distacco livello serbatoio carburante Inizio campagna di richiamo: aprile 2019 718 71 RANGE ROVER /DISCOVERY vari modelli Periodo di produzione: anni 2016/2018 Numero veicoli da richiamare: 309 Difetto: emissioni CO2 non a norma Inizio campagna di richiamo: giugno 2019 72 RANGE ROVER EVOQUE (LV) diesel Ingenium I4.2.0L Periodo di produzione: anni 2016/2018 Numero veicoli da [...] contatto cablaggio motore/staffa intercooler Inizio campagna di richiamo: ottobre 2017 Al 30 giugno 2018, risanati 1343 veicoli Al 31 dicembre 2018, risanati 1356 veicoli Al 31 dicembre 2019, campagna conclusa 63 RANGE ROVER/RANGE ROVER SPORT Periodo di produzione: anno 2017 Numero veicoli da richiamare: 3142 Difetto: possibile malfunzionamento quadro strumenti Inizio campagna di richiamo: ottobre 2017 Al 30 giugno 2018, risanati 2394 veicoli Al 31 dicembre 2018, risanati 2394 veicoli 64 RANGE [...] ottobre 2017 Al 30 giugno 2018, risanati 47 veicoli Al 31 dicembre 2018, risanati 49 veicoli 61 RANGE ROVER/EVOQUE/DISCOVERY SPORT Periodo di produzione: anni 2016/2017 Numero veicoli da richiamare: 26 Difetto: eccessivo serraggio giunto portafuso/braccio comando inferiore destro Inizio campagna di richiamo: ottobre 2017 Al 31 dicembre 2018, risanati 23 veicoli 716 62 EVOQUE/DISCOVERY SPORT Periodo di produzione: anni 2016/2017 Numero veicoli da richiamare: 1438 Difetto: contatto cablaggio",
+      "sourceUrl": "https://www.mit.gov.it/sites/default/files/media/documentazione/2020-01/Bollettino%20semestrale%20di%20richiamo%20dei%20veicoli%20difettosi%20n.38.pdf"
     }
   ],
   "latestUpdate": {
-    "id": "2026-10-12T05:56:56.446425+00:00",
-    "updatedAt": "2026-10-12T05:56:56.446425+00:00",
-    "addedCount": 3,
-    "summary": "Trovate 3 nuove fonti ufficiali per Ford Fiesta, in verifica.",
+    "id": "2026-10-18T04:32:54.758351+00:00",
+    "updatedAt": "2026-10-18T04:32:54.758351+00:00",
+    "addedCount": 1,
+    "summary": "Trovate 1 nuove fonti ufficiali per Land Rover Range Rover Evoque, in verifica.",
     "details": [
-      "Ford Italia: Ford EcoBoost",
-      "Ford Italia: 2018 Fiesta (2017) Manuali d'uso e altre informazioni",
-      "Ford Italia: Richiami - Il mio veicolo Ford | Ford Italia"
+      "Ministero delle infrastrutture e dei trasporti: bollettino semestrale di richiamo dei veicoli difettosi"
     ],
     "sources": [
-      "https://www.ford.it/supporto/come-fare/altre-tematiche/motore-e-transmissione/ecoboost",
-      "https://www.ford.it/supporto/veicolo/fiesta-2017/2018/manuali-utente",
-      "https://www.ford.it/supporto/come-fare/richiami"
+      "https://www.mit.gov.it/sites/default/files/media/documentazione/2020-01/Bollettino%20semestrale%20di%20richiamo%20dei%20veicoli%20difettosi%20n.38.pdf"
     ],
     "vehicles": [
       {
-        "make": "Ford",
-        "model": "Fiesta"
+        "make": "Land Rover",
+        "model": "Range Rover Evoque"
       }
     ]
   }
