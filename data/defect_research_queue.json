@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-18T20:42:14.912093+00:00",
-  "cursor": 26,
+  "updatedAt": "2026-10-19T04:39:41.142336+00:00",
+  "cursor": 0,
   "candidates": [
     {
       "status": "approved",
@@ -3413,6 +3413,20 @@
       "title": "Grave problema 208 Pure Tech 82 GPL - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Mi chiedo se stessero parlando del tuo difetto. Peugeot 208 Allure 1.2 82cv PureTech Benzina/GPL Fari funzione cornering, cromature, retrocamera di parcheggio, retrovisori riscaldabili, vano portaoggetti refrigerato, Screen 7&#x27;&#x27;, navigatore e il mio affetto più puro Mi chiedo se stessero parlando del tuo difetto. Peugeot 208 Allure 1.2 82cv PureTech Benzina/GPL Fari funzione cornering, cromature, retrocamera di parcheggio, retrovisori riscaldabili, vano portaoggetti refrigerato, Screen 7'', navigatore e il mio affetto più puro -ex PEUGEOT 208 1.2 puretech GPL 82hp ACTIVE 06/17 -PEUGEOT 308 1.6 120 Bluehdi manuale allure 18 sephir noir,park assist,visio park 180,fari automatici,abbaglianti automatici,tregi automatici,rilevatore stanchezza,3d navi,CD,mantenimento corsia,Tep-Alcantara,ruotino,monitoraggio angolo cieco,keyless,drive sport pack,persa 220v.,SOS e assistenza,allarme volumetrico,rilevatore stanchezza guidatore,grigio artense -Audi 3.0 V6 Tdi quattro avant Guasti, difetti, problemi e cose che non ci piacciono; costi dei tagliandi e delle riparazioni",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=108796"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-19T04:39:41.142336+00:00",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year": 2018,
+      "engine": "1.5 TSI Evo",
+      "sourceName": "VW Golf Community",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Discussioni sul Gruppo Volkswagen - The VW Golf Community",
+      "snippet": "Discussioni generiche sul Gruppo Volkswagen · Nella VW Golf Community elaboriamo i dati personali degli utenti attraverso l&#x27;uso di cookie e altre tecnologie per fornire i nostri servizi, personalizzare la pubblicità e analizzare l&#x27;attività del sito. Potremmo quindi condividere alcune ...",
+      "sourceUrl": "https://www.vwgolfcommunity.com/vb/forum/vw-golf-world/gruppo-volkswagen/14741-dieselgate-richiamo-per-motore-ea189-discussione-tecnica/page22"
     }
   ],
   "latestUpdate": {
