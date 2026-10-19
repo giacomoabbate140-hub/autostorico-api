@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-19T04:39:41.142336+00:00",
-  "cursor": 0,
+  "updatedAt": "2026-10-19T13:13:36.893869+00:00",
+  "cursor": 3,
   "candidates": [
     {
       "status": "approved",
@@ -3427,6 +3427,20 @@
       "title": "Discussioni sul Gruppo Volkswagen - The VW Golf Community",
       "snippet": "Discussioni generiche sul Gruppo Volkswagen · Nella VW Golf Community elaboriamo i dati personali degli utenti attraverso l&#x27;uso di cookie e altre tecnologie per fornire i nostri servizi, personalizzare la pubblicità e analizzare l&#x27;attività del sito. Potremmo quindi condividere alcune ...",
       "sourceUrl": "https://www.vwgolfcommunity.com/vb/forum/vw-golf-world/gruppo-volkswagen/14741-dieselgate-richiamo-per-motore-ea189-discussione-tecnica/page22"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-19T13:13:36.893869+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "year": 2016,
+      "engine": "1.6 Multijet",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Sezione Elettronica Alfa Romeo Giulietta - Club Alfa Forum",
+      "snippet": "Parliamo di: elettronica interna ed esterna, lampadine fari, climattizatori, pulsanti, cavi, airbag, batterie, spie (avaria-abs-asr-vdc-ebd- etc) centraline... Parliamo di: elettronica interna ed esterna, lampadine fari, climattizatori, pulsanti, cavi, airbag, batterie, spie (avaria-abs-asr-vdc-ebd- etc) centraline in genere No rimappature",
+      "sourceUrl": "https://forum.clubalfa.it/sezione/elettronica-alfaromeo-giulietta/"
     }
   ],
   "latestUpdate": {
