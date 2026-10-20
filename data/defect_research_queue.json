@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-19T22:20:49.535963+00:00",
-  "cursor": 6,
+  "updatedAt": "2026-10-20T04:50:05.886282+00:00",
+  "cursor": 9,
   "candidates": [
     {
       "status": "approved",
@@ -3455,6 +3455,20 @@
       "title": "Richiami ufficiali Audi",
       "snippet": "Beh....qlc probl congenito li hanno........ce li hanno, basta sentire in giro, per es le vs alta prex.....si sgretolano, l&#x27; ingranaggio pompa olio che si spappola perchè in plastica...stesso motore anche sullle altre carrozzerie.... A5-A6-A3 ... Navigazione Rapida Tagliandi - Manutenzione - Riparazioni - Sostituzioni - Difetti - Guasti - Anomalie - Strani sintomi Cima Oggetto di richiamo ? X quale motivo ???? Le b8 sono perfettissime......vedi la mia.....mai avuto un ......niente mai........ma nemmeno a3/a5/a6/a7/a8/tt........mamma audi e la perfezione .....e poi con un marchio cosi...... prestigioso facevano le macchine con dei pezzi difettosi ???? Beh....qlc probl congenito li hanno........ce li hanno, basta sentire in giro, per es le vs alta prex.....si sgretolano, l' ingranaggio pompa olio che si spappola perchè in plastica...stesso motore anche sullle altre carrozzerie.... A5-A6-A3 ... Navigazione Rapida Tagliandi - Manutenzione - Riparazioni - Sostituzioni - Difetti - Guasti - Anomalie - Strani sintomi Cima Tagliandi - Manutenzione - Riparazioni - Sostituzioni - Difetti - Guasti - Anomalie - Strani sintomi ... La nostra B8...inesistente...muah...😳😳😣 Inviato dal mio iPhone 4 - 32gb utilizzando Tapatalk · [B][SIZE=3]IL MIGLIOR DISPREZZO E' LA NON CURANZA...[/SIZE][/B] ... Mi sembra strano la mia A4 B8 a suo tempo era stata soggetta ad un richiamo per la sostituzione di un cuscinetto del cambio automatico, ma in quella pagina non ne' trovo traccia. Forum dell\\'Audi RS Club",
       "sourceUrl": "https://forum.audirsclub.it/showthread.php?57785-Richiami-ufficiali-Audi=&57785-Richiami-ufficiali-Audi=&p=1164188#post1164188"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-20T04:50:05.886282+00:00",
+      "make": "Fiat",
+      "model": "Panda",
+      "year": 2018,
+      "engine": "1.3 Multijet",
+      "sourceName": "Forum Auto Caradisiac",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Fiat - Forum Auto - Caradisiac",
+      "snippet": "La marque italienne : forum Fiat pour 500, Panda, Tipo, Ducato. Présentations de vos Fiat, actualités de la marque, problèmes récurrents moteurs MultiJet et",
+      "sourceUrl": "https://forum-auto.caradisiac.com/forum/255-fiat"
     }
   ],
   "latestUpdate": {
