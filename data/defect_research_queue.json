@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-22T04:43:50.120562+00:00",
-  "cursor": 4,
+  "updatedAt": "2026-10-22T11:51:22.980327+00:00",
+  "cursor": 7,
   "candidates": [
     {
       "status": "approved",
@@ -3483,6 +3483,62 @@
       "title": "Pessima esperienza Jeep Renegade 1.3 DDCT Limited | Page 2 | Il Forum di Quattroruote",
       "snippet": "Vedremo se ci sará o no un richiamo da parte di Toyota. E resta il primo problema diffuso su ibride HSF. C&#x27;é chi con la Prius é arrivato a oltre 600.000 km con la batteria originale. Il dato di fatto é che le giapponesi sono da anni in testa alle classifiche di affidabilitá, basta vedere quella di JD Power. Vedremo se ci sará o no un richiamo da parte di Toyota. E resta il primo problema diffuso su ibride HSF. C'é chi con la Prius é arrivato a oltre 600.000 km con la batteria originale. Il dato di fatto é che le giapponesi sono da anni in testa alle classifiche di affidabilitá, basta vedere quella di JD Power. Lo ripeto le macchine difettose possono capitare è l’assistenza che deve fare la differenza e nel mio caso sono vergognosi · Clicca per allargare... forse l'hai già fatto, ma una segnalazione ai piani alti chissà che non smuova qualcosa... ... Una é questa dell'OP. Non é un mistero che fiat non brilli per affidabilitá e servizio assistenza. Clicca per allargare... Ah i giappo .. Loro si che sono bravi. Motori che saltavano a 30-40 mila km Neanche un richiamo. Clicca per allargare... Non si tratta di offendere. La questione è che leggere certe cose lo trovo puerile. Assodato che anche una Bentley possa uscire difettosa, quello che conta è come si comportano la casa madre e la concessionaria. Non crederai mai quello che ho visto tramite un meccanico Hyundai con cui avevo confidenza: un disco frizione addirittura spaccato a metà e la Hyundai che ha fatto orecchie da mercante!",
       "sourceUrl": "https://forum.quattroruote.it/threads/pessima-esperienza-jeep-renegade-1-3-ddct-limited.138892/page-2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-22T11:51:22.980327+00:00",
+      "make": "Audi",
+      "model": "Q3",
+      "year": 2020,
+      "engine": "2.0 TDI",
+      "sourceName": "Audi Owners Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Audi Recalls - Page 2",
+      "snippet": "Post here for discussions on Audi Recall notices and Manufacturer. Audi Q3 Recalled Over Rearview Camera Software Error. Engine is CJCB 2.0tdi",
+      "sourceUrl": "https://www.audiownersclub.com/forums/forum/93-audi-recalls/page/2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-22T11:51:22.980327+00:00",
+      "make": "Audi",
+      "model": "Q3",
+      "year": 2020,
+      "engine": "2.0 TDI",
+      "sourceName": "Audi Owners Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Loss of Favourites in MMI - Page 2 - Audi Q3 Club",
+      "snippet": "Audi Q3 Club Loss of Favourites in MMI. We accept that there is fault on your MII system. I formally rejected my Q3 under the 30 day rule. Any",
+      "sourceUrl": "https://www.audiownersclub.com/forums/topic/26867-loss-of-favourites-in-mmi/page/2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-22T11:51:22.980327+00:00",
+      "make": "Audi",
+      "model": "Q3",
+      "year": 2020,
+      "engine": "2.0 TDI",
+      "sourceName": "Audi Owners Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "DAB Radio - Page 4 - Audi Q3 Club",
+      "snippet": "It seems the radio fitted (Bose system) isn't DAB+ compatible. Mentioned it at my last service and was told no faults recorded. Like others here",
+      "sourceUrl": "https://www.audiownersclub.com/forums/topic/28834-dab-radio/page/4"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-22T11:51:22.980327+00:00",
+      "make": "Audi",
+      "model": "Q3",
+      "year": 2020,
+      "engine": "2.0 TDI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Meccatronica andata - Audi",
+      "snippet": "Ciao a tutti, nel 2019 ho acquistato un'Audi Q3 35 TDI automatica e dopo aver percorso solo 64000 Km e comparso il messaggio ANOMALIA CAMBIO.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/meccatronica-andata.144419"
     }
   ],
   "latestUpdate": {
