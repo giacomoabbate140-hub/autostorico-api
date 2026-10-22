@@ -918,6 +918,7 @@ DEFECT_REVIEW_CACHE_TTL_SECONDS = int(
     os.environ.get("AUTOSTORICO_DEFECT_REVIEW_CACHE_SECONDS", "300")
 )
 PUBLISHED_DEFECT_SOURCES_CACHE: tuple[float, list[dict[str, Any]]] | None = None
+DEFECT_PUBLICATION_STATE_CACHE: tuple[float, list[dict[str, Any]]] | None = None
 DEFECT_REVIEW_CACHE_LOCK = threading.Lock()
 MARKET_SITES = [
     ("AutoScout24", "autoscout24.it"),
@@ -1517,9 +1518,10 @@ def admin_defect_review(payload: dict[str, Any]) -> dict[str, Any]:
             or saved[0].get("source_url") != item["sourceUrl"]
             or saved[0].get("status") != item["status"]):
         raise RuntimeError("Salvataggio non confermato dal database. Ricarica le fonti prima di riprovare.")
-    global PUBLISHED_DEFECT_SOURCES_CACHE
+    global PUBLISHED_DEFECT_SOURCES_CACHE, DEFECT_PUBLICATION_STATE_CACHE
     with DEFECT_REVIEW_CACHE_LOCK:
         PUBLISHED_DEFECT_SOURCES_CACHE = None
+        DEFECT_PUBLICATION_STATE_CACHE = None
     return {
         "ok": True,
         "action": action,
@@ -1614,9 +1616,87 @@ def published_defect_reports_for_vehicle(
 
 
 
+def _review_timestamp(value: Any) -> datetime | None:
+    try:
+        parsed = datetime.fromisoformat(str(value or "").replace("Z", "+00:00"))
+        return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed.astimezone(timezone.utc)
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
+def _catalog_publication_rows() -> list[dict[str, Any]]:
+    """Cache publication decisions, including removals, without exposing private fields."""
+    global DEFECT_PUBLICATION_STATE_CACHE
+    now = time.time()
+    with DEFECT_REVIEW_CACHE_LOCK:
+        cached = DEFECT_PUBLICATION_STATE_CACHE
+        if cached and now - cached[0] < DEFECT_REVIEW_CACHE_TTL_SECONDS:
+            return [dict(row) for row in cached[1]]
+    try:
+        rows = _defect_review_rows()
+    except RuntimeError:
+        # A transient database failure must not roll clients back to a stale version.
+        return [dict(row) for row in cached[1]] if cached else []
+    resolved = [row for row in rows
+                if row.get("status") in {"published", "rejected"}
+                and _review_timestamp(row.get("reviewed_at")) is not None
+                and safe_public_source_url(row.get("source_url"))
+                and defect_source_relevant_to_vehicle(row)]
+    with DEFECT_REVIEW_CACHE_LOCK:
+        DEFECT_PUBLICATION_STATE_CACHE = (now, resolved)
+    return [dict(row) for row in resolved]
+
+
+def effective_catalog_version(rows: list[dict[str, Any]] | None = None) -> int:
+    base = catalog_year_value(VEHICLE_DEFECT_CATALOG.get("catalogVersion"))
+    rows = _catalog_publication_rows() if rows is None else rows
+    stamps = [_review_timestamp(row.get("reviewed_at")) for row in rows]
+    newest = max((stamp for stamp in stamps if stamp is not None), default=None)
+    if newest is None:
+        return base
+    static_date = _review_timestamp(VEHICLE_DEFECT_CATALOG.get("updatedAt"))
+    newest = max(newest, static_date) if static_date else newest
+    # Stable and monotonic for both curated catalog edits and review decisions.
+    # The current value fits exactly in both a Dart int and a JavaScript number.
+    return int(newest.timestamp() * 1000) * 1000 + base
+
+
+def _review_publication_update(rows: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if not rows:
+        return None
+    newest = max(_review_timestamp(row["reviewed_at"]) for row in rows)
+    static_date = _review_timestamp(VEHICLE_DEFECT_CATALOG.get("updatedAt"))
+    if static_date and static_date > newest:
+        return None
+    batch = [row for row in rows
+             if _review_timestamp(row["reviewed_at"]).date() == newest.date()]
+    vehicles, details, sources = [], [], []
+    for row in sorted(batch, key=lambda row: str(row.get("reviewed_at")), reverse=True):
+        vehicle = {key: str(row.get(key) or "").strip() for key in ("make", "model")}
+        if vehicle not in vehicles:
+            vehicles.append(vehicle)
+        if row.get("status") == "published":
+            detail = str(row.get("title") or "Fonte approvata").strip()
+            url = safe_public_source_url(row.get("source_url"))
+            if detail not in details:
+                details.append(detail)
+            if url and url not in sources:
+                sources.append(url)
+    return {
+        "id": "reviewed-" + newest.isoformat(),
+        "updatedAt": newest.isoformat(),
+        "summary": "Aggiornate le fonti revisionate del catalogo Difetti Gold.",
+        "details": details[:6] or ["Aggiornata la disponibilità delle fonti revisionate."],
+        "vehicles": vehicles[:6],
+        "sources": sources[:6],
+    }
+
+
 def catalog_update_status() -> dict[str, Any]:
     """Expose only the public metadata used by clients to detect catalog updates."""
-    latest = VEHICLE_DEFECT_CATALOG.get("latestUpdate")
+    reviewed_rows = _catalog_publication_rows()
+    reviewed_update = _review_publication_update(reviewed_rows)
+    latest = reviewed_update or VEHICLE_DEFECT_CATALOG.get("latestUpdate")
     latest = latest if isinstance(latest, dict) else {}
     vehicles = latest.get("vehicles")
     safe_vehicles = [
@@ -1641,8 +1721,9 @@ def catalog_update_status() -> dict[str, Any]:
         if safe_url
     ] if isinstance(sources, list) else []
     return {
-        "catalogVersion": catalog_year_value(VEHICLE_DEFECT_CATALOG.get("catalogVersion")),
-        "updatedAt": str(VEHICLE_DEFECT_CATALOG.get("updatedAt") or "").strip(),
+        "catalogVersion": effective_catalog_version(reviewed_rows),
+        "updatedAt": (reviewed_update or {}).get("updatedAt")
+            or str(VEHICLE_DEFECT_CATALOG.get("updatedAt") or "").strip(),
         "latestUpdate": {
             "id": str(latest.get("id") or "").strip(),
             "summary": str(latest.get("summary") or "").strip(),
@@ -1782,7 +1863,7 @@ def vehicle_defect_reports(
     )
     reports.extend(published_reports)
     return {
-        "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
+        "catalogVersion": effective_catalog_version(),
         "make": matching_vehicles[0].get("make") if matching_vehicles else make.strip(),
         "model": matching_vehicles[0].get("model") if matching_vehicles else model.strip(),
         "searchContext": {"year": year, "engine": engine.strip()},
@@ -4897,7 +4978,7 @@ def vehicle_defects_response(
         # A catalog entry is optional: every vehicle can still receive live
         # source candidates from the approved online research flow.
         result = {
-            "catalogVersion": VEHICLE_DEFECT_CATALOG.get("catalogVersion", 1),
+            "catalogVersion": effective_catalog_version(),
             "make": str(make or "").strip(),
             "model": str(model or "").strip(),
             "searchContext": {"year": year, "engine": str(engine or "").strip()},
