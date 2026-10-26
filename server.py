@@ -10,6 +10,9 @@ import server_core as _server_core
 # the dashboard still has the old Start Command configured.
 if __name__ == "__main__":
     import patched_server
+    from tls_trust_check import start as start_tls_trust_check
+
+    start_tls_trust_check()
 
     patched_server.server.main()
 else:
