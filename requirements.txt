@@ -2,3 +2,6 @@
 google-auth>=2.0.0
 requests>=2.31.0
 stripe>=14.0.0,<15.0.0
+
+# Updated HTTPS trust store for the Render eMudhra certificate advisory.
+certifi>=2026.10.19
