@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-27T22:13:34.547688+00:00",
-  "cursor": 12,
+  "updatedAt": "2026-10-28T05:41:23.381968+00:00",
+  "cursor": 15,
   "candidates": [
     {
       "status": "approved",
@@ -3553,6 +3553,20 @@
       "title": "Grande delusione!!! [Archivio] - Forum dell'Audi RS Club",
       "snippet": "Sulla mia attuale a3 ho sempre avuto da equipaggiamento di serie in po Pzero rosso, gomma scomoda ma performance al massimo, aderenza, tenuta in curva, frenata, han tutto ste gomme. Le hankook me ne aveva già parlato un gran bene il mio gommista di fiducia. ... Io con le continental mi sto trovando benissimo! Quel che è importante e l&#x27;affidabilita in strada non il rumore... C'è qualcuno che si lamenta per alcuni rumorini (retrovisore o MMI) ... beati loro! Cosa dovrei dire io? Ritirata dopo 3 mesi di attesa e dopo appena due giorni riportata in concessionaria per un guasto alla centralina \"Airbag\".........ebbene son passati 16 gg e ancora non hanno alcuna notizia di quando arriverà il pezzo da sostituire; vi rendete conto? Parlando col venditore proprio giovedì scorso (quando ho ritirato la mia A3) della tua spiacevole situazione, mi ha spiegato che non possono assolutamente dare al cliente un'auto con un dispositivo di sicurezza (in questo caso l'airbag) non funzionante, nemmeno se lo stesso proprietario volesse firmare che se ne prende la resposabilità e che se le cose van così per le lunghe probabilmente sono in attesa di un ricambio... Per esperienza lavorativa in campo analogo, posso solo dire che spesso, quando c'è un elettronica nuova, nemmeno può capitare di non riuscire a programmare un bel niente, nemmeno con le spiegazioni, perchè può succedere che delle variabili possano richiedere modifiche che è impossibile prevedere, per adattare e proseguire. Io riparo telecamere, e quando arriva qualche prodotto nuovo, nonostante noi riceviamo la documentazione tecnica prima ancora che il prodotto veda il mercato, quando arriva la prima con un difetto che richiede una taratura elettronica, spesso non è così intuitivo e immediato o scontato che vada a buon fine la programmazione.... Sulla mia attuale a3 ho sempre avuto da equipaggiamento di serie in po Pzero rosso, gomma scomoda ma performance al massimo, aderenza, tenuta in curva, frenata, han tutto ste gomme. Le hankook me ne aveva già parlato un gran bene il mio gommista di fiducia. ... Io con le continental mi sto trovando benissimo! Quel che è importante e l'affidabilita in strada non il rumore...",
       "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-49815.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-28T05:41:23.381968+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "difetti riscontrati dai proprietari nuova tucson | Pagina 2 | Forum Hyundai Club Italia",
+      "snippet": "ciao a tutti, ho 1.7xp 116cv, ritirata sabato 23! vi segnalo i rumori che secondo me sono sospettii: 1) ho notato che in accelerazione sotto i 2000...",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/difetti-riscontrati-dai-proprietari-nuova-tucson.17336/page-2"
     }
   ],
   "latestUpdate": {
