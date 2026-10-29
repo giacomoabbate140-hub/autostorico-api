@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-29T12:59:24.740757+00:00",
-  "cursor": 27,
+  "updatedAt": "2026-10-29T22:44:23.982431+00:00",
+  "cursor": 1,
   "candidates": [
     {
       "status": "approved",
@@ -3609,6 +3609,20 @@
       "title": "Campagna richiamo Sostituzione Turbo 3008 1.5 Bluehdi - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Grazie a tutti! Auto: Peugeot 3008 GT Line BlueHDI 1.5 130cv EAT8 ... Anche io ho saputo del richiamo, mio cugino che ha comprato l&#x27;auto dopo la mia ha ricevuto la lettera di richiamo io no. La mia ha telaio n. 186000 e rotti la sua supera con il n. Buongiorno a tutti, Quanti di voi hanno ricevuto la comunicazione per il richiamo riguardante il controllo del gruppo turbo-compressore ed eventuale sostituzione completa se il ricontrollo dovesse risultare negativo ? Mi ha chiamato poco fa il concessionario in quanto non mi ero ancora presentato, io però non ho ricevuta alcuna lettera/raccomandata da Peugeot. Immatricolata 05/2018. Nuova 3008 1.5 Bluehdi 130cv EAT8 GTLine Rosso Ultimate, Cruise adattivo, Keyless, Advanced Grip Control, DAB, Visiopark 180°, barre al tetto. Grazie a tutti! Auto: Peugeot 3008 GT Line BlueHDI 1.5 130cv EAT8 ... Anche io ho saputo del richiamo, mio cugino che ha comprato l'auto dopo la mia ha ricevuto la lettera di richiamo io no. La mia ha telaio n. 186000 e rotti la sua supera con il n. Peugeottista D.O.C. ... 11 in Italia non si può davvero sentire. Questi richiami coinvolgono solitamente interi lotti di auto nei quali viene usato un componente leggermente diverso da quello usato in precedenza per garantire la produzione e magari si viene a sapere che quella modifica anche solo del fornitore può portate a dei malfunzionamenti, per questo si applicano le Campagne di richiamo per verificare effettivamente se ci sono o meno dei problemi. Peugeottista D.O.C. ... Hallahub ha scritto:11 in Italia non si può davvero sentire. ..... ......In questo caso credo proprio che le vetture incriminate siano almeno un migliaio Le campagne di richiamo possono invece coinvolgere anche pochissimi esemplari, in Francia é attivo da anni un sito ministeriale dove vengono indicati in maniera dettagliata le auto coinvolte nelle varie campagne, questo é il report 2018, e come puoi constatare ci sono casi inferiori alle 10 unità https://www.ecologique-solidaire.gouv.f ...",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=114772"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-29T22:44:23.982431+00:00",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year": 2018,
+      "engine": "1.5 TSI Evo",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Tre Golf, tre volte problemi di motori. L'affidabilità tedesca (!). | Il Forum di Quattroruote",
+      "snippet": "Ci ho percorso ben 107.000 km e diciamo che i primi 60.000 km sono stati diciamo accompagnati da un calvario di &quot;scossoni&quot; che erano causati dal famoso volano bimasse per cui Volkswagen fece una campagna di richiamo (neanche tanto &quot;pubblicizzata&quot;, per la verità) e finalmente dopo prove, provette e provucce trovarono la soluzione al problema. Ci ho percorso ben 107.000 km e diciamo che i primi 60.000 km sono stati diciamo accompagnati da un calvario di \"scossoni\" che erano causati dal famoso volano bimasse per cui Volkswagen fece una campagna di richiamo (neanche tanto \"pubblicizzata\", per la verità) e finalmente dopo prove, provette e provucce trovarono la soluzione al problema. Dovesse essere sostituito, goditi la tua G6 col motore nuovo, poi, tra un anno e mezzo, vendila.....all'epoca avrà 3 anni e mezzo, età piu' o meno giusta per cambiare macchina. Ti faccio i miei complimenti per la tua Cmmunity: continua cosi'!!! PS: 12k euri per una G6 TSI 160cv, di meno di 2 anni, sono davvero pochini..... Queste sono le discussioni dove potrete reperire tante informazioni riguardo alle noie che affliggono questo motore che pur sempre rimane un motore ottimo e liscio, piacevole da guidare. Peccato che gli manchi l'unica cosa che noi automobilisti PRETENDIAMO da una Volkswagen, ossia l'affidabilità. http://www.vwgolfcommunity.com/vbulletin/showthread.php?16589-Golf-VI-1.4-TSI-160cv-Motore-sostituito!",
+      "sourceUrl": "https://forum.quattroruote.it/threads/tre-golf-tre-volte-problemi-di-motori-laffidabilit%C3%A0-tedesca.55818/"
     }
   ],
   "latestUpdate": {
