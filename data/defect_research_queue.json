@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-28T22:34:18.243600+00:00",
-  "cursor": 21,
+  "updatedAt": "2026-10-29T05:46:54.643531+00:00",
+  "cursor": 24,
   "candidates": [
     {
       "status": "approved",
@@ -3567,6 +3567,48 @@
       "title": "difetti riscontrati dai proprietari nuova tucson | Pagina 2 | Forum Hyundai Club Italia",
       "snippet": "ciao a tutti, ho 1.7xp 116cv, ritirata sabato 23! vi segnalo i rumori che secondo me sono sospettii: 1) ho notato che in accelerazione sotto i 2000...",
       "sourceUrl": "https://www.hyundai-club.eu/threads/difetti-riscontrati-dai-proprietari-nuova-tucson.17336/page-2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-29T05:46:54.643531+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Pseudo campagna di richiamo al cambio - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Guasti, difetti, problemi e cose che non ci piacciono; costi dei tagliandi e delle riparazioni ... Oggi ho portato la 208 a fare il secondo tagliando, se la sono tenuta per effettuare una campagna di richiamo al cambio automatico, di più non mi hanno detto. Io ho verificato sia sull&#x27;app che sul portale peugeot,e con il miuo VIN non risulta nessun richiamo!! Guasti, difetti, problemi e cose che non ci piacciono; costi dei tagliandi e delle riparazioni ... Oggi ho portato la 208 a fare il secondo tagliando, se la sono tenuta per effettuare una campagna di richiamo al cambio automatico, di più non mi hanno detto. Io ho verificato sia sull'app che sul portale peugeot,e con il miuo VIN non risulta nessun richiamo!! Partner 1,6 Hdi 90hp 263k km :10/2008 C3 Aircross 1,2 Puretech 110hp EAT6 120k km :05/2018 Ex Citroen C3 Elegance 1,1 60hp 47k km :10/2006 Ex Citroen C3 Picasso Exclusive 1,6 Hdi 92hp 72k km : 08/2014 Ex Fiat scudo JLX 1.9TD 90hp :12/1996 149k km App MyCitroen r.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=126232"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-29T05:46:54.643531+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "richiamo per 1.5 BlueHdi, catena albero a camme (MXL) - Pagina 6 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Sinceramente, visto il grande clamore nato intorno a questo difetto del nostro 1.5 BlueHDi, <strong>sono grato che alla fine Stellantis abbia riconosciuto che è un problema che merita il richiamo anche perché pregiudica la sicurezza (oltre il portafogli e l&#x27;affidabilità).</strong> Sono proprietario di una 3008 gt-line del 2019 con all'incirca 100 mila km. Sentito del problema mi sono recato in concessionaria e dopo un check della rumorosità della cinghia risultava anomalia e quindi consigliavano sostituzione a mie spese perchè non dal VIN la macchina non era interessata nella campagna di richiamo. Vista la spesa ingente ho preso tempo ed ho contattato più volte la Peugeot tramite sito ufficiale e dopo varie mie insistenze finalmente anche la mia Leonessa è rientrata nella campagna di richiamo. Riferisco quanto ha appreso da esperienze di conoscenti in zona: ad un proprietario a cui è stata trovata la catena non conforme un'officina autorizzata ha chiesto documenti relativi ai tagliandi prima di fare il lavoro. Alla fine si è rivolto ad un'altra officina autorizzata che gli ha fatto il lavoro, sempre sfruttando la campagna di richiamo, senza far alcuna menzione di ulteriori prerequisiti obbligatori. Sinceramente, visto il grande clamore nato intorno a questo difetto del nostro 1.5 BlueHDi, sono grato che alla fine Stellantis abbia riconosciuto che è un problema che merita il richiamo anche perché pregiudica la sicurezza (oltre il portafogli e l'affidabilità). Non ho modificato nulla ed é tutto originale ma, di questi progettisti Peugeot non ho più la minima fiducia, ne combinano una al giorno e noi costretti a pagare per i loro disastri. Nemmeno marchi più blasonati sono esenti da pecche anche piuttosto gravi. Purtroppo inizio a credere che non esistano più marchi veramente affidabili, ma nell'era moderna sono cambiate, spesso in peggio, troppe cose che influiscono sulla qualità delle nostre autovetture Resta il fatto che il riconoscimento dell'anomalia e il relativo richiamo sono già un grande successo, rispetto al passato ...",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=126449&start=75"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-29T05:46:54.643531+00:00",
+      "make": "Peugeot",
+      "model": "3008",
+      "year": 2019,
+      "engine": "1.5 BlueHDi",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna richiamo Sostituzione Turbo 3008 1.5 Bluehdi - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Grazie a tutti! Auto: Peugeot 3008 GT Line BlueHDI 1.5 130cv EAT8 ... Anche io ho saputo del richiamo, mio cugino che ha comprato l&#x27;auto dopo la mia ha ricevuto la lettera di richiamo io no. La mia ha telaio n. 186000 e rotti la sua supera con il n. Buongiorno a tutti, Quanti di voi hanno ricevuto la comunicazione per il richiamo riguardante il controllo del gruppo turbo-compressore ed eventuale sostituzione completa se il ricontrollo dovesse risultare negativo ? Mi ha chiamato poco fa il concessionario in quanto non mi ero ancora presentato, io però non ho ricevuta alcuna lettera/raccomandata da Peugeot. Immatricolata 05/2018. Nuova 3008 1.5 Bluehdi 130cv EAT8 GTLine Rosso Ultimate, Cruise adattivo, Keyless, Advanced Grip Control, DAB, Visiopark 180°, barre al tetto. Grazie a tutti! Auto: Peugeot 3008 GT Line BlueHDI 1.5 130cv EAT8 ... Anche io ho saputo del richiamo, mio cugino che ha comprato l'auto dopo la mia ha ricevuto la lettera di richiamo io no. La mia ha telaio n. 186000 e rotti la sua supera con il n. Peugeottista D.O.C. ... 11 in Italia non si può davvero sentire. Questi richiami coinvolgono solitamente interi lotti di auto nei quali viene usato un componente leggermente diverso da quello usato in precedenza per garantire la produzione e magari si viene a sapere che quella modifica anche solo del fornitore può portate a dei malfunzionamenti, per questo si applicano le Campagne di richiamo per verificare effettivamente se ci sono o meno dei problemi. Peugeottista D.O.C. ... Hallahub ha scritto:11 in Italia non si può davvero sentire. ..... ......In questo caso credo proprio che le vetture incriminate siano almeno un migliaio Le campagne di richiamo possono invece coinvolgere anche pochissimi esemplari, in Francia é attivo da anni un sito ministeriale dove vengono indicati in maniera dettagliata le auto coinvolte nelle varie campagne, questo é il report 2018, e come puoi constatare ci sono casi inferiori alle 10 unità https://www.ecologique-solidaire.gouv.f ...",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=114772"
     }
   ],
   "latestUpdate": {
