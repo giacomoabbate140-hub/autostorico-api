@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-30T05:47:43.363851+00:00",
-  "cursor": 4,
+  "updatedAt": "2026-10-30T12:54:41.718216+00:00",
+  "cursor": 7,
   "candidates": [
     {
       "status": "approved",
@@ -3623,6 +3623,20 @@
       "title": "Tre Golf, tre volte problemi di motori. L'affidabilità tedesca (!). | Il Forum di Quattroruote",
       "snippet": "Ci ho percorso ben 107.000 km e diciamo che i primi 60.000 km sono stati diciamo accompagnati da un calvario di &quot;scossoni&quot; che erano causati dal famoso volano bimasse per cui Volkswagen fece una campagna di richiamo (neanche tanto &quot;pubblicizzata&quot;, per la verità) e finalmente dopo prove, provette e provucce trovarono la soluzione al problema. Ci ho percorso ben 107.000 km e diciamo che i primi 60.000 km sono stati diciamo accompagnati da un calvario di \"scossoni\" che erano causati dal famoso volano bimasse per cui Volkswagen fece una campagna di richiamo (neanche tanto \"pubblicizzata\", per la verità) e finalmente dopo prove, provette e provucce trovarono la soluzione al problema. Dovesse essere sostituito, goditi la tua G6 col motore nuovo, poi, tra un anno e mezzo, vendila.....all'epoca avrà 3 anni e mezzo, età piu' o meno giusta per cambiare macchina. Ti faccio i miei complimenti per la tua Cmmunity: continua cosi'!!! PS: 12k euri per una G6 TSI 160cv, di meno di 2 anni, sono davvero pochini..... Queste sono le discussioni dove potrete reperire tante informazioni riguardo alle noie che affliggono questo motore che pur sempre rimane un motore ottimo e liscio, piacevole da guidare. Peccato che gli manchi l'unica cosa che noi automobilisti PRETENDIAMO da una Volkswagen, ossia l'affidabilità. http://www.vwgolfcommunity.com/vbulletin/showthread.php?16589-Golf-VI-1.4-TSI-160cv-Motore-sostituito!",
       "sourceUrl": "https://forum.quattroruote.it/threads/tre-golf-tre-volte-problemi-di-motori-laffidabilit%C3%A0-tedesca.55818/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-30T12:54:41.718216+00:00",
+      "make": "Citroen",
+      "model": "C3",
+      "year": 2019,
+      "engine": "1.2 PureTech",
+      "sourceName": "Citroën-Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Citroën-Club e DS Forum • Leggi argomento - NUOVI PROBLEMI MOTORE 1.2 PURETECH....",
+      "snippet": "Indice » DISCUSSIONI E AREA TECNICA » Vetture Citroën » C3 &amp; C3 Aircross IV » C3 IV | Argomenti a Carattere Tecnico · Tutti gli orari sono UTC + 1 ora [ ora legale ]",
+      "sourceUrl": "https://www.citroen-club.it/forum/viewtopic.php?t=46189"
     }
   ],
   "latestUpdate": {
