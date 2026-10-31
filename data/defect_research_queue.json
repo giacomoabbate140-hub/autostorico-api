@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-31T12:27:47.552023+00:00",
-  "cursor": 16,
+  "updatedAt": "2026-10-31T21:32:52.379233+00:00",
+  "cursor": 19,
   "candidates": [
     {
       "status": "approved",
@@ -3665,6 +3665,20 @@
       "title": "Cambio manuale Tucson 1.7 - Problemi al sincronizzatore | Forum Hyundai Club Italia",
       "snippet": "NO!! dopo due mesi succede di nuovo, però questa volta è la quarta marcia che gratta vado di nuovo alla hyundai mi fanno aspettare quasi un mese per accettarla ... va bene ok sono pieni di lavoro, nessun problema può succedere hanno cambiato il sincronizzatore della quarta marcia e mi hanno detto le stesse parole della volta scorsa. Ora la mia domanda è : non è mai capitato a nessuno ? E se i sincronizzatori nuovi durano altri 27000km ? E se fosse il cambio difettoso ? La Hyundai non dovrebbe fare un richiamo ? NO!! dopo due mesi succede di nuovo, però questa volta è la quarta marcia che gratta vado di nuovo alla hyundai mi fanno aspettare quasi un mese per accettarla ... va bene ok sono pieni di lavoro, nessun problema può succedere hanno cambiato il sincronizzatore della quarta marcia e mi hanno detto le stesse parole della volta scorsa. Ora la mia domanda è : non è mai capitato a nessuno ? E se i sincronizzatori nuovi durano altri 27000km ? E se fosse il cambio difettoso ? La Hyundai non dovrebbe fare un richiamo ? Sarebbe interessante sapere se qualcuno accusa problemi di inserimento marce... in particolare 4a e 5a.... o anche se non accusa assolutamente niente In ogni caso sarebbe da inserire anche il chilometraggio percorso... con un post del tipo Problemi: si/no (con eventuale descrizione) Km percorsi: xxxxx Ripeto Cambio manuale Motorizzazione 1.7 crdi Clicca per espandere... Aggiungerei... su che Tucson ? Perché sul profilo leggo \"1.6 CRDI\".... se è 1.6 è benzina.... Clicca per espandere... Per la precisione parliamo del 1.7 crdi",
       "sourceUrl": "https://www.hyundai-club.eu/threads/cambio-manuale-tucson-1-7-problemi-al-sincronizzatore.22694/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-31T21:32:52.379233+00:00",
+      "make": "Mercedes-Benz",
+      "model": "Classe A",
+      "year": 2018,
+      "engine": "180d",
+      "sourceName": "Mercedes-Benz Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Richiami mercedes classe a w169 - Mercedes-Benz Club Italia",
+      "snippet": "Mi chiedevo, visto che si parla tanto di richiami per diffeti ecc.,se per l&#x27;autovettura in oggetto sono stati indetti dei richiami da parte di mercedes per &quot;difetti&quot; di fabbrica, che mi sembra ce ne siano anche parecchi, ed in che modo il proprietario dell&#x27;autovettura viene messo a conoscenza...mi scuso anticipatamente se e&#x27; stato gia&#x27; trattato qsto argomento ma non l&#x27;ho trovato. Mi chiedevo, visto che si parla tanto di richiami per diffeti ecc.,se per l'autovettura in oggetto sono stati indetti dei richiami da parte di mercedes per \"difetti\" di fabbrica, che mi sembra ce ne siano anche parecchi, ed in che modo il proprietario dell'autovettura viene messo a conoscenza...mi scuso anticipatamente se e' stato gia' trattato qsto argomento ma non l'ho trovato. CRONet ha scritto:C'è un richiamo per ruggine. A me hanno sostituito 3 porte in Svizzera. Anche la classe B è interessata a questo problema. Però non tutte le classe A e B sono soggette a questo problema. Cerca nella sezione Classe A, perchè ho scritto un post sul argomento abbastanza completo.",
+      "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?f=6&t=38679"
     }
   ],
   "latestUpdate": {
