@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-31T05:39:29.459336+00:00",
-  "cursor": 13,
+  "updatedAt": "2026-10-31T12:27:47.552023+00:00",
+  "cursor": 16,
   "candidates": [
     {
       "status": "approved",
@@ -3637,6 +3637,34 @@
       "title": "Citroën-Club e DS Forum • Leggi argomento - NUOVI PROBLEMI MOTORE 1.2 PURETECH....",
       "snippet": "Indice » DISCUSSIONI E AREA TECNICA » Vetture Citroën » C3 &amp; C3 Aircross IV » C3 IV | Argomenti a Carattere Tecnico · Tutti gli orari sono UTC + 1 ora [ ora legale ]",
       "sourceUrl": "https://www.citroen-club.it/forum/viewtopic.php?t=46189"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-31T12:27:47.552023+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Cambio manuale Tucson 1.7 - Problemi al sincronizzatore | Pagina 2 | Forum Hyundai Club Italia",
+      "snippet": "La casa madre, si rifiuta di sostituire integralmente il cambio...nonostante le mie insistenti richieste al ripresentarsi del problema per la quarta volta! Capisco da questo forum (ma anche da altre fonti) che questo modello di auto presenta spesso tale difetto e, quindi, il mio non è un caso isolato. La cosa più grave è che Hyundai dovrebbe fare una campagna di richiamo per sostituire il cambio integralmente e proteggere la sua reputazione che può solo peggiorare se questi episodi si infittiscono. La casa madre, si rifiuta di sostituire integralmente il cambio...nonostante le mie insistenti richieste al ripresentarsi del problema per la quarta volta! Capisco da questo forum (ma anche da altre fonti) che questo modello di auto presenta spesso tale difetto e, quindi, il mio non è un caso isolato. La cosa più grave è che Hyundai dovrebbe fare una campagna di richiamo per sostituire il cambio integralmente e proteggere la sua reputazione che può solo peggiorare se questi episodi si infittiscono. Ciao zibizibi, ho spostato il tuo messaggio in questa discussione in quanto esisteva già una discussione analoga (usiamo il tasto cerca prima di aprirne una nuova ). Venendo al problema: come vedi nel forum non ci sono tantissimi casi con questo tipo di problema, per cui vista l'incidenza un richiamo lo vedo poco probabile. Anche se so che la cosa non ti farà rilassare, l'ipotesi che il cambio della tua auto sia nato male è tutt'altro che remota. Alla luce del ripresentarsi del problema, cercherei di insistere con l'assistenza per una sostituzione completa dei sincronizzatori. ... La Divina: i20 1.4 CRDi 90 cv Comfort+Login pack col. NO!! dopo due mesi succede di nuovo, però questa volta è la quarta marcia che gratta vado di nuovo alla hyundai mi fanno aspettare quasi un mese per accettarla ... va bene ok sono pieni di lavoro, nessun problema può succedere hanno cambiato il sincronizzatore della quarta marcia e mi hanno detto le stesse parole della volta scorsa. Ora la mia domanda è : non è mai capitato a nessuno ? E se i sincronizzatori nuovi durano altri 27000km ? E se fosse il cambio difettoso ? La Hyundai non dovrebbe fare un richiamo ? Salve, anche io problemi, Tucson 1.7 crdi del novembre 2015 cambio manuale a ora km 65.000, con l'auto in movimento cambio che gratta all'inserimento della quarta marcia, la concessionaria riconosce il difetto è provvede a risolvere in garanzia, sono in attesa dell'intervento, siamo quasi a Natale e spero presto, passare dalla terza alla quinta non è simpatico.",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/cambio-manuale-tucson-1-7-problemi-al-sincronizzatore.22694/page-2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-10-31T12:27:47.552023+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Cambio manuale Tucson 1.7 - Problemi al sincronizzatore | Forum Hyundai Club Italia",
+      "snippet": "NO!! dopo due mesi succede di nuovo, però questa volta è la quarta marcia che gratta vado di nuovo alla hyundai mi fanno aspettare quasi un mese per accettarla ... va bene ok sono pieni di lavoro, nessun problema può succedere hanno cambiato il sincronizzatore della quarta marcia e mi hanno detto le stesse parole della volta scorsa. Ora la mia domanda è : non è mai capitato a nessuno ? E se i sincronizzatori nuovi durano altri 27000km ? E se fosse il cambio difettoso ? La Hyundai non dovrebbe fare un richiamo ? NO!! dopo due mesi succede di nuovo, però questa volta è la quarta marcia che gratta vado di nuovo alla hyundai mi fanno aspettare quasi un mese per accettarla ... va bene ok sono pieni di lavoro, nessun problema può succedere hanno cambiato il sincronizzatore della quarta marcia e mi hanno detto le stesse parole della volta scorsa. Ora la mia domanda è : non è mai capitato a nessuno ? E se i sincronizzatori nuovi durano altri 27000km ? E se fosse il cambio difettoso ? La Hyundai non dovrebbe fare un richiamo ? Sarebbe interessante sapere se qualcuno accusa problemi di inserimento marce... in particolare 4a e 5a.... o anche se non accusa assolutamente niente In ogni caso sarebbe da inserire anche il chilometraggio percorso... con un post del tipo Problemi: si/no (con eventuale descrizione) Km percorsi: xxxxx Ripeto Cambio manuale Motorizzazione 1.7 crdi Clicca per espandere... Aggiungerei... su che Tucson ? Perché sul profilo leggo \"1.6 CRDI\".... se è 1.6 è benzina.... Clicca per espandere... Per la precisione parliamo del 1.7 crdi",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/cambio-manuale-tucson-1-7-problemi-al-sincronizzatore.22694/"
     }
   ],
   "latestUpdate": {
