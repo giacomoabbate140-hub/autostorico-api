@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-31T21:32:52.379233+00:00",
-  "cursor": 19,
+  "updatedAt": "2026-11-01T06:02:17.996404+00:00",
+  "cursor": 22,
   "candidates": [
     {
       "status": "approved",
@@ -3679,6 +3679,20 @@
       "title": "Richiami mercedes classe a w169 - Mercedes-Benz Club Italia",
       "snippet": "Mi chiedevo, visto che si parla tanto di richiami per diffeti ecc.,se per l&#x27;autovettura in oggetto sono stati indetti dei richiami da parte di mercedes per &quot;difetti&quot; di fabbrica, che mi sembra ce ne siano anche parecchi, ed in che modo il proprietario dell&#x27;autovettura viene messo a conoscenza...mi scuso anticipatamente se e&#x27; stato gia&#x27; trattato qsto argomento ma non l&#x27;ho trovato. Mi chiedevo, visto che si parla tanto di richiami per diffeti ecc.,se per l'autovettura in oggetto sono stati indetti dei richiami da parte di mercedes per \"difetti\" di fabbrica, che mi sembra ce ne siano anche parecchi, ed in che modo il proprietario dell'autovettura viene messo a conoscenza...mi scuso anticipatamente se e' stato gia' trattato qsto argomento ma non l'ho trovato. CRONet ha scritto:C'è un richiamo per ruggine. A me hanno sostituito 3 porte in Svizzera. Anche la classe B è interessata a questo problema. Però non tutte le classe A e B sono soggette a questo problema. Cerca nella sezione Classe A, perchè ho scritto un post sul argomento abbastanza completo.",
       "sourceUrl": "https://www.mercedesbenzclub.it/forum/viewtopic.php?f=6&t=38679"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-01T06:02:17.996404+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo JZR su motore 1.2 PureTech Turbo - Pagina 24 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Forse a sto punto sarebbe da cambiare il titolo del topic che parla solo di turbo (ma è anche vero che su questi richiami non ci sono stati). Grazie a peugeot che non manda manco una letterina per comunicare i cambi intervalli previsti. Certo loro vorrebbero che vai in assistenza ufficiale e lo sanno, ma la mia esperienza me lo ha sconsigliato, oltre che scomodo · 208 active 1.0 - 5 porte bianco con pack fendi/specchietti abbattibili/sensori parcheggio e ruota di scorta. 208 active 1.0 - 5 porte bianco con pack fendi/specchietti abbattibili/sensori parcheggio e ruota di scorta. Ritirata giugno 2016 - 68cv di pura adrenalina ... Peugeottista D.O.C. ... Una lettera di richiamo ufficiale, per Legge, la Casa è obbligata a spedirla in caso di problematiche legate a SICUREZZA, SALUTE o AMBIENTE. Diversamente ci potranno essere delle note di servizio interne oppure dei bollettini di assistenza( TSB). Forse a sto punto sarebbe da cambiare il titolo del topic che parla solo di turbo (ma è anche vero che su questi richiami non ci sono stati). Grazie a peugeot che non manda manco una letterina per comunicare i cambi intervalli previsti. Certo loro vorrebbero che vai in assistenza ufficiale e lo sanno, ma la mia esperienza me lo ha sconsigliato, oltre che scomodo · 208 active 1.0 - 5 porte bianco con pack fendi/specchietti abbattibili/sensori parcheggio e ruota di scorta. Ma altrettanto ovvio anche il tempo incida. E' un po' difficile credo avere fatti comprovati se non sei peugeot, siamo su un forum, che è fatto apposta per discutere. A meno che per scrivere non debba rintracciare prima tutti i proprietari e chiedere la loro esperienza e fare una statistica. Tutte potrebbero avere ….. ecc), non c’entra nulla la correttezza o meno di un costruttore Il piano di manutenzione è un foglio a parte (non inserito nel libretto di uso e manutenzione) che viene fornito in copia al momento della consegna dell’auto, l’originale deve essere firmato dal proprietario per accettazione e tenuto dal concessionario, se dici che non ti é stato dato è una mancanza del concessionario dove l’hai acquistata, fai perciò una doverosa segnalazione a Peugeot Italia",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=119601&start=345"
     }
   ],
   "latestUpdate": {
