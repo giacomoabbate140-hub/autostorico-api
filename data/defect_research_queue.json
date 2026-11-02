@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-02T06:00:08.785613+00:00",
-  "cursor": 2,
+  "updatedAt": "2026-11-02T15:50:16.279623+00:00",
+  "cursor": 5,
   "candidates": [
     {
       "status": "approved",
@@ -3777,6 +3777,20 @@
       "title": "Consiglio Alfa romeo Giulia - 2.2 Diesel - ClubAlfa.it Forum",
       "snippet": "Sto valutando diversi esemplari ma in particolare uno ha attirato la mia attenzione: trattasi di una stupenda Giulia Veloce 2.2 del 2018, proposta ad un prezzo allettante (occhio, non è certamente regalata) da un noto, in senso positivo, rivenditore. Tutti tagliandi certificati in alfa incluso distribuzione e tagliando al cambio, condizioni pressoché perfette all’apparenza ed è in conto vendita, volendo potrei mettermi anche in contatto con il proprietario. Clicca per espandere... La mia l'ho venduta con 120000 km e zero problemi e il nuovo proprietario ne è entusiasta. Sto valutando diversi esemplari ma in particolare uno ha attirato la mia attenzione: trattasi di una stupenda Giulia Veloce 2.2 del 2018, proposta ad un prezzo allettante (occhio, non è certamente regalata) da un noto, in senso positivo, rivenditore. Tutti tagliandi certificati in alfa incluso distribuzione e tagliando al cambio, condizioni pressoché perfette all’apparenza ed è in conto vendita, volendo potrei mettermi anche in contatto con il proprietario.",
       "sourceUrl": "https://forum.clubalfa.it/threads/consiglio-alfa-romeo-giulia.147684/page-4"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-02T15:50:16.279623+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Audi A3 1.6 tdi | Il Forum di Quattroruote",
+      "snippet": "Mi sono trovato in un bivio dove dopo averle provate entrambe sono rimasto un pò dubbioso, ovvero: Audi a3 2.0 e una A200 Entrambe a quasi lo stesso prezzo, 2017, con meno di 20.000km Ora mi ritrovo in una indecisione abissale. Affidabilità? Tendenzialmente per un utilizzo cosi un bel turbo benzina potrebbe essere valido ,piccolo,sui 1.4 se seg C oppure 1.0 scendendo di categoria. Vedi tu,il gasolio cosi va davvero ad aria e anche questo è un piacere. Ad affidabilità quest'ultima edizione è ormai buono. Mi sono trovato in un bivio dove dopo averle provate entrambe sono rimasto un pò dubbioso, ovvero: Audi a3 2.0 e una A200 Entrambe a quasi lo stesso prezzo, 2017, con meno di 20.000km Ora mi ritrovo in una indecisione abissale. Affidabilità?",
+      "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-1-6-tdi.116157/"
     }
   ],
   "latestUpdate": {
