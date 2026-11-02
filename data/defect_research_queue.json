@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-01T22:01:15.437257+00:00",
-  "cursor": 28,
+  "updatedAt": "2026-11-02T06:00:08.785613+00:00",
+  "cursor": 2,
   "candidates": [
     {
       "status": "approved",
@@ -3721,6 +3721,62 @@
       "title": "seat leon 1.4 tgi quali contro? | Il Forum di Quattroruote",
       "snippet": "Io sono possessore di questa auto però a onor del vero ho avuto alcune noie non ancora risolte, puoi trovare il post qui sul forum; nonostante tutto però (il mio rammarico è verso l&#x27;assistenza) è una buona auto: consumi ridicoli, qualità elevata, prestazioni discrete, non dico buone perché ovviamente in ripresa con marce lunghe non è certo un fulmine ma comunque nemmeno un chiodo, anzi nella guida giornaliera va più che bene ma richiede qualche piccolo compromesso. Quindi i pregi son quelli di cui sopra, per quanto concerne i difetti direi: ambiente interno un pò triste e serioso, ci vorrebbe qualche colore in più; bagagliaio ridotto per un auto da famiglia, siamo sui 280 litri, poiché il doppiofondo è occupato dalle bombole. Io sono possessore di questa auto però a onor del vero ho avuto alcune noie non ancora risolte, puoi trovare il post qui sul forum; nonostante tutto però (il mio rammarico è verso l'assistenza) è una buona auto: consumi ridicoli, qualità elevata, prestazioni discrete, non dico buone perché ovviamente in ripresa con marce lunghe non è certo un fulmine ma comunque nemmeno un chiodo, anzi nella guida giornaliera va più che bene ma richiede qualche piccolo compromesso. Quindi i pregi son quelli di cui sopra, per quanto concerne i difetti direi: ambiente interno un pò triste e serioso, ci vorrebbe qualche colore in più; bagagliaio ridotto per un auto da famiglia, siamo sui 280 litri, poiché il doppiofondo è occupato dalle bombole.",
       "sourceUrl": "https://forum.quattroruote.it/threads/seat-leon-1-4-tgi-quali-contro.103932/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-02T06:00:08.785613+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "year": 2016,
+      "engine": "1.6 Multijet",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Acquisto prima auto. - ClubAlfa.it Forum",
+      "snippet": "Ciao a tutti, sto valutando l’acquisto di un’Alfa Romeo Giulietta 1.4 TB 120 CV del 2016 e vorrei chiedere il parere di chi la possiede o l’ha avuta. Nel 2026 è ancora un acquisto che ha senso? L’idea sarebbe di cercarne una con meno di 100.000 km e una buona cronologia di manutenzione. Avrei alcune domande: Secondo voi qual è un prezzo corretto oggi per una Giulietta 1.4 TB 120 CV del 2016 con meno di 100.000 km? A livello di affidabilità, ci sono difetti ricorrenti o interventi importanti da verificare prima dell’acquisto? Ciao a tutti, sto valutando l’acquisto di un’Alfa Romeo Giulietta 1.4 TB 120 CV del 2016 e vorrei chiedere il parere di chi la possiede o l’ha avuta. Nel 2026 è ancora un acquisto che ha senso? L’idea sarebbe di cercarne una con meno di 100.000 km e una buona cronologia di manutenzione. Avrei alcune domande: Secondo voi qual è un prezzo corretto oggi per una Giulietta 1.4 TB 120 CV del 2016 con meno di 100.000 km? A livello di affidabilità, ci sono difetti ricorrenti o interventi importanti da verificare prima dell’acquisto? Fiat Bravo GT, Alfa 156, Lancia Lybra, bmw serie3, Alfa 159 grigia, nera, Alfa Giulietta, Lancia Ypsilon,Fiat G.Punto Fiat Tipo Toyota C-HR ... Benvenuto Francesco. Motore 120cv affidabile longevo e molto prestazionale. Il 170cv è sprecato. Andresti solo a pagare bollo e assicurazione in più. Consiglio acquisto Giulietta 2.0 JTDm 170cv TCT come prima auto (Budget 6000€) ... Aiuto per info acquisto prima Alfa! I motori 1.4 120 è affidabile e robusto è praticamente lo stesso delle 500 abarth cambiano pochi componenti turbina ecc.. i consumi non sono bassissimi sono accettabili tra i 10/14 al litro dipende dal utilizzo e percorsi.. per risparmiare basta mettere un impianto a gpl e ha risparmio assicurato..",
+      "sourceUrl": "https://forum.clubalfa.it/threads/acquisto-prima-auto.171026/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-02T06:00:08.785613+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo 6962 - ClubAlfa.it Forum",
+      "snippet": "Alfa Romeo Giulia e Alfa Romeo Stelvio invitano i proprietari di queste auto, prodotte tra il 15 aprile 2019 e il 14 luglio 2020, a far riparare i propri veicoli, poiché è possibile che siano dotati di un alloggiamento del freno BSM installato in modo errato. https://www.giuliaforums.com/threads/brake-recall-on-some-my19-20-vehicles.66853/ Alfa Romeo Giulia e Alfa Romeo Stelvio invitano i proprietari di queste auto, prodotte tra il 15 aprile 2019 e il 14 luglio 2020, a far riparare i propri veicoli, poiché è possibile che siano dotati di un alloggiamento del freno BSM installato in modo errato. https://www.giuliaforums.com/threads/brake-recall-on-some-my19-20-vehicles.66853/ ✅ Alfa Romeo is recalling 6,355 vehicles of the Giulia and Stelvio model series manufactured between 2019 and 2020. The reason for the recall is that an ... Allora mi hanno detto he oltre all’aggiornamento centralina, devono cambiare anche il cilindretto sotto il pedale. Clicca per espandere... Fatto solo aggiornamento della centralina, questo l'intervento relativo al richiamo sulle nostre Giulia/Stelvio. VIN of Alfa Romeo cars of European manufacture always begins with a manufacturer's code ZAR or ZAS (Alfa Romeo Arna).",
+      "sourceUrl": "https://forum.clubalfa.it/threads/campagna-di-richiamo-6962.154886/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-02T06:00:08.785613+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Alfa Romeo Giulia 2.2 TD 180 CV Business Sport (2018) cambio manuale - 2.2 Diesel - ClubAlfa",
+      "snippet": "Per quanto riguarda i Km di quella che hai trovata sono decisamente pochi e questo è un elemento negativo in quanto è probabile che l’auto sia stata usata poco e per percorrenze brevi, quindi è consigliabile un tagliando completo con sostituzione della cinghia, del gommino della pompa olio (con quello originale) con pulizia o sostituzione del condotto di aspirazione e del filtro dei vapori olio… dopodiché con il cambio manuale ti potrai godere pienamente il piacere di guidare una Giulia. L’unico difetto della Giulia è l’impossibilità di togliere i controlli, il resto è tutto perfetto. Vorrei chiedere a voi esperti e possessori un po' di informazioni generali su questa specifica versione. In particolare: - Quali sono le principali accortezze da avere prima e dopo l'acquisto? - Quali sono i difetti noti, i \"punti deboli\" o i problemi più comuni riscontrati su questa motorizzazione e sull'elettronica di quell'anno? Per quanto riguarda i Km di quella che hai trovata sono decisamente pochi e questo è un elemento negativo in quanto è probabile che l’auto sia stata usata poco e per percorrenze brevi, quindi è consigliabile un tagliando completo con sostituzione della cinghia, del gommino della pompa olio (con quello originale) con pulizia o sostituzione del condotto di aspirazione e del filtro dei vapori olio… dopodiché con il cambio manuale ti potrai godere pienamente il piacere di guidare una Giulia. L’unico difetto della Giulia è l’impossibilità di togliere i controlli, il resto è tutto perfetto. - A questo chilometraggio (88.000 km), quali sono gli interventi di manutenzione più importanti da verificare? (es. cinghia di distribuzione, tagliando al cambio, ecc.) - In sintesi, secondo la vostra esperienza, valutando costi di gestione, affidabilità e piacere di guida, è un acquisto che vale la pena fare oggi?",
+      "sourceUrl": "https://forum.clubalfa.it/threads/alfa-romeo-giulia-2-2-td-180-cv-business-sport-2018-cambio-manuale.172088/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-02T06:00:08.785613+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Consiglio Alfa romeo Giulia - 2.2 Diesel - ClubAlfa.it Forum",
+      "snippet": "Sto valutando diversi esemplari ma in particolare uno ha attirato la mia attenzione: trattasi di una stupenda Giulia Veloce 2.2 del 2018, proposta ad un prezzo allettante (occhio, non è certamente regalata) da un noto, in senso positivo, rivenditore. Tutti tagliandi certificati in alfa incluso distribuzione e tagliando al cambio, condizioni pressoché perfette all’apparenza ed è in conto vendita, volendo potrei mettermi anche in contatto con il proprietario. Clicca per espandere... La mia l'ho venduta con 120000 km e zero problemi e il nuovo proprietario ne è entusiasta. Sto valutando diversi esemplari ma in particolare uno ha attirato la mia attenzione: trattasi di una stupenda Giulia Veloce 2.2 del 2018, proposta ad un prezzo allettante (occhio, non è certamente regalata) da un noto, in senso positivo, rivenditore. Tutti tagliandi certificati in alfa incluso distribuzione e tagliando al cambio, condizioni pressoché perfette all’apparenza ed è in conto vendita, volendo potrei mettermi anche in contatto con il proprietario.",
+      "sourceUrl": "https://forum.clubalfa.it/threads/consiglio-alfa-romeo-giulia.147684/page-4"
     }
   ],
   "latestUpdate": {
