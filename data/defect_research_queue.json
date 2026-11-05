@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-04T19:44:35.051370+00:00",
-  "cursor": 20,
+  "updatedAt": "2026-11-05T06:44:53.552592+00:00",
+  "cursor": 23,
   "candidates": [
     {
       "status": "approved",
@@ -3791,6 +3791,20 @@
       "title": "Audi A3 1.6 tdi | Il Forum di Quattroruote",
       "snippet": "Mi sono trovato in un bivio dove dopo averle provate entrambe sono rimasto un pò dubbioso, ovvero: Audi a3 2.0 e una A200 Entrambe a quasi lo stesso prezzo, 2017, con meno di 20.000km Ora mi ritrovo in una indecisione abissale. Affidabilità? Tendenzialmente per un utilizzo cosi un bel turbo benzina potrebbe essere valido ,piccolo,sui 1.4 se seg C oppure 1.0 scendendo di categoria. Vedi tu,il gasolio cosi va davvero ad aria e anche questo è un piacere. Ad affidabilità quest'ultima edizione è ormai buono. Mi sono trovato in un bivio dove dopo averle provate entrambe sono rimasto un pò dubbioso, ovvero: Audi a3 2.0 e una A200 Entrambe a quasi lo stesso prezzo, 2017, con meno di 20.000km Ora mi ritrovo in una indecisione abissale. Affidabilità?",
       "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-1-6-tdi.116157/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-05T06:44:53.552592+00:00",
+      "make": "Peugeot",
+      "model": "208",
+      "year": 2020,
+      "engine": "1.2 PureTech",
+      "sourceName": "Passione Peugeot Auto Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna di richiamo JZR su motore 1.2 PureTech Turbo - Pagina 18 - Passione Peugeot Auto Club Italia - FORUM",
+      "snippet": "Conoscevo il difetto dell&#x27;olio/cinghia di distribuzione sul PureTech, che ha portato al richiamo qualche centinaia di migliaia di veicoli. Mi pare tollerabile, per quanto possa scocciare al proprietario. Capita a tutti i brands, pure a Ferrari! Ora come siamo messi? Il problema è stato risolto o ci sono altre magagne note? Ho appena preso una 208 PureTech (benzina) da 100cv manuale nuova, deve arrivarmi tra un mese e mezzo o due. Spero in un&#x27;auto affidabile per diversi anni/chilometri e che non dia fastidi prolungati. Conoscevo il difetto dell'olio/cinghia di distribuzione sul PureTech, che ha portato al richiamo qualche centinaia di migliaia di veicoli. Mi pare tollerabile, per quanto possa scocciare al proprietario. Capita a tutti i brands, pure a Ferrari! Ora come siamo messi? Il problema è stato risolto o ci sono altre magagne note? Ho appena preso una 208 PureTech (benzina) da 100cv manuale nuova, deve arrivarmi tra un mese e mezzo o due. Spero in un'auto affidabile per diversi anni/chilometri e che non dia fastidi prolungati. Peugeottista D.O.C. ... Turbo, l'aspirato è 75cv. ... Con calma lo leggerò sicuramente, ma ora cercavo una risposta immediata, venendo da una macchina per nulla affidabile, mi sono subito spaventato. In genere, anche io faccio un tagliando ogni anno, in base a dove lavoro parliamo di ogni 10 o 15 mila km. Peugeottista D.O.C. ... 10/03/2022, 21:31 Con calma lo leggerò sicuramente, ma ora cercavo una risposta immediata, venendo da una macchina per nulla affidabile, mi sono subito spaventato. In genere, anche io faccio un tagliando ogni anno, in base a dove lavoro parliamo di ogni 10 o 15 mila km. D'altronde, a conferma di ciò, Alfa Romeo si piazza ultima in tutte le classifiche di affidabilità prese in esame, europee ed americane! Quindi, capite bene, sono molto scettico. Tant'è che non volevo più acquistare un'auto, ma prenderne una strausata da pochissimo, proprio per evitare la delusione. Ok, per la manutenzione mi sono sempre affidato e fidato di professionisti, spero non lavorino secondo etica! ... Peugeottista D.O.C.",
+      "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=119601&start=255"
     }
   ],
   "latestUpdate": {
