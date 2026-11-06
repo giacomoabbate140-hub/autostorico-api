@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-05T19:56:05.331837+00:00",
-  "cursor": 26,
+  "updatedAt": "2026-11-06T06:42:49.164937+00:00",
+  "cursor": 0,
   "candidates": [
     {
       "status": "approved",
@@ -3805,6 +3805,20 @@
       "title": "Campagna di richiamo JZR su motore 1.2 PureTech Turbo - Pagina 18 - Passione Peugeot Auto Club Italia - FORUM",
       "snippet": "Conoscevo il difetto dell&#x27;olio/cinghia di distribuzione sul PureTech, che ha portato al richiamo qualche centinaia di migliaia di veicoli. Mi pare tollerabile, per quanto possa scocciare al proprietario. Capita a tutti i brands, pure a Ferrari! Ora come siamo messi? Il problema è stato risolto o ci sono altre magagne note? Ho appena preso una 208 PureTech (benzina) da 100cv manuale nuova, deve arrivarmi tra un mese e mezzo o due. Spero in un&#x27;auto affidabile per diversi anni/chilometri e che non dia fastidi prolungati. Conoscevo il difetto dell'olio/cinghia di distribuzione sul PureTech, che ha portato al richiamo qualche centinaia di migliaia di veicoli. Mi pare tollerabile, per quanto possa scocciare al proprietario. Capita a tutti i brands, pure a Ferrari! Ora come siamo messi? Il problema è stato risolto o ci sono altre magagne note? Ho appena preso una 208 PureTech (benzina) da 100cv manuale nuova, deve arrivarmi tra un mese e mezzo o due. Spero in un'auto affidabile per diversi anni/chilometri e che non dia fastidi prolungati. Peugeottista D.O.C. ... Turbo, l'aspirato è 75cv. ... Con calma lo leggerò sicuramente, ma ora cercavo una risposta immediata, venendo da una macchina per nulla affidabile, mi sono subito spaventato. In genere, anche io faccio un tagliando ogni anno, in base a dove lavoro parliamo di ogni 10 o 15 mila km. Peugeottista D.O.C. ... 10/03/2022, 21:31 Con calma lo leggerò sicuramente, ma ora cercavo una risposta immediata, venendo da una macchina per nulla affidabile, mi sono subito spaventato. In genere, anche io faccio un tagliando ogni anno, in base a dove lavoro parliamo di ogni 10 o 15 mila km. D'altronde, a conferma di ciò, Alfa Romeo si piazza ultima in tutte le classifiche di affidabilità prese in esame, europee ed americane! Quindi, capite bene, sono molto scettico. Tant'è che non volevo più acquistare un'auto, ma prenderne una strausata da pochissimo, proprio per evitare la delusione. Ok, per la manutenzione mi sono sempre affidato e fidato di professionisti, spero non lavorino secondo etica! ... Peugeottista D.O.C.",
       "sourceUrl": "https://www.forumpassionepeugeot.it/viewtopic.php?t=119601&start=255"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-06T06:42:49.164937+00:00",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year": 2018,
+      "engine": "1.5 TSI Evo",
+      "sourceName": "VW Golf Community",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Irregolarità funzionamento 1.5 TSI 150 cv EA 211 - The VW Golf Community",
+      "snippet": "Viceversa il problema del seghettamento a frizione già rilasciata e filo di acceleratore mi fa pensare a difetto/tolleranza eccessiva del gruppo farfallato o miscela estremamente magra in fase di iniezione. Qualcuno è riuscito a trovare una relazione difetto/settimana di produzione o altro ? Cavolo il 1.5 TSI è il top gamma benzina di Volkswagen, montato dappertutto, inoltre nel 2019 si prevede un aumento di vendita dei benzina rispetto ai diesel. Utilizziamo questa discussione per parlare delle irregolarità di funzionamento segnalate da alcuni possessori del nuovo motore. Il titolo spero sia sufficientemente chiaro. Per evitare di inficiare l'ottimo scopo della discussione prego di intervenire solo chi è in possesso di tale motorizzazione e riscontra il problema. Viceversa il problema del seghettamento a frizione già rilasciata e filo di acceleratore mi fa pensare a difetto/tolleranza eccessiva del gruppo farfallato o miscela estremamente magra in fase di iniezione. Qualcuno è riuscito a trovare una relazione difetto/settimana di produzione o altro ? Cavolo il 1.5 TSI è il top gamma benzina di Volkswagen, montato dappertutto, inoltre nel 2019 si prevede un aumento di vendita dei benzina rispetto ai diesel. AL CONTRARIO SE IL SISTEMA INVIA L'EMAIL PER LA RIATTIVAZIONE DEL TUO ACCOUNT MA TU NON LA RICEVI ALLORA EVIDENTEMENTE STAI USANDO UN'EMAIL CON UN SISTEMA ANTI-SPAM CHE CANCELLA LE NOSTRE EMAIL. IN QUESTO CASO PUOI CONTATTARE IL WEBMASTER SPECIFICANDO CHE HAI GIA' EFFETTUATO IL CONTROLLO SULL'EMAIL E SULLA PRESENZA DELL'ACCOUNT CHIEDENDO DI UTILIZZARE UN'ALTRA EMAIL. ALTRE RICHIESTE VERRANNO IGNORATE. VW GOLF COMMUNITY Tutto il materiale presente nel Sito (immagini, loghi, articoli, messaggi, etc) appartiene ai legittimi proprietari.",
+      "sourceUrl": "https://www.vwgolfcommunity.com/vb/forum/vw-golf-world/vw-golf-7/guasti-problemi-richiami-ab/motore-ab/19081-irregolarit%C3%A0-funzionamento-1-5-tsi-150-cv-ea-211/page103"
     }
   ],
   "latestUpdate": {
