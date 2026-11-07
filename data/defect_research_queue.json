@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-07T05:57:12.169241+00:00",
-  "cursor": 6,
+  "updatedAt": "2026-11-07T12:59:08.976196+00:00",
+  "cursor": 9,
   "candidates": [
     {
       "status": "approved",
@@ -3875,6 +3875,20 @@
       "title": "Audi A3 Sportback 1.6tdi 110cv s tronic | Il Forum di Quattroruote",
       "snippet": "<strong>La prima volta per la sostituzione di un iniettore difettoso, la seconda per la sostituzione di una pompa difettosa</strong>, che ha messo &quot;in circolo&quot; schegge metalliche, portando, oltre al cambio della stessa, anche di tutti i filtri motore, di tutte le pompe, di tutti gli iniettori e della pulizia ... La prima volta per la sostituzione di un iniettore difettoso, la seconda per la sostituzione di una pompa difettosa, che ha messo \"in circolo\" schegge metalliche, portando, oltre al cambio della stessa, anche di tutti i filtri motore, di tutte le pompe, di tutti gli iniettori e della pulizia del serbatoio.",
       "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-sportback-1-6tdi-110cv-s-tronic.118913/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-07T12:59:08.976196+00:00",
+      "make": "Fiat",
+      "model": "Panda",
+      "year": 2018,
+      "engine": "1.3 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "500L 1.3 MULTIJET 95CV EURO6B DEL 2017 | Il Forum di Quattroruote",
+      "snippet": "Quando arrivo ed il capo officina Fiat mi riceve, spiegando tutto il fatto, mi dice che per il motore 1.3 multijet 95cv prodotto negli anni 2016/2017 e montato oltre che su 500L anche su 500X, Panda, Fiorino, Lancia Ypsilon, è un problema che l&#x27;80% di queste vetture ha riscontrato e stranamente il Gruppo FCA, non ha mai inviato ai proprietari una lettera di richiamo per risolvere il disguido che in alcuni casi ha avuto conseguenze spiacevoli anche sulla salute dei guidatori. Quando arrivo ed il capo officina Fiat mi riceve, spiegando tutto il fatto, mi dice che per il motore 1.3 multijet 95cv prodotto negli anni 2016/2017 e montato oltre che su 500L anche su 500X, Panda, Fiorino, Lancia Ypsilon, è un problema che l'80% di queste vetture ha riscontrato e stranamente il Gruppo FCA, non ha mai inviato ai proprietari una lettera di richiamo per risolvere il disguido che in alcuni casi ha avuto conseguenze spiacevoli anche sulla salute dei guidatori. Il problema sta in una canaletta che dalla coppa dell'olio va al motore, che in condizioni particolari non ancora stabilite e ad un chilometraggio variabile, riversa olio nella camera di combustione generando tutto quello che vi ho descritto. Ora Fiat prevede la canaletta con una valvola anti risucchio per impedire che il problema non si presenti nuovamente, ma non è una soluzione certificata, in quanto manca la campagna di richiamo che certifichi questa operazione.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/500l-1-3-multijet-95cv-euro6b-del-2017.137306/"
     }
   ],
   "latestUpdate": {
