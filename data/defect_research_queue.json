@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-06T19:23:51.684277+00:00",
-  "cursor": 3,
+  "updatedAt": "2026-11-07T05:57:12.169241+00:00",
+  "cursor": 6,
   "candidates": [
     {
       "status": "approved",
@@ -3861,6 +3861,20 @@
       "title": "Problema Audi a1 1.6 tdi | Il Forum di Quattroruote",
       "snippet": "Buongiorno 3 giorni fa mi si è accesa la spia gialla del motore, sono andato dal meccanico vicino e con il bah è uscito errore sconosciuto (a71), mi ha tolto la spia manualmente, e detto di stare tranquillo, la macchina non ha alcun tipo di anomalia durante il passo. Stamattina accendendo la...",
       "sourceUrl": "https://forum.quattroruote.it/threads/problema-audi-a1-1-6-tdi.137535/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-07T05:57:12.169241+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Audi A3 Sportback 1.6tdi 110cv s tronic | Il Forum di Quattroruote",
+      "snippet": "<strong>La prima volta per la sostituzione di un iniettore difettoso, la seconda per la sostituzione di una pompa difettosa</strong>, che ha messo &quot;in circolo&quot; schegge metalliche, portando, oltre al cambio della stessa, anche di tutti i filtri motore, di tutte le pompe, di tutti gli iniettori e della pulizia ... La prima volta per la sostituzione di un iniettore difettoso, la seconda per la sostituzione di una pompa difettosa, che ha messo \"in circolo\" schegge metalliche, portando, oltre al cambio della stessa, anche di tutti i filtri motore, di tutte le pompe, di tutti gli iniettori e della pulizia del serbatoio.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-sportback-1-6tdi-110cv-s-tronic.118913/"
     }
   ],
   "latestUpdate": {
