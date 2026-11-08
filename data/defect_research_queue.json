@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-07T21:49:08.456445+00:00",
-  "cursor": 12,
+  "updatedAt": "2026-11-08T05:59:09.629849+00:00",
+  "cursor": 15,
   "candidates": [
     {
       "status": "approved",
@@ -3889,6 +3889,34 @@
       "title": "500L 1.3 MULTIJET 95CV EURO6B DEL 2017 | Il Forum di Quattroruote",
       "snippet": "Quando arrivo ed il capo officina Fiat mi riceve, spiegando tutto il fatto, mi dice che per il motore 1.3 multijet 95cv prodotto negli anni 2016/2017 e montato oltre che su 500L anche su 500X, Panda, Fiorino, Lancia Ypsilon, è un problema che l&#x27;80% di queste vetture ha riscontrato e stranamente il Gruppo FCA, non ha mai inviato ai proprietari una lettera di richiamo per risolvere il disguido che in alcuni casi ha avuto conseguenze spiacevoli anche sulla salute dei guidatori. Quando arrivo ed il capo officina Fiat mi riceve, spiegando tutto il fatto, mi dice che per il motore 1.3 multijet 95cv prodotto negli anni 2016/2017 e montato oltre che su 500L anche su 500X, Panda, Fiorino, Lancia Ypsilon, è un problema che l'80% di queste vetture ha riscontrato e stranamente il Gruppo FCA, non ha mai inviato ai proprietari una lettera di richiamo per risolvere il disguido che in alcuni casi ha avuto conseguenze spiacevoli anche sulla salute dei guidatori. Il problema sta in una canaletta che dalla coppa dell'olio va al motore, che in condizioni particolari non ancora stabilite e ad un chilometraggio variabile, riversa olio nella camera di combustione generando tutto quello che vi ho descritto. Ora Fiat prevede la canaletta con una valvola anti risucchio per impedire che il problema non si presenti nuovamente, ma non è una soluzione certificata, in quanto manca la campagna di richiamo che certifichi questa operazione.",
       "sourceUrl": "https://forum.quattroruote.it/threads/500l-1-3-multijet-95cv-euro6b-del-2017.137306/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-08T05:59:09.629849+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Campagna richiamo 21DC03 ..... e 30DC02 | Forum Hyundai Club Italia",
+      "snippet": "Ora ho chiesto alla Hyundai se, considerato che si tratta di una loro iniziativa finalizzata a porre rimedio ad un difetto, posso avere un&#x27;auto sostitutiva gratuitamente per il tempo necessario all&#x27;intervento. Non dubito della serietà della casa madre. Di tutto il resto...vedremo... N.B.: è il secondo richiamo che ho avuto sulla Tucson. Ora ho chiesto alla Hyundai se, considerato che si tratta di una loro iniziativa finalizzata a porre rimedio ad un difetto, posso avere un'auto sostitutiva gratuitamente per il tempo necessario all'intervento. Non dubito della serietà della casa madre. Di tutto il resto...vedremo... N.B.: è il secondo richiamo che ho avuto sulla Tucson. Non sono un legale, ma credo che Daniel78 abbia ragione: cosa c'entra il tagliando con il difetto di fabbrica? E neppure i 5 anni, a mio avviso, hanno una valenza: è uscita dalla catena di montaggio con il problema. Se fossero dirimenti (tagliandi e 5 anni) la raccomandata andava scritta molto diversamente. Grazie ... Reggio-Em. RE ... @mi02686_Tucson Io la lettera non la ho mai vista, ma se metto insieme quello che riporta il messaggio n.1 e il tuo potresti avere ragione. Clicca per espandere... Visto che il richiamo è un'iniziativa della casa madre ed è legato presumibilmente ad un difetto di produzione è legittimo chiedere un'auto sostitutiva gratuita nei giorni di fermo macchina? Buongiorno, vi espongo la mia esperienza per quanto concerne questo difetto… Circa un mese fa mi è arrivata la raccomandata per il suddetto problema e come da raccomandazioni ho chiamato subito un centro autorizzato per la campagna di richiamo.",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/campagna-richiamo-21dc03-e-30dc02.37162/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-08T05:59:09.629849+00:00",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2017,
+      "engine": "1.7 CRDi",
+      "sourceName": "Hyundai Club",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Tucson 2017 consigli | Forum Hyundai Club Italia",
+      "snippet": "Salve a tutti sono nuovo del forum sto per comprare una tucson 1.7 confort 141 cavalli vorrei sapere se sto facendo un buono acquisto perche leggo su molti forum che si hanno molti problemi con il cambio doppia frezione qualcuno puo cinsigliarmi sono ancora in tempo per disdire la vendita quindi... La Divina: i20 1.4 CRDi 90 cv Comfort+Login pack col. Aqua Sparkling int. I \"rientri\" in garanzia dei quali abbiamo parlato in altre discussioni, si riferiscono ad auto che in partenza avevano 5 anni di garanzia, per le quali poi il proprietario disattento ha saltato dei tagliandi ma comunque Hyundai gli ha poi consentito di rientrare nella copertura a 5 anni iniziale.",
+      "sourceUrl": "https://www.hyundai-club.eu/threads/tucson-2017-consigli.29349/"
     }
   ],
   "latestUpdate": {
