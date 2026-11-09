@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-09T06:25:39.474746+00:00",
-  "cursor": 24,
+  "updatedAt": "2026-11-09T22:20:21.744113+00:00",
+  "cursor": 27,
   "candidates": [
     {
       "status": "approved",
@@ -3917,6 +3917,20 @@
       "title": "Tucson 2017 consigli | Forum Hyundai Club Italia",
       "snippet": "Salve a tutti sono nuovo del forum sto per comprare una tucson 1.7 confort 141 cavalli vorrei sapere se sto facendo un buono acquisto perche leggo su molti forum che si hanno molti problemi con il cambio doppia frezione qualcuno puo cinsigliarmi sono ancora in tempo per disdire la vendita quindi... La Divina: i20 1.4 CRDi 90 cv Comfort+Login pack col. Aqua Sparkling int. I \"rientri\" in garanzia dei quali abbiamo parlato in altre discussioni, si riferiscono ad auto che in partenza avevano 5 anni di garanzia, per le quali poi il proprietario disattento ha saltato dei tagliandi ma comunque Hyundai gli ha poi consentito di rientrare nella copertura a 5 anni iniziale.",
       "sourceUrl": "https://www.hyundai-club.eu/threads/tucson-2017-consigli.29349/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-09T22:20:21.744113+00:00",
+      "make": "Toyota",
+      "model": "Yaris",
+      "year": 2021,
+      "engine": "1.5 Hybrid",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Toyota Yaris Hybrid 2020-21-22-23 | Page 68 | Il Forum di Quattroruote",
+      "snippet": "Nuovo richiamo per la Yaris: R/SSC - for eCall malfunction on certain models equipped with European 19DCM",
+      "sourceUrl": "https://forum.quattroruote.it/threads/toyota-yaris-hybrid-2020-21-22-23.133921/page-68"
     }
   ],
   "latestUpdate": {
