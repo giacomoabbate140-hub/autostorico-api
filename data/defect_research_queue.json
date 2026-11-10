@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-10T07:16:50.527837+00:00",
-  "cursor": 1,
+  "updatedAt": "2026-11-10T19:42:55.258377+00:00",
+  "cursor": 4,
   "candidates": [
     {
       "status": "approved",
@@ -3973,6 +3973,34 @@
       "title": "Giulietta Affidabilità - Club Alfa Forum - ClubAlfa.it",
       "snippet": "- ClubAlfa.it Forum) i km mi sembra poco, controlla non ti abbiamo fatto uno sconto 50+10 sui km reali. La tenuta di strada e la linea della carrozzeria sono le uniche cose che salvo per il resto non ricomprerei alfaromeo e nemmeno la vendo perchè non voglio tirare sole. Salve, ho quasi concluso un affare su un'Alfa Romeo Giulietta 1.75 del 2015. Questa è la mia prima macchina e sono piuttosto eccitato, ma un'opinione che ho sentito su tutta la linea è che trascorrerò molto tempo in officina. Questa macchina ha solo 45k km percorsi, quindi non credo che dovrebbe essere un problema? Le persone che possiedono/possiedono questo possono confermare se questo è vero o meno? ... Dipende molto da come è messo auto e come la userai e la usata il proprietario precedenti potresti andare in officina solo per manutenzione e stop se tenuti bene i motori sono tt affidabile salvo errori di progettazione - ClubAlfa.it Forum) i km mi sembra poco, controlla non ti abbiamo fatto uno sconto 50+10 sui km reali. La tenuta di strada e la linea della carrozzeria sono le uniche cose che salvo per il resto non ricomprerei alfaromeo e nemmeno la vendo perchè non voglio tirare sole.",
       "sourceUrl": "https://forum.clubalfa.it/threads/giulietta-affidabilita.134442/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-10T19:42:55.258377+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Alfa Romeo Giulia Motori",
+      "snippet": "Discussioni tecniche e problemi sui Motori di Alfa Romeo Giulia",
+      "sourceUrl": "https://forum.clubalfa.it/sezione/motori-giulia/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-10T19:42:55.258377+00:00",
+      "make": "Audi",
+      "model": "A3",
+      "year": 2017,
+      "engine": "1.6 TDI",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Audi A3 ... passano gli anni ma rimangono i tanti problemi ! | Il Forum di Quattroruote",
+      "snippet": "Ironizzare sugli acquisti degli altri utenti non è molto simpatico... peraltro i medesimi riferimenti sono già stati usati in altro topic e sono stati oggetto di richiamo da parte della moderazione. Meglio parlare delle Audi · Clicca per allargare... Il commento postato dall&#x27;utente non è suo, e non si sa da dove venga. ... Il commento postato dall&#x27;utente non è suo, e non si sa da dove venga. Clicca per allargare... Appunto…Bravo, ben detto ... Il commento postato dall&#x27;utente non è suo, e non si sa da dove venga. Clicca per allargare... Cambia poco: qui si parla di Audi a3 e di affidabilità del modello, non di presunte patologie di chi l&#x27;ha acquistata o di osterie. Ironizzare sugli acquisti degli altri utenti non è molto simpatico... peraltro i medesimi riferimenti sono già stati usati in altro topic e sono stati oggetto di richiamo da parte della moderazione. Meglio parlare delle Audi · Clicca per allargare... Il commento postato dall'utente non è suo, e non si sa da dove venga. ... Il commento postato dall'utente non è suo, e non si sa da dove venga. Clicca per allargare... Appunto…Bravo, ben detto ... Il commento postato dall'utente non è suo, e non si sa da dove venga. Clicca per allargare... Cambia poco: qui si parla di Audi a3 e di affidabilità del modello, non di presunte patologie di chi l'ha acquistata o di osterie.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-passano-gli-anni-ma-rimangono-i-tanti-problemi.150769/"
     }
   ],
   "latestUpdate": {
