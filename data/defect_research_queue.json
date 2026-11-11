@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-10T19:42:55.258377+00:00",
-  "cursor": 4,
+  "updatedAt": "2026-11-11T06:17:11.721796+00:00",
+  "cursor": 7,
   "candidates": [
     {
       "status": "approved",
@@ -4001,6 +4001,20 @@
       "title": "Audi A3 ... passano gli anni ma rimangono i tanti problemi ! | Il Forum di Quattroruote",
       "snippet": "Ironizzare sugli acquisti degli altri utenti non è molto simpatico... peraltro i medesimi riferimenti sono già stati usati in altro topic e sono stati oggetto di richiamo da parte della moderazione. Meglio parlare delle Audi · Clicca per allargare... Il commento postato dall&#x27;utente non è suo, e non si sa da dove venga. ... Il commento postato dall&#x27;utente non è suo, e non si sa da dove venga. Clicca per allargare... Appunto…Bravo, ben detto ... Il commento postato dall&#x27;utente non è suo, e non si sa da dove venga. Clicca per allargare... Cambia poco: qui si parla di Audi a3 e di affidabilità del modello, non di presunte patologie di chi l&#x27;ha acquistata o di osterie. Ironizzare sugli acquisti degli altri utenti non è molto simpatico... peraltro i medesimi riferimenti sono già stati usati in altro topic e sono stati oggetto di richiamo da parte della moderazione. Meglio parlare delle Audi · Clicca per allargare... Il commento postato dall'utente non è suo, e non si sa da dove venga. ... Il commento postato dall'utente non è suo, e non si sa da dove venga. Clicca per allargare... Appunto…Bravo, ben detto ... Il commento postato dall'utente non è suo, e non si sa da dove venga. Clicca per allargare... Cambia poco: qui si parla di Audi a3 e di affidabilità del modello, non di presunte patologie di chi l'ha acquistata o di osterie.",
       "sourceUrl": "https://forum.quattroruote.it/threads/audi-a3-passano-gli-anni-ma-rimangono-i-tanti-problemi.150769/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-11T06:17:11.721796+00:00",
+      "make": "BMW",
+      "model": "Serie 1",
+      "year": 2015,
+      "engine": "2.0 diesel N47",
+      "sourceName": "BMW Passion Forum",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Affidabilità nuova serie 1 motore B47 | BMWpassion forum e blog",
+      "snippet": "Ciao a tutti, è parecchio tempo che voglio prendere una serie 1 perché mi piace tantissimo esteticamente e trovo che abbia un&#x27;ottima dinamica di...",
+      "sourceUrl": "https://www.bmwpassion.com/forum/threads/affidabilit%C3%A0-nuova-serie-1-motore-b47.320669/"
     }
   ],
   "latestUpdate": {
