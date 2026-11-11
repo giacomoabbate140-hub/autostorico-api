@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-11T06:17:11.721796+00:00",
-  "cursor": 7,
+  "updatedAt": "2026-11-11T19:34:48.374771+00:00",
+  "cursor": 10,
   "candidates": [
     {
       "status": "approved",
@@ -4015,6 +4015,20 @@
       "title": "Affidabilità nuova serie 1 motore B47 | BMWpassion forum e blog",
       "snippet": "Ciao a tutti, è parecchio tempo che voglio prendere una serie 1 perché mi piace tantissimo esteticamente e trovo che abbia un&#x27;ottima dinamica di...",
       "sourceUrl": "https://www.bmwpassion.com/forum/threads/affidabilit%C3%A0-nuova-serie-1-motore-b47.320669/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-11T19:34:48.374771+00:00",
+      "make": "Fiat",
+      "model": "Panda",
+      "year": 2018,
+      "engine": "1.3 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Panda: controllate il 1.3 m-jet | Il Forum di Quattroruote",
+      "snippet": "Massima attenzione ok, ma come ... che Fiat non fa richiami? ... D&#x27; accordo con quello che ha scritto MODUS72, i richiami purtroppo si fanno solo quando entra in ballo l&#x27; incolumità delle persone, ora vi chiedo solo sulla Panda c&#x27;e&#x27; questo difetto? ... Clicca per allargare... forse perchè, ammesso e non concesso ceh sia un difetto ricorrente, NON è un oggetto da campagna di ... Massima attenzione ok, ma come si può risolvere il problema da soli visto che Fiat non fa richiami? ... D' accordo con quello che ha scritto MODUS72, i richiami purtroppo si fanno solo quando entra in ballo l' incolumità delle persone, ora vi chiedo solo sulla Panda c'e' questo difetto? ... Clicca per allargare... forse perchè, ammesso e non concesso ceh sia un difetto ricorrente, NON è un oggetto da campagna di richiamo? Clicca per allargare... no no credimi, io non tifo per toyota, giacchè sono cliente toy da meno di 1 anno dico solo che se mi accadesse una cosa simile e per tale difetto a garanzia scaduta spaccassi qualcosa nel motore con ingenti danni e venissi a sapere questo mi incaxxerei e non poco... o no?? ... Clicca per allargare... Massima attenzione ok, ma come si può risolvere il problema da soli visto che Fiat non fa richiami? Io ho una 4x4 mj e l' acqua nel filtro mi è già entrata, fortunatamente non ha causato danni, ho dovuto solo cambiare prematuramente il filtro, la spiegazione del capoofficina è stata che ho aspirato acqua prendendo una pozza visto che abito in campagna e quindi ho 3 km di strada sterrata piena di buche, spiegazione a dir poco assurda ma sinceramente non sapevo da dove potesse essere arrivata l'acqua, comunque domattina controllo subito.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/panda-controllate-il-1-3-m-jet.23964/"
     }
   ],
   "latestUpdate": {
