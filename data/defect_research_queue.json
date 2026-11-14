@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-14T17:59:51.936004+00:00",
-  "cursor": 28,
+  "updatedAt": "2026-11-14T22:23:09.386287+00:00",
+  "cursor": 2,
   "candidates": [
     {
       "status": "approved",
@@ -4267,6 +4267,20 @@
       "title": "Azione di Richiamo VW - Airbag Takata - The VW Golf Community",
       "snippet": "Impossibile prendere appuntamento in officina, lunghi tempi di riparazione, mancanza dei pezzi di ricambio: sono i problemi che stanno affrontando gli automobilisti che hanno ricevuto la lettera di richiamo della casa automobilistica. La richiesta è di non utilizzare la vettura e far sostituire l&#x27;airbag perché ci sono rischi di gravi danni in caso di incidente, ma in tanti ci segnalano di non riuscire a farlo. Cari utenti, prendendo spunto dalla lettera giunta al nostro amico mau65 per la sua Golf 6, stanno arrivando avvisi per questa azione di richiamo: https://www.volkswagen.it/it/area-clienti/informazioni-utili-e-modelli-fuori-produzione/informazioni-utili/campagna-richiamo-airbag.html Questi airbag son stati montati su (Io per la mia MK7 mi sono addirittura salvato lo screenshot ove si indica che non è interessata dal richiamo in oggetto. Voi direte: ma allora perché te lo sei salvato? E io rispondo: perché, corna facendo, non si sa mai ... rientrando anche lei nelle VW prodotte dal 2005 al 2018). ---- A quanto pare, altre case automobilistiche, tra cui Citroen, si sono preoccupate un po' di più rispetto a VW, invitando addirittura i proprietari delle autovetture interessate del loro marchio ad evitarne l'utilizzazione nelle more della soluzione al problema VW GOLF COMMUNITY Tutto il materiale presente nel Sito (immagini, loghi, articoli, messaggi, etc) appartiene ai legittimi proprietari. Impossibile prendere appuntamento in officina, lunghi tempi di riparazione, mancanza dei pezzi di ricambio: sono i problemi che stanno affrontando gli automobilisti che hanno ricevuto la lettera di richiamo della casa automobilistica. La richiesta è di non utilizzare la vettura e far sostituire l'airbag perché ci sono rischi di gravi danni in caso di incidente, ma in tanti ci segnalano di non riuscire a farlo.",
       "sourceUrl": "https://www.vwgolfcommunity.com/vb/forum/vw-golf-world/vw-golf-6/guasti-problemi-richiami-aa/richiami-ufficiali-aa/1417764-azione-di-richiamo-vw-airbag-takata/page2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-14T22:23:09.386287+00:00",
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "year": 2018,
+      "engine": "2.2 diesel",
+      "sourceName": "ClubAlfa",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Opinioni per l'auto che ho acquistato - ClubAlfa.it Forum",
+      "snippet": "Se la pompa perde non è un gran problema perchè quando si fa la distribuzione è normale che venga cambiata e un raccordo che perde mi pare un altro piccolo difetto facilmente risolvibile. Al cambio olio che il venditore dice di fare prima della consegna dell&#x27;auto io non ci ho mai creduto, ma io sono malfidente di natura. Considera che dai vari discorsi che sono stati fatti sul forum, sembra che i motori diesel della Giulia, per essere mantenuti in buona salute, necessitino di un cambio olio più frequente rispetto a quanto indicato dalla casa madre. Dovresti dare qualche indicazione in più: - Modello di Giulia - Anno - km - acquistata nuova o usata? Se usata quando l'hai comprata, quanti km aveva e quanti km ha ora. Quando dici \"Pompa\", intendi la sostituzione della pompa olio? ... Alfa Romeo Giulia 2.2 150CV Tech Edition, cambio rigorosamente manuale Anno 2018, presa con 96.000 km circa, ad ora ne ha 106.000 Comprata quindi usata Quando dico pompa, intendo la pompa del liquido di raffreddamento, la perdita che ho segnalato e che ha riscontrato il meccanico sia da un raccordo sia da quest'ultima (e che con la distribuzione veniva cambiata indipendentemente dalla perdita che ha trovato anche su di essa) Se la pompa perde non è un gran problema perchè quando si fa la distribuzione è normale che venga cambiata e un raccordo che perde mi pare un altro piccolo difetto facilmente risolvibile. Al cambio olio che il venditore dice di fare prima della consegna dell'auto io non ci ho mai creduto, ma io sono malfidente di natura. Considera che dai vari discorsi che sono stati fatti sul forum, sembra che i motori diesel della Giulia, per essere mantenuti in buona salute, necessitino di un cambio olio più frequente rispetto a quanto indicato dalla casa madre. Clicca per espandere... Ma l'hai presa da un concessionario alfa romeo o da un rivenditore generico? Per i rivenditori normalmente il tagliando pre vendita vuol dire che hanno cambiato l'olio (lasciando il filtro vecchio). Quando va bene... quando va male hanno solo rabboccato l'olio se serviva. I difetti che lamenti, in realtà mi paiono nella sostanza poco importanti e facilmente eliminabili.",
+      "sourceUrl": "https://forum.clubalfa.it/threads/opinioni-per-lauto-che-ho-acquistato.150386/"
     }
   ],
   "latestUpdate": {
