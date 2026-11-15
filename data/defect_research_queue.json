@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-15T06:29:33.708834+00:00",
-  "cursor": 5,
+  "updatedAt": "2026-11-15T18:50:18.693981+00:00",
+  "cursor": 8,
   "candidates": [
     {
       "status": "approved",
@@ -4281,6 +4281,20 @@
       "title": "Opinioni per l'auto che ho acquistato - ClubAlfa.it Forum",
       "snippet": "Se la pompa perde non è un gran problema perchè quando si fa la distribuzione è normale che venga cambiata e un raccordo che perde mi pare un altro piccolo difetto facilmente risolvibile. Al cambio olio che il venditore dice di fare prima della consegna dell&#x27;auto io non ci ho mai creduto, ma io sono malfidente di natura. Considera che dai vari discorsi che sono stati fatti sul forum, sembra che i motori diesel della Giulia, per essere mantenuti in buona salute, necessitino di un cambio olio più frequente rispetto a quanto indicato dalla casa madre. Dovresti dare qualche indicazione in più: - Modello di Giulia - Anno - km - acquistata nuova o usata? Se usata quando l'hai comprata, quanti km aveva e quanti km ha ora. Quando dici \"Pompa\", intendi la sostituzione della pompa olio? ... Alfa Romeo Giulia 2.2 150CV Tech Edition, cambio rigorosamente manuale Anno 2018, presa con 96.000 km circa, ad ora ne ha 106.000 Comprata quindi usata Quando dico pompa, intendo la pompa del liquido di raffreddamento, la perdita che ho segnalato e che ha riscontrato il meccanico sia da un raccordo sia da quest'ultima (e che con la distribuzione veniva cambiata indipendentemente dalla perdita che ha trovato anche su di essa) Se la pompa perde non è un gran problema perchè quando si fa la distribuzione è normale che venga cambiata e un raccordo che perde mi pare un altro piccolo difetto facilmente risolvibile. Al cambio olio che il venditore dice di fare prima della consegna dell'auto io non ci ho mai creduto, ma io sono malfidente di natura. Considera che dai vari discorsi che sono stati fatti sul forum, sembra che i motori diesel della Giulia, per essere mantenuti in buona salute, necessitino di un cambio olio più frequente rispetto a quanto indicato dalla casa madre. Clicca per espandere... Ma l'hai presa da un concessionario alfa romeo o da un rivenditore generico? Per i rivenditori normalmente il tagliando pre vendita vuol dire che hanno cambiato l'olio (lasciando il filtro vecchio). Quando va bene... quando va male hanno solo rabboccato l'olio se serviva. I difetti che lamenti, in realtà mi paiono nella sostanza poco importanti e facilmente eliminabili.",
       "sourceUrl": "https://forum.clubalfa.it/threads/opinioni-per-lauto-che-ho-acquistato.150386/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-15T18:50:18.693981+00:00",
+      "make": "Citroen",
+      "model": "C3",
+      "year": 2019,
+      "engine": "1.2 PureTech",
+      "sourceName": "Citroën-Club Italia",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Citroën-Club e DS Forum • Leggi argomento - NUOVI PROBLEMI MOTORE 1.2 PURETECH....",
+      "snippet": "Indice » DISCUSSIONI E AREA TECNICA » Vetture Citroën » C3 &amp; C3 Aircross IV » C3 IV | Argomenti a Carattere Tecnico · Tutti gli orari sono UTC + 1 ora [ ora legale ]",
+      "sourceUrl": "https://www.citroen-club.it/forum/viewtopic.php?f=235&t=46189"
     }
   ],
   "latestUpdate": {
