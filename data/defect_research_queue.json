@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-15T18:50:18.693981+00:00",
-  "cursor": 8,
+  "updatedAt": "2026-11-16T06:27:11.048883+00:00",
+  "cursor": 11,
   "candidates": [
     {
       "status": "approved",
@@ -4295,6 +4295,20 @@
       "title": "Citroën-Club e DS Forum • Leggi argomento - NUOVI PROBLEMI MOTORE 1.2 PURETECH....",
       "snippet": "Indice » DISCUSSIONI E AREA TECNICA » Vetture Citroën » C3 &amp; C3 Aircross IV » C3 IV | Argomenti a Carattere Tecnico · Tutti gli orari sono UTC + 1 ora [ ora legale ]",
       "sourceUrl": "https://www.citroen-club.it/forum/viewtopic.php?f=235&t=46189"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-16T06:27:11.048883+00:00",
+      "make": "Fiat",
+      "model": "Panda",
+      "year": 2018,
+      "engine": "1.3 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Opinioni e pareri su migliore modello Panda 1.3 Multijet | Page 2 | Il Forum di Quattroruote",
+      "snippet": "Il problema delle Panda Mjt usate è il primo proprietario. Trovi esemplari molto chilometrati spesso con manutenzione approssimativa che hanno viaggiato molto oppure auto con pochi km fatti tutti in città, che alla fine è peggio. Il problema delle Panda Mjt usate è il primo proprietario. Trovi esemplari molto chilometrati spesso con manutenzione approssimativa che hanno viaggiato molto oppure auto con pochi km fatti tutti in città, che alla fine è peggio. La macchina rigenera ogni 250 km più o meno, tanta città, tanta strada extraurbana poca autostrada...filtro mai intasato anzi pulito all' 80/90%. Motore non molto silenzioso, non so se la panda ha il cambio a 5 o 6 marce, la 500 no e si sente. È fantastico, ora ho il 1.5 renault ma dico la verità preferisco il multijet, certo non ha la stessa potenza però fiat aveva il 1.6 e il paragone andrebbe fatto con quello.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/opinioni-e-pareri-su-migliore-modello-panda-1-3-multijet.149273/page-2"
     }
   ],
   "latestUpdate": {
