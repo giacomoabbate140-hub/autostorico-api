@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-16T22:00:23.447011+00:00",
-  "cursor": 14,
+  "updatedAt": "2026-11-17T07:53:50.168917+00:00",
+  "cursor": 17,
   "candidates": [
     {
       "status": "approved",
@@ -4309,6 +4309,90 @@
       "title": "Opinioni e pareri su migliore modello Panda 1.3 Multijet | Page 2 | Il Forum di Quattroruote",
       "snippet": "Il problema delle Panda Mjt usate è il primo proprietario. Trovi esemplari molto chilometrati spesso con manutenzione approssimativa che hanno viaggiato molto oppure auto con pochi km fatti tutti in città, che alla fine è peggio. Il problema delle Panda Mjt usate è il primo proprietario. Trovi esemplari molto chilometrati spesso con manutenzione approssimativa che hanno viaggiato molto oppure auto con pochi km fatti tutti in città, che alla fine è peggio. La macchina rigenera ogni 250 km più o meno, tanta città, tanta strada extraurbana poca autostrada...filtro mai intasato anzi pulito all' 80/90%. Motore non molto silenzioso, non so se la panda ha il cambio a 5 o 6 marce, la 500 no e si sente. È fantastico, ora ho il 1.5 renault ma dico la verità preferisco il multijet, certo non ha la stessa potenza però fiat aveva il 1.6 e il paragone andrebbe fatto con quello.",
       "sourceUrl": "https://forum.quattroruote.it/threads/opinioni-e-pareri-su-migliore-modello-panda-1-3-multijet.149273/page-2"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-17T07:53:50.168917+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "What Car? Reliability Survey",
+      "sourceType": "independent_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Jeep Renegade Review 2026, Price & Specs | What Car?",
+      "snippet": "- February 2015: Jeep Renegade arrives with 109bhp 1.6-litre or 138bhp/168bhp 1.4-litre MultiAir petrol engines, or 118bhp 1.6 MultiJet and 138bhp 2.0 MultiJet diesels. All have front-wheel drive except 2.0 MultiJet which has four-wheel drive. Sport, Longitude, Trailhawk, Limited, Opening Edition trims [...] ### Weaknesses\n\n Lax handling\n Numb steering\n 4xe is subpar for electric-only range\n\nThe entry-level engine in the Jeep Renegade is a 1.5-litre petrol with mild-hybrid assistance. It's called the e-Hybrid and it's our pick of the range.\n\nadvertisement\n\nscroll for more\n\nThe e-Hybrid produces 128bhp and is good for a 0-62mph time of 10 seconds, although its reluctance to rev makes it feel (and sound) like it’s struggling to haul the Renegade’s weight. [...] ## The Jeep Renegade offers distinctive styling and decent practicality, but most rivals make it feel agricultural\n\nStar Rating Red Star Rating Red Star Rating Grey Star Rating Grey Star Rating Grey\n\nRRP £30,785\n\n New\n Used\n\nJeep Renegade front cornering\n\nJeep Renegade front driving\n\nJeep Renegade front left driving\n\nJeep Renegade front driving off road\n\nJeep Renegade rear left driving\n\nJeep Renegade front left static\n\nJeep Renegade front detail\n\nJeep Renegade alloy wheel",
+      "sourceUrl": "https://www.whatcar.com/jeep/renegade/4x4/review/n138"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-17T07:53:50.168917+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "What Car? Reliability Survey",
+      "sourceType": "independent_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Best SUVs 2026 reviewed and rated – plus the models to avoid | What Car?",
+      "snippet": "With the Jeep Renegade, a user-friendly interior is offset by ab unsettled ride and woeful refinement. Plus, the Renegade is comparatively expensive to buy.\n\n Read our review\n\n## How to choose the best SUV [...] Lower total monthly cost than PCP/HP\n No balloon payments\n Road tax included\n\n## And the SUVs to avoid…\n\n### KGM Rexton\n\nKGM Rexton front right static\n\nEven though the KGM Rexton is a good tow car and can seat seven, it’s flawed in too many other areas to be recommendable. For instance, the engine is gruff, the steering is vague and the ride is just plain awful. For the money, there are loads are far better SUVs out there.\n\n Read our review\n\n### Jeep Renegade\n\nJeep Renegade front cornering [...] Being fully electric, the #1 provides impressive performance; our favourite Premium model provides a 0-62mph time of 6.7sec and an official range of 273 miles. For comparison, the similarly-priced Jeep Avenger can travel 249 miles officially.\n\nThe #1 continues to impress inside. The quality of the materials is top notch, while the touchscreen infotainment system is quick to respond and packed full of features.",
+      "sourceUrl": "https://www.whatcar.com/best/suvs/n26176"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-17T07:53:50.168917+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "What Car? Reliability Survey",
+      "sourceType": "independent_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Jeep Compass Review 2026, Price & Specs | What Car?",
+      "snippet": "Jeep Compass\n\nJeep Renegade\n\nKia Stonic\n\nLexus LBX\n\nMazda CX-30\n\nMazda MX-30 R-EV\n\nNew Citroën C3 Aircross\n\nNew Citroën C4\n\nNew KGM Tivoli\n\nNew Vauxhall Frontera\n\nNissan Juke\n\nPeugeot 2008\n\nRange Rover Evoque\n\nRenault Captur\n\nSeat Arona\n\nSeat Ateca\n\nSkoda Kamiq\n\nSkoda Karoq\n\nSuzuki S-Cross\n\nSuzuki Vitara\n\nToyota C-HR\n\nToyota Yaris Cross\n\nVauxhall Crossland\n\nVauxhall Mokka\n\nVolkswagen T-Cross\n\nVolkswagen T-Roc\n\nVolkswagen Taigo\n\nVolvo XC40\n\nShow more [...] |  |  |  |  |\n ---  --- |\n|  | Power | 0-62mph | Top speed |\n| e-Hybrid | 143bhp | 10.0sec | 121mph |\n| e-Hybrid Plug-in | 221bhp | 8.0sec | 134mph |\n| Electric | 211bhp | 8.5sec | 112mph |\n| 4xe | 370bhp | 5.4sec | 112mph | [...] Jeep SUVs render\n\n### Jeep to launch three new SUVs in the UK by 2030\n\nA three-model offensive from Jeep will feature two compact SUVs and a big flagship model co-developed with Dongfeng\n\nMon Jun 29 2026\n\n See all latest advice\n\n## All Small SUV reviews\n\nAlfa Romeo Junior Ibrida\n\nAudi Q2\n\nBYD Atto 2 DM-i PHEV\n\nChery Tiggo 4\n\nCupra Ateca\n\nDacia Duster\n\nDS 3\n\nDS No 4\n\nFiat 600\n\nFiat Grande Panda Hybrid\n\nFord Puma\n\nHonda HR-V\n\nHyundai Bayon\n\nHyundai Kona\n\nJaecoo 5\n\nJeep Avenger\n\nJeep Compass",
+      "sourceUrl": "https://www.whatcar.com/jeep/compass/4x4/review/n17288"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-17T07:53:50.168917+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "What Car? Reliability Survey",
+      "sourceType": "independent_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Used Jeep Renegade 2015-present review",
+      "snippet": "Renegade 1.6 MultiJetII. The 1.6 is a little smoother and performance is adequate if not spectacular. Expect to pay £14,500 or more for …",
+      "sourceUrl": "https://www.whatcar.com/jeep/renegade/4x4/used-review/n17422"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-17T07:53:50.168917+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "What Car? Reliability Survey",
+      "sourceType": "independent_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "Hyundai KONA Review 2026, Price & Specs | What Car?",
+      "snippet": "Audi Q2\n\nBYD Atto 2 DM-i PHEV\n\nChery Tiggo 4\n\nCupra Ateca\n\nDacia Duster\n\nDS 3\n\nDS No 4\n\nFiat 600\n\nFiat Grande Panda Hybrid\n\nFord Puma\n\nHonda HR-V\n\nHyundai Bayon\n\nHyundai Kona\n\nJaecoo 5\n\nJeep Avenger\n\nJeep Compass\n\nJeep Renegade\n\nKia Stonic\n\nLexus LBX\n\nMazda CX-30\n\nMazda MX-30 R-EV\n\nNew Citroën C3 Aircross\n\nNew Citroën C4\n\nNew KGM Tivoli\n\nNew Vauxhall Frontera\n\nNissan Juke\n\nPeugeot 2008\n\nRange Rover Evoque\n\nRenault Captur\n\nSeat Arona\n\nSeat Ateca\n\nSkoda Kamiq\n\nSkoda Karoq\n\nSuzuki S-Cross [...] We asked 30,000 drivers what their car is really like to own. Here are the most reliable cars you can buy\n\nMon Oct 12 2026\n\nBest of\n\nNew Volkswagen T-Roc vs Ford Puma vs Toyota Yaris Cross fronts\n\n### The most and least economical small SUVs\n\nWhat Car?'s real-world tests reveal the real fuel economy figures you can expect from a car. Here we reveal the best-performing small SUVs we've ever tested.\n\nTue Sep 29 2026\n\n See all latest advice\n\n## All Small SUV reviews\n\nAlfa Romeo Junior Ibrida [...] Suzuki S-Cross\n\nSuzuki Vitara\n\nToyota C-HR\n\nToyota Yaris Cross\n\nVauxhall Crossland\n\nVauxhall Mokka\n\nVolkswagen T-Cross\n\nVolkswagen T-Roc\n\nVolkswagen Taigo\n\nVolvo XC40\n\nShow more",
+      "sourceUrl": "https://www.whatcar.com/hyundai/kona/hatchback/review/n17377"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-17T07:53:50.168917+00:00",
+      "make": "Jeep",
+      "model": "Renegade",
+      "year": 2021,
+      "engine": "1.6 Multijet",
+      "sourceName": "What Car? Reliability Survey",
+      "sourceType": "independent_candidate",
+      "researchCategory": "official_or_technical",
+      "title": "The best petrol cars",
+      "snippet": "RRP from: £55,045\n\nNearly new deals\n\nFrom £41,980\n\nadvertisement\n\nscroll for more\n\n### Jeep Renegade\n\nStar Rating Red Star Rating Red Star Rating Grey Star Rating Grey Star Rating Grey\n\nJeep Renegade front cornering\n\nJeep Renegade dashboard\n\nJeep Renegade front cornering\n\nJeep Renegade dashboard\n\nDriving\n\nStar Rating Red Star Rating Red Star Rating Grey Star Rating Grey Star Rating Grey\n\nInterior\n\nStar Rating Red Star Rating Red Star Rating Grey Star Rating Grey Star Rating Grey\n\nPracticality [...] Lower total monthly cost than PCP/HP\n No balloon payments\n Road tax included\n\n### Volkswagen T-Roc\n\nStar Rating Red Star Rating Red Star Rating Red Star Rating Red Star Rating Red\n\nVolkswagen T-Roc front driving\n\nWhat Car? Car of the Year 2026 logo - motoreasy\n\nOliver Young driving the Volkswagen T-Roc\n\nVolkswagen T-Roc front driving\n\nOliver Young driving the Volkswagen T-Roc\n\nWhat Car? Car of the Year 2026 logo - motoreasy\n\n### Best buy: 1.5 eTSI MHEV Life DSG Euro 6 (s/s) 5dr [...] ### Deal of the Day: Lease a Leapmotor C10 Hybrid from £186 per month\n\nBest of\n\nDealership featuring Mercedes E-Class\n\n### Best-selling cars 2026: new car market grows in October\n\nNews\n\nRenault Trafic E-Tech front static\n\n### Renault Trafic E-Tech van to offer 292-mile range for £38k\n\n2026-summer-tyre-test-Volvo-XC60\n\n### Best tyres 2026: the safest tyres reviewed and rated\n\nFeature\n\nBMW iX3 LT with Mark Pearson standing beside it\n\n### BMW iX3 long-term test",
+      "sourceUrl": "https://www.whatcar.com/best/the-best-petrol-cars/n19980"
     }
   ],
   "latestUpdate": {
