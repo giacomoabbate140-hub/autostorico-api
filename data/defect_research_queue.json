@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-20T07:14:07.298070+00:00",
-  "cursor": 6,
+  "updatedAt": "2026-11-20T20:17:30.288146+00:00",
+  "cursor": 9,
   "candidates": [
     {
       "status": "approved",
@@ -4463,6 +4463,34 @@
       "title": "Problemini riscontrati sulla A3 Sprtback 1.6 [Archivio] - Forum dell'Audi RS Club",
       "snippet": "Ma allora questo è un problema Audi? stesso problema dello specchietto anch&#x27;io, gia stato in conce,dato lo spay e lo specchietto fa esattamente come prima, stesso problema specchietto dx sulla A4 b8 precedente mai risolto . ... ho gli stessi tuoi problemi.. portata in conce per il primo tagliando dei 4000 e nemmeno me l&#x27;han guardato lo specchietto, mi han solo detto che potrebbe essere la molla di richiamo.. Ciao a tutti, come avevo anticipato nel post dove parlavo della accensione della ventola a palla, volevo segnalare di DUE altri piccolissimi problemini riscontrati sulla mia A3 SportBack 1.6 TDi. Il primo è costituito da una vibrazione del display dell'MMI (no plus) da 5.8 In buona sostanza quando l'auto è al sole e si riscaldano gli interni, il display dell'MMI, quando è fuoriuscito, emette una vibrazioni non forte, ma percettibile e fastidiosa (soprattutto su una auto silenziosa come Se non ricordo male era Tommasino (uno dei primi ad aver avuto tra le mani l'A3 che da tempo non scrive più sul forum) che lamentava un leggero problema di questo tipo sul 2.0 TDi. Portata dal gommista... peggiorata la situazione. Alla fine è dovuto tornare in Audi per farsela risistemare. Per fortuna non tutti i gommisti sono così, ma se non lo conosci... ... si andro in concessionaria, ma ragazzi visto che colpi non ne ho presi a cosa e' dovuto sto difetto ? Ma allora questo è un problema Audi? stesso problema dello specchietto anch'io, gia stato in conce,dato lo spay e lo specchietto fa esattamente come prima, stesso problema specchietto dx sulla A4 b8 precedente mai risolto . ... ho gli stessi tuoi problemi.. portata in conce per il primo tagliando dei 4000 e nemmeno me l'han guardato lo specchietto, mi han solo detto che potrebbe essere la molla di richiamo.. Io desidero un Audi da sempre e vengo da un Volvo V50 ed è davvero deprimente vedere come una macchina di una casa che ti fa pagare come optional anche l'aria dell'abitacolo, che ha problemi di questo tipo... proprio non me lo aspettavo! ... Ciao, un altra informazione, ho letto che parlate di specchietti che richiudendosi fanno rumore, i mei non si richiudono affatto era un optional?",
       "sourceUrl": "https://forum.audirsclub.it/archive/index.php/t-49734.html"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-20T20:17:30.288146+00:00",
+      "make": "Dacia",
+      "model": "Duster",
+      "year": 2018,
+      "engine": "1.5 dCi",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Nuova Dacia Duster | Il Forum di Quattroruote",
+      "snippet": "Piccoli difetti di assemblaggio potrebbero starci, di solito vengono risolti e ottimizzati al restyling (circa dopo 3 anni). Se hai bisogno dell&#x27;auto, l&#x27;hai provata e ti ha convinto, direi OK. Se vuoi un mio parere personale a me è sempre piaciuta e questa nuova mi sembra anche meglio. ... Un mio collega ha appena ritirato la Duster a gas vecchio modello. Molti ora si stanno spostando su questa alimentazione, ho avuto il 1.5 DCi su Megane per 10 anni, gran motore, piacevole da guidare, economo e affidabile. Piccoli difetti di assemblaggio potrebbero starci, di solito vengono risolti e ottimizzati al restyling (circa dopo 3 anni). Se hai bisogno dell'auto, l'hai provata e ti ha convinto, direi OK. Se vuoi un mio parere personale a me è sempre piaciuta e questa nuova mi sembra anche meglio. ... Un mio collega ha appena ritirato la Duster a gas vecchio modello. Molti ora si stanno spostando su questa alimentazione, ho avuto il 1.5 DCi su Megane per 10 anni, gran motore, piacevole da guidare, economo e affidabile. Ciao a tutti, premetto che non sono un grande esperto di veicoli e che sono alla ricerca di una nuova auto dal momento che la famiglia si è allargata Le necessità sono quindi un grande spazio (interni e bagagliaio), bassi consumi e un costo contenuto: la scelta sembra ricadere sulla nuova Dacia Duster (versione comfort 1.5 diesel 110cv per un totale di circa 17.800 euro). Gli interni non sembrano particolarmente accattivanti, ma le priorità in questo momento sono altre. Anche il test drive mi ha lasciato abbastanza soddisfatto. Che valutazione date all'auto? Pregi/difetti? Infatti la Dacia Duster ha migliorato gli interni, abbandonando quell'aria di auto spartana. Il motore della Renault è affidabile, poi con 16000 euro si può acquistare la versione full optional.",
+      "sourceUrl": "https://forum.quattroruote.it/threads/nuova-dacia-duster.115472/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-20T20:17:30.288146+00:00",
+      "make": "Fiat",
+      "model": "Panda",
+      "year": 2018,
+      "engine": "1.3 Multijet",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Fiat Panda 1.3 mtj 95 cv euro 6 | Il Forum di Quattroruote",
+      "snippet": "Salve ragazzi Premetto che parlo da ignorante al 75% in materia Sono possessore di una fiat panda 1.3 multijet 95 cv turbina alta , anno 2016 euro 6 con 130 mila km Praticamente parto da ritroso dal primo problema Si ottura il Fap 2 mesi fa e la macchina non camminava Siamo intervenuti bucando il fap e sistemando il tutto senza intaccare nulla nella centralina caricando il file come se l&#x27;auto non aveva il Fap Lasciando il tutto originale ovviamente come di fabbrica senza potenziare l&#x27;auto Risolto questo problema ci cammino un mese tranquillo fino a quando l&#x27;auto non comincia a farmi fumo bianc Salve ragazzi Premetto che parlo da ignorante al 75% in materia Sono possessore di una fiat panda 1.3 multijet 95 cv turbina alta , anno 2016 euro 6 con 130 mila km Praticamente parto da ritroso dal primo problema Si ottura il Fap 2 mesi fa e la macchina non camminava Siamo intervenuti bucando il fap e sistemando il tutto senza intaccare nulla nella centralina caricando il file come se l'auto non aveva il Fap Lasciando il tutto originale ovviamente come di fabbrica senza potenziare l'auto Risolto questo problema ci cammino un mese tranquillo fino a quando l'auto non comincia a farmi fumo bianc",
+      "sourceUrl": "https://forum.quattroruote.it/threads/fiat-panda-1-3-mtj-95-cv-euro-6.149143/"
     }
   ],
   "latestUpdate": {
