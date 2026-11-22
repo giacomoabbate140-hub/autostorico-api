@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-22T06:46:09.380005+00:00",
-  "cursor": 18,
+  "updatedAt": "2026-11-22T19:38:39.132523+00:00",
+  "cursor": 21,
   "candidates": [
     {
       "status": "approved",
@@ -4491,6 +4491,20 @@
       "title": "Fiat Panda 1.3 mtj 95 cv euro 6 | Il Forum di Quattroruote",
       "snippet": "Salve ragazzi Premetto che parlo da ignorante al 75% in materia Sono possessore di una fiat panda 1.3 multijet 95 cv turbina alta , anno 2016 euro 6 con 130 mila km Praticamente parto da ritroso dal primo problema Si ottura il Fap 2 mesi fa e la macchina non camminava Siamo intervenuti bucando il fap e sistemando il tutto senza intaccare nulla nella centralina caricando il file come se l&#x27;auto non aveva il Fap Lasciando il tutto originale ovviamente come di fabbrica senza potenziare l&#x27;auto Risolto questo problema ci cammino un mese tranquillo fino a quando l&#x27;auto non comincia a farmi fumo bianc Salve ragazzi Premetto che parlo da ignorante al 75% in materia Sono possessore di una fiat panda 1.3 multijet 95 cv turbina alta , anno 2016 euro 6 con 130 mila km Praticamente parto da ritroso dal primo problema Si ottura il Fap 2 mesi fa e la macchina non camminava Siamo intervenuti bucando il fap e sistemando il tutto senza intaccare nulla nella centralina caricando il file come se l'auto non aveva il Fap Lasciando il tutto originale ovviamente come di fabbrica senza potenziare l'auto Risolto questo problema ci cammino un mese tranquillo fino a quando l'auto non comincia a farmi fumo bianc",
       "sourceUrl": "https://forum.quattroruote.it/threads/fiat-panda-1-3-mtj-95-cv-euro-6.149143/"
+    },
+    {
+      "status": "pending_review",
+      "collectedAt": "2026-11-22T19:38:39.132523+00:00",
+      "make": "Nissan",
+      "model": "Qashqai",
+      "year": 2020,
+      "engine": "1.3 DIG-T",
+      "sourceName": "Forum Quattroruote",
+      "sourceType": "community_candidate",
+      "researchCategory": "community",
+      "title": "Nissan Qashqai 2: la ricomprereste? | Il Forum di Quattroruote",
+      "snippet": "Il nuovo 1.3 mi sembrerebbe ok ma sono frenato nell&#x27;acquisto visto cosa ho letto di QQ... problemi di ogni tipo, motori che si rompono, bronzine, montanti posteriori difettosi, plasfiche che scricchiolano, sensori che suonano se piove, un&#x27;assistenza vergognosa,etc,etc... Il nuovo 1.3 mi sembrerebbe ok ma sono frenato nell'acquisto visto cosa ho letto di QQ... problemi di ogni tipo, motori che si rompono, bronzine, montanti posteriori difettosi, plasfiche che scricchiolano, sensori che suonano se piove, un'assistenza vergognosa,etc,etc...",
+      "sourceUrl": "https://forum.quattroruote.it/threads/nissan-qashqai-2-la-ricomprereste.120336/"
     }
   ],
   "latestUpdate": {
